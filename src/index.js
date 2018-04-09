@@ -40,6 +40,7 @@ const history = syncHistoryWithStore(browserHistory, store);
 
 class Index extends Component{
     
+    
     //判断当前用户是否有权限进行菜单访问，token是否存在
     requireAuth = (nextState, replace) => {
         console.info('--requireAuth--');
