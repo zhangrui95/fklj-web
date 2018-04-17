@@ -84,8 +84,8 @@ export class PersonalContentfollow extends Component {
                 currentPage: 1,
                 entityOrField: true,
                 pd: {
-                    policeIdcard: '' + userItem.body.idcard,
-                    followerUserid: '' + userItem.body.idcard,
+                    policeIdcard: '' + userItem.user.idcard,
+                    followerUserid: '' + userItem.user.idcard,
                 },
                 showCount: constants.pageSize
             }
@@ -113,8 +113,8 @@ export class PersonalContentfollow extends Component {
                         endTime: lbtquery.endTime?lbtquery.endTime:'',
                         name: lbtquery.name?lbtquery.name:'',
                         idcard: lbtquery.sfzh?lbtquery.sfzh:'',
-                        policeIdcard: '' + userItem.body.idcard,
-                        followerUserid: '' + userItem.body.idcard,
+                        policeIdcard: '' + userItem.user.idcard,
+                        followerUserid: '' + userItem.user.idcard,
                     },
                     showCount: constants.pageSize
                 }
@@ -136,8 +136,8 @@ export class PersonalContentfollow extends Component {
                      endTime: '',
                      name:'',
                      idcard: '',
-                     policeIdcard: '' + userItem.body.idcard,
-                     followerUserid: '' + userItem.body.idcard,
+                     policeIdcard: '' + userItem.user.idcard,
+                     followerUserid: '' + userItem.user.idcard,
      
                  },
                  showCount: constants.pageSize
@@ -153,7 +153,7 @@ export class PersonalContentfollow extends Component {
                     endTime: this.state.dateEnd,
                     name: this.state.name,
                     idcard: this.state.sfzh,
-                    followerUserid: '' + userItem.body.idcard,
+                    followerUserid: '' + userItem.user.idcard,
                 },
                 showCount: constants.pageSize
             }
@@ -183,7 +183,7 @@ export class PersonalContentfollow extends Component {
                 beginTime: this.state.dateBegin,
                 endTime: this.state.dateEnd,
                 idcard: this.state.sfzh,
-                followerUserid: '' + userItem.body.idcard,
+                followerUserid: '' + userItem.user.idcard,
                 name: this.state.name,
 
             },
@@ -205,7 +205,7 @@ export class PersonalContentfollow extends Component {
                 endTime: this.state.dateEnd,
                 idcard: this.state.sfzh,
                 name: this.state.name,
-                followerUserid: '' + userItem.body.idcard,
+                followerUserid: '' + userItem.user.idcard,
             },
             showCount: constants.pageSize
         }
@@ -327,7 +327,7 @@ const SearchArea = React.createClass({
                     endTime: this.state.dateEnd,
                     name: this.state.name,
                     idcard: this.state.sfzh,
-                    followerUserid: '' + userItem.body.idcard,
+                    followerUserid: '' + userItem.user.idcard,
                 },
                 showCount: constants.pageSize
             }
@@ -366,12 +366,12 @@ const SearchArea = React.createClass({
                 currentPage: 1,
                 entityOrField: true,
                 pd: {
-                    policeIdcard: '' + userItem.body.idcard,
+                    policeIdcard: '' + userItem.user.idcard,
                     beginTime: '',
                     endTime:'',
                     name: '',
                     idcard: '',
-                    followerUserid: '' + userItem.body.idcard,
+                    followerUserid: '' + userItem.user.idcard,
                 },
                 showCount: constants.pageSize
             }

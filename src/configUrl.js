@@ -10,6 +10,9 @@ global.configUrl = {
   //重庆  http://10.158.35.98:8100
   //测试主机  http://172.19.1.140:8100   http://172.19.4.4:7070
   securityCenterUrl: "http://172.19.1.145:8100",//平时测试接口
+    securityCenterUrls: "http://172.19.12.249:8200",//跳转安全中心
+    loginUrl: "http://172.19.12.249",//登陆地址
+    // loginUrl: "http://172.19.12.249:8100",//登陆地址
   //   securityCenterUrl: "http://172.19.12.249:8200",//平时测试接口
   //   loginUrl: "http://172.19.12.249:8100",
   //securityCenterUrl: "http://35.0.40.53:8100",
@@ -21,7 +24,8 @@ global.configUrl = {
 /*  serverUrl: "http://172.19.12.147:8888",*/
   //serverUrl: "/data-service",
  //serverUrl: "http://172.19.12.137:8888",//shd 服务地址
-   serverUrl: "http://172.19.1.145:7000",
+    //http://172.19.1.145:7000 测试部接口地址
+   serverUrl: "http://172.19.12.102:8888",
   //客户区域
   clientArea: '黑龙江',
   //PKI登录是否开启

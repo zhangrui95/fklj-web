@@ -93,7 +93,7 @@ export class DynamicContentInflow extends Component {
                     endTime: '',
                     name:'',
                     idcard: '',
-                    followerUserid: '' + userItem.body.idcard,
+                    followerUserid: '' + userItem.user.idcard,
     
                 },
                 showCount: constants.pageSize
@@ -109,7 +109,7 @@ export class DynamicContentInflow extends Component {
                     endTime: this.state.dateEnd,
                     name: this.state.name,
                     idcard: this.state.sfzh,
-                    followerUserid: '' + userItem.body.idcard,
+                    followerUserid: '' + userItem.user.idcard,
                 },
                 showCount: constants.pageSize
             }
@@ -143,7 +143,7 @@ export class DynamicContentInflow extends Component {
                         endTime: lbtquery.endTime?lbtquery.endTime:'',
                         name: lbtquery.name?lbtquery.name:'',
                         idcard: lbtquery.sfzh?lbtquery.sfzh:'',
-                        followerUserid: '' + userItem.body.idcard,
+                        followerUserid: '' + userItem.user.idcard,
                     },
                     showCount: constants.pageSize
                 }
@@ -188,7 +188,7 @@ export class DynamicContentInflow extends Component {
                 endTime: this.state.dateEnd,
                 idcard: this.state.sfzh,
                 name: this.state.name,
-                followerUserid: '' + userItem.body.idcard,
+                followerUserid: '' + userItem.user.idcard,
             },
             showCount: constants.pageSize
         }
@@ -199,7 +199,7 @@ export class DynamicContentInflow extends Component {
         let user = JSON.parse(sessionStorage.getItem('user'));
         const creds = {
             sfzh: store.getState().DynamicControl.data.users.result.list.idcard,
-            name: user.body.name
+            name: user.user.name
         }
         store.dispatch(saveDynamicPhotoItem(creds));
         store.dispatch(PostUsersInflowData(creds));
@@ -221,7 +221,7 @@ export class DynamicContentInflow extends Component {
                 endTime: this.state.dateEnd,
                 idcard: this.state.sfzh,
                 name: this.state.name,
-                followerUserid: '' + userItem.body.idcard,
+                followerUserid: '' + userItem.user.idcard,
             },
             showCount: constants.pageSize
         }
@@ -379,7 +379,7 @@ const SearchArea = React.createClass({
                     endTime: this.state.dateEnd,
                     name: this.state.name,
                     idcard: this.state.sfzh,
-                    followerUserid: '' + userItem.body.idcard,
+                    followerUserid: '' + userItem.user.idcard,
                 },
                 showCount: constants.pageSize
             }
@@ -428,7 +428,7 @@ const SearchArea = React.createClass({
                 endTime: '',
                 name: '',
                 idcard: '',
-                followerUserid: '' + userItem.body.idcard,
+                followerUserid: '' + userItem.user.idcard,
 
             },
             showCount: constants.pageSize
@@ -562,7 +562,7 @@ class ModalDialogue extends Component {
                         </p>
                     </div>
                     
-                </div> < /div>
+                </div> </div>
         );
     }
 }

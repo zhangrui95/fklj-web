@@ -68,7 +68,7 @@ export class BgInformation extends Component {
         let personId = this.props.personId;
 
         var user = JSON.parse(sessionStorage.getItem('user'));
-        var jyxm = user.body.name;
+        var jyxm = user.user.name;
 
         // let vehicle=this.props.InterrogationDetailsUsers.data.interrogationDetails.basicInformation.vehicle;
         // let driver=this.props.InterrogationDetailsUsers.data.interrogationDetails.basicInformation.driver;

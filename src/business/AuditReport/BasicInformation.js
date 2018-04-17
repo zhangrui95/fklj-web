@@ -279,8 +279,8 @@ onContactNumberChange=(e)=>{
                         for_what:this.state.for_what?this.state.for_what:basic.for_what,
                         for_whom:this.state.for_whom?this.state.for_whom:basic.for_whom,
                         for_whom_phone:this.state.for_whom_phone?this.state.for_whom_phone:basic.for_whom_phone,
-                        optuser:userItem.body.idcard,
-                        createuser:userItem.body.idcard,
+                        optuser:userItem.user.idcard,
+                        createuser:userItem.user.idcard,
                     }
                     store.dispatch(editBasicInformationData(creds));
                

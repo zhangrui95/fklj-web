@@ -77,7 +77,7 @@ export class BasicInformation extends Component {
         // let driver=this.props.InterrogationDetailsUsers.data.interrogationDetails.basicInformation.driver;
         let idcard = this.props.idcard;
         var user = JSON.parse(sessionStorage.getItem('user'));
-        var jyxm = user.body.name;
+        var jyxm = user.user.name;
         //let pliceName = userItem.
         return (
             <div>

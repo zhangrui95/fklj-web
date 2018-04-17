@@ -15,6 +15,11 @@ export const developmentMode = developmentModeList.standard;
 
 //安全中心地址         czp 172.19.12.232:8081
 export  const  securityCenterUrl = global.configUrl.securityCenterUrl;
+export  const  securityCenterUrls = global.configUrl.securityCenterUrls;
+
+//登陆地址
+export  const  loginUrl = global.configUrl.loginUrl;
+
 //洛阳  http://10.58.45.4:8100    http://172.19.12.217:8071
 //4.4 http://172.19.4.4:7070
 //http://172.19.12.232:8081

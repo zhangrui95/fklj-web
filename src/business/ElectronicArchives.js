@@ -98,7 +98,7 @@ class ElectronicArchives extends Component{
         let recordId = (ElectronicArchives===null?0:ElectronicArchives.recordId);
         let personId = (ElectronicArchives===null?0:ElectronicArchives.personId);
         let user = JSON.parse(sessionStorage.getItem('user'));
-        let jyxm = user.body.name;
+        let jyxm = user.user.name;
         let idcard =  this.props.params.idcard;
         if(ElectronicArchives !== null){
             switch(isSelectTab.tabName){

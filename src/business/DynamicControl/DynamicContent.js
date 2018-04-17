@@ -95,7 +95,7 @@ export class DynamicContent extends Component {
                     endTime: '',
                     name: '',
                     idcard: '',
-                    followerUserid: '' + userItem.body.idcard,
+                    followerUserid: '' + userItem.user.idcard,
 
                 },
                 showCount: constants.pageSize
@@ -112,7 +112,7 @@ export class DynamicContent extends Component {
                     endTime: this.state.dateEnd,
                     name: this.state.name,
                     idcard: this.state.sfzh,
-                    followerUserid: '' + userItem.body.idcard,
+                    followerUserid: '' + userItem.user.idcard,
                 },
                 showCount: constants.pageSize
             }
@@ -139,7 +139,7 @@ export class DynamicContent extends Component {
                 entityOrField: true,
                 pd: {
                     code: nextProps.type,
-                    followerUserid: '' + userItem.body.idcard,
+                    followerUserid: '' + userItem.user.idcard,
                 },
                 showCount: constants.pageSize
             }
@@ -168,7 +168,7 @@ export class DynamicContent extends Component {
                         endTime: lbtquery.endTime ? lbtquery.endTime : '',
                         name: lbtquery.name ? lbtquery.name : '',
                         idcard: lbtquery.sfzh ? lbtquery.sfzh : '',
-                        followerUserid: '' + userItem.body.idcard,
+                        followerUserid: '' + userItem.user.idcard,
                     },
                     showCount: constants.pageSize
                 }
@@ -213,7 +213,7 @@ export class DynamicContent extends Component {
                 endTime: this.state.dateEnd,
                 idcard: this.state.sfzh,
                 name: this.state.name,
-                followerUserid: '' + userItem.body.idcard,
+                followerUserid: '' + userItem.user.idcard,
             },
             showCount: constants.pageSize
         }
@@ -241,7 +241,7 @@ export class DynamicContent extends Component {
                 endTime: this.state.dateEnd,
                 idcard: this.state.sfzh,
                 name: this.state.name,
-                followerUserid: '' + userItem.body.idcard,
+                followerUserid: '' + userItem.user.idcard,
             },
             showCount: constants.pageSize
         }
@@ -400,7 +400,7 @@ const SearchArea = React.createClass({
                 endTime: this.state.dateEnd,
                 name: this.state.name,
                 idcard: this.state.sfzh,
-                followerUserid: '' + userItem.body.idcard,
+                followerUserid: '' + userItem.user.idcard,
 
             },
             showCount: constants.pageSize
@@ -452,7 +452,7 @@ const SearchArea = React.createClass({
                 endTime: '',
                 name: '',
                 idcard: '',
-                followerUserid: '' + userItem.body.idcard,
+                followerUserid: '' + userItem.user.idcard,
 
             },
             showCount: constants.pageSize

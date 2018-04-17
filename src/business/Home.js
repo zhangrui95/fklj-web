@@ -141,13 +141,15 @@ const smallIcon = {
     height: "30px",
     borderRadius: "3px",
     float: "right",
+    overflow: "hidden",
 }
 const smallIcon2 = {
-    width: "103px",
+    width: "102px",
     border: "1px solid #0C5F93",
     height: "30px",
     borderRadius: "3px",
     float: "right",
+    overflow: "hidden",
 }
 const clear = {
     clear: "both"
@@ -1094,7 +1096,7 @@ class ActiveDataStatistics extends Component {
         // browserHistory.push('/DynamicControl');
     }
     render() {
-        
+
 // let active = {in: {lch: "0", gl: "1", tl: "1", mh: "0"}, out: {lch: "1", gl: "1", tl: "1", mh: "2"}}
         let activityStatisticsListIn = store.getState().Home.data.activityStatistics.result.in;
         let activityStatisticsListOut = store.getState().Home.data.activityStatistics.result.out;
@@ -1168,7 +1170,7 @@ class ActiveDataStatistics extends Component {
                 name: '民航',
                 type: 'bar',
                 stack: '总量',
-                
+
                 barWidth: '50%',
                 data: mhData,
                 label: {
@@ -1177,7 +1179,7 @@ class ActiveDataStatistics extends Component {
                         position: 'inside',
                     }
                 },
-                
+
             }, {
                 name: '铁路',
                 type: 'bar',
@@ -1188,7 +1190,7 @@ class ActiveDataStatistics extends Component {
                         show:  false,
                         position: 'inside',
                     }
-                },  
+                },
             }, {
                 name: '公路',
                 type: 'bar',
@@ -1199,7 +1201,7 @@ class ActiveDataStatistics extends Component {
                         show: false,
                         position: 'inside',
                     }
-                }, 
+                },
             }, {
                 name: '轮船',
                 type: 'bar',
@@ -1210,7 +1212,7 @@ class ActiveDataStatistics extends Component {
                         show: false,
                         position: 'inside',
                     }
-                },  
+                },
             }]
         };
         let isShowBtn = this.state.isShowBtn;
@@ -1345,7 +1347,7 @@ class Personnel extends Component {
             personnelList = store.getState().Home.data.personnelMissingList.result.list;
             isFetching = store.getState().Home.data.personnelMissingList.isFetching;
         }
-        
+
         /*let personDivList=[];
 
 
@@ -1375,15 +1377,15 @@ class Personnel extends Component {
         }
         let zmdDiv = [];
         // for (var i = 0; i < personnelList.length; i++) {
-            
+
         //     if (i  % 2 == 0) {
         //         zmdDiv.push(
-                    
+
         //             <div key={i}>
         //                 <PersonnelLst personIndex={personnelList[i-1]} />
         //                 <PersonnelLst personIndex={personnelList[i]} />
         //             </div>
-                    
+
         //         )
         //     }
         // }
@@ -1392,10 +1394,10 @@ class Personnel extends Component {
                 <div key={i}>
                     <PersonnelLst personIndex={personnelList[i]} />
                 </div>
-                
+
             )
         }
-        
+
         return (
             <div style={{width:"27%",float:"left",height:"161px",position:"relative",zIndex:'99'}}>
                 <DeepBlueBtnY width="100px" height="30px" text={this.props.text} borderTop="2px solid #0C1CD8" borderRight="0" borderLeft="0" margin="150px 0 0 0"  display={isShowBtn} onClick={this.BtnClick}/>
@@ -1415,15 +1417,15 @@ class Personnel extends Component {
                                 <p style={{fontSize:"20px",color:"#fff",textAlign:"center"}}>暂无人员</p>
                             </div>
                             :
-                            
+
                             <Carousel autoplay vertical autoplaySpeed={1200}  afterChange={this.afterChange} >
                               {zmdDiv}
                             </Carousel>
-                            
+
                         }
 
                     </div>
-                    
+
                 </div>
             </div>
 

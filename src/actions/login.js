@@ -1,8 +1,9 @@
-import {hex_md5,b64_md5} from "../resources/md5";
-import {  browserHistory } from 'react-router';
+import {hex_md5} from "../resources/md5";
+import { browserHistory } from 'react-router';
+import {post} from "./request";
 import { routerMiddleware, push } from 'react-router-redux';
 import {store} from '../index.js';
-import {clientNameList,clientName,securityCenterUrl} from '../utils/index';
+import {clientNameList,clientName,securityCenterUrl, loginUrl} from '../utils/index';
 import { message} from 'antd';
 export const LOGIN_REQUEST = 'LOGIN_REQUEST'
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS'
@@ -28,7 +29,7 @@ function receiveLogin(json) {
         type: LOGIN_SUCCESS,
         isFetching: false,
         isAuthenticated: true,
-        id_token: json.id_token,
+        id_token: json.token,
         json
     }
 }
@@ -41,58 +42,31 @@ function loginError(message) {
         message
     }
 }
-//172.19.12.217:8071     http://172.19.12.232:8081
-//调用action取得token,并dispatch三种状态。
 export function loginUser(creds) {
-    //
-    // let config = {
-    //     method: 'POST',
-    //     headers: {
-    //        'Content-Type': 'application/x-www-form-urlencoded',
-    //     },
-    //     body: `username=${creds.username}&password=${hex_md5(creds.password)}&serverId=1&clientIp=127.0.0.1`
-    // }
-    // headers: {'Content-Type': 'application/x-www-form-urlencoded',
-    //     'Accept': 'application/json',
-    //     'Access-Token':'888888'
-    // },
-
-    let config = {
-        method: 'POST',
-        headers: {'Content-Type': 'application/x-www-form-urlencoded',
-                 'Access-Token':'qweqweqweasdasdasd'
-        },
-        body: `username=${creds.username}&password=${hex_md5(creds.password)}&serverId=1&serverType=1`
-    }
 
     return dispatch => {
-        // dispatch 请求开始状态
         dispatch(requestLogin(creds))
-                //http://172.19.12.217:8071/api/user/login
-        return fetch(securityCenterUrl+'/api/user/login', config)
-            .then((res) =>
-            {
-                if (!res.ok) {
-                    // dispatch 错误状态
-                    dispatch(loginError(res))
-                    return Promise.reject(res)
-                } else {
-                    res.json().then(json=> {
-                        if(json.code===200){//登录成功
-                            let userJson = JSON.stringify(json);
-                            let user = JSON.parse(userJson);
-                            sessionStorage.setItem('user', userJson);
-                            sessionStorage.setItem('userName', user.body.name);
-                            sessionStorage.setItem('id_token', json.token);
-                            dispatch(receiveLogin(json));
-                            message.success('提示：登录成功!');
-                            browserHistory.push('/Home');
-                        }else{
-                            message.warning('提示：'+json.msg+"!",3);
-                        }
-                    });
-                }
-            }).catch(err => {console.log("Error: ", err); message.warning('提示：登录失败，与服务器交互发生异常!');})
+
+        let cred = {username: creds.username, password: hex_md5(creds.password),sid:'fklj_sys'}
+        post(loginUrl+'/aqzx/api/login', cred).then((res) => {
+            console.log('res', res)
+            if(res.error !== null){
+                message.warning('提示：'+res.error.text+"!",3);
+            } else {
+                let userJson = JSON.stringify(res.data);
+                let user = JSON.parse(userJson);
+                console.log('userJson', userJson)
+                console.log('user', user)
+                sessionStorage.setItem('user', userJson);
+                sessionStorage.setItem('userName', user.user.name);
+                sessionStorage.setItem('id_token', res.data.token);
+                // sessionStorage.setItem('id_token', 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJjNTFmZDQwMS1hYTQ1LTQ3NzctOTkyZC1mODA5ODg5MGE2NGMiLCJpYXQiOjE1MjMyNTE0NDMsInN1YiI6IjEiLCJpc3MiOiJTZWN1cmUgQ2VudGVyIiwiZ3JvdXBjb2RlIjoiNDEwMzAwMDAwMDAwIiwidXR5cGUiOiIxIiwiaWRjYXJkIjoiYWRtaW4iLCJleHAiOjE1MjMzMzc4NDN9.WzBKSsbIkSOZy60FTmfGfliJxDYohkadUaArP1po2Wo');
+                dispatch(receiveLogin(res.data));
+                message.success('提示：登录成功!');
+                browserHistory.push('/Home');
+            }
+        }).catch(err => {console.log("Error: ", err); message.warning('提示：登录失败，与服务器交互发生异常!');});
+
     }
 
 }

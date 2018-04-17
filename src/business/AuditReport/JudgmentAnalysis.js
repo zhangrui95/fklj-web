@@ -177,7 +177,7 @@ export class JudgmentAnalysis extends Component {
                 let userItem = JSON.parse(sessionStorage.getItem('user'));
                 let data = {
                     JudgeId: store.getState().AuditReport.data.judgeCode.result,
-                    username: userItem.body.name,
+                    username: userItem.user.name,
                     Head: store.getState().AuditReport.data.head,
                     JudgeBase: store.getState().AuditReport.data.basicInformation,
                     JudgeNetInfo: store.getState().AuditReport.data.onlineInformationList,

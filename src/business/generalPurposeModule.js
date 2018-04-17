@@ -422,22 +422,22 @@ export class PhotoItem extends Component {
             let creds = {
                 idcard: user.idcard, //被关注人身份证号
                 personid: user.personId, //被关注人的ID
-                followerUserid: '' + userItem.body.idcard, //登录人身份证号
-                userName: userItem.body.name, //当前登录人姓名
-                followerName: userItem.body.name, //登录人姓名
-                followerUnitname: userItem.body.gundercn, //登录人单位名称
-                followerUnitcode: userItem.body.gunder //登录人单位编码
+                followerUserid: '' + userItem.user.idcard, //登录人身份证号
+                userName: userItem.user.name, //当前登录人姓名
+                followerName: userItem.user.name, //登录人姓名
+                followerUnitname: userItem.user.gundercn, //登录人单位名称
+                followerUnitcode: userItem.user.gunder //登录人单位编码
             }
             store.dispatch(saveMessAttention(creds, this.props.queryCreds, this.props.pageType));
         } else {
             let creds = {
                 idcard: user.idcard, //被关注人身份证号
                 personid: user.personId, //被关注人的ID
-                followerUserid: '' + userItem.body.idcard, //登录人ID
-                userName: userItem.body.name, //当前登录人姓名
-                followerName: userItem.body.name, //登录人姓名
-                followerUnitname: userItem.body.gundercn, //登录人单位名称
-                followerUnitcode: userItem.body.gunder //登录人单位编码
+                followerUserid: '' + userItem.user.idcard, //登录人ID
+                userName: userItem.user.name, //当前登录人姓名
+                followerName: userItem.user.name, //登录人姓名
+                followerUnitname: userItem.user.gundercn, //登录人单位名称
+                followerUnitcode: userItem.user.gunder //登录人单位编码
             }
             store.dispatch(DelMessAttention(creds, this.props.queryCreds, this.props.pageType));
         }

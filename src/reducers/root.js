@@ -15,7 +15,9 @@ const initialState = {
             dispositionlList: [],//处置措施集合
             policeUnitsList:[], //警员单位集合
             personTagsList:[],//人员标签集合
-            carTagsList:[]//车辆标签集合
+            carTagsList:[],//车辆标签集合
+            taskTypeList:[],//任务类型集合
+            taskStatusList:[],//任务状态集合
     },
     uiData: {
         navigations: [ //导航集合
@@ -23,13 +25,29 @@ const initialState = {
                 id: '101',
                 navigationName: '首页',
                 isSelect: true,
-                path: "/Home"
+                path: "/Home",
+                isShow: true
             },
             {
                 id: '102',
                 navigationName: '动态管控',
                 isSelect: false,
-                path: "/DynamicControl"
+                path: "/DynamicControl",
+                isShow: true
+            },
+            {
+                id: '109',
+                navigationName: '片区管理',
+                isSelect: false,
+                path: "/AreaManagement",
+                isShow: true
+            },
+            {
+                id: '110',
+                navigationName: '任务管理',
+                isSelect: false,
+                path: "/TaskManagement",
+                isShow: true
             },
             // {
             //     id: '103',
@@ -41,7 +59,8 @@ const initialState = {
                 id: '104',
                 navigationName: '统计报表',
                 isSelect: false,
-                path: "/ReportForms"
+                path: "/ReportForms",
+                isShow: true
             },
             // {
             //     id:'105',
@@ -53,13 +72,15 @@ const initialState = {
                 id: '107',
                 navigationName: '个人中心',
                 isSelect: false,
-                path: "/PersonalCenter"
+                path: "/PersonalCenter",
+                isShow: true
             },
             {
                 id: '108',
                 navigationName: '系统管理',
                 isSelect: false,
-                path: "/SystemManagement"
+                path: "/SystemManagement",
+                isShow: false
             }
         ],
         ModalDialogueBg: 'none'//遮罩展示与隐藏

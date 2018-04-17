@@ -244,7 +244,7 @@ export class TrajectoryInformation extends Component {
                         entityOrField: true,
                         pd: {
                             idcard: this.props.idcard,
-                            followerUserid: '' + userItem.body.idcard,
+                            followerUserid: '' + userItem.user.idcard,
                         },
 
                     }
@@ -349,7 +349,7 @@ export class TrajectoryInformation extends Component {
         //     entityOrField: true,
         //     pd: {
         //         idcard: this.props.idcard,
-        //         followerUserid: '' + userItem.body.idcard,
+        //         followerUserid: '' + userItem.user.idcard,
         //         beginTime: dateBegin,
         //         endTime: dateEnd,
         //     },

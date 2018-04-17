@@ -86,7 +86,7 @@ export class PersonalContentJudge extends Component {
                 currentPage: 1,
                 entityOrField: true,
                 pd: {
-                    username:userItem.body.name
+                    username:userItem.user.name
                 },
                 showCount: constants.pageSize
             }
@@ -113,7 +113,7 @@ export class PersonalContentJudge extends Component {
                         endTime: lbtquery.endTime?lbtquery.endTime:'',
                         name: lbtquery.name?lbtquery.name:'',
                         idcard: lbtquery.sfzh?lbtquery.sfzh:'',
-                        username:userItem.body.name
+                        username:userItem.user.name
                     },
                     showCount: constants.pageSize
                 }
@@ -133,7 +133,7 @@ export class PersonalContentJudge extends Component {
                 currentPage: 1,
                 entityOrField: true,
                 pd: {
-                    username:userItem.body.name
+                    username:userItem.user.name
                 },
                 showCount: constants.pageSize
             }
@@ -144,7 +144,7 @@ export class PersonalContentJudge extends Component {
             currentPage: 1,
             entityOrField: true,
             pd: {
-                username:userItem.body.name,
+                username:userItem.user.name,
                 beginTime: this.state.dateBegin,
                 endTime: this.state.dateEnd,
                 idcard: this.state.sfzh,
@@ -176,7 +176,7 @@ export class PersonalContentJudge extends Component {
             currentPage: nowPage,
             entityOrField: true,
             pd: {
-                username:userItem.body.name,
+                username:userItem.user.name,
                 beginTime: this.state.dateBegin,
                 endTime: this.state.dateEnd,
                 idcard: this.state.sfzh,
@@ -309,7 +309,7 @@ const SearchArea = React.createClass({
                 currentPage: 1,
                 entityOrField: true,
                 pd: {
-                    username:userItem.body.name,
+                    username:userItem.user.name,
                     beginTime: this.state.dateBegin,
                     endTime: this.state.dateEnd,
                     name: this.state.name,
@@ -352,7 +352,7 @@ const SearchArea = React.createClass({
             currentPage: 1,
             entityOrField: true,
             pd: {
-                username:userItem.body.name
+                username:userItem.user.name
             },
             showCount: constants.pageSize
         }

@@ -9,7 +9,7 @@ import {StylePage,ShallowBlueBtn,DeepRedBtn,FangSelectBlueBtn} from "../business
 import {mainReducer} from "../reducers/reducers";
 import {logoutUser} from "../actions/login";
 import {store} from '../index.js';
-import {clientNameList,clientName,securityCenterUrl} from '../utils/index';
+import {clientNameList,clientName,securityCenterUrls} from '../utils/index';
 import '../resources/index.css';
 import {sysName} from '../utils/Configuration';
 import {
@@ -72,21 +72,27 @@ const fontSize14= {
 }
 
 
-
+const user = JSON.parse(sessionStorage.getItem('user'));
 export class Header extends Component{
-
   render(){
       let user = JSON.parse(sessionStorage.getItem('user'));
       let navigations = store.getState().root.uiData.navigations;
       let  navigationList = [];
+      user.menu.map((col) => {
+          if(col.resourceCode === 'xtgl_menu'){
+                navigations[6].isShow = true;
+          }
+      })
       navigations.forEach(function(navigation, i){
           let css;
-          {navigation.isSelect===true?css=collapseLi1:css=collapseLi}
-          navigationList.push(
-              <li className="fl" style={css} key={i}>
-                  <Link to={navigation.path} style={{color:"#fff"}}>{navigation.navigationName}</Link>
-              </li>
-          );
+          if(navigation.isShow){
+              {navigation.isSelect===true?css=collapseLi1:css=collapseLi}
+              navigationList.push(
+                  <li className="fl" style={css} key={i}>
+                      <Link to={navigation.path} style={{color:"#fff"}}>{navigation.navigationName}</Link>
+                  </li>
+              );
+          }
       });
     return (
         <div>
@@ -133,8 +139,13 @@ class LoginIcon extends Component{
         store.dispatch(logoutUser());
     }
 
+    // onClickUserManagement=()=>{
+    //     let url = securityCenterUrl+"/user/user/login?token="+sessionStorage.getItem('id_token') || '';
+    //     window.open(url);
+    // }
     onClickUserManagement=()=>{
-        let url = securityCenterUrl+"/user/user/login?token="+sessionStorage.getItem('id_token') || '';
+        let url = securityCenterUrls + "/home?token="+sessionStorage.getItem('id_token') || '';
+        // http://172.19.12.249:8200/user/login
         window.open(url);
     }
 
@@ -143,6 +154,12 @@ class LoginIcon extends Component{
 
   render(){
       let user = this.props.user;
+      let btnShow;
+      user.menu.map((col, index) => {
+          if(col.resourceCode === 'yhgl_btn'){
+              btnShow = true;
+          }
+      })
     return (
           <div>
               <div className="fl" style={marginT220}>
@@ -150,14 +167,14 @@ class LoginIcon extends Component{
                     <img src="/images/head.png" width="57" height="57" />
                   </div>
                   <div className="fl" style={{margin:"19px 20px 0 0"}}>
-                    <p style={fontSize14}>{user.body.name}</p>
+                    <p style={fontSize14}>{user.user.name}</p>
                   </div>
                   <div className="clear"></div>
               </div>
              {/*<FangSelectBlueBtn padding="6px" float="left" margin="27px 20px 0 0" imgMargin="5px 0 0 5px" text="涉恐背景查询" fangselectIconUl1="/images/down.png" fangselectIconUl2="/images/up.png"/>*/}
               {/*修改密码*/}
               {/*通过utype判断是否显示用户管理按钮*/}
-              {user.body.utype === '1' ?
+              { btnShow ?
                   <ShallowBlueBtn padding="6px" width="80px" float="left" margin="27px 20px 0 0" onClick={ onClick=>this.onClickUserManagement()} imgMargin="5px 0 0 5px" text="用户管理"  />
                   : ''
               }

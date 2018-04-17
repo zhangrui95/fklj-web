@@ -27,7 +27,8 @@ const initialState = {
                     isOpen: false,
                     search: 'type=all',
                     haveSon: false,
-                    isSelect: true
+                    isSelect: true,
+                    isShow: true,
                 },
                 {
                     id: '102',
@@ -36,6 +37,7 @@ const initialState = {
                     search: 'type=gzry',
                     haveSon: true,
                     isSelect: false,
+                    isShow: true,
                     sonMenu: [
                         {
                             id: '1021',
@@ -70,6 +72,7 @@ const initialState = {
                     search: 'type=ldry',
                     haveSon: true,
                     isSelect: false,
+                    isShow: false,
                     sonMenu: [
                         {
                             id: '1031',

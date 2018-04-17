@@ -81,7 +81,7 @@ const initialState = { //研判报告
         },
         toConfigure: '',
         saveDisable: true,
-        //   username:userItem.body.name,
+        //   username:userItem.user.name,
         username: '',
         bgTrigger: false,
         trajectoryTrigger: false,

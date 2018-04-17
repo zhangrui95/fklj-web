@@ -49,8 +49,10 @@ const PersonalCenter = require('./PersonalCenter.js');
 const IntelligentRetrievalType = require('./IntelligentRetrieval');
 const InterrogationDetailsUsers = require('./InterrogationDetails');
 const InterrogationRecordUsers = require('./InterrogationRecord');
+const TaskManagement = require('./TaskManagement')
 const ReportForms = require('./ReportForms');
 const SystemManagement = require('./SystemManagement');
+const AreaManagement = require('./AreaManagement');
 const DynamicControl = require('./Users');
 const ElectronicArchivesUsers = require('./ElectronicArchives');
 
@@ -65,6 +67,8 @@ export const mainReducer = combineReducers({
   ...InterrogationRecordUsers,
   ...ReportForms,
   ...SystemManagement,
+  ...AreaManagement,
+  ...TaskManagement,
   ...DynamicControl,
   ...ElectronicArchivesUsers,
   routing:routerReducer,

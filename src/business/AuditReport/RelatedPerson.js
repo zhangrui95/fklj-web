@@ -201,8 +201,8 @@ export class RelatedPerson extends Component {
                         relation: values.relation ? values.relation : '',
                         ishaveterrback: values.ishaveterrback ? values.ishaveterrback : '',
                         incrimination: values.incrimination ? values.incrimination : '',
-                        createuser: userItem.body.idcard,
-                        optuser: userItem.body.idcard,
+                        createuser: userItem.user.idcard,
+                        optuser: userItem.user.idcard,
                     }
 
                     store.dispatch(addRelatedPersonData(creds));
@@ -216,8 +216,8 @@ export class RelatedPerson extends Component {
                         relation: values.relation ? values.relation : this.state.record.relation,
                         ishaveterrback: values.ishaveterrback ? values.ishaveterrback : this.state.record.ishaveterrback,
                         incrimination: values.incrimination ? values.incrimination : this.state.record.incrimination,
-                        createuser: userItem.body.idcard,
-                        optuser: userItem.body.idcard,
+                        createuser: userItem.user.idcard,
+                        optuser: userItem.user.idcard,
                     }
                     store.dispatch(editRelatedPersonData(creds));
 

@@ -2,9 +2,14 @@
  * Created by iliulei on 2017/5/18.
  */
 import {store} from '../index.js';
-import {PERSONALCENTER_MODULE,DYNAMICCONTROL_MODULE,SYSTEMMANAGEMENT_MODULE,INTELLIGENTRETRIEVAL_MODULE,
-    AUDIT_REPORT_MODULE,REPORTFORMS_MODULE,INVENTORYMANAGEMENT_MODULE,CUSTOMMANAGEMENT_MODULE,REPORTLY_MODULE,DEFINEWARE_MODULE,
-    TaskMANAGEMENT_MODULE,ELETRO_MODULE} from "../utils/Constants";
+// import {mainReducer} from "../reducers/reducers";
+// import {createDevToolsStore} from "../configStore";
+import {
+    PERSONALCENTER_MODULE, DYNAMICCONTROL_MODULE, SYSTEMMANAGEMENT_MODULE, INTELLIGENTRETRIEVAL_MODULE,
+    AUDIT_REPORT_MODULE, REPORTFORMS_MODULE, INVENTORYMANAGEMENT_MODULE, CUSTOMMANAGEMENT_MODULE, REPORTLY_MODULE,
+    DEFINEWARE_MODULE,
+    TaskMANAGEMENT_MODULE, ELETRO_MODULE, AREAMANAGEMENT_MODULE
+} from "../utils/Constants";
 import {fetchData} from "./request";
 import {INTERROGATIONDETAILS_TAB_CHANGE_CURRENT,INTERROGATIONDETAILS_TAB_INIT} from "./InterrogationDetails";
 import {ELECTRO_TAB_CHANGE_CURRENT} from "./ElectronicArchives";
@@ -24,6 +29,7 @@ import {PostPersonCenterData,PostPersonCenterFollowData} from "./PersonalCenter"
 const mockApi = "http://www.easy-mock.com/mock/591d5f109aba4141cf2736c6/fklj2";
 //const standardApi = serverUrl+"/hylink-fklj";
 const standardApi = serverUrl;
+// let store = createDevToolsStore(mainReducer);
 
 export let api;
 if(developmentMode === developmentModeList.mock){
@@ -195,6 +201,7 @@ export const DTGK_MENU_LDRY_CHAGE = 'recv-data-error';
 export const DTGK_MENU_CHANGE_CURRENT = 'dtgk_menu_change_current';
 export const PERSONALCENTER_MENU_CHANGE_CURRENT = 'personalcenter_menu_change_current';
 export const SYSTEMMANAGEMENT_MENU_CHANGE_CURRENT = 'systemmanagement_menu_change_current';//更换选中菜单
+export const AREAMANAGEMENT_MENU_CHANGE_CURRENT = 'areamanagement_menu_change_current';//更换选中菜单
 export const INTELLIGENT_RETRIEVAL_MENU_CHANGE_CURRENT = 'intelligent_retrieval_menu_change_current';//智能检索更换选中菜单
 export  const SYSTEMMANAGEMENT_HIGHRISKAREA_CHAGE='systemmanagement_highriskarea_chage';//高危地区打开关闭
 export const AUDIT_REPORT_MENU_CHANGE_CURRENT = 'audit_report_menu_change_current';//研判报告
@@ -244,6 +251,12 @@ export function changeMenu(menu, type, moduleName){//改变目录状态
             }
         }else if(type==='getData'){//点击目录
             return {type:SYSTEMMANAGEMENT_MENU_CHANGE_CURRENT,menu:menu};
+        }
+    } else if(moduleName===AREAMANAGEMENT_MODULE){//片区管理模块
+        if(type==='openAndClose'){//菜单打开关闭
+
+        }else if(type==='getData'){//点击目录
+            return {type:AREAMANAGEMENT_MENU_CHANGE_CURRENT,menu:menu};
         }
     }else if(moduleName===AUDIT_REPORT_MODULE){//研判报告-动态管控内
         if(type==='openAndClose'){//菜单打开关闭
@@ -312,6 +325,10 @@ export  function initIntelligentRetrievalMenu(menu) {
 export  function initPersonalCenterMenu(menu) {
     return {type:PERSONALCENTER_MENU_INIT,menu:menu};
 }
+//初始片区管理菜单
+export  function initAreaManagementCenterMenu(menu) {
+    return {type:AREAMANAGEMENT_MENU_INIT,menu:menu};
+}
 //初始化系统管理菜单
 export  function initSystemManagementMenu(menu) {
     return {type:SYSTEMMANAGEMENT_MENU_INIT,menu:menu};
@@ -355,6 +372,8 @@ export const DYNAMICCONTROL_MENU_INIT = 'dynamiccontrol_menu_init';
 export const INTELLIGENTRETRIEVAL_MENU_INIT = 'intelligentretrieval_menu_init';
 //设置管理菜单初始化
 export const SYSTEMMANAGEMENT_MENU_INIT = 'systemmanagement_menu_init';
+//设置片区管理菜单初始化
+export const AREAMANAGEMENT_MENU_INIT = 'areaManagement_menu_init';
 //设置智能检索初始化
 export const INTELLIGENTRETRIEVA_MENU_INIT = 'intelligentretrieva_menu_init';
 //设置统计报表初始化
@@ -391,6 +410,7 @@ export function changeTab(tab, type, moduleName){
 export const NAVIGATION_CHANGE = 'navigation_change';
 //导航栏切换
 export function changeNavigation(navigationPath){
+    console.log('console.log(store.getState().root.uiData.navigations)22222',store.getState().root.uiData.navigations)
     return {type:NAVIGATION_CHANGE,navigationPath:navigationPath,navigations:store.getState().root.uiData.navigations};
 }
 //设置遮罩状态常量

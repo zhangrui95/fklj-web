@@ -289,7 +289,7 @@ export class AuditReportRight extends Component{
                                         <span>编&nbsp;&nbsp;号：</span><spna>{this.state.judgeCode}</spna>
                                     </p>
                                     <p>
-                                        <span>研判人员：</span><spna>{toConfigure==='' ?userItem.body.name: this.state.username}</spna>
+                                        <span>研判人员：</span><spna>{toConfigure==='' ?userItem.user.name: this.state.username}</spna>
                                     </p>
                                 </div>
                                 <div style={{fontSize:"14px",color:"#fff",float:"left",width:"20%"}}>

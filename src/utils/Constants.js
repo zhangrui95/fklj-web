@@ -29,6 +29,8 @@ export const REPORTFORMS_MENU_ACTIVITY = "活动数据统计"
 export const PERSONALCENTER_MODULE = 'personalcenter_module';
 //动态管控模块
 export const DYNAMICCONTROL_MODULE = 'dynamiccontrol_module';
+//片区管理模块
+export const AREAMANAGEMENT_MODULE = '片区管理';
 //智能检索模块
 export const INTELLIGENTRETRIEVAL_MODULE = 'intelligentretrieval_module';
 //设置管理模块
@@ -73,6 +75,9 @@ export const DEFINEWAREHOUSE_MENU_PERSON = "临控人员"
 export const DEFINEWAREHOUSE_MENU_CAR = "临控车辆"
 // 任务管理 菜单名称
 export const TASKMANAGEMENT_MENU = "任务管理"
+// 任务管理 菜单名称
+export const TASKMANAGEMENT_MENU_PATROL = "巡逻任务"
+export const TASKMANAGEMENT_MENU_POINT = "卡点任务"
 ////////////////////////////////////////////////////////////////////
 export const SYSTEMMANAGEMENT_MENU_HORRORSOFTWARE = "涉恐软件"
 export const SYSTEMMANAGEMENT_MENU_INTERROGATIONINFORMATION = "特征设置"

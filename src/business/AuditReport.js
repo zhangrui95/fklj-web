@@ -36,7 +36,7 @@ class AuditReport extends Component{
         //     entityOrField: true,
         //     pd: {
         //         personId:this.props.params.personId,
-        //         followerUserid: '' + userItem.body.idcard,
+        //         followerUserid: '' + userItem.user.idcard,
         //     },
             
         // }

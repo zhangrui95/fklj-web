@@ -180,7 +180,6 @@ const initialState = { //系统管理
     },
         uiData: {
             menus: [
-                
                 {
                     id: '101',
                     menuName: '涉恐软件',

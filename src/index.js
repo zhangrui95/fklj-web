@@ -18,6 +18,8 @@ import InterrogationRecord from "./business/InterrogationRecord";
 import InterrogationDetails from "./business/InterrogationDetails";
 import ElectronicArchives from "./business/ElectronicArchives";
 import SystemManagement from "./business/SystemManagement";
+import AreaManagement from "./business/AreaManagement";
+import TaskManagement from "./business/TaskManagement";
 import AuditReport from "./business/AuditReport";
 import Preview from "./business/AuditReport/Preview";
 import ReportForms from "./business/ReportForms";
@@ -29,6 +31,8 @@ import {changeNavigation} from "./actions/actions";
 import PhoneDetails from "./components/shared/PhoneDetails";
 
 import {versionNumberQuote} from "./utils/Configuration";
+import WebSocket from './business/WebSocket';
+
 
 import moment from 'moment';
 moment.locale('zh-cn');
@@ -39,7 +43,7 @@ const history = syncHistoryWithStore(browserHistory, store);
 //const history = syncHistoryWithStore(browserHistory, store);
 
 class Index extends Component{
-    
+
     //判断当前用户是否有权限进行菜单访问，token是否存在
     requireAuth = (nextState, replace) => {
         console.info('--requireAuth--');
@@ -59,7 +63,7 @@ class Index extends Component{
             store.dispatch(changeNavigation(pathname));
         }
     }
-   
+
     render(){
         return (
             <div>
@@ -72,6 +76,8 @@ class Index extends Component{
                             <Route exact path="/IntelligentRetrieval" component={IntelligentRetrieval} onEnter={this.requireAuth} />
                             <Route exact path="/PersonalCenter" component={PersonalCenter} onEnter={this.requireAuth} />
                             <Route exact path="/SystemManagement" component={SystemManagement} onEnter={this.requireAuth} />
+                            <Route exact path="/AreaManagement" component={AreaManagement} onEnter={this.requireAuth} />
+                            <Route exact path="/TaskManagement" component={TaskManagement} onEnter={this.requireAuth} />
                             <Route exact path="/AuditReport/:idcard/:personId" component={AuditReport}  onEnter={this.requireAuth}/>
                             <Route exact path="/interrogationRecord/:idcard" component={InterrogationRecord} onEnter={this.requireAuth} />
                             <Route exact path="/InterrogationDetails/:recordId/:personId" component={InterrogationDetails}  onEnter={this.requireAuth} />
@@ -84,6 +90,7 @@ class Index extends Component{
                     </Router>
                 </Provider>
                 <div style={{position:"fixed",bottom:5,left:30,color:"#fff",fontSize:12}}>版本号:&nbsp;&nbsp;{versionNumberQuote}</div>
+                <WebSocket/>
             </div>
             
         );

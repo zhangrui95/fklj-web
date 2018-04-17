@@ -324,7 +324,7 @@ export class PlaceOfInfluxPerson extends Component {
                             telbak: values.tel_bak ? values.tel_bak : '',
                             areacode: this.state.citycode === '' ? this.state.personInfo.area_code : this.state.citycode,
                             id: values.id.toString(),
-                            createuser: userItem.body.idcard,
+                            createuser: userItem.user.idcard,
                             unitname: values.unit_name ? values.unit_name : '',
 
                         },
@@ -363,7 +363,7 @@ export class PlaceOfInfluxPerson extends Component {
                         tel: values.tel ? values.tel : '',
                         tel_bak: values.tel_bak ? values.tel_bak : '',
                         unit_code: this.state.citycode,
-                        createuser: userItem.body.idcard,
+                        createuser: userItem.user.idcard,
                         unit_name: values.unit_name ? values.unit_name : '',
                         type: "1"
 

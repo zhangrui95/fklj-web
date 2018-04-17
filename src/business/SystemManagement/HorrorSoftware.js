@@ -147,6 +147,7 @@ const pagination = {
 export class HorrorSoftware extends Component {
     constructor(props) { //初始化nowPage为1
         super(props);
+        console.log('this.props', this.props)
         this.state = {
             nowPage: 1,
             ModalDialogueShow: 'none',
@@ -372,8 +373,8 @@ export class HorrorSoftware extends Component {
                                     name:values.label,
                                     iconUrl:values.iconUrl?values.iconUrl:this.state.avatarSrc,
                                     id:values.id.toString(),
-                                    optuser:userItem.body.idcard,
-                                    createuser:userItem.body.idcard,
+                                    optuser:userItem.user.idcard,
+                                    createuser:userItem.user.idcard,
                                     remark:values.remark?values.remark:'',
                                     status:values.status?values.status:'1',
                                     code:values.value?values.value:'',
@@ -398,8 +399,8 @@ export class HorrorSoftware extends Component {
                                 name:values.label?values.label:'', 
                                 iconUrl:values.iconUrl?values.iconUrl:'',
                                 menuname:"304",
-                                optuser:userItem.body.idcard,
-                                createuser:userItem.body.idcard,
+                                optuser:userItem.user.idcard,
+                                createuser:userItem.user.idcard,
                                 remark:values.remark?values.remark:'',
                                 status:values.status?values.status:'1',
                                 code:values.value?values.value:'',
@@ -783,6 +784,7 @@ const SearchArea = React.createClass({
         render() {
             let name = this.state.name;
             let begindate = this.state.begindate;
+            console.log('begindate', begindate)
             let enddate = this.state.enddate;
             let beginDateValue = '';
             if (begindate === '') {} else {
@@ -830,7 +832,6 @@ const SearchArea = React.createClass({
                             取消
                         </Button>
                     </p>
-
                     </Modal>
             </div>
             );

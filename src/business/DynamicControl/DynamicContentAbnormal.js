@@ -94,7 +94,7 @@ export class DynamicContentAbnormal extends Component {
                     endTime: '',
                     name:'',
                     idcard: '',
-                    followerUserid: '' + userItem.body.idcard,
+                    followerUserid: '' + userItem.user.idcard,
     
                 },
                 showCount: constants.pageSize
@@ -111,7 +111,7 @@ export class DynamicContentAbnormal extends Component {
                     endTime: this.state.dateEnd,
                     name: this.state.name,
                     idcard: this.state.sfzh,
-                    followerUserid: '' + userItem.body.idcard,
+                    followerUserid: '' + userItem.user.idcard,
     
                 },
                 showCount: constants.pageSize
@@ -146,7 +146,7 @@ export class DynamicContentAbnormal extends Component {
                         endTime: lbtquery.endTime?lbtquery.endTime:'',
                         name: lbtquery.name?lbtquery.name:'',
                         idcard: lbtquery.sfzh?lbtquery.sfzh:'',
-                        followerUserid: '' + userItem.body.idcard,
+                        followerUserid: '' + userItem.user.idcard,
                     },
                     showCount: constants.pageSize
                 }
@@ -197,7 +197,7 @@ export class DynamicContentAbnormal extends Component {
                 endTime: this.state.dateEnd,
                 idcard: this.state.sfzh,
                 name: this.state.name,
-                followerUserid: '' + userItem.body.idcard,
+                followerUserid: '' + userItem.user.idcard,
 
             },
             showCount: constants.pageSize
@@ -210,7 +210,7 @@ export class DynamicContentAbnormal extends Component {
         // alert(this.props.sfzh);
         const creds = {
             sfzh: store.getState().DynamicControl.data.users.result.list.idcard,
-            name: user.body.name
+            name: user.user.name
         }
         store.dispatch(saveDynamicPhotoItem(creds));
         store.dispatch(PostUsersAbnormalData(creds));
@@ -234,7 +234,7 @@ export class DynamicContentAbnormal extends Component {
                 endTime: this.state.dateEnd,
                 idcard: this.state.sfzh,
                 name: this.state.name,
-                followerUserid: '' + userItem.body.idcard,
+                followerUserid: '' + userItem.user.idcard,
 
             },
             showCount: constants.pageSize
@@ -397,7 +397,7 @@ const SearchArea = React.createClass({
                     endTime: this.state.dateEnd,
                     name: this.state.name,
                     idcard: this.state.sfzh,
-                    followerUserid: '' + userItem.body.idcard,
+                    followerUserid: '' + userItem.user.idcard,
                 },
                 showCount: constants.pageSize
             }
@@ -447,7 +447,7 @@ const SearchArea = React.createClass({
                 endTime: '',
                 name: '',
                 idcard: '',
-                followerUserid: '' + userItem.body.idcard,
+                followerUserid: '' + userItem.user.idcard,
 
             },
             showCount: constants.pageSize

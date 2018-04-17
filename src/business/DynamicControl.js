@@ -12,6 +12,7 @@ import {store} from '../index.js';
 import {DYNAMICCONTROL_MODULE} from "../utils/Constants";
 import  * as constants from "../utils/Constants";
 import {Header} from "../components/Header";
+
 class DynamicControl extends Component {
     // componentWillUnmount() { //销毁
     //     store.dispatch(initDynamicControlMenu(this.props.DynamicControl.uiData.menus))//销毁时初始化菜单
@@ -32,12 +33,24 @@ class DynamicControl extends Component {
     }
     render(){
         let isBlock = store.getState().root.uiData.ModalDialogueBg;
+        let menus = [];
+        const user = JSON.parse(sessionStorage.getItem('user'));
+        user.menu.map((col) => {
+            if(col.resourceCode === 'dtgk_ldry_page'){
+                this.props.DynamicControl.uiData.menus[2].isShow = true;
+            }
+        })
+        this.props.DynamicControl.uiData.menus.map((menu) =>  {
+            if(menu.isShow){
+                menus.push(menu);
+            }
+        })
         return (
             <div style={{overflow:'hidden',width:"100%"}}>
                 <Shade isBlock={isBlock}/>
                 <Header />
                 <div  className="sileder_left">
-                    <SliderMenuItem  menus={this.props.DynamicControl.uiData.menus}
+                    <SliderMenuItem  menus={menus}
                                      handleMenuClick={this.handleMenuClick}   />
                 </div>
                 <div  className="sileder_right">

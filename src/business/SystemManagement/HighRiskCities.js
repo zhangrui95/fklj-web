@@ -295,7 +295,7 @@ const Select = React.createClass({
             } >
             <option value ="">{this.props.text}</option>
 
-            < /select>
+            </select>
         );
     }
 });
