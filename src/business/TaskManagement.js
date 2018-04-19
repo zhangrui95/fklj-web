@@ -14,6 +14,7 @@ import {
 import {changeMenu, initTaskManagementMenu} from "../actions/actions";
 import {TaskMANAGEMENT_MODULE} from "../utils/Constants";
 import {TaskManagementRight} from "./TaskManagementRight";
+import WebSocket from './WebSocket';
 // import  * as constants from "../utils/Constants";
 //
 // import  {Spare}  from "./Spare";
@@ -51,6 +52,7 @@ class TaskManagement extends Component{
                     <TaskManagementRight />
                 </div>
                 <div className="clear"></div>
+                <WebSocket/>
             </div>
 
         );

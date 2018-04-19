@@ -20,6 +20,7 @@ import {
 import {store} from '../index.js';
 import {REPORTFORMS_MODULE} from "../utils/Constants";
 import {Header} from "../components/Header";
+import WebSocket from './WebSocket';
 //import { Line } from './';
 import ReactHighcharts from 'react-highcharts';
 import EchartsReact from 'echarts-for-react';
@@ -61,6 +62,7 @@ class ReportForms extends Component {
                     <ReportFormsRight />
                 </div>
                 <div className="clear"></div>
+                <WebSocket/>
             </div>
 
 

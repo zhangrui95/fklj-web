@@ -12,6 +12,7 @@ import {store} from '../index.js';
 import {DYNAMICCONTROL_MODULE} from "../utils/Constants";
 import  * as constants from "../utils/Constants";
 import {Header} from "../components/Header";
+import WebSocket from './WebSocket';
 
 class DynamicControl extends Component {
     // componentWillUnmount() { //销毁
@@ -61,6 +62,7 @@ class DynamicControl extends Component {
                     <DynamicRightContent />
                 </div>
                 <div className="clear"></div>
+                <WebSocket/>
             </div>
 
         );

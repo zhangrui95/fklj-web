@@ -12,6 +12,7 @@ import {
     SliderMenuItem,
     Shade
 } from "./generalPurposeModule";
+import WebSocket from './WebSocket';
 class AreaManagement extends Component {
     componentDidMount() {
         console.log('this.props.AreaManagement', this.props.AreaManagement);
@@ -38,6 +39,7 @@ class AreaManagement extends Component {
                     <AreaManagementRight />
                 </div>
                 <div className="clear"></div>
+                <WebSocket/>
             </div>
 
         );

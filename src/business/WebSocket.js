@@ -70,13 +70,15 @@ class WebSocket extends Component{
             <div>
                 <div
                     style={{
+                        position: 'fixed',
+                        right: '30px',
+                        bottom: '20px',
                         textAlign: 'right',
                         boxShadow: '0 1px 4px rgba(0,21,41,.12)',
                         width: '60px',
                         float:'right',
                         color: '#fff',
-                        margin: '15px',
-                        background: 'rgba(25, 41, 85, 0.5)',
+                        background: 'rgba(43, 108, 197, 0.7)',
                         padding: '7px 0 0',
                         cursor:'pointer'
                     }}

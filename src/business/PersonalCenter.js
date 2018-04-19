@@ -8,6 +8,7 @@ import {StylePage,ShallowBlueBtn,DeepRedBtn,Input,DeepBlueBtn,PhotoItem,Pag,Slid
 import {changeMenu,initPersonalCenterMenu} from "../actions/actions";
 import {PERSONALCENTER_MODULE} from "../utils/Constants";
 import {Header} from "../components/Header";
+import WebSocket from './WebSocket';
 class PersonalCenter extends Component {
     // componentWillUnmount() { //销毁
     //     store.dispatch(initPersonalCenterMenu(this.props.PersonalCenter.uiData.menus))
@@ -29,6 +30,7 @@ class PersonalCenter extends Component {
                     <PersonalCenterRight />
                 </div>
                 <div className="clear"></div>
+                <WebSocket/>
             </div>
 
         );

@@ -21,6 +21,7 @@ import {SYSTEMMANAGEMENT_MODULE} from "../utils/Constants";
 import SystemManagementRight from "./SystemManagementRight";
 import  * as constants from "../utils/Constants";
 import {Header} from "../components/Header";
+import WebSocket from './WebSocket';
 import {
     fetchPlaceOfInfluxPersonData,
     fetchPlaceOfOriginPersonData,
@@ -110,6 +111,7 @@ class SystemManagement extends Component {
                 </div>
                 {/*<Spare header='true'/>*/}
                 <div className="clear"></div>
+                <WebSocket/>
             </div>
 
         );
