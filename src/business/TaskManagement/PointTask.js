@@ -39,12 +39,14 @@ import {
 } from 'antd';
 
 import moment from 'moment';
+import 'moment/locale/zh-cn';
 moment.locale('zh-cn');
 
 // 样式
 const sliderdyHeader = {
     borderBottom: "1px solid #0C5F93",
-    padding: "18px 0"
+    padding: "18px 0",
+    overflow: "hidden"
 }
 
 const CheckboxGroup = Checkbox.Group;
@@ -397,6 +399,7 @@ export  class PointTask extends Component{
                 {/*分页*/}
                 <Pag pageSize={10} nowPage={nowPage} totalRecord={10} pageChange={this.pageChange} />
                 <Modal
+                    width={600}
                     title="卡点任务"
                     visible={this.state.visible}
                     onCancel={this.handleCancel}

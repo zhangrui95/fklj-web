@@ -55,7 +55,8 @@ import { browserHistory } from 'react-router';
 // 样式
 const sliderdyHeader = {
     borderBottom: "1px solid #0C5F93",
-    padding: "18px 0"
+    padding: "18px 0",
+    overflow: "hidden"
 }
 
 export class DynamicContentOutflow extends Component {
@@ -546,7 +547,7 @@ class ModalDialogue extends Component {
                         </p>
                     </div>
                     
-                </div> < /div>
+                </div> </div>
         );
     }
 }

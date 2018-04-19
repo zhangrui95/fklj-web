@@ -53,6 +53,7 @@ const TaskManagement = require('./TaskManagement')
 const ReportForms = require('./ReportForms');
 const SystemManagement = require('./SystemManagement');
 const AreaManagement = require('./AreaManagement');
+const ControlPersonnel = require('./ControlPersonnel');
 const DynamicControl = require('./Users');
 const ElectronicArchivesUsers = require('./ElectronicArchives');
 
@@ -71,5 +72,6 @@ export const mainReducer = combineReducers({
   ...TaskManagement,
   ...DynamicControl,
   ...ElectronicArchivesUsers,
+  ...ControlPersonnel,
   routing:routerReducer,
 });

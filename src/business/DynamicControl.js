@@ -36,7 +36,11 @@ class DynamicControl extends Component {
         let menus = [];
         const user = JSON.parse(sessionStorage.getItem('user'));
         user.menu.map((col) => {
-            if(col.resourceCode === 'dtgk_ldry_page'){
+            if(col.resourceCode === 'dtgk_qb_page'){
+                this.props.DynamicControl.uiData.menus[0].isShow = true;
+            }else if(col.resourceCode === 'dtgk_gzry_page'){
+                this.props.DynamicControl.uiData.menus[1].isShow = true;
+            }else if(col.resourceCode === 'dtgk_ldry_page'){
                 this.props.DynamicControl.uiData.menus[2].isShow = true;
             }
         })

@@ -41,8 +41,13 @@ const initialState = {
                 isSelect: false,
                 path: "/AreaManagement",
                 isShow: true
-            },
-            {
+            }, {
+                id: '111',
+                navigationName: '管控人员',
+                isSelect: false,
+                path: "/ControlPersonnel",
+                isShow: true
+            }, {
                 id: '110',
                 navigationName: '任务管理',
                 isSelect: false,

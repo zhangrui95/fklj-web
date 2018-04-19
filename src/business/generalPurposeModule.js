@@ -1025,7 +1025,8 @@ const OneLevelMenuActive = {
 }
 const sliderUl = {
     background: "rgba(2,24,85,0.5)",
-    position: "relative"
+    position: "relative",
+    marginBottom: "0"
 }
 //二级菜单样式
 const secondLevelMenu = {

@@ -31,6 +31,12 @@ export const PERSONALCENTER_MODULE = 'personalcenter_module';
 export const DYNAMICCONTROL_MODULE = 'dynamiccontrol_module';
 //片区管理模块
 export const AREAMANAGEMENT_MODULE = '片区管理';
+//片区管理模块
+export const CONTROLPERSONNEL_MODULE = '管控人员';
+export const CONTROLPERSONNEL_MODULE_GZ_NLHRY = '拟来呼人员';
+export const CONTROLPERSONNEL_MODULE_GZ_ZALY = '治安来源';
+export const CONTROLPERSONNEL_MODULE_GK = '管控人员';
+export const CONTROLPERSONNEL_MODULE_YCC = '已撤出管控';
 //智能检索模块
 export const INTELLIGENTRETRIEVAL_MODULE = 'intelligentretrieval_module';
 //设置管理模块

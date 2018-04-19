@@ -1189,7 +1189,8 @@ class SexCharts extends Component {
 
 const sliderdyHeader = {
     borderBottom: "1px solid #0C5F93",
-    padding: "18px 10px"
+    padding: "18px 10px",
+    overflow: "hidden"
 }
 const labelStyle2 = {
     fontSize: "14px",

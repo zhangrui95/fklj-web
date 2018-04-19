@@ -57,7 +57,8 @@ moment.locale('zh-cn');
 
 const sliderdyHeader = {
     borderBottom: "1px solid #0C5F93",
-    padding: "18px 0"
+    padding: "18px 0",
+    overflow: "hidden"
 }
 
 const formItemLayout = {

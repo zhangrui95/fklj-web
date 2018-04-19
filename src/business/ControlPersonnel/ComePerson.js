@@ -1,38 +1,11 @@
-import React, {
-    Component
-} from 'react';
-import {
-    connect
-} from 'react-redux';
-import {
-    mainReducer
-} from "../../reducers/reducers";
-import {
-    StylePage,
-    ShallowBlueBtn,
-    Pag,
-} from "../generalPurposeModule";
-import {
-    store
-} from '../../index.js';
+import React, {Component} from 'react';
+import {connect} from 'react-redux';
+import {mainReducer} from "../../reducers/reducers";
+import {StylePage, ShallowBlueBtn, Pag,} from "../generalPurposeModule";
+import {store} from '../../index.js';
 import * as constants from "../../utils/Constants";
-import {
-    monthFormat,
-    dateFormat,
-    serverUrl
-} from '../../utils/';
-import {
-    Spin,
-    Table,
-    message,
-    Input,
-    Modal,
-    Button,
-    Form,
-    Icon,
-    Row,
-    Col,
-} from 'antd';
+import {monthFormat, dateFormat, serverUrl} from '../../utils/';
+import {Spin, Table, message, Input, Modal, Button, Form, Icon, Row, Col, Select, DatePicker} from 'antd';
 
 import moment from 'moment';
 moment.locale('zh-cn');
@@ -44,6 +17,7 @@ const sliderdyHeader = {
     overflow: "hidden"
 }
 const FormItem = Form.Item;
+const Option = Select.Option;
 
 //分页配置文件
 const pagination = {
@@ -72,7 +46,7 @@ const formItemLayout = {
     },
 };
 
-export  class AreaManage extends Component{
+export  class ComePerson extends Component{
     constructor(props) { //初始化nowPage为1
         super(props);
         this.state = {
@@ -87,9 +61,9 @@ export  class AreaManage extends Component{
             enddate: '',
             key: '',
             data: [
-                {key: 1, serial: 1, value: '011233001', label: '海邻科片区', updatetime: '2018-04-10'},
-                {key: 2, serial: 2, value: '011233002', label: 'hylink片区', updatetime: '2018-04-09'},
-                {key: 3, serial: 3, value: '011233003', label: '海邻科片区', updatetime: '2018-04-08'},
+                {key: 1, serial: 1, cardId: '230106196201222121', label: '张三', sex:'男',age:'26', state:'暂住', phone:'13936003633',zrdw:'呼伦浩特市XX单位', updatetime: '2018-04-10'},
+                {key: 2, serial: 2, cardId: '230105199605262631', label: '李四', sex:'女',age:'18', state:'暂住', phone:'13936003633',zrdw:'呼伦浩特市XX单位', updatetime: '2018-04-09'},
+                {key: 3, serial: 3, cardId: '20610819740122292X', label: '王二', sex:'男',age:'39', state:'暂住', phone:'13936003633',zrdw:'呼伦浩特市XX单位', updatetime: '2018-04-08'},
             ],
             record: null,
             pagination: pagination,
@@ -265,26 +239,41 @@ export  class AreaManage extends Component{
     render() {
         const { getFieldDecorator } = this.props.form;
         let nowPage = this.state.nowPage;
-        let isFetching = store.getState().AreaManagement.isFetching;
+        let isFetching = store.getState().ControlPersonnel.isFetching;
         const columns = [{
             title: '序号',
             dataIndex: 'serial',
-        }, {
-            title: '编码',
-            dataIndex: 'value',
-        }, {
-            title: '片区名称',
+        },{
+            title: '身份证号',
+            dataIndex: 'cardId',
+            width:180,
+        },{
+            title: '姓名',
             dataIndex: 'label',
+        },{
+            title: '性别',
+            dataIndex: 'sex',
+        },{
+            title: '年龄',
+            dataIndex: 'age',
+        },{
+            title: '居住类型',
+            dataIndex: 'state',
+        },{
+            title: '联系电话',
+            dataIndex: 'phone',
+        },{
+            title: '责任单位',
+            dataIndex: 'zrdw',
         }, {
             title: '更新时间',
             dataIndex: 'updatetime',
-            width:180,
         }, {
             title: '操作',
             key: 'action',
             render: (text, record) => (
                 <span>
-                        <span onClick={(e)=>this.editShowModal(record)} style={{cursor:'pointer'}}>编辑</span>
+                        <span onClick={(e)=>this.editShowModal(record)} style={{cursor:'pointer'}}>详情</span>
                 </span>
             ),
         }];
@@ -331,65 +320,110 @@ export  class AreaManage extends Component{
                             <Spin size="large" />
                         </div>:
                         <div style={{padding:"0 15px"}}>
-                            <Table locale={{emptyText:'暂无数据'}} rowSelection={rowSelection} columns={columns} dataSource={this.state.data} bordered  pagination={false}/>
+                            <Table locale={{emptyText:'暂无数据'}} columns={columns} dataSource={this.state.data} bordered  pagination={false}/>
                         </div>}
                     <div className="clear"></div>
                 </div>
                 {/*分页*/}
                 <Pag pageSize={10} nowPage={nowPage} totalRecord={10} pageChange={this.pageChange} />
                 <Modal
-                    title="片区管理"
+                    width={700}
+                    title="详情"
                     visible={this.state.visible}
                     onCancel={this.handleCancel}
                     footer={null}
                     key={this.state.modalKey}
                 >
-                    <Form onSubmit={this.saveModel}>
-                        <div className="formItemLeft">
-                            <FormItem
-                                {...formItemLayout}
-                                label="编码"
-                            >
-                                {getFieldDecorator('value', {
-                                    rules: [{
-                                        required: true, message: '请输入编码!'
-                                    },{
-                                        max:14,message:'最多输入十四个字符!'
-                                    }],
-                                    initialValue:this.state.modalType === 'edit' ? this.state.personInfo.value : '',
-                                    validateFirst:true
-                                })(
-                                    <Input />
-                                )}
-                            </FormItem>
-                        </div>
-                        <div className="formItemLeft">
-                            <FormItem
-                                {...formItemLayout}
-                                label="片区名称"
-                            >
-                                {getFieldDecorator('label', {
-                                    rules: [{
-                                        required: true, message: '请输入名称!',
-
-                                    },{
-                                        max:20,message:'最多输入二十个字符!',
-                                    }],
-                                    initialValue:this.state.modalType === 'edit' ? this.state.personInfo.label : '',
-                                    validateFirst:true
-                                })(
-                                    <Input />
-                                )}
-                            </FormItem>
-                        </div>
-                        <Row>
-                            <Col span={16} style={{textAlign: 'right'}}>
-                                <Button htmlType="submit"  className="btn_ok">保存</Button>
-                                <Button style={{marginLeft: 30}} onClick={this.handleCancel} className="btn_delete">取消</Button>
-                            </Col>
-                        </Row>
-
-                    </Form>
+                    <Row>
+                        <Col span={12}>
+                            <Form onSubmit={this.saveModel}>
+                                <FormItem
+                                    {...formItemLayout}
+                                    label="身份证号"
+                                >
+                                    {getFieldDecorator('value', {
+                                        initialValue:this.state.personInfo.cardId,
+                                    })(
+                                        <Input disabled/>
+                                    )}
+                                </FormItem>
+                                <FormItem
+                                    {...formItemLayout}
+                                    label="姓名"
+                                >
+                                    {getFieldDecorator('value', {
+                                        initialValue:this.state.personInfo.label,
+                                    })(
+                                        <Input disabled/>
+                                    )}
+                                </FormItem>
+                                <FormItem
+                                    {...formItemLayout}
+                                    label="性别"
+                                >
+                                    {getFieldDecorator('value', {
+                                        initialValue:this.state.personInfo.sex,
+                                    })(
+                                        <Input disabled/>
+                                    )}
+                                </FormItem>
+                                <FormItem
+                                    {...formItemLayout}
+                                    label="年龄"
+                                >
+                                    {getFieldDecorator('value', {
+                                        initialValue:this.state.personInfo.age,
+                                    })(
+                                        <Input disabled/>
+                                    )}
+                                </FormItem>
+                            </Form>
+                        </Col>
+                        <Col span={12}>
+                            <Form>
+                                <FormItem
+                                    {...formItemLayout}
+                                    label="居住类型"
+                                >
+                                    {getFieldDecorator('value', {
+                                        initialValue:this.state.personInfo.state,
+                                    })(
+                                        <Input disabled/>
+                                    )}
+                                </FormItem>
+                                <FormItem
+                                    {...formItemLayout}
+                                    label="联系电话"
+                                >
+                                    {getFieldDecorator('value', {
+                                        initialValue:this.state.personInfo.phone,
+                                    })(
+                                        <Input disabled/>
+                                    )}
+                                </FormItem>
+                                <FormItem
+                                    {...formItemLayout}
+                                    label="责任单位"
+                                >
+                                    {getFieldDecorator('value', {
+                                        initialValue:this.state.personInfo.zrdw,
+                                    })(
+                                        <Input disabled/>
+                                    )}
+                                </FormItem>
+                                <FormItem
+                                    {...formItemLayout}
+                                    label="更新时间"
+                                >
+                                    {getFieldDecorator('value', {
+                                        initialValue:this.state.personInfo.updatetime,
+                                    })(
+                                        <Input disabled/>
+                                    )}
+                                </FormItem>
+                            </Form>
+                        </Col>
+                    </Row>
                 </Modal>
             </div>
         )
@@ -401,16 +435,32 @@ const SearchArea = React.createClass({
     getInitialState: function() {
         return {
             name: '',
+            cardId:'',
+            nameClear:'',
+            status:'',
+            WorkPlace:'',
             begindate: '',
             enddate: '',
-            nameClear:'',
-            begindateClear:'',
-            enddateClear:''
         };
     },
     handleNameChange: function(e) {
         this.setState({
             name: e.target.value
+        });
+    },
+    handleCardChange: function (e) {
+        this.setState({
+            cardId: e.target.value
+        });
+    },
+    statusChange:function(value){
+        this.setState({
+            status: value
+        });
+    },
+    WorkPlaceChange:function (e) {
+        this.setState({
+            WorkPlace: e.target.value
         });
     },
     handleClick: function() { //点击查询
@@ -419,7 +469,13 @@ const SearchArea = React.createClass({
     },
     init:function () {
         this.setState({
-            name:''
+            name: '',
+            cardId:'',
+            nameClear:'',
+            status:'',
+            WorkPlace:'',
+            begindate: '',
+            enddate: '',
         });
     },
     showModal: function() {
@@ -433,52 +489,53 @@ const SearchArea = React.createClass({
         });
         this.props.handleDelete();
     },
+    handleBeginDeteClick: function(date, dateString) {
+        this.setState({
+            begindate: dateString,
+        });
+    },
+    handleEndDeteClick: function(date, dateString) {
+        this.setState({
+            enddate: dateString,
+        });
+    },
     hideModal: function() {
         this.setState({
             visible: false,
         });
     },
     render() {
-        let name = this.state.name;
+        let {name,cardId,status,WorkPlace, enddate, begindate} = this.state;
+        let beginDateValue = '';
+        if (begindate === '') {} else {
+            beginDateValue = moment(begindate, dateFormat);
+        }
+        let endDateValue = '';
+        if (enddate === '') {} else {
+            endDateValue = moment(enddate, dateFormat);
+        }
         return (
             <div className="marLeft40 fl z_searchDiv">
-                <label htmlFor="" className="font14">片区名称：</label>
-                <Input style={{width:'121px',marginRight:"10px"}} type="text"  id='name' placeholder='请输入片区名称'  value={name}  onChange={this.handleNameChange}/>
+                <label htmlFor="" className="font14">身份证号：</label>
+                <Input style={{width:'150px',marginRight:"10px"}} type="text"  id='name' placeholder='请输入身份证号'  value={cardId} onChange={this.handleCardChange}/>
+                <label htmlFor="" className="font14">姓名：</label>
+                <Input style={{width:'150px',marginRight:"10px"}} type="text"  id='name' placeholder='请输入人员姓名'  value={name}  onChange={this.handleNameChange}/>
+                <label htmlFor="" className="font14">居住类型：</label>
+                <Select value={status} style={{ width: 100 ,marginRight:"10px" }} onChange={this.statusChange} notFoundContent='暂无'>
+                    <Option value="">全部</Option>
+                    <Option value="暂住">暂住</Option>
+                </Select>
+                <label htmlFor="" className="font14">责任单位：</label>
+                <Input style={{width:'150px',marginRight:"10px"}} type="text"  id='name' placeholder='请输入责任单位'  value={WorkPlace}  onChange={this.WorkPlaceChange}/>
+                <label htmlFor="" className="font14">更新时间：</label>
+                <DatePicker format={dateFormat} allowClear={false} style={{marginRight:"10px"}} value={beginDateValue} defaultValue="" onChange={this.handleBeginDeteClick}/>
+                <span className="font14" style={{margin:"0 10px 0 0"}}>至</span>
+                <DatePicker format={dateFormat} allowClear={false} style={{marginRight:"10px"}} value={endDateValue} defaultValue="" onChange={this.handleEndDeteClick}/>
                 <ShallowBlueBtn width="80px" text="查询" margin="0 10px 0 0" onClick={this.handleClick} />
                 <ShallowBlueBtn width="80px" text="重置" margin="0 10px 0 0" onClick={this.init} />
-                <div style={{marginTop:"15px"}}>
-                    <Button style={{width:"80px"}}
-                            onClick={this.props.addShowModal}
-                            className="btn_ok"
-                    >
-                        <Icon type="file-add" /> 增加
-                    </Button>
-                    <Button style={{margin:'0 0 0 10px',width:"80px"}} onClick={this.showModal} className="btn_delete">
-                        <Icon type="delete" />  删除
-                    </Button>
-                    <Modal style={{top:"38%"}}
-                           title="提示"
-                           visible={this.state.visible}
-                           footer={null}
-                           maskClosable={false}
-                           closable={false}
-                    >
-                        <p style={{fontSize:"16px",}}>是否删除选中项？</p>
-                        <p style={{marginTop:"20px",textAlign:"center"}}>
-                            <Button style={{margin:'0 20px 0 0 ',width:"80px"}} onClick={this.hideModalOk} className="btn_ok">
-                                确定
-                            </Button>
-                            <Button style={{margin:'',width:"80px"}} onClick={this.hideModal} className="btn_delete">
-                                取消
-                            </Button>
-                        </p>
-
-                    </Modal>
-                    <div className="clear"></div>
-                </div>
             </div>
         );
     }
 })
-AreaManage = Form.create()(AreaManage);
-export default connect(mainReducer)(AreaManage);
+ComePerson = Form.create()(ComePerson);
+export default connect(mainReducer)(ComePerson);

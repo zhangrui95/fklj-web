@@ -50,6 +50,7 @@ import {
 } from '../../utils/';
 
 import moment from 'moment';
+import 'moment/locale/zh-cn';
 moment.locale('zh-cn');
 import { goBack, push, replace } from 'react-router-redux';
 import { browserHistory } from 'react-router';
@@ -57,7 +58,8 @@ import { browserHistory } from 'react-router';
 // 样式
 const sliderdyHeader = {
     borderBottom: "1px solid #0C5F93",
-    padding: "18px 0"
+    padding: "18px 0",
+    overflow: "hidden"
 }
 
 export class DynamicContent extends Component {

@@ -20,6 +20,7 @@ import ElectronicArchives from "./business/ElectronicArchives";
 import SystemManagement from "./business/SystemManagement";
 import AreaManagement from "./business/AreaManagement";
 import TaskManagement from "./business/TaskManagement";
+import ControlPersonnel from "./business/ControlPersonnel";
 import AuditReport from "./business/AuditReport";
 import Preview from "./business/AuditReport/Preview";
 import ReportForms from "./business/ReportForms";
@@ -41,7 +42,6 @@ export let store = createDevToolsStore(mainReducer);
 const history = syncHistoryWithStore(browserHistory, store);
 
 //const history = syncHistoryWithStore(browserHistory, store);
-
 class Index extends Component{
 
     //判断当前用户是否有权限进行菜单访问，token是否存在
@@ -86,11 +86,12 @@ class Index extends Component{
                             <Route exact path="/ReportForms" component={ReportForms}  onEnter={this.requireAuth}  />
                             <Route exact path="/InventoryManagement" component={InventoryManagement}   onEnter={this.requireAuth}  />
                             <Route exact path="/PhoneDetails/:phoneId" component={PhoneDetails}   onEnter={this.requireAuth}  />
+                            <Route exact path="/ControlPersonnel" component={ControlPersonnel}   onEnter={this.requireAuth}  />
                         </div>
                     </Router>
                 </Provider>
                 <div style={{position:"fixed",bottom:5,left:30,color:"#fff",fontSize:12}}>版本号:&nbsp;&nbsp;{versionNumberQuote}</div>
-                <WebSocket/>
+                {sessionStorage.getItem('id_token')? <WebSocket/> : ''}
             </div>
             
         );

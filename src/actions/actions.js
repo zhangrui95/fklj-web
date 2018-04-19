@@ -8,7 +8,7 @@ import {
     PERSONALCENTER_MODULE, DYNAMICCONTROL_MODULE, SYSTEMMANAGEMENT_MODULE, INTELLIGENTRETRIEVAL_MODULE,
     AUDIT_REPORT_MODULE, REPORTFORMS_MODULE, INVENTORYMANAGEMENT_MODULE, CUSTOMMANAGEMENT_MODULE, REPORTLY_MODULE,
     DEFINEWARE_MODULE,
-    TaskMANAGEMENT_MODULE, ELETRO_MODULE, AREAMANAGEMENT_MODULE
+    TaskMANAGEMENT_MODULE, ELETRO_MODULE, AREAMANAGEMENT_MODULE,CONTROLPERSONNEL_MODULE
 } from "../utils/Constants";
 import {fetchData} from "./request";
 import {INTERROGATIONDETAILS_TAB_CHANGE_CURRENT,INTERROGATIONDETAILS_TAB_INIT} from "./InterrogationDetails";
@@ -212,6 +212,8 @@ export const CUSTOMERMANAGEMENT_MENU__CHANGE_CURRENT = 'customermanagement_menu_
 export const REPORT_MENU__CHANGE_CURRENT = 'Report_menu_change_current';//统计报表管理-更换选-洛阳
 export const DEFINWARE_MENU__CHANGE_CURRENT = 'DefinWare_menu_change_current';//临控管理-更换选-洛阳
 export const TASK_MENU__CHANGE_CURRENT = 'Task_menu_change_current';//任务管理-更换选-洛阳
+export const CONTROL_PERSONNEL_CURRENT = 'Control_personnel_current';//管控人员-更选项-呼市
+export const CONTROLPERSONNEL_TYPE = 'Control_personnel_type';//管控人员-更选项-呼市
 
 export const INVENTORY_MENU_LDPC_CHAGE = 'inventory-menu-change';//一级菜单流动盘查
 export const INVENTORY_MENU_KKPC_CHAGE = 'customsPass-data-flow';//一级菜单卡口盘查
@@ -236,6 +238,15 @@ export function changeMenu(menu, type, moduleName){//改变目录状态
         if(type==='openAndClose'){//菜单打开关闭
         }else if(type==='getData'){//点击目录
             return {type:INTELLIGENT_RETRIEVAL_MENU_CHANGE_CURRENT,menu:menu};
+        }
+    }else if(moduleName===CONTROLPERSONNEL_MODULE){//管控人员模块
+        if(type==='openAndClose'){//菜单打开关闭
+            if(menu.menuName === '关注人员'){
+                return {type:CONTROLPERSONNEL_TYPE}
+            }
+        }else if(type==='getData'){//点击目录
+            // store.dispatch(fetchUsersData('/data/getDArcPersonList',menu.search));
+            return {type:CONTROL_PERSONNEL_CURRENT,menu:menu};
         }
     }else if(moduleName===PERSONALCENTER_MODULE){//个人中心模块
         if(type==='openAndClose'){//菜单打开关闭
@@ -302,11 +313,6 @@ export function changeMenu(menu, type, moduleName){//改变目录状态
             return {type:TASK_MENU__CHANGE_CURRENT,menu:menu};
         }
     }
-
-
-
-
-
 }
 //初始化动态管控菜单
 export  function initDynamicControlMenu(menu) {
@@ -363,6 +369,10 @@ export  function initCustomManagementMenu(menu) {
 export  function initTaskManagementMenu(menu) {
     return {type:TASKMANAGEMENT_MENU_INIT,menu:menu};
 }
+//管控人员菜单
+export  function initControlPersonnelMenu(menu) {
+    return {type:CONTROLPERSONNEL_MENU_INIT,menu:menu};
+}
 
 //个人中心菜单初始化
 export const PERSONALCENTER_MENU_INIT = 'personalcenter_menu_init';
@@ -384,6 +394,8 @@ export const AUDITREPOT_MENU_INIT = 'auditreport_menu_init';
 export const INVENTORYMANAGEMENT_MENU_INIT = 'InventoryManagement_menu_init';
 //设置任务管理初始化--洛阳
 export const TASKMANAGEMENT_MENU_INIT = 'TaskManagement_menu_init';
+//设置任务管理初始化--管控人员-呼市
+export const CONTROLPERSONNEL_MENU_INIT = 'Controlpersonnel_menu_init';
 //设置卡口管理初始化--洛阳
 export const CUSTOMMANAGEMENT_MENU_INIT = 'CustomManagement_menu_init';
 //设置统计报表初始化--洛阳

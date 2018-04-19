@@ -43,7 +43,8 @@ moment.locale('zh-cn');
 // 样式
 const sliderdyHeader = {
     borderBottom: "1px solid #0C5F93",
-    padding: "18px 0"
+    padding: "18px 0",
+    // overflow: "hidden"
 }
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -102,6 +103,7 @@ export  class PatrolTask extends Component{
             imgtext:'',
             text:null,
             unit_scope:'116001',
+            treeValue:[]
         };
         this.pageChange = this.pageChange.bind(this);
     }
@@ -260,6 +262,11 @@ export  class PatrolTask extends Component{
             unit_scope: e,
         });
     }
+    onSelectTreeChange = (e) => {
+        this.setState({
+            treeValue: e,
+        });
+    }
     render() {
         const { getFieldDecorator } = this.props.form;
         let nowPage = this.state.nowPage;
@@ -365,7 +372,7 @@ export  class PatrolTask extends Component{
                 </div>
                 {/*分页*/}
                 <Pag pageSize={10} nowPage={nowPage} totalRecord={10} pageChange={this.pageChange} />
-                <Modal
+                <Modal width={600}
                     title="巡逻任务"
                     visible={this.state.visible}
                     onCancel={this.handleCancel}
@@ -398,19 +405,12 @@ export  class PatrolTask extends Component{
                                 {getFieldDecorator('unit', {
                                     rules: [{
                                         required: true,
-                                        message: '请选择派发单位!'
+                                        message: '派发单位!'
                                     }],
-                                    // initialValue:this.state.modalType === 'edit' ? this.state.personInfo.treeValue : '',
+                                    initialValue:this.state.modalType === 'edit' ? this.state.personInfo.treeValue : [],
                                     validateFirst:true
                                 })(
-                                    <div>
-                                        <Select value={this.state.unit_scope} style={{ width: 115, float: 'left', marginRight: '15px'}} onChange={this.onChange} >
-                                            <Option value="116001">仅自身节点</Option>
-                                            <Option value="116002">自身节点及子节点</Option>
-                                            <Option value="116003">仅子节点</Option>
-                                        </Select>
-                                        <TreeSelect  treeData={treeList} value={this.state.modalType === 'edit' ? this.state.personInfo.treeValue : []} style={{ width: 193 , float:'left'}}  placeholder="请选择派发单位" treeCheckable={true} showCheckedStrategy={SHOW_PARENT} treeCheckStrictly={true}/>
-                                    </div>
+                                    <TreeSelect  treeData={treeList} style={{ width: 193 , float:'left'}} placeholder="请选择派发单位" treeCheckable={true} showCheckedStrategy={SHOW_PARENT} treeCheckStrictly={true}/>
                                 )}
                             </FormItem>
                             <FormItem {...formItemLayout}

@@ -79,8 +79,12 @@ export class Header extends Component{
       let navigations = store.getState().root.uiData.navigations;
       let  navigationList = [];
       user.menu.map((col) => {
-          if(col.resourceCode === 'xtgl_menu'){
-                navigations[6].isShow = true;
+          if(col.resourceCode === 'dtgk_menu'){
+              navigations[1].isShow = true;
+          }else if(col.resourceCode === 'tjbb_menu'){
+              navigations[4].isShow = true;
+          }else if(col.resourceCode === 'xtgl_menu'){
+              navigations[6].isShow = true;
           }
       })
       navigations.forEach(function(navigation, i){

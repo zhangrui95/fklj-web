@@ -82,8 +82,9 @@ const tdStyle = {
 
 // 样式
 const sliderdyHeader = {
-  borderBottom: "1px solid #0C5F93",
-  padding: "18px 0"
+    borderBottom: "1px solid #0C5F93",
+    padding: "18px 0",
+    overflow: "hidden"
 }
 
 

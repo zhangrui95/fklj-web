@@ -15,7 +15,8 @@ import  {PersonalContentJudge}  from "./PersonalCenter/PersonalContentJudge";
 // 样式
 const sliderdyHeader = {
     borderBottom:"1px solid #0C5F93",
-    padding:"18px 0"
+    padding:"18px 0",
+    overflow: "hidden"
 }
 const font14 = {
     fontSize: "14px",
