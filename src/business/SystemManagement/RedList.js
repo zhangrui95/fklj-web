@@ -472,14 +472,14 @@ const SearchArea = React.createClass({
         let beginPicker = ''
         if (this.state.redList_beginTime === '') {
             beginPicker = (
-                <DatePicker format={dateFormat} allowClear={false} style={{marginRight: "10px"}} defaultValue=""
+                <DatePicker format={dateFormat} allowClear={false} style={{marginRight: "10px"}} placeholder=''
                     onChange={this.handleBeginDeteClick}/>
             );
         } else {
             beginDateValue = moment(this.state.redList_beginTime, dateFormat);
             beginPicker = (
                 <DatePicker format={dateFormat} allowClear={false} style={{marginRight: "10px"}} value={beginDateValue}
-                    defaultValue="" onChange={this.handleBeginDeteClick}/>
+                            placeholder='' onChange={this.handleBeginDeteClick}/>
             );
         }
         let endDateValue = '';
@@ -487,13 +487,13 @@ const SearchArea = React.createClass({
         if (this.state.redList_endTime === '') {
             endPicker = (
                 <DatePicker format={dateFormat} allowClear={false} style={{marginRight: "10px"}}
-                        defaultValue="" onChange={this.handleEndDeteClick}/>
+                            placeholder='' onChange={this.handleEndDeteClick}/>
             );
         } else {
             endDateValue = moment(this.state.redList_endTime, dateFormat);
             endPicker = (
                 <DatePicker format={dateFormat} allowClear={false} style={{marginRight: "10px"}} value={endDateValue}
-                        defaultValue="" onChange={this.handleEndDeteClick}/>
+                            placeholder='' onChange={this.handleEndDeteClick}/>
             );
         }
 

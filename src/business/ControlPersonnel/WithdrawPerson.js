@@ -529,9 +529,9 @@ const SearchArea = React.createClass({
                 <label htmlFor="" className="font14">责任单位：</label>
                 <Input style={{width:'150px',marginRight:"10px"}} type="text"  id='name' placeholder='请输入责任单位'  value={WorkPlace}  onChange={this.WorkPlaceChange}/>
                 <label htmlFor="" className="font14">更新时间：</label>
-                <DatePicker format={dateFormat} allowClear={false} style={{marginRight:"10px"}} value={beginDateValue} defaultValue="" onChange={this.handleBeginDeteClick}/>
+                <DatePicker placeholder="请选择日期"  format={dateFormat} allowClear={false} style={{marginRight:"10px"}} value={beginDateValue} defaultValue="" onChange={this.handleBeginDeteClick}/>
                 <span className="font14" style={{margin:"0 10px 0 0"}}>至</span>
-                <DatePicker format={dateFormat} allowClear={false} style={{marginRight:"10px"}} value={endDateValue} defaultValue="" onChange={this.handleEndDeteClick}/>
+                <DatePicker placeholder="请选择日期"  format={dateFormat} allowClear={false} style={{marginRight:"10px"}} value={endDateValue} defaultValue="" onChange={this.handleEndDeteClick}/>
                 <ShallowBlueBtn width="80px" text="查询" margin="0 10px 0 0" onClick={this.handleClick} />
                 <ShallowBlueBtn width="80px" text="重置" margin="0 10px 0 0" onClick={this.init} />
             </div>

@@ -483,9 +483,9 @@ onChangeName:function(e){
                     style={{width:202,margin:"0 10px 0 0"}}
                   />
                 <label htmlFor="" className="font14">最后盘查时间：</label>
-               <DatePicker onChange={this.handleBeginDeteClick}  format={dateFormat} allowClear={false} style={{marginRight:"10px"}} value={beginDateValue} />
+               <DatePicker  placeholder="" onChange={this.handleBeginDeteClick}  format={dateFormat} allowClear={false} style={{marginRight:"10px"}} value={beginDateValue} />
                <span className="font14" style={{margin:"0 10px 0 0"}}>至</span>
-               <DatePicker onChange={this.handleEndDeteClick}  format={dateFormat} allowClear={false} style={{marginRight:"10px"}} value={endDateValue}/>
+               <DatePicker  placeholder="" onChange={this.handleEndDeteClick}  format={dateFormat} allowClear={false} style={{marginRight:"10px"}} value={endDateValue}/>
                 <ShallowBlueBtn width={82} text="查询" margin="0 10px 0 0" onClick={this.handleClick} />
                 <DeepRedBtn  width={82} text="清除" onClick={this.clearHandleClick} />
                 <Modal style={{top:"38%"}}

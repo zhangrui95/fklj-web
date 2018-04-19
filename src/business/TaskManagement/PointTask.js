@@ -656,9 +656,9 @@ const SearchArea = React.createClass({
                     notFoundContent='暂无'
                 />
                 <label htmlFor="" className="font14">开始时间：</label>
-                <DatePicker format={dateFormat} allowClear={false} style={{marginRight:"10px"}} value={beginDateValue} defaultValue="" onChange={this.handleBeginDeteClick}/>
+                <DatePicker  placeholder="" format={dateFormat} allowClear={false} style={{marginRight:"10px"}} value={beginDateValue} defaultValue="" onChange={this.handleBeginDeteClick}/>
                 <span className="font14" style={{margin:"0 10px 0 0"}}>至</span>
-                <DatePicker format={dateFormat} allowClear={false} style={{marginRight:"10px"}} value={endDateValue} defaultValue="" onChange={this.handleEndDeteClick}/>
+                <DatePicker  placeholder="" format={dateFormat} allowClear={false} style={{marginRight:"10px"}} value={endDateValue} defaultValue="" onChange={this.handleEndDeteClick}/>
                 <label htmlFor="" className="font14">状态：</label>
                 <Select value={status} style={{ width: 100 ,margin:"0 10px 0 0" }} onChange={this.statusChange} notFoundContent='暂无'>
                     <Option value="">全部</Option>

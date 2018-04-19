@@ -82,9 +82,9 @@ export class Header extends Component{
           if(col.resourceCode === 'dtgk_menu'){
               navigations[1].isShow = true;
           }else if(col.resourceCode === 'tjbb_menu'){
-              navigations[4].isShow = true;
+              navigations[5].isShow = true;
           }else if(col.resourceCode === 'xtgl_menu'){
-              navigations[6].isShow = true;
+              navigations[7].isShow = true;
           }
       })
       navigations.forEach(function(navigation, i){

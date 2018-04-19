@@ -492,9 +492,9 @@ const SearchArea = React.createClass({
                 <label htmlFor="" className="font14">身份证号</label>
                 <Input style={{width:"202px" ,margin:"0 10px 0 0"}}  type="text" id='whiteList_idNumber' placeholder='' value={whiteList_idNumber} onChange={this.handleIdNumberChange} />
                 <label htmlFor="" className="font14">创建时间：</label>
-                <DatePicker  format={dateFormat} allowClear={false} style={{marginRight:"10px"}} value={beginDateValue} defaultValue="" onChange={this.handleBeginDeteClick}/>
+                <DatePicker placeholder='' format={dateFormat} allowClear={false} style={{marginRight:"10px"}} value={beginDateValue} defaultValue="" onChange={this.handleBeginDeteClick}/>
                 <span className="font14" style={{margin:"0 10px 0 0"}}>至</span>
-                <DatePicker  format={dateFormat} allowClear={false} style={{marginRight:"10px"}} value={endDateValue} defaultValue="" onChange={this.handleEndDeteClick}/> 
+                <DatePicker placeholder='' format={dateFormat} allowClear={false} style={{marginRight:"10px"}} value={endDateValue} defaultValue="" onChange={this.handleEndDeteClick}/>
                 <ShallowBlueBtn width="82" text="查询" margin="0 10px 0 0" onClick={this.handleClick} />
                 <ShallowBlueBtn  width="82" text="创建" margin="0 10px 0 0" onClick={this.props.handleClickAdd} />
                 <ShallowBlueBtn  width="82" text="导入"  />

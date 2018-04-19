@@ -782,9 +782,9 @@ const SearchArea = React.createClass({
                 <label htmlFor="" className="font14">名称：</label>
                 <Input   style={{width:"111px",margin:"0 10px 0 0"}} type="text"  id='name' placeholder=''  value={name}  onChange={this.handleNameChange} />
                 <label htmlFor="" className="font14">更新时间：</label>
-                <DatePicker  format={dateFormat} allowClear={false} style={{marginRight:"10px"}} value={beginDateValue} defaultValue="" onChange={this.handleBeginDeteClick}/>
+                <DatePicker  format={dateFormat} allowClear={false} style={{marginRight:"10px"}} value={beginDateValue} placeholder='' onChange={this.handleBeginDeteClick}/>
                 <span className="font14" style={{margin:"0 10px 0 0"}}>至</span>
-                <DatePicker  format={dateFormat} allowClear={false} style={{marginRight:"10px"}} value={endDateValue} defaultValue="" onChange={this.handleEndDeteClick}/>
+                <DatePicker  format={dateFormat} allowClear={false} style={{marginRight:"10px"}} value={endDateValue} placeholder='' onChange={this.handleEndDeteClick}/>
                 <ShallowBlueBtn width="82" text="查询" margin="0 10px 0 0" onClick={this.handleClick} />
                 {/*<ShallowBlueBtn  width="82" text="创建" onClick={this.handleClickClear} margin="0 10px 0 0"/>*/}
                  {/* <Button style={{margin:'0 10px 0 0px',width:"80px"}} onClick={this.props.addShowModal} className="btn_ok">

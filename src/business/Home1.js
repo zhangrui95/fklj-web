@@ -52,8 +52,7 @@ import {
 } from '../utils/';
 import {
     Spin,
-    Carousel,
-    Table
+    Carousel
 } from 'antd';
 
 import'../resources/main.less';
@@ -372,13 +371,13 @@ class Home extends Component {
                             <TaskStatistics dateSet={dateSet} />
 
                             {/*三个人员*/}
-                            <div style={{position:"absolute",bottom:"15px",right:"15px",width:"25%",height:"40%"}}>
-                                {/*已盘查任务*/}
-                                <Personnel text="已盘查任务"   personType='zdgz' code='201001'  dateSet={dateSet}/>
-                                {/*/!*未落地人员*!/*/}
-                                {/*<Personnel text="未落地人员" personType='wld'  dateSet={dateSet}/>*/}
-                                {/*/!*失踪人员*!/*/}
-                                {/*<Personnel text="失踪人员" personType='szry'  dateSet={dateSet}/>*/}
+                            <div style={{position:"absolute",bottom:"15px",left:"15px",width:"73%"}}>
+                                {/*重点关注人员*/}
+                                <Personnel text="重点关注人员"   personType='zdgz' code='201001'  dateSet={dateSet}/>
+                                {/*未落地人员*/}
+                                <Personnel text="未落地人员" personType='wld'  dateSet={dateSet}/>
+                                {/*失踪人员*/}
+                                <Personnel text="失踪人员" personType='szry'  dateSet={dateSet}/>
                                 <div style={clear}></div>
                             </div>
                             {/*总体和活动统计*/}
@@ -836,14 +835,14 @@ class TaskStatistics extends Component {
         let isFetching = store.getState().Home.data.taskStatistics.isFetching;
         return (
 
-            <div style={{position:"absolute",top:"15px",left:"15px",width:"25%",height:"50%",}}>
+            <div style={{position:"absolute",top:"15px",left:"15px",width:"25%",height:"65%",}}>
                 {/*隐藏的按钮状态*/}
-                <DeepBlueBtnY width="25px" text="拟来呼人员" borderRight="2px solid #0C1CD8" borderLeft="0" borderTop="0" display={isShowBtn} onClick={this.BtnClick}/>
+                <DeepBlueBtnY width="25px" text="动态管控统计" borderRight="2px solid #0C1CD8" borderLeft="0" borderTop="0" display={isShowBtn} onClick={this.BtnClick}/>
                 <div style={{padding:"10px 15px",background:"rgba(25,41,85,0.5)",display:isShowDiv,height:'99.9%'}}>
 
                     {/*标题*/}
                     <div>
-                        <p style={titleP}>拟来呼人员</p>
+                        <p style={titleP}>动态管控统计</p>
                         <img src="/images/guanbi.png" alt="" style={{float:"right",marginLeft:"20px",cursor:"pointer"}} onClick={this.chartsClick}/>
                         <div style={clear}></div>
                     </div>
@@ -859,7 +858,7 @@ class TaskStatistics extends Component {
                             {/*盘查人员总数*/}
                             <div style={{position:"absolute",top:"0px",right:"20px"}}>
                                 <p style={p16}>
-                                    <span>人员总数</span>
+                                    <span>盘查人次总数</span>
                                 </p>
                                 {/*<Link to='/DynamicControl'>*/}
                                     <p style={p25}>
@@ -992,14 +991,14 @@ class PopulationStatistics extends Component {
         // let isFetching = store.getState().Home.data.populationData.isFetching;
         return (
 
-            <div style={{position:"absolute",bottom:"15px",left:"15px",width:"25%",height:"40%"}}>
-                <DeepBlueBtnY width="25px" text="管控人员" borderRight="2px solid #0C1CD8" borderLeft="0" borderTop="0" display={isShowBtn} onClick={this.BtnClick}/>
+            <div style={{position:"absolute",top:"15px",right:"15px",width:"25%",height:"45%"}}>
+                <DeepBlueBtnY width="25px" text="总体数据统计" borderLeft="2px solid #0C1CD8" borderRight="0" borderTop="0" float="right" display={isShowBtn} onClick={this.BtnClick}/>
                 <div style={{padding:"10px 15px",background:"rgba(25,41,85,0.5)",position:"relative",display:isShowDiv,height:"99.9%"}}>
 
                     {/*标题*/}
                     <div>
-                        <img src="/images/guanbi.png" alt="" style={{float:"right",marginLeft:"20px",cursor:"pointer"}} onClick={this.chartsClick}/>
-                        <p style={titleP}>管控人员</p>
+                        <img src="/images/guanbi.png" alt="" style={{float:"left",marginRight:"20px"}} onClick={this.chartsClick}/>
+                        <p style={titleP}>总体数据统计</p>
 
                         <div style={clear}></div>
                     </div>
@@ -1015,16 +1014,16 @@ class PopulationStatistics extends Component {
                                 />
                             </div>
                             {/*关注人员总数*/}
-                            {/*<div style={{position:"absolute",top:"30px",right:"20px"}}>*/}
-                                {/*<p style={p16}>*/}
-                                    {/*<span>管控人员总数</span>*/}
-                                {/*</p>*/}
-                                {/*<Link to={'/DynamicControl'}>*/}
-                                    {/*<p style={p25}>*/}
-                                        {/*<span>{concernTotalData}</span>*/}
-                                    {/*</p>*/}
-                                {/*</Link>*/}
-                            {/*</div>*/}
+                            <div style={{position:"absolute",top:"30px",right:"20px"}}>
+                                <p style={p16}>
+                                    <span>关注人员总数</span>
+                                </p>
+                                <Link to={'/DynamicControl'}>
+                                    <p style={p25}>
+                                        <span>{concernTotalData}</span>
+                                    </p>
+                                </Link>
+                            </div>
                         </div>}
                 </div>
             </div>
@@ -1034,7 +1033,7 @@ class PopulationStatistics extends Component {
         );
     }
 }
-//派出所任务统计
+//活动数据统计
 class ActiveDataStatistics extends Component {
     constructor(props) {
         super(props);
@@ -1221,47 +1220,44 @@ class ActiveDataStatistics extends Component {
         let isShowDiv = this.state.isShowDiv;
         let isFetching = store.getState().Home.data.activityStatistics.isFetching;
         let type = 'flowIn';
-        const columns = [{
-            title: '序号',
-            dataIndex: 'key',
-            key: 'key',
-        }, {
-            title: '单位',
-            dataIndex: 'dw',
-            key: 'dw',
-        }, {
-            title: '任务量',
-            dataIndex: 'rwl',
-            key: 'rwl',
-        }];
-
-        const data = [{
-            key: '1',
-            dw: '新城西街派出所',
-            rwl: '12'
-        }, {
-            key: '2',
-            dw: '清滨派出所',
-            rwl: '5'
-        }, {
-            key: '3',
-            dw: '海拉尔派出所',
-            rwl: '7'
-        }];
         return (
-            <div style={{position:"absolute",top:"15px",right:"15px",width:"25%",height:"50%"}}>
-                <DeepBlueBtnY width="25px" text="派出所任务统计" borderLeft="2px solid #0C1CD8" borderRight="0" borderTop="0" float="right" display={isShowBtn} onClick={this.BtnClick}/>
+            <div style={{position:"absolute",bottom:"15px",right:"15px",width:"25%",height:"45%"}}>
+                <DeepBlueBtnY width="25px" text="活动数据统计" borderLeft="2px solid #0C1CD8" borderRight="0" borderTop="0" float="right" display={isShowBtn} onClick={this.BtnClick}/>
                 <div style={{padding:"10px 15px",background:"rgba(25,41,85,0.5)",display:isShowDiv,height:'99.9%'}}>
                     {/*标题*/}
                     <div>
                         <img src="/images/guanbi.png" alt="" style={{float:"left",marginRight:"20px"}} onClick={this.chartsClick}/>
-                        <p style={titleP}>派出所任务统计</p>
+                        <p style={titleP}>活动数据统计</p>
 
                         <div style={clear}></div>
                     </div>
-                    <div className="home-table" style={{padding:"0 15px"}}>
-                        <Table locale={{emptyText:'暂无数据'}} columns={columns} dataSource={data}  pagination={false}/>
-                    </div>}
+                    {/*图表*/}
+                    {isFetching ===  true? <div style={{textAlign:"center",position:"absolute",left:"45%",top:"50%"}}>
+                        <Spin size="large" />
+                    </div>:
+                        <div>
+                            <EchartsReact
+                                option={activeoption}
+                                style={{height: '95%', width: '60%',float:"left"}}
+                            />
+                            <div style={{float:"right",marginTop:"10px",marginRight:"20px"}}>
+                                <p style={p16}>
+                                    <span>流入人员总数</span>
+                                </p>
+                                <Link to={'/DynamicControl'}>
+                                    <p style={p25} onClick={this.clickInflow}>
+                                        <span>{inflowTotalData}</span>
+                                    </p>
+                                </Link>
+                                <p style={p16}>
+                                    <span>流出人员总数</span>
+                                </p>
+                                <p style={p25}>
+                                    <span>{outflowTotalData}</span>
+                                </p>
+                            </div>
+                            <div style={clear}></div>
+                        </div>}
                 </div>
             </div>
 
@@ -1404,13 +1400,13 @@ class Personnel extends Component {
         }
 
         return (
-            <div>
-                <DeepBlueBtnY width="25" text={this.props.text} borderLeft="2px solid #0C1CD8" borderRight="0" borderTop="0" float="right"  display={isShowBtn} onClick={this.BtnClick}/>
-                <div style={{padding:"10px 10px",background:"rgba(25,41,85,0.5)",height:"100%",display:isShowDiv}}>
+            <div style={{width:"27%",float:"left",height:"161px",position:"relative",zIndex:'99'}}>
+                <DeepBlueBtnY width="100px" height="30px" text={this.props.text} borderTop="2px solid #0C1CD8" borderRight="0" borderLeft="0" margin="150px 0 0 0"  display={isShowBtn} onClick={this.BtnClick}/>
+                <div style={{padding:"10px 10px",background:"rgba(25,41,85,0.5)",height:"100%",marginRight:"20px",display:isShowDiv}}>
                     {/*标题*/}
-                    <div style={{borderBottom:"1px solid #585c77"}}>
-                        <img src="/images/guanbi.png" alt="" style={{float:'left', marginRight:"20px"}} onClick={this.chartsClick}/>
+                    <div style={{borderBottom:"1px solid #1C3495"}}>
                         <p style={titleP}>{this.props.text}</p>
+                        <img src="/images/guanbi.png" alt="" style={{float:"right",marginLeft:"20px"}} onClick={this.chartsClick}/>
                         {/*<span style={{float:"right",color:"#cacaca",}}>更多>></span>*/}
                         <div style={clear}></div>
                     </div>
@@ -1419,7 +1415,7 @@ class Personnel extends Component {
                     <div>
                         {isNull === true ?
                             <div style={{marginTop:"40px",}}>
-                                <p style={{fontSize:"20px",color:"#fff",textAlign:"center"}}>暂无任务</p>
+                                <p style={{fontSize:"20px",color:"#fff",textAlign:"center"}}>暂无人员</p>
                             </div>
                             :
 

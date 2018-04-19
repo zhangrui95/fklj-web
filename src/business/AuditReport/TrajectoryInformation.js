@@ -671,9 +671,9 @@ export class TrajectoryInformation extends Component {
                     {/*时间查询*/}
                     <div>
                         <label htmlFor="" style={labelStyle2}>时间：</label>
-                        <DatePicker value={beginDateValue} onChange={this.handleChangeDateBegin} />
+                        <DatePicker  placeholder="" value={beginDateValue} onChange={this.handleChangeDateBegin} />
                         <span style={{ color: "#fff", fontSize: "14px", margin: "0 10px" }}>至</span>
-                        <DatePicker value={endDateValue} onChange={this.handleChangeDateEnd} />
+                        <DatePicker  placeholder="" value={endDateValue} onChange={this.handleChangeDateEnd} />
                         <ShallowBlueBtn text="查询" margin="0 0 0 20px" width="60px" onClick={this.handleClickQuery} />
                         {toConfigure === 'JudgeHistory' ? '' :
                             <Button style={{ margin: '0 0 0 0px', width: "60px", float: "right" }} onClick={this.handleClickAdd} className="btn_ok">
@@ -820,7 +820,7 @@ export class TrajectoryInformation extends Component {
                                             initialValue: '',
                                             validateFirst: true
                                         })(
-                                            <DatePicker format='YYYY-MM-DD HH:mm:ss' allowClear={false} style={{ width: '323px' }} />
+                                            <DatePicker  placeholder="" format='YYYY-MM-DD HH:mm:ss' allowClear={false} style={{ width: '323px' }} />
                                             )}
                                     </FormItem>
                                 </div>
@@ -837,7 +837,7 @@ export class TrajectoryInformation extends Component {
                                             initialValue: moment(),
                                             validateFirst: true
                                         })(
-                                            <DatePicker format='YYYY-MM-DD HH:mm:ss' allowClear={false} style={{ width: '323px' }} />
+                                            <DatePicker  placeholder="" format='YYYY-MM-DD HH:mm:ss' allowClear={false} style={{ width: '323px' }} />
                                             )}
                                     </FormItem>
                                 </div>
@@ -950,7 +950,7 @@ export class TrajectoryInformation extends Component {
                                             initialValue: '',
                                             validateFirst: true
                                         })(
-                                            <DatePicker format="YYYY-MM-DD HH:mm:ss" allowClear={false} style={{ width: '323px' }} />
+                                            <DatePicker  placeholder="" format="YYYY-MM-DD HH:mm:ss" allowClear={false} style={{ width: '323px' }} />
                                             )}
                                     </FormItem>
                                 </div>
@@ -967,7 +967,7 @@ export class TrajectoryInformation extends Component {
                                             initialValue: moment(),
                                             validateFirst: true
                                         })(
-                                            <DatePicker format="YYYY-MM-DD HH:mm:ss" allowClear={false} style={{ width: '323px' }} />
+                                            <DatePicker  placeholder="" format="YYYY-MM-DD HH:mm:ss" allowClear={false} style={{ width: '323px' }} />
                                             )}
                                     </FormItem>
                                 </div>
@@ -1078,7 +1078,7 @@ export class TrajectoryInformation extends Component {
                                                     initialValue: '',
                                                     validateFirst: true
                                                 })(
-                                                    <DatePicker format="YYYY-MM-DD HH:mm:ss" allowClear={false} style={{ width: '323px' }} />
+                                                    <DatePicker  placeholder="" format="YYYY-MM-DD HH:mm:ss" allowClear={false} style={{ width: '323px' }} />
                                                     )}
                                             </FormItem>
                                         </div>
@@ -1095,7 +1095,7 @@ export class TrajectoryInformation extends Component {
                                                     initialValue: '',
                                                     validateFirst: true
                                                 })(
-                                                    <DatePicker format="YYYY-MM-DD HH:mm:ss" allowClear={false} style={{ width: '323px' }} />
+                                                    <DatePicker  placeholder="" format="YYYY-MM-DD HH:mm:ss" allowClear={false} style={{ width: '323px' }} />
                                                     )}
                                             </FormItem>
                                         </div>
@@ -1206,7 +1206,7 @@ export class TrajectoryInformation extends Component {
                                                     initialValue: '',
                                                     validateFirst: true
                                                 })(
-                                                    <DatePicker format="YYYY-MM-DD HH:mm:ss" allowClear={false} style={{ width: '323px' }} />
+                                                    <DatePicker  placeholder="" format="YYYY-MM-DD HH:mm:ss" allowClear={false} style={{ width: '323px' }} />
                                                     )}
                                             </FormItem>
                                         </div>
@@ -1223,7 +1223,7 @@ export class TrajectoryInformation extends Component {
                                                     initialValue: '',
                                                     validateFirst: true
                                                 })(
-                                                    <DatePicker format="YYYY-MM-DD HH:mm:ss" allowClear={false} style={{ width: '323px' }} />
+                                                    <DatePicker  placeholder="" format="YYYY-MM-DD HH:mm:ss" allowClear={false} style={{ width: '323px' }} />
                                                     )}
                                             </FormItem>
                                         </div>
@@ -1594,7 +1594,7 @@ class TraiectoryData extends Component {
                                             initialValue: moment(trajectoryInformation.beginDate),
                                             validateFirst: true
                                         })(
-                                            <DatePicker format='YYYY-MM-DD HH:mm:ss' allowClear={false} disabled={toConfigure === 'JudgeHistory' ? true : false} style={{ width: '323px' }} />
+                                            <DatePicker  placeholder="" format='YYYY-MM-DD HH:mm:ss' allowClear={false} disabled={toConfigure === 'JudgeHistory' ? true : false} style={{ width: '323px' }} />
                                             )}
                                     </FormItem>
                                 </div>
@@ -1611,7 +1611,7 @@ class TraiectoryData extends Component {
                                             initialValue: trajectoryInformation.endDate ? moment(trajectoryInformation.endDate) : moment(),
                                             validateFirst: true
                                         })(
-                                            <DatePicker format='YYYY-MM-DD HH:mm:ss' allowClear={false} disabled={toConfigure === 'JudgeHistory' ? true : false} style={{ width: '323px' }} />
+                                            <DatePicker  placeholder="" format='YYYY-MM-DD HH:mm:ss' allowClear={false} disabled={toConfigure === 'JudgeHistory' ? true : false} style={{ width: '323px' }} />
                                             )}
                                     </FormItem>
                                 </div>
@@ -1725,7 +1725,7 @@ class TraiectoryData extends Component {
                                             initialValue: moment(trajectoryInformation.beginDate),
                                             validateFirst: true
                                         })(
-                                            <DatePicker format="YYYY-MM-DD HH:mm:ss" allowClear={false} disabled={toConfigure === 'JudgeHistory' ? true : false} style={{ width: '323px' }} />
+                                            <DatePicker  placeholder="" format="YYYY-MM-DD HH:mm:ss" allowClear={false} disabled={toConfigure === 'JudgeHistory' ? true : false} style={{ width: '323px' }} />
                                             )}
                                     </FormItem>
                                 </div>
@@ -1742,7 +1742,7 @@ class TraiectoryData extends Component {
                                             initialValue: trajectoryInformation.endDate ? moment(trajectoryInformation.endDate) : moment(),
                                             validateFirst: true
                                         })(
-                                            <DatePicker format="YYYY-MM-DD HH:mm:ss" allowClear={false} disabled={toConfigure === 'JudgeHistory' ? true : false} style={{ width: '323px' }} />
+                                            <DatePicker  placeholder="" format="YYYY-MM-DD HH:mm:ss" allowClear={false} disabled={toConfigure === 'JudgeHistory' ? true : false} style={{ width: '323px' }} />
                                             )}
                                     </FormItem>
                                 </div>
@@ -1854,7 +1854,7 @@ class TraiectoryData extends Component {
                                                     initialValue: moment(trajectoryInformation.beginDate),
                                                     validateFirst: true
                                                 })(
-                                                    <DatePicker format="YYYY-MM-DD HH:mm:ss" allowClear={false} disabled={toConfigure === 'JudgeHistory' ? true : false} style={{ width: '323px' }} />
+                                                    <DatePicker  placeholder="" format="YYYY-MM-DD HH:mm:ss" allowClear={false} disabled={toConfigure === 'JudgeHistory' ? true : false} style={{ width: '323px' }} />
                                                     )}
                                             </FormItem>
                                         </div>
@@ -1871,7 +1871,7 @@ class TraiectoryData extends Component {
                                                     initialValue: trajectoryInformation.endDate ? moment(trajectoryInformation.endDate) : moment(),
                                                     validateFirst: true
                                                 })(
-                                                    <DatePicker format="YYYY-MM-DD HH:mm:ss" allowClear={false} disabled={toConfigure === 'JudgeHistory' ? true : false} style={{ width: '323px' }} />
+                                                    <DatePicker  placeholder="" format="YYYY-MM-DD HH:mm:ss" allowClear={false} disabled={toConfigure === 'JudgeHistory' ? true : false} style={{ width: '323px' }} />
                                                     )}
                                             </FormItem>
                                         </div>
@@ -1983,7 +1983,7 @@ class TraiectoryData extends Component {
                                                     initialValue: moment(trajectoryInformation.beginDate),
                                                     validateFirst: true
                                                 })(
-                                                    <DatePicker format="YYYY-MM-DD HH:mm:ss" allowClear={false} disabled={toConfigure === 'JudgeHistory' ? true : false} style={{ width: '323px' }} />
+                                                    <DatePicker  placeholder="" format="YYYY-MM-DD HH:mm:ss" allowClear={false} disabled={toConfigure === 'JudgeHistory' ? true : false} style={{ width: '323px' }} />
                                                     )}
                                             </FormItem>
                                         </div>
@@ -2000,7 +2000,7 @@ class TraiectoryData extends Component {
                                                     initialValue: trajectoryInformation.endDate ? moment(trajectoryInformation.endDate) : moment(),
                                                     validateFirst: true
                                                 })(
-                                                    <DatePicker format="YYYY-MM-DD HH:mm:ss" allowClear={false} disabled={toConfigure === 'JudgeHistory' ? true : false} style={{ width: '323px' }} />
+                                                    <DatePicker  placeholder="" format="YYYY-MM-DD HH:mm:ss" allowClear={false} disabled={toConfigure === 'JudgeHistory' ? true : false} style={{ width: '323px' }} />
                                                     )}
                                             </FormItem>
                                         </div>

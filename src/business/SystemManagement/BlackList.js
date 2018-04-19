@@ -454,10 +454,10 @@ const SearchArea = React.createClass({
                 <Input style={{width:"202px", margin:"0 10px 0 0"}}  type="text" id='blackList_idNumber' placeholder='' value={blackList_idNumber} onChange={this.blackList_idNumber} />
                  <label htmlFor="" className="font14">创建时间：</label>
                 {/*<Input width="125px" margin="0 10px 0 0" type="date" id='InterrogationInformation_dateBegin' value={InterrogationInformation_dateBegin}  callbackParent={this.onChildChanged}/>*/}
-                <DatePicker  format={dateFormat} allowClear={false} style={{marginRight:"10px"}} value={beginDateValue} defaultValue="" onChange={this.handleBeginDeteClick}/>
+                <DatePicker  format={dateFormat} allowClear={false} style={{marginRight:"10px"}} value={beginDateValue} placeholder='' onChange={this.handleBeginDeteClick}/>
                 <span className="font14" style={{margin:"0 10px 0 0"}}>至</span>
                 {/*<Input width="125px" margin="0 10px 0 0" type="date" id='InterrogationInformation_dateEnd' value={InterrogationInformation_dateEnd} callbackParent={this.onChildChanged}/>*/}
-                <DatePicker  format={dateFormat} allowClear={false} style={{marginRight:"10px"}} value={endDateValue} defaultValue="" onChange={this.handleEndDeteClick}/>
+                <DatePicker  format={dateFormat} allowClear={false} style={{marginRight:"10px"}} value={endDateValue} placeholder='' onChange={this.handleEndDeteClick}/>
                 <ShallowBlueBtn width="82" text="查询" margin="0 10px 0 0" onClick={this.handleClick} />
                 <ShallowBlueBtn  width="82" text="创建" margin="0 10px 0 0" onClick={this.props.handleClickAdd} />
                 <ShallowBlueBtn  width="82" text="导入"  />

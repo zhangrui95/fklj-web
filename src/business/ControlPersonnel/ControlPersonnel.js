@@ -8,6 +8,7 @@ import {monthFormat, dateFormat, serverUrl} from '../../utils/';
 import {Spin, Table, message, Input, Modal, Button, Form, Icon, Row, Col, Select, DatePicker, Divider} from 'antd';
 
 import moment from 'moment';
+import 'moment/locale/zh-cn';
 moment.locale('zh-cn');
 
 // 样式
@@ -344,7 +345,7 @@ export  class ControlPersonnel extends Component{
                                     label="身份证号"
                                 >
                                     {getFieldDecorator('value', {
-                                        initialValue:this.state.personInfo.cardId,
+                                        initialValue:this.state.modalType === 'edit' ?this.state.personInfo.cardId : '',
                                     })(
                                         <Input/>
                                     )}
@@ -354,7 +355,7 @@ export  class ControlPersonnel extends Component{
                                     label="姓名"
                                 >
                                     {getFieldDecorator('value', {
-                                        initialValue:this.state.personInfo.label,
+                                        initialValue:this.state.modalType === 'edit' ? this.state.personInfo.label : '',
                                     })(
                                         <Input/>
                                     )}
@@ -364,7 +365,7 @@ export  class ControlPersonnel extends Component{
                                     label="性别"
                                 >
                                     {getFieldDecorator('value', {
-                                        initialValue:this.state.personInfo.sex,
+                                        initialValue:this.state.modalType === 'edit' ? this.state.personInfo.sex : '',
                                     })(
                                         <Input/>
                                     )}
@@ -374,7 +375,7 @@ export  class ControlPersonnel extends Component{
                                     label="年龄"
                                 >
                                     {getFieldDecorator('value', {
-                                        initialValue:this.state.personInfo.age,
+                                        initialValue:this.state.modalType === 'edit' ? this.state.personInfo.age : '',
                                     })(
                                         <Input/>
                                     )}
@@ -388,11 +389,13 @@ export  class ControlPersonnel extends Component{
                                     label="居住类型"
                                 >
                                     {getFieldDecorator('state', {
-                                        initialValue:this.state.personInfo.state,
+                                        initialValue:this.state.modalType === 'edit' ? this.state.personInfo.state : '',
                                     })(
                                         <Select notFoundContent='暂无'>
                                             <Option value="">全部</Option>
+                                            <Option value="常住">常住</Option>
                                             <Option value="暂住">暂住</Option>
+                                            <Option value="流动">流动</Option>
                                         </Select>
                                     )}
                                 </FormItem>
@@ -401,7 +404,7 @@ export  class ControlPersonnel extends Component{
                                     label="联系电话"
                                 >
                                     {getFieldDecorator('value', {
-                                        initialValue:this.state.personInfo.phone,
+                                        initialValue:this.state.modalType === 'edit' ? this.state.personInfo.phone : '',
                                     })(
                                         <Input/>
                                     )}
@@ -411,7 +414,7 @@ export  class ControlPersonnel extends Component{
                                     label="责任单位"
                                 >
                                     {getFieldDecorator('value', {
-                                        initialValue:this.state.personInfo.zrdw,
+                                        initialValue: this.state.modalType === 'edit' ? this.state.personInfo.zrdw : '',
                                     })(
                                         <Input/>
                                     )}
@@ -420,10 +423,10 @@ export  class ControlPersonnel extends Component{
                                     {...formItemLayout}
                                     label="更新时间"
                                 >
-                                    {getFieldDecorator('value', {
-                                        initialValue:this.state.personInfo.updatetime,
+                                    {getFieldDecorator('time', {
+                                        setFieldsValue:this.state.modalType === 'edit' ? moment(this.state.personInfo.updatetime, 'YYYY-MM-DD HH:mm:ss') : '',
                                     })(
-                                        <Input/>
+                                        <DatePicker placeholder="" allowClear={false} style={{width:"190px"}}/>
                                     )}
                                 </FormItem>
                             </Form>
@@ -534,47 +537,49 @@ const SearchArea = React.createClass({
                 <label htmlFor="" className="font14">居住类型：</label>
                 <Select value={status} style={{ width: 100 ,marginRight:"10px" }} onChange={this.statusChange} notFoundContent='暂无'>
                     <Option value="">全部</Option>
+                    <Option value="常住">常住</Option>
                     <Option value="暂住">暂住</Option>
+                    <Option value="流动">流动</Option>
                 </Select>
                 <label htmlFor="" className="font14">责任单位：</label>
                 <Input style={{width:'150px',marginRight:"10px"}} type="text"  id='name' placeholder='请输入责任单位'  value={WorkPlace}  onChange={this.WorkPlaceChange}/>
                 <label htmlFor="" className="font14">更新时间：</label>
-                <DatePicker format={dateFormat} allowClear={false} style={{marginRight:"10px"}} value={beginDateValue} defaultValue="" onChange={this.handleBeginDeteClick}/>
+                <DatePicker format={dateFormat} allowClear={false} style={{marginRight:"10px"}} value={beginDateValue} placeholder="请选择日期" onChange={this.handleBeginDeteClick}/>
                 <span className="font14" style={{margin:"0 10px 0 0"}}>至</span>
-                <DatePicker format={dateFormat} allowClear={false} style={{marginRight:"10px"}} value={endDateValue} defaultValue="" onChange={this.handleEndDeteClick}/>
+                <DatePicker format={dateFormat} allowClear={false} style={{marginRight:"10px"}} placeholder="请选择日期"  value={endDateValue} onChange={this.handleEndDeteClick}/>
                 <ShallowBlueBtn width="80px" text="查询" margin="0 10px 0 0" onClick={this.handleClick} />
                 <ShallowBlueBtn width="80px" text="重置" margin="0 10px 0 0" onClick={this.init} />
                 <div style={{marginTop:"15px"}}>
-                    {/*<Button style={{width:"80px"}}*/}
-                            {/*onClick={this.props.addShowModal}*/}
-                            {/*className="btn_ok"*/}
-                    {/*>*/}
-                        {/*<Icon type="file-add" /> 增加*/}
-                    {/*</Button>*/}
-                    {/*<Button style={{margin:'0 0 0 10px',width:"80px"}} onClick={this.showModal} className="btn_delete">*/}
-                        {/*<Icon type="delete" />  删除*/}
-                    {/*</Button>*/}
-                    {/*<Modal style={{top:"38%"}}*/}
-                           {/*title="提示"*/}
-                           {/*visible={this.state.visible}*/}
-                           {/*footer={null}*/}
-                           {/*maskClosable={false}*/}
-                           {/*closable={false}*/}
-                    {/*>*/}
-                        {/*<p style={{fontSize:"16px",}}>是否删除选中项？</p>*/}
-                        {/*<p style={{marginTop:"20px",textAlign:"center"}}>*/}
-                            {/*<Button style={{margin:'0 20px 0 0 ',width:"80px"}} onClick={this.hideModalOk} className="btn_ok">*/}
-                                {/*确定*/}
-                            {/*</Button>*/}
-                            {/*<Button style={{margin:'',width:"80px"}} onClick={this.hideModal} className="btn_delete">*/}
-                                {/*取消*/}
-                            {/*</Button>*/}
-                        {/*</p>*/}
-
-                    {/*</Modal>*/}
+                    <Button style={{width:"80px"}}
+                            onClick={this.props.addShowModal}
+                            className="btn_ok"
+                    >
+                        <Icon type="file-add" /> 增加
+                    </Button>
+                    <Button style={{margin:'0 10px 0 10px',width:"80px"}} onClick={this.showModal} className="btn_delete">
+                        <Icon type="delete" />  删除
+                    </Button>
                     <Button style={{width:"80px"}} className="btn_ok">导入</Button>
                     <Button style={{width:"80px", marginLeft:"10px"}} className="btn_ok">导出</Button>
                     <Button style={{width:"80px", marginLeft:"10px"}} className="btn_ok">模板下载</Button>
+                    <Modal style={{top:"38%"}}
+                           title="提示"
+                           visible={this.state.visible}
+                           footer={null}
+                           maskClosable={false}
+                           closable={false}
+                    >
+                        <p style={{fontSize:"16px",}}>是否删除选中项？</p>
+                        <p style={{marginTop:"20px",textAlign:"center"}}>
+                            <Button style={{margin:'0 20px 0 0 ',width:"80px"}} onClick={this.hideModalOk} className="btn_ok">
+                                确定
+                            </Button>
+                            <Button style={{margin:'',width:"80px"}} onClick={this.hideModal} className="btn_delete">
+                                取消
+                            </Button>
+                        </p>
+
+                    </Modal>
                     <div className="clear"></div>
                 </div>
             </div>

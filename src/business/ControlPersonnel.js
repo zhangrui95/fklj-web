@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import {mainReducer} from "../reducers/reducers";
 import {connect} from "react-redux";
 import {Header} from "../components/Header";
+import WebSocket from './WebSocket';
 import {store} from '../index.js';
 import {
     SliderMenuItem,
@@ -39,11 +40,11 @@ class ControlPersonnel extends Component{
                     <SliderMenuItem menus={store.getState().ControlPersonnel.uiData.menus}
                                     handleMenuClick={this.handleMenuClick}/>
                 </div>
-
                 <div className="sileder_right">
                     <ControlPersonnelRight />
                 </div>
                 <div className="clear"></div>
+                <WebSocket/>
             </div>
 
         );

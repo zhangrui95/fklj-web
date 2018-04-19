@@ -30,11 +30,7 @@ import InventoryManagement from "./business/InventoryManagement";
 import {connect} from "react-redux";
 import {changeNavigation} from "./actions/actions";
 import PhoneDetails from "./components/shared/PhoneDetails";
-
 import {versionNumberQuote} from "./utils/Configuration";
-import WebSocket from './business/WebSocket';
-
-
 import moment from 'moment';
 moment.locale('zh-cn');
 
@@ -91,7 +87,6 @@ class Index extends Component{
                     </Router>
                 </Provider>
                 <div style={{position:"fixed",bottom:5,left:30,color:"#fff",fontSize:12}}>版本号:&nbsp;&nbsp;{versionNumberQuote}</div>
-                {sessionStorage.getItem('id_token')? <WebSocket/> : ''}
             </div>
             
         );

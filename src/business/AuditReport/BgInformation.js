@@ -884,7 +884,7 @@ class IllegalCrime extends Component {
                                         initialValue: this.state.modalType === 'edit' ? moment(this.state.record.birth) : '',
                                         validateFirst: true
                                     })(
-                                        <DatePicker format='YYYY-MM-DD' allowClear={false} style={{ width: '323px' }} disabled={toConfigure === 'JudgeHistory' ? true : false} />
+                                        <DatePicker  placeholder="" format='YYYY-MM-DD' allowClear={false} style={{ width: '323px' }} disabled={toConfigure === 'JudgeHistory' ? true : false} />
                                         )}
                                 </FormItem>
                             </div>
@@ -1613,7 +1613,7 @@ class Drug extends Component {
                                     initialValue: this.state.modalType === 'edit' ? moment(this.state.record.checkintime) : '',
                                     validateFirst: true
                                 })(
-                                    <DatePicker onOk={this.checkintimeOk} format='YYYY-MM-DD HH:mm:ss' allowClear={false} showTime={true} style={{ width: '323px' }} disabled={toConfigure === 'JudgeHistory' ? true : false} />
+                                    <DatePicker  placeholder="" onOk={this.checkintimeOk} format='YYYY-MM-DD HH:mm:ss' allowClear={false} showTime={true} style={{ width: '323px' }} disabled={toConfigure === 'JudgeHistory' ? true : false} />
                                     )}
                             </FormItem>
                         </div>
@@ -2015,7 +2015,7 @@ class Trafviolate extends Component {
                                         initialValue: this.state.modalType === 'edit' ? moment(this.state.record.illegaltime) : '',
                                         validateFirst: true
                                     })(
-                                        <DatePicker format='YYYY-MM-DD' allowClear={false} width={{ width: "323px" }} />
+                                        <DatePicker  placeholder="" format='YYYY-MM-DD' allowClear={false} width={{ width: "323px" }} />
                                         )}
                                 </FormItem>
                             </div>
@@ -2270,7 +2270,7 @@ class Trafviolate extends Component {
                                         initialValue: this.state.modalType === 'edit' ? moment(this.state.record.paytime) : '',
                                         validateFirst: true
                                     })(
-                                        <DatePicker format='YYYY-MM-DD HH:mm:ss' allowClear={false} style={{ width: '323px' }} />
+                                        <DatePicker  placeholder="" format='YYYY-MM-DD HH:mm:ss' allowClear={false} style={{ width: '323px' }} />
                                         )}
                                 </FormItem>
                             </div>
@@ -2302,7 +2302,7 @@ class Trafviolate extends Component {
                                         initialValue: this.state.modalType === 'edit' ? moment(this.state.record.recordtime) : '',
                                         validateFirst: true
                                     })(
-                                        <DatePicker format='YYYY-MM-DD HH:mm:ss' allowClear={false} showTime={true} style={{ width: "323px" }} />
+                                        <DatePicker  placeholder="" format='YYYY-MM-DD HH:mm:ss' allowClear={false} showTime={true} style={{ width: "323px" }} />
                                         )}
                                 </FormItem>
                             </div>

@@ -921,9 +921,9 @@ const SearchArea = React.createClass({
                 <label htmlFor="" className="font14">姓名：</label>
                 <Input style={{width:"111px" ,margin:"0 10px 0 0"}}  type="text"  id='police_name' placeholder=''  value={police_name}  onChange={this.handleNameChange} />
                 <label htmlFor="" className="font14">更新时间：</label>
-                <DatePicker  format={dateFormat} allowClear={false} style={{marginRight:"10px"}} value={beginDateValue} defaultValue="" onChange={this.handleBeginDeteClick}/>
+                <DatePicker  format={dateFormat} allowClear={false} style={{marginRight:"10px"}} value={beginDateValue} placeholder='' onChange={this.handleBeginDeteClick}/>
                 <span className="font14" style={{margin:"0 10px 0 0"}}>至</span>
-                <DatePicker  format={dateFormat} allowClear={false} style={{marginRight:"10px"}} value={endDateValue} defaultValue="" onChange={this.handleEndDeteClick}/>
+                <DatePicker  format={dateFormat} allowClear={false} style={{marginRight:"10px"}} value={endDateValue} placeholder='' onChange={this.handleEndDeteClick}/>
                 <label htmlFor="" className="font14">区域：</label>
                 <Tree   treeData={this.props.provinceTreeList} citycodeChange={this.citycodeChange}/>
                 <ShallowBlueBtn width="82" text="查询" margin="0 10px 0 10px" onClick={this.handleClick} />
