@@ -24,10 +24,12 @@ class ControlPersonnelRight extends Component{
             if (menu.haveSon === true) {
                 haveSonMenu = menu;
                 haveSonMenu.sonMenu.forEach(function(sonMenu) {
-                    if (sonMenu.isSelect) {
-                        isSelectMenu = sonMenu;
-                        return
-                    }
+                    // if(sonMenu.isShow){
+                        if (sonMenu.isSelect) {
+                            isSelectMenu = sonMenu;
+                            return
+                        }
+                    // }
                 })
             }
         });

@@ -983,7 +983,9 @@ const SonMenuBox = React.createClass({
             } else {
                 liCss = secondLevelMenu;
             }
-            sonMenus.push(<li style={liCss} key={i} onClick={this.handleClick.bind(this, sonMenuDb)}>{sonMenuDb.menuName}</li>)
+            if(sonMenuDb.isShow){
+                sonMenus.push(<li style={liCss} key={i} onClick={this.handleClick.bind(this, sonMenuDb)}>{sonMenuDb.menuName}</li>)
+            }
         }
         return (
             <ul>

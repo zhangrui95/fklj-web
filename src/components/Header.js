@@ -83,6 +83,8 @@ export class Header extends Component{
               navigations[1].isShow = true;
           }else if(col.resourceCode === 'tjbb_menu'){
               navigations[5].isShow = true;
+          }else if(col.resourceCode === 'gkry_menu'){
+              navigations[3].isShow = true;
           }else if(col.resourceCode === 'xtgl_menu'){
               navigations[7].isShow = true;
           }

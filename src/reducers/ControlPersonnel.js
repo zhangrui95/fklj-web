@@ -30,18 +30,21 @@ const initialState = {
                 search: 'type=rwgl',
                 isSelect: false,
                 code: "jyydpt_rwgl_xlrw",
+                isShow: false,
                 sonMenu: [
                     {
                         id: '1001',
                         menuName: '拟来呼人员',
                         search: 'type=gzry&state=1',
                         isSelect: true,
+                        isShow: false,
                     },
                     {
                         id: '1002',
                         menuName: '治安来源',
                         search: 'type=gzry&state=2',
                         isSelect: false,
+                        isShow: false,
                     }
                 ]
             },
@@ -53,6 +56,7 @@ const initialState = {
                 haveSon: false,
                 isSelect: false,
                 code: "jyydpt_rwgl_kdrw",
+                isShow: true,
             },
             {
                 id: '103',
@@ -62,6 +66,7 @@ const initialState = {
                 haveSon: false,
                 isSelect: false,
                 code: "jyydpt_rwgl_kdrw",
+                isShow: true,
             }
         ]
     }
@@ -90,8 +95,11 @@ const ControlPersonnel =(state = initialState, action) =>{
         case CONTROLPERSONNEL_MENU_INIT://初始化菜单
             for (let x in newState.uiData.menus) {
                 newState.uiData.menus[x].isSelect = false;
+                for(let i in  newState.uiData.menus[x].sonMenu){
+                    newState.uiData.menus[x].sonMenu[i].isSelect = false;
+                }
             }
-            newState.uiData.menus[0].isSelect = true;
+            newState.uiData.menus[0].sonMenu[0].isSelect = true;
             return newState;
         case CONTROLPERSONNEL_TYPE:
             if(newState.uiData.menus[0].isOpen===true){

@@ -53,7 +53,8 @@ import {
 import {
     Spin,
     Carousel,
-    Table
+    Table,
+    Tag
 } from 'antd';
 
 import'../resources/main.less';
@@ -370,15 +371,8 @@ class Home extends Component {
 
                             {/*任务数据统计*/}
                             <TaskStatistics dateSet={dateSet} />
-
-                            {/*三个人员*/}
-                            <div style={{position:"absolute",bottom:"15px",right:"15px",width:"25%",height:"40%"}}>
-                                {/*已盘查任务*/}
-                                <Personnel text="已盘查任务"   personType='zdgz' code='201001'  dateSet={dateSet}/>
-                                {/*/!*未落地人员*!/*/}
-                                {/*<Personnel text="未落地人员" personType='wld'  dateSet={dateSet}/>*/}
-                                {/*/!*失踪人员*!/*/}
-                                {/*<Personnel text="失踪人员" personType='szry'  dateSet={dateSet}/>*/}
+                            <div style={{position:"absolute",bottom:"15px",right:"15px",width:"25%",height:"40%",minHeight:"270px"}}>
+                                <Personnel text="已盘查任务"   personType='ypcrw' code='201001'  dateSet={dateSet}/>
                                 <div style={clear}></div>
                             </div>
                             {/*总体和活动统计*/}
@@ -763,9 +757,10 @@ class TaskStatistics extends Component {
         let taskStatisticsList = store.getState().Home.data.taskStatistics.result.list;
         let inventoryTotalData = store.getState().Home.data.inventoryTotalData.result.list;
         let data = [0, 0, 0, 0, 0, 0];
-        if (taskStatisticsList.length > 0) {
-            data = [taskStatisticsList[5].value, taskStatisticsList[4].value, taskStatisticsList[3].value, taskStatisticsList[2].value, taskStatisticsList[1].value, taskStatisticsList[0].value];
-        }
+        // if (taskStatisticsList.length > 0) {
+        //     data = [taskStatisticsList[5].value, taskStatisticsList[4].value, taskStatisticsList[3].value, taskStatisticsList[2].value, taskStatisticsList[1].value, taskStatisticsList[0].value];
+        // }
+        data = [7,17,27,3,12,9]
         var sourcesOption = {
             color: ['#F88A6F'],
             textStyle: {
@@ -795,7 +790,7 @@ class TaskStatistics extends Component {
             },
             yAxis: {
                 type: 'category',
-                data: ['流出人员', '流入人员', '在侦在控', '临控对象', '重点人员', '盘查异常'],
+                data: ['北京', '新疆', '西藏', '山东', '广西', '湖北'],
                 axisLine: {
                     lineStyle: {
                         color: '#FFFAF0', //Y轴线条颜色
@@ -833,7 +828,8 @@ class TaskStatistics extends Component {
         let isShowBtn = this.state.isShowBtn;
         let isShowDiv = this.state.isShowDiv;
         // let queryType = this.state.queryType
-        let isFetching = store.getState().Home.data.taskStatistics.isFetching;
+        // let isFetching = store.getState().Home.data.taskStatistics.isFetching;
+        let isFetching = false;
         return (
 
             <div style={{position:"absolute",top:"15px",left:"15px",width:"25%",height:"50%",}}>
@@ -863,7 +859,8 @@ class TaskStatistics extends Component {
                                 </p>
                                 {/*<Link to='/DynamicControl'>*/}
                                     <p style={p25}>
-                                        <span>{inventoryTotalData}</span>
+                                        {/*<span>{inventoryTotalData}</span>*/}
+                                        <span>108</span>
                                     </p>
                                 {/*</Link>*/}
                             </div>
@@ -928,10 +925,12 @@ class PopulationStatistics extends Component {
         });
     }
     render() {
-        let populationDataList = store.getState().Home.data.populationData.result.list;
+        // let populationDataList = store.getState().Home.data.populationData.result.list;
+        let populationDataList = [{name: "流动人员", value: 18},{name: "常住人员", value: 5},{name: "暂住人员", value:60}];
 
 
-        let isFetching = store.getState().Home.data.populationData.isFetching;
+        // let isFetching = store.getState().Home.data.populationData.isFetching;
+        let isFetching = false;
         let concernTotalData = store.getState().Home.data.concernTotalData.result.list;
         var liveOption = {
             // title : {
@@ -1247,21 +1246,28 @@ class ActiveDataStatistics extends Component {
             key: '3',
             dw: '海拉尔派出所',
             rwl: '7'
+        }, {
+            key: '4',
+            dw: '清滨派出所',
+            rwl: '5'
+        }, {
+            key: '5',
+            dw: '海拉尔派出所',
+            rwl: '7'
         }];
         return (
-            <div style={{position:"absolute",top:"15px",right:"15px",width:"25%",height:"50%"}}>
+            <div style={{position:"absolute",top:"15px",right:"15px",width:"25%",height:"50%",minHeight:'340px'}}>
                 <DeepBlueBtnY width="25px" text="派出所任务统计" borderLeft="2px solid #0C1CD8" borderRight="0" borderTop="0" float="right" display={isShowBtn} onClick={this.BtnClick}/>
                 <div style={{padding:"10px 15px",background:"rgba(25,41,85,0.5)",display:isShowDiv,height:'99.9%'}}>
                     {/*标题*/}
                     <div>
                         <img src="/images/guanbi.png" alt="" style={{float:"left",marginRight:"20px"}} onClick={this.chartsClick}/>
                         <p style={titleP}>派出所任务统计</p>
-
                         <div style={clear}></div>
                     </div>
                     <div className="home-table" style={{padding:"0 15px"}}>
-                        <Table locale={{emptyText:'暂无数据'}} columns={columns} dataSource={data}  pagination={false}/>
-                    </div>}
+                        <Table locale={{emptyText:'暂无数据'}} columns={columns} dataSource={data} size="small"/>
+                    </div>
                 </div>
             </div>
 
@@ -1338,62 +1344,18 @@ class Personnel extends Component {
         let personType = this.props.personType;
         let personnelList = [];
         let isFetching;
-        if (personType === "zdgz") {
+        if (personType === "ypcrw") {
             //alert(111);
-            personnelList = store.getState().Home.data.personnelKeyList.result.list;
+            // personnelList = store.getState().Home.data.personnelKeyList.result.list;
+            personnelList = [{address: "玉泉区兴隆巷1012单元104",birth: "1987-11-21 00:00:00",check_exception: 0,gzzt: 0,idcard: "450102198711210265",name: "流出人员",nation: "汉族",personId: "6bb9b08102434a9f8511440382b19679",recordId: "23012419800101005520180125150933078",sex: "女",visibale: 1,zpurl: ""},{address: "玉泉区兴隆巷1012单元104",birth: "1987-11-21 00:00:00",check_exception: 0,gzzt: 0,idcard: "450102198711210265",name: "流出人员",nation: "汉族",personId: "6bb9b08102434a9f8511440382b19679",recordId: "23012419800101005520180125150933078",sex: "女",visibale: 1,zpurl: ""},{address: "玉泉区兴隆巷1012单元104",birth: "1987-11-21 00:00:00",check_exception: 0,gzzt: 0,idcard: "450102198711210265",name: "流出人员",nation: "汉族",personId: "6bb9b08102434a9f8511440382b19679",recordId: "23012419800101005520180125150933078",sex: "女",visibale: 1,zpurl: ""}];
             isFetching = store.getState().Home.data.personnelKeyList.isFetching;
-
-        } else if (personType === "wld") {
-            //alert(22);
-            personnelList = store.getState().Home.data.personnelNotList.result.list;
-            isFetching = store.getState().Home.data.personnelNotList.isFetching;
-        } else if (personType === "szry") {
-            //alert(33);
-            personnelList = store.getState().Home.data.personnelMissingList.result.list;
-            isFetching = store.getState().Home.data.personnelMissingList.isFetching;
         }
-
-        /*let personDivList=[];
-
-
-         if(personnelList.length == 0){
-         personDivList.push(
-         <div style={{marginTop:"50px",}}>
-         <p style={{fontSize:"20px",color:"#fff",textAlign:"center"}}>暂无人员</p>
-         </div>
-         );
-         }else{
-         for(var i=0;i<personnelList.length;i++){
-         var person = personnelList[i];
-         if((i+1)%2==0){
-         personDivList.push(
-         <div>
-         <PersonnelLst personIndex={personnelList[i-1]}/>
-         <PersonnelLst personIndex={personnelList[i]}/>
-         </div>
-         )
-         }
-         }
-         }*/
         let Lists = [];
         let isNull = true;
         if (personnelList.length == 0) {} else {
             isNull = false;
         }
         let zmdDiv = [];
-        // for (var i = 0; i < personnelList.length; i++) {
-
-        //     if (i  % 2 == 0) {
-        //         zmdDiv.push(
-
-        //             <div key={i}>
-        //                 <PersonnelLst personIndex={personnelList[i-1]} />
-        //                 <PersonnelLst personIndex={personnelList[i]} />
-        //             </div>
-
-        //         )
-        //     }
-        // }
         for(var i = 0; i < personnelList.length; i++){
             zmdDiv.push(
                 <div key={i}>
@@ -1442,26 +1404,31 @@ class PersonnelLst extends Component {
         let personIndex = this.props.personIndex;
         let toElectronicArchivesUrl = '/ElectronicArchives/' + personIndex.idcard;
         return (
-            <div style={{marginTop:"10px",height:106,}}>
-                <Link to={toElectronicArchivesUrl}>
-                <div style={{height:103}}>
+            <div style={{marginTop:"10px",height:"200",padding:"0 16px"}}>
+                {/*<Link to={toElectronicArchivesUrl}>*/}
+                <div >
                   {personIndex.zpurl !== '' ? <img src={personIndex.zpurl} alt="" style={{width:"16%",height:"auto",float:"left",marginTop:15}}/>:
-                    <img src='../images/zanwu.png' alt="" style={{width:"16%",height:"auto",float:"left",marginTop:15}}/>
+                    <img src='../images/zanwu.png' alt="" style={{width:"auto",height:"55%",float:"left",marginTop:15}}/>
                   }
-                    <div style={{float:"left",marginLeft:"5%",marginTop:20,width:'75%'}}>
+                    <div style={{float:"left",marginLeft:"5%",marginTop:20,width:'60%'}}>
                         <p style={{
-                            fontSize:14,color:"#fff",marginBottom:15,width:'98%',overflow:'hidden',
+                            fontSize:14,color:"#fff",width:'98%',overflow:'hidden',
                             textOverflow:'ellipsis',whiteSpace:'nowrap',
                             }}
                             title={personIndex.name === '' ? '暂无姓名': personIndex.name}
                         >
-                        {personIndex.name === '' ? '暂无姓名': personIndex.name}
+                        {personIndex.name === '' ? '暂无姓名': personIndex.name}<Tag style={{marginLeft:'16px',color:'#f6c094',background:'none'}} color="volcano">暂住</Tag>
                         </p>
                         <p style={{fontSize:14,color:"#fff"}}>{personIndex.idcard}</p>
+                        <p style={{fontSize:14,color:"#fff"}}>{personIndex.address}</p>
                     </div>
                     <div style={clear}></div>
                 </div>
-                </Link>
+                <div style={{color:'#f89448',marginTop:'16px'}}>
+                    <div>由 玉泉区分局兴隆巷派出所张建军 盘查</div>
+                    <div>2018年01月23日 12点34分</div>
+                </div>
+                {/*</Link>*/}
             </div>
         );
     }
