@@ -31,7 +31,6 @@ class DynamicControl extends Component {
     render(){
         let isBlock = store.getState().root.uiData.ModalDialogueBg;
         let menus = [];
-        console.log(' this.props.DynamicControl.uiData.menus', this.props.DynamicControl.uiData.menus)
         this.props.DynamicControl.uiData.menus.map((menu) =>  {
             if(menu.isShow){
                 menus.push(menu);

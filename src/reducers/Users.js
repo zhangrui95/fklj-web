@@ -35,7 +35,7 @@ const initialState = {
                 {
                     id: '102',
                     menuName: '关注人员',
-                    isOpen: true,
+                    isOpen: false,
                     search: 'type=gzry',
                     haveSon: true,
                     isSelect: false,
@@ -47,24 +47,28 @@ const initialState = {
                             menuName: '盘查异常',
                             search: 'type=gzry&state=1',
                             isSelect: false,
+                            isShow: true
                         },
                         {
                             id: '1022',
                             menuName: '重点人员',
                             search: 'type=gzry&state=2',
                             isSelect: false,
+                            isShow: true
                         },
                         {
                             id: '1023',
                             menuName: '临控对象',
                             search: 'type=gzry&state=3',
-                            isSelect: false
+                            isSelect: false,
+                            isShow: true
                         },
                         {
                             id: '1024',
                             menuName: '在侦在控',
                             search: 'type=gzry&state=4',
-                            isSelect: false
+                            isSelect: false,
+                            isShow: true
                         }
                     ]
                 },
@@ -82,25 +86,29 @@ const initialState = {
                             id: '1031',
                             menuName: '未落地人员',
                             search: 'type=ldry&state=1',
-                            isSelect: false
+                            isSelect: false,
+                            isShow: true
                         },
                         {
                             id: '1032',
                             menuName: '流入人员',
                             search: 'type=ldry&state=2',
-                            isSelect: false
+                            isSelect: false,
+                            isShow: true
                         },
                         {
                             id: '1033',
                             menuName: '流出人员',
                             search: 'type=ldry&state=3',
-                            isSelect: false
+                            isSelect: false,
+                            isShow: true
                         },
                         {
                             id: '1034',
                             menuName: '失踪人员',
                             search: 'type=ldry&state=4',
-                            isSelect: false
+                            isSelect: false,
+                            isShow: true
                         }
                     ]
                 }
@@ -143,6 +151,7 @@ const DynamicControl = (state=initialState, action) => {
             }else{
                 newState.uiData.menus[1].isOpen=true;
             }
+            console.log(newState.uiData.menus)
             return newState;
         case DTGK_MENU_ALL_CHANGE:
             if(newState.uiData.menus[0].isOpen===true){
