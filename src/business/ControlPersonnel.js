@@ -17,9 +17,9 @@ const font = {
 }
 
 class ControlPersonnel extends Component{
-    componentWillUnmount() { //销毁
-        store.dispatch(initControlPersonnelMenu(this.props.TaskManagement.uiData.menus))
-    }
+    // componentWillUnmount() { //销毁
+    //     store.dispatch(initControlPersonnelMenu(this.props.TaskManagement.uiData.menus))
+    // }
     //
     // //设置管理菜单点击-获取数据-开关事件
     handleMenuClick = (menu, type) => {
@@ -30,16 +30,6 @@ class ControlPersonnel extends Component{
         //遮罩状态
         let isBlock = store.getState().root.uiData.ModalDialogueBg;
         let menusList = [];
-        const user = JSON.parse(sessionStorage.getItem('user'));
-        user.menu.map((col) => {
-            if(col.resourceCode === 'fkry_gzry_page'){
-                this.props.ControlPersonnel.uiData.menus[0].isShow = true;
-            }else if(col.resourceCode === 'gkry_gzry_nlhry_page'){
-                this.props.ControlPersonnel.uiData.menus[0].sonMenu[0].isShow = true;
-            }else if(col.resourceCode === 'gkry_gzry_zaly_page'){
-                this.props.ControlPersonnel.uiData.menus[0].sonMenu[1].isShow = true;
-            }
-        })
         this.props.ControlPersonnel.uiData.menus.map((menu) =>  {
             if(menu.isShow) {
                 menusList.push(menu);

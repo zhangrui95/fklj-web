@@ -4,6 +4,7 @@ import {DYNAMICCONTROL_MENU_INIT,USERS_ERROR,USERS_TIMEOUT,USERS_DATA,DTGK_MENU_
     POLICE_UNITS_DATA,PERSON_TAGS_DATA,CAR_TAGS_DATA} from "../actions/actions";
 import * as Home from "../actions/Home";
 import {store} from '../index.js';
+import {isAllowMenu} from '../utils/index';
 
 const initialState = {
         success: true,
@@ -29,15 +30,17 @@ const initialState = {
                     haveSon: false,
                     isSelect: true,
                     isShow: true,
+                    code:'dtgk_qb_page',
                 },
                 {
                     id: '102',
                     menuName: '关注人员',
-                    isOpen: false,
+                    isOpen: true,
                     search: 'type=gzry',
                     haveSon: true,
                     isSelect: false,
-                    isShow: true,
+                    code:'dtgk_gzry_page',
+                    isShow: false,
                     sonMenu: [
                         {
                             id: '1021',
@@ -72,6 +75,7 @@ const initialState = {
                     search: 'type=ldry',
                     haveSon: true,
                     isSelect: false,
+                    code:'dtgk_ldry_page',
                     isShow: false,
                     sonMenu: [
                         {
@@ -180,9 +184,14 @@ const DynamicControl = (state=initialState, action) => {
 
             return newState;
         default:
-            if(store !== undefined){
+            if(store !== undefined ){
                 return store.getState().DynamicControl;
             }else{
+                if(sessionStorage.getItem('user')!== null && sessionStorage.getItem('id_token')!== null ){
+                    let menus = state.uiData.menus;
+                    isAllowMenu(menus);
+                    // state.uiData.menus = menus;
+                }
                 return state;
             }
     }

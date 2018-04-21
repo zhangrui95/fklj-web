@@ -142,7 +142,7 @@ export function receiveUsersError(message) {
 export function saveMessAttention(creds,queryCreds,pageType) {
     return dispatch => {
         post(api + "/data/saveMessAttention",creds).then((json) => {
-            
+
             if(pageType === "动态管控"){
                 store.dispatch(PostUsersData(queryCreds));
             }else if(pageType === '动态管控盘查异常'){
@@ -158,7 +158,7 @@ export function saveMessAttention(creds,queryCreds,pageType) {
             }else if(pageType === "我的盘查"){
                 store.dispatch(PostPersonCenterData(queryCreds));
             }else if(pageType === "我的收藏"){
-                store.dispatch(PostPersonCenterFollowData(queryCreds));  
+                store.dispatch(PostPersonCenterFollowData(queryCreds));
             }
             message.success('提示：收藏成功！');
         }).catch((e)=>{
@@ -169,7 +169,7 @@ export function saveMessAttention(creds,queryCreds,pageType) {
 export function DelMessAttention(creds,queryCreds,pageType) {
     return dispatch => {
         post(api + "/data/DelMessAttention",creds).then((json) => {
-            
+
             if(pageType === "动态管控"){
                 store.dispatch(PostUsersData(queryCreds));
             }else if(pageType === '动态管控盘查异常'){
@@ -185,7 +185,7 @@ export function DelMessAttention(creds,queryCreds,pageType) {
             }else if(pageType === "我的盘查"){
                 store.dispatch(PostPersonCenterData(queryCreds));
             }else if(pageType === "我的收藏"){
-                store.dispatch(PostPersonCenterFollowData(queryCreds));  
+                store.dispatch(PostPersonCenterFollowData(queryCreds));
             }
             message.success('提示：取消收藏成功！');
              //store.dispatch(PostUsersData(creds));
@@ -293,21 +293,21 @@ export function changeMenu(menu, type, moduleName){//改变目录状态
         }
     }else if(moduleName===REPORTLY_MODULE){//统计报表-洛阳
         if(type==='openAndClose'){//菜单打开关闭
-    
+
          }else if(type==='getData'){//点击目录
                     // store.dispatch(fetchUsersData('/getUsers',menu.search));
             return {type:REPORT_MENU__CHANGE_CURRENT,menu:menu};
         }
     }else if(moduleName===DEFINEWARE_MODULE){//临控管理-洛阳
         if(type==='openAndClose'){//菜单打开关闭
-    
+
          }else if(type==='getData'){//点击目录
                     // store.dispatch(fetchUsersData('/getUsers',menu.search));
             return {type:DEFINWARE_MENU__CHANGE_CURRENT,menu:menu};
         }
     }else if(moduleName===TaskMANAGEMENT_MODULE){//任务管理-洛阳
         if(type==='openAndClose'){//菜单打开关闭
-    
+
          }else if(type==='getData'){//点击目录
                     // store.dispatch(fetchUsersData('/getUsers',menu.search));
             return {type:TASK_MENU__CHANGE_CURRENT,menu:menu};
@@ -422,7 +422,6 @@ export function changeTab(tab, type, moduleName){
 export const NAVIGATION_CHANGE = 'navigation_change';
 //导航栏切换
 export function changeNavigation(navigationPath){
-    console.log('console.log(store.getState().root.uiData.navigations)22222',store.getState().root.uiData.navigations)
     return {type:NAVIGATION_CHANGE,navigationPath:navigationPath,navigations:store.getState().root.uiData.navigations};
 }
 //设置遮罩状态常量

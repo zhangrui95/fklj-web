@@ -4,7 +4,7 @@
 import {lyInitialStateReturn} from "./initialState"
 import {CONTROL_PERSONNEL_CURRENT, CONTROLPERSONNEL_MENU_INIT, CONTROLPERSONNEL_TYPE} from "../actions/actions";
 import {store} from '../index.js';
-import {filterMenu} from '../utils/index';
+import {isAllowMenu} from '../utils/index';
 
 const initialState = {
     success: true,
@@ -29,7 +29,7 @@ const initialState = {
                 isOpen: true,
                 search: 'type=rwgl',
                 isSelect: false,
-                code: "jyydpt_rwgl_xlrw",
+                code: "fkry_gzry_page",
                 isShow: false,
                 sonMenu: [
                     {
@@ -38,6 +38,7 @@ const initialState = {
                         search: 'type=gzry&state=1',
                         isSelect: true,
                         isShow: false,
+                        code: "gkry_gzry_nlhry_page"
                     },
                     {
                         id: '1002',
@@ -45,6 +46,7 @@ const initialState = {
                         search: 'type=gzry&state=2',
                         isSelect: false,
                         isShow: false,
+                        code: "gkry_gzry_zaly_page"
                     }
                 ]
             },
@@ -55,7 +57,7 @@ const initialState = {
                 search: 'type=rwgl',
                 haveSon: false,
                 isSelect: false,
-                code: "jyydpt_rwgl_kdrw",
+                code: "",
                 isShow: true,
             },
             {
@@ -65,7 +67,7 @@ const initialState = {
                 search: 'type=rwgl',
                 haveSon: false,
                 isSelect: false,
-                code: "jyydpt_rwgl_kdrw",
+                code: "",
                 isShow: true,
             }
         ]
@@ -128,13 +130,13 @@ const ControlPersonnel =(state = initialState, action) =>{
             }
             return newState;
         default:
-            if(store !== undefined){
+            if(store !== undefined ){
                 return store.getState().ControlPersonnel;
             }else{
-                if(sessionStorage.getItem('allowMenus')!== undefined && sessionStorage.getItem('allowMenus')!== null && sessionStorage.getItem('allowMenus')!== ''){
+                if(sessionStorage.getItem('user')!== null && sessionStorage.getItem('id_token')!== null ){
                     let menus = state.uiData.menus;
-                    menus = filterMenu(menus);//权限判断菜单
-                    state.uiData.menus = menus;
+                    isAllowMenu(menus);
+                    // state.uiData.menus = menus;
                 }
                 return state;
             }

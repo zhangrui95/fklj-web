@@ -1117,7 +1117,6 @@ class ActiveDataStatistics extends Component {
         glData.push(activityStatisticsListOut.gl);
         lchData.push(activityStatisticsListIn.lch);
         lchData.push(activityStatisticsListOut.lch);
-        console.log('glData',glData);
 
 
         let activeoption = {

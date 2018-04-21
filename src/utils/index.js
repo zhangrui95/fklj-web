@@ -1,4 +1,5 @@
 const DateUtil = require('./Date');
+const Authority = require('./Authority');
 const Configuration = require('./Configuration');
 const Tools = require('./Tools');
 const MapCode = require('./MapCode');
@@ -7,6 +8,7 @@ module.exports = {
     ...Configuration,
     ...Tools,
     ...MapCode,
+    ...Authority,
     //...nodeActions,
     //...replyActions,
     //...loginActions,

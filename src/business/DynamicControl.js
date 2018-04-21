@@ -10,7 +10,7 @@ import {changeMenu,initDynamicControlMenu,fetchLogin} from "../actions/actions";
 import {StylePage,DeepRedBtn,Input,DeepBlueBtn,PhotoItem,Pag,SliderMenuItem,Shade} from "./generalPurposeModule";
 import {store} from '../index.js';
 import {DYNAMICCONTROL_MODULE} from "../utils/Constants";
-import  * as constants from "../utils/Constants";
+// import  * as constants from "../utils/Constants";
 import {Header} from "../components/Header";
 import WebSocket from './WebSocket';
 
@@ -18,11 +18,7 @@ class DynamicControl extends Component {
     // componentWillUnmount() { //销毁
     //     store.dispatch(initDynamicControlMenu(this.props.DynamicControl.uiData.menus))//销毁时初始化菜单
     // }
-    componentDidMount() {
-        
-    }
     componentWillReceiveProps(nextProps) {
-
         this.setState({
             login: nextProps.login
         });
@@ -35,16 +31,7 @@ class DynamicControl extends Component {
     render(){
         let isBlock = store.getState().root.uiData.ModalDialogueBg;
         let menus = [];
-        const user = JSON.parse(sessionStorage.getItem('user'));
-        user.menu.map((col) => {
-            if(col.resourceCode === 'dtgk_qb_page'){
-                this.props.DynamicControl.uiData.menus[0].isShow = true;
-            }else if(col.resourceCode === 'dtgk_gzry_page'){
-                this.props.DynamicControl.uiData.menus[1].isShow = true;
-            }else if(col.resourceCode === 'dtgk_ldry_page'){
-                this.props.DynamicControl.uiData.menus[2].isShow = true;
-            }
-        })
+        console.log(' this.props.DynamicControl.uiData.menus', this.props.DynamicControl.uiData.menus)
         this.props.DynamicControl.uiData.menus.map((menu) =>  {
             if(menu.isShow){
                 menus.push(menu);
