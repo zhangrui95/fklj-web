@@ -772,7 +772,7 @@ export class ModalDialogue extends Component {
                         </div>
                         <div style={{marginBottom:"20px"}}>
                             <label style={mStyle} htmlFor="">出生日期</label>
-                            <DatePicker  format={dateFormat} allowClear={false} style={{width:"272px",marginRight:"10px"}} value={dateBirth} defaultValue="" onChange={this.dateOfBirthChange}/>
+                            <DatePicker  format={dateFormat} allowClear={false} style={{width:"272px",marginRight:"10px"}} value={dateBirth} placeholder="" onChange={this.dateOfBirthChange}/>
                         </div>
                         <div style={{marginBottom:"20px"}}>
                             <label style={mStyle} htmlFor="">国籍</label><Input style={{width:"272px"}} onChange={this.nationalityChange} value={nationality}/>
@@ -789,7 +789,7 @@ export class ModalDialogue extends Component {
                         </div>
                         <div style={{marginBottom:"20px"}}>
                             <label style={mStyle} htmlFor="">布控时间</label>
-                            <DatePicker  format={dateFormat} allowClear={false} style={{width:"272px",marginRight:"10px"}} value={controldate} defaultValue="" onChange={this.controlTimeChange}/>
+                            <DatePicker  format={dateFormat} allowClear={false} style={{width:"272px",marginRight:"10px"}} value={controldate} placeholder="" onChange={this.controlTimeChange}/>
                         </div>
                         <div style={{marginBottom:"20px"}}>
                             <label style={mStyle} htmlFor="">数据来源</label><Input style={{width:"272px"}} onChange={this.dataSourcesChange} value={dataSources}/>

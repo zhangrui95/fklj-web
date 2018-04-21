@@ -318,9 +318,9 @@ export class Input extends Component {
             type={
                 this.props.type
             }
-            placeholder={
-                this.props.placeholder
-            }
+            // placeholder={
+            //     this.props.placeholder
+            // }
             style={
                 {
                     width: this.props.width,

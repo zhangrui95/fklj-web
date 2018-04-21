@@ -497,12 +497,12 @@ const SearchArea = React.createClass({
         let beginPicker = '';
         if (dateBegin === '') {
             beginPicker = (
-                <DatePicker onChange={this.handleBeginDeteClick} format={dateFormat} allowClear={false} style={{ marginRight: "10px" }} value={dateBegin} />
+                <DatePicker placeholder="" onChange={this.handleBeginDeteClick} format={dateFormat} allowClear={false} style={{ marginRight: "10px" }} value={dateBegin} />
             )
         } else {
             beginDateValue = moment(dateBegin, dateFormat);
             beginPicker = (
-                <DatePicker onChange={this.handleBeginDeteClick} format={dateFormat} allowClear={false} style={{ marginRight: "10px" }} value={beginDateValue} />
+                <DatePicker placeholder="" onChange={this.handleBeginDeteClick} format={dateFormat} allowClear={false} style={{ marginRight: "10px" }} value={beginDateValue} />
             )
         }
 
@@ -510,12 +510,12 @@ const SearchArea = React.createClass({
         let endPicker = '';
         if (dateEnd === '') {
             endPicker = (
-                <DatePicker onChange={this.handleEndDeteClick} format={dateFormat} allowClear={false} style={{ marginRight: "10px" }} value={dateEnd} />
+                <DatePicker placeholder="" onChange={this.handleEndDeteClick} format={dateFormat} allowClear={false} style={{ marginRight: "10px" }} value={dateEnd} />
             )
         } else {
             endDateValue = moment(dateEnd, dateFormat);
             endPicker = (
-                <DatePicker onChange={this.handleEndDeteClick} format={dateFormat} allowClear={false} style={{ marginRight: "10px" }} value={endDateValue} />
+                <DatePicker placeholder="" onChange={this.handleEndDeteClick} format={dateFormat} allowClear={false} style={{ marginRight: "10px" }} value={endDateValue} />
             )
         }
         if (beginDateValue != "" && endDateValue != "" && beginDateValue > endDateValue) {

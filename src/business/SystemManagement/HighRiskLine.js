@@ -592,9 +592,9 @@ const SearchArea = React.createClass({
                 <label htmlFor="" className="font14">城市：</label>
                 <Input style={{width:"111px",margin:"0 10px 0 0"}}   type="text"  id='highRiskAreaList_cityName' placeholder=''  value={highRiskAreaList_cityName}  onChange={this.handleNameChange} />
                 <label htmlFor="" className="font14">创建时间：</label>
-               <DatePicker  format={dateFormat} allowClear={false} style={{marginRight:"10px"}} value={beginDateValue} defaultValue="" onChange={this.handleBeginDeteClick}/>
+               <DatePicker  format={dateFormat} allowClear={false} style={{marginRight:"10px"}} value={beginDateValue} placeholder="" onChange={this.handleBeginDeteClick}/>
                 <span className="font14" style={{margin:"0 10px 0 0"}}>至</span>
-                <DatePicker  format={dateFormat} allowClear={false} style={{marginRight:"10px"}} value={endDateValue} defaultValue="" onChange={this.handleEndDeteClick}/>
+                <DatePicker  format={dateFormat} allowClear={false} style={{marginRight:"10px"}} value={endDateValue} placeholder="" onChange={this.handleEndDeteClick}/>
                 <ShallowBlueBtn width="82" text="查询" margin="0 10px 0 0" onClick={this.handleClick} />
                 <ShallowBlueBtn  width="82" text="创建" margin="0 10px 0 0" onClick={this.props.handleClickAdd} />
                 <Button style={{margin:'0 0 0 0px',width:"80px"}} onClick={this.showModal} className="btn_delete">
@@ -838,9 +838,9 @@ export class ModalDialogue extends Component {
                         <span style={{fontSize:"14px",color:"#fff",margin:"0 5px"}}>
                             至</span>
                         <Input width="135px" margin="0 10px 0 0" type="date" id='highRiskLine_dateEnd' value={this.state.endDate} callbackParent={this.handlEndDateChange}/>*/}
-                        <DatePicker  format={dateFormat} allowClear={false} style={{marginRight:"10px"}} value={beginDate} defaultValue="" onChange={this.handlBeginDateChange}/>
+                        <DatePicker  format={dateFormat} allowClear={false} style={{marginRight:"10px"}} value={beginDate} placeholder="" onChange={this.handlBeginDateChange}/>
                         <span className="font14" style={{margin:"0 10px 0 0"}}>至</span>
-                        <DatePicker  format={dateFormat} allowClear={false} style={{marginRight:"10px"}} value={endDate} defaultValue="" onChange={this.handlEndDateChange}/>
+                        <DatePicker  format={dateFormat} allowClear={false} style={{marginRight:"10px"}} value={endDate} placeholder="" onChange={this.handlEndDateChange}/>
                         
                     </div>
                     <div>
