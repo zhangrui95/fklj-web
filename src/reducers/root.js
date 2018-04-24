@@ -3,6 +3,7 @@ import {DYNAMICCONTROL_MENU_INIT,USERS_ERROR,USERS_TIMEOUT,USERS_DATA,DTGK_MENU_
     POLICE_UNITS_DATA,PERSON_TAGS_DATA,CAR_TAGS_DATA} from "../actions/actions";
 import {store} from '../index.js';
 import {history} from '../index.js';
+import {isAllowMenu} from '../utils/index';
 
 
 const initialState = {
@@ -26,14 +27,16 @@ const initialState = {
                 navigationName: '首页',
                 isSelect: true,
                 path: "/Home",
-                isShow: true
+                isShow: true,
+                code:'home_menu'
             },
             {
                 id: '102',
                 navigationName: '动态管控',
                 isSelect: false,
                 path: "/DynamicControl",
-                isShow: true
+                isShow: false,
+                code:'dtgk_menu'
             },
             {
                 id: '109',
@@ -46,7 +49,8 @@ const initialState = {
                 navigationName: '管控人员',
                 isSelect: false,
                 path: "/ControlPersonnel",
-                isShow: true
+                isShow: false,
+                code: 'gkry_menu'
             }, {
                 id: '110',
                 navigationName: '任务管理',
@@ -65,7 +69,8 @@ const initialState = {
                 navigationName: '统计报表',
                 isSelect: false,
                 path: "/ReportForms",
-                isShow: true
+                isShow: true,
+                code: 'tjbb_menu'
             },
             // {
             //     id:'105',
@@ -85,7 +90,8 @@ const initialState = {
                 navigationName: '系统管理',
                 isSelect: false,
                 path: "/SystemManagement",
-                isShow: false
+                isShow: false,
+                code:'xtgl_menu'
             }
         ],
         ModalDialogueBg: 'none'//遮罩展示与隐藏
@@ -143,9 +149,13 @@ const root = (state=initialState, action) => {
             newState.data.policeUnitsList = action.data.result.list;
             return newState;
         default:
-            if(store !== undefined){
+            if(store !== undefined ){
                 return store.getState().root;
             }else{
+                if(sessionStorage.getItem('user')!== null && sessionStorage.getItem('id_token')!== null ){
+                    let menus = state.uiData.navigations;
+                    isAllowMenu(menus);
+                }
                 return state;
             }
     }

@@ -400,17 +400,36 @@ export  class PatrolTask extends Component{
                             </FormItem>
                             <FormItem
                                 {...formItemLayout}
+                                label="派发节点"
+                            >
+                                {getFieldDecorator('unit_scope', {
+                                    rules: [{
+                                        required: true,
+                                        message: '请选择派发节点!'
+                                    }],
+                                    initialValue:this.state.modalType === 'edit' ? this.state.personInfo.unit_scope : this.state.unit_scope,
+                                    validateFirst:true
+                                })(
+                                    <Select onChange={this.onChange} >
+                                        <Option value="116001">仅自身节点</Option>
+                                        <Option value="116002">自身节点及子节点</Option>
+                                        <Option value="116003">仅子节点</Option>
+                                    </Select>
+                                )}
+                            </FormItem>
+                            <FormItem
+                                {...formItemLayout}
                                 label="派发单位"
                             >
                                 {getFieldDecorator('unit', {
                                     rules: [{
                                         required: true,
-                                        message: '派发单位!'
+                                        message: '请选择派发单位!'
                                     }],
                                     initialValue:this.state.modalType === 'edit' ? this.state.personInfo.treeValue : [],
                                     validateFirst:true
                                 })(
-                                    <TreeSelect  treeData={treeList} style={{ width: 193 , float:'left'}} placeholder="请选择派发单位" treeCheckable={true} showCheckedStrategy={SHOW_PARENT} treeCheckStrictly={true}/>
+                                    <TreeSelect  treeData={treeList} placeholder="请选择派发单位" treeCheckable={true} showCheckedStrategy={SHOW_PARENT} treeCheckStrictly={true}/>
                                 )}
                             </FormItem>
                             <FormItem {...formItemLayout}

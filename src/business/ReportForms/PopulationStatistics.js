@@ -44,11 +44,13 @@ import {
 } from "../../actions/ReportForms"
 import EchartsReact from 'echarts-for-react';
 require("echarts/map/js/province/heilongjiang.js");
+require("echarts/map/js/province/neimenggu.js");
 require("echarts/map/js/province/guangxi.js");
 require("echarts/map/js/province/xinjiang.js");
 require("echarts/map/js/province/shandong.js");
 require("echarts/map/js/province/liaoning.js");
 require("echarts/map/js/province/jilin.js");
+require("echarts/map/js/city/huhehaote.js");
 import {
     DatePicker,
     Spin,
@@ -251,24 +253,24 @@ class PopulationStatistics extends Component {
         let beginPicker = '';
         if (begin === '') {
           beginPicker = (
-            <DatePicker onChange={this.handleBeginDeteClick}  format={dateFormat} allowClear={false} style={{marginRight:"10px"}}/>
+            <DatePicker placeholder="" onChange={this.handleBeginDeteClick}  format={dateFormat} allowClear={false} style={{marginRight:"10px"}}/>
           )
         } else {
           beginDateValue = moment(begin, dateFormat);
           beginPicker = (
-            <DatePicker onChange={this.handleBeginDeteClick}  format={dateFormat} allowClear={false} style={{marginRight:"10px"}} value={beginDateValue}/>
+            <DatePicker placeholder="" onChange={this.handleBeginDeteClick}  format={dateFormat} allowClear={false} style={{marginRight:"10px"}} value={beginDateValue}/>
           )
         }
         let endDateValue = '';
         let endPicker = '';
         if (end === '') {
           endPicker = (
-            <DatePicker onChange={this.handleEndDeteClick} format={dateFormat} allowClear={false} style={{marginRight:"10px"}}/>
+            <DatePicker placeholder="" onChange={this.handleEndDeteClick} format={dateFormat} allowClear={false} style={{marginRight:"10px"}}/>
           )
         } else {
           endDateValue = moment(end, dateFormat);
           endPicker = (
-            <DatePicker onChange={this.handleEndDeteClick} format={dateFormat} allowClear={false} style={{marginRight:"10px"}} value={endDateValue}/>
+            <DatePicker placeholder="" onChange={this.handleEndDeteClick} format={dateFormat} allowClear={false} style={{marginRight:"10px"}} value={endDateValue}/>
           )
         }
         if (beginDateValue != "" && endDateValue != "" && beginDateValue > endDateValue) {
@@ -480,8 +482,10 @@ class DistributeCharts extends Component {
     }
     render() {
 
-        let distributeChartsList = store.getState().ReportForms.data.distributeChartsList.result.list;
-        let isFetching = store.getState().ReportForms.data.distributeChartsList.isFetching;
+        // let distributeChartsList = store.getState().ReportForms.data.distributeChartsList.result.list;
+        let distributeChartsList = [{name: "呼和浩特市", value: 2},{name: "包头市", value: 0},{name: "乌海市", value: 0},{name: "赤峰市", value: 0},{name: "呼伦贝尔市", value: 0},{name: "兴安盟", value: 0}];
+        // let isFetching = store.getState().ReportForms.data.distributeChartsList.isFetching;
+        let isFetching = false;
         let numData = [];
         for (var i = 0; i < distributeChartsList.length; i++) {
             var distribute = distributeChartsList[i];
@@ -629,8 +633,10 @@ class OriginalCharts extends Component {
 
 
     render() {
-        let originalChartsList = store.getState().ReportForms.data.originalChartsList.result.list;
-        let isFetching = store.getState().ReportForms.data.originalChartsList.isFetching;
+        let originalChartsList = [{name:'乌鲁木齐市',value:'2'}]
+        // let originalChartsList = store.getState().ReportForms.data.originalChartsList.result.list;
+        // let isFetching = store.getState().ReportForms.data.originalChartsList.isFetching;
+        let isFetching = false;
         let numData = [];
         for (var i = 0; i < originalChartsList.length; i++) {
             var original = originalChartsList[i];
@@ -775,8 +781,10 @@ class LiveCharts extends Component {
     // }
 
     render() {
-        let liveChartsList = store.getState().ReportForms.data.liveChartsList.result.list;
-        let isFetching = store.getState().ReportForms.data.liveChartsList.isFetching;
+        // let liveChartsList = store.getState().ReportForms.data.liveChartsList.result.list;
+        let liveChartsList = [{name: "常住关注人员", value: 12}, {name: "临时流动人员", value: 26}, {name: "暂住人员", value: 5}];
+        // let isFetching = store.getState().ReportForms.data.liveChartsList.isFetching;
+        let isFetching = false;
         var liveOption = {
             // title : {
             //     text: '某站点用户访问来源',
@@ -877,7 +885,8 @@ class ObtainEmployment extends Component {
     //     }
     // }
     render() {
-        let obtainEmploymentChartsList = store.getState().ReportForms.data.obtainEmploymentChartsList.result.list;
+        // let obtainEmploymentChartsList = store.getState().ReportForms.data.obtainEmploymentChartsList.result.list;
+        let obtainEmploymentChartsList = [{name:'无业',value: "30"},{name:'在职',value: "330"},{name:'学生',value: "920"}];
         // let obt=[];
         // for(var i = 0;i<obtainEmploymentChartsList.length;i++){
         //     let abtName = obtainEmploymentChartsList[i].name;
@@ -885,7 +894,8 @@ class ObtainEmployment extends Component {
         //      abtName
         //  );
         // }
-        let isFetching = store.getState().ReportForms.data.obtainEmploymentChartsList.isFetching;
+        // let isFetching = store.getState().ReportForms.data.obtainEmploymentChartsList.isFetching;
+        let isFetching = false;
         var obtainOption = {
 
             tooltip: {
@@ -995,7 +1005,8 @@ class AgeCharts extends Component {
     //     }
     // }
     render() {
-        let ageChartsList = store.getState().ReportForms.data.ageChartsList.result.list;
+        // let ageChartsList = store.getState().ReportForms.data.ageChartsList.result.list;
+        let ageChartsList = [{name: "不满14岁", value: "7"}, {name: "14-16岁", value: "13"}, {name: "16-18岁", value: "55"},{name: "18-25岁", value: "9"},{name: "25-36岁", value: "20"}, {name: "36-60岁", value: "5"},{name: "60岁", value: "2"}];
         // let obj=[]
         // for(var i = 0;i<ageChartsList.length;i++){
         //     let abjName = ageChartsList[i].name;
@@ -1003,7 +1014,8 @@ class AgeCharts extends Component {
         //      abjName
         //  );
         // }
-        let isFetching = store.getState().ReportForms.data.ageChartsList.isFetching;
+        // let isFetching = store.getState().ReportForms.data.ageChartsList.isFetching;
+        let isFetching = false;
         var ageOption = {
             color: ['#00ACEE'],
             textStyle: {
@@ -1018,7 +1030,6 @@ class AgeCharts extends Component {
             grid: {
                 left: '3%',
                 right: '4%',
-
                 containLabel: true
             },
             xAxis: {
@@ -1112,8 +1123,10 @@ class SexCharts extends Component {
     //     }
     // }
     render() {
-        let sexChartsList = store.getState().ReportForms.data.sexChartsList.result.list;
-        let isFetching = store.getState().ReportForms.data.sexChartsList.isFetching;
+        // let sexChartsList = store.getState().ReportForms.data.sexChartsList.result.list;
+        let sexChartsList = [{name: "女", value: "15"}, {name: "男", value: "28"}];
+        // let isFetching = store.getState().ReportForms.data.sexChartsList.isFetching;
+        let isFetching = false;
         let option = {
             tooltip: {
                 trigger: 'item',
@@ -1251,6 +1264,7 @@ const smallIcon = {
     height: "30px",
     borderRadius: "3px",
     float: "left",
+    overflow: "hidden"
 }
 const clear = {
     clear: "both"

@@ -97,12 +97,18 @@ class SystemManagement extends Component {
     render() {
         //遮罩状态
         let isBlock = store.getState().root.uiData.ModalDialogueBg;
+        let menus = [];
+        this.props.SystemManagement.uiData.menus.map((menu) =>  {
+            if(menu.isShow){
+                menus.push(menu);
+            }
+        })
         return (
             <div>
                 <Shade isBlock={isBlock}/>
                 <Header />
                 <div className="sileder_left">
-                    <SliderMenuItem menus={this.props.SystemManagement.uiData.menus}
+                    <SliderMenuItem menus={menus}
                                     handleMenuClick={this.handleMenuClick}/>
                 </div>
 

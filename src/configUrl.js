@@ -27,7 +27,7 @@ global.configUrl = {
     //http://172.19.1.145:7000 测试部接口地址
    serverUrl: "http://172.19.12.102:8888",
   //客户区域
-  clientArea: '黑龙江',
+  clientArea: '呼和浩特市',
   //PKI登录是否开启
   pkiLoginIsOpen: false,
   //版本号

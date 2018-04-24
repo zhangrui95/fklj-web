@@ -59,8 +59,10 @@ export function loginUser(creds) {
                 sessionStorage.setItem('id_token', res.data.token);
                 // sessionStorage.setItem('id_token', 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJjNTFmZDQwMS1hYTQ1LTQ3NzctOTkyZC1mODA5ODg5MGE2NGMiLCJpYXQiOjE1MjMyNTE0NDMsInN1YiI6IjEiLCJpc3MiOiJTZWN1cmUgQ2VudGVyIiwiZ3JvdXBjb2RlIjoiNDEwMzAwMDAwMDAwIiwidXR5cGUiOiIxIiwiaWRjYXJkIjoiYWRtaW4iLCJleHAiOjE1MjMzMzc4NDN9.WzBKSsbIkSOZy60FTmfGfliJxDYohkadUaArP1po2Wo');
                 dispatch(receiveLogin(res.data));
+                isAllowMenu(store.getState().root.uiData.navigations)
                 isAllowMenu(store.getState().ControlPersonnel.uiData.menus)
                 isAllowMenu(store.getState().DynamicControl.uiData.menus)
+                isAllowMenu(store.getState().SystemManagement.uiData.menus)
                 message.success('提示：登录成功!');
                 browserHistory.push('/Home');
                 //盘查管理菜单

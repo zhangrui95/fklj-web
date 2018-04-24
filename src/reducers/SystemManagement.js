@@ -4,6 +4,7 @@
 import * as systemManagementAction from "../actions/SystemManagement";
 import {SYSTEMMANAGEMENT_MENU_CHANGE_CURRENT,SYSTEMMANAGEMENT_MENU_INIT,SYSTEMMANAGEMENT_HIGHRISKAREA_CHAGE} from "../actions/actions";
 import {store} from '../index.js';
+import {isAllowMenu} from '../utils/index';
 const initialState = { //系统管理
         success: true,
         data: {
@@ -186,7 +187,9 @@ const initialState = { //系统管理
                     isOpen: false,
                     search: 'type=all',
                     haveSon: false,
-                    isSelect: true
+                    isSelect: true,
+                    code:'xtgl_skrj_page',
+                    isShow: false
                 },
                 {
                     id: '102',
@@ -194,7 +197,9 @@ const initialState = { //系统管理
                     isOpen: false,
                     search: 'type=gzry',
                     haveSon: false,
-                    isSelect: false
+                    isSelect: false,
+                    code:'xtgl_tzsz_page',
+                    isShow: false
                 },
                 {
                     id: '103',
@@ -202,7 +207,9 @@ const initialState = { //系统管理
                     isOpen: false,
                     search: 'type=ldry',
                     haveSon: false,
-                    isSelect: false
+                    isSelect: false,
+                    code:'xtgl_ycbdgz_page',
+                    isShow: false
                 },
                 // {
                 //     id: '104',
@@ -247,7 +254,9 @@ const initialState = { //系统管理
                     isOpen: false,
                     search: 'type=ldry',
                     haveSon: false,
-                    isSelect: false
+                    isSelect: false,
+                    code:'xtgl_yjdlxr_page',
+                    isShow: false
                 },
                 {
                     id: '108',
@@ -255,7 +264,9 @@ const initialState = { //系统管理
                     isOpen: false,
                     search: 'type=ldry',
                     haveSon: false,
-                    isSelect: false
+                    isSelect: false,
+                    code:'xtgl_lrdlxr_page',
+                    isShow: false
                 },
                 // {
                 //   id: '109',
@@ -271,7 +282,9 @@ const initialState = { //系统管理
                     isOpen: false,
                     search: 'type=ldry',
                     haveSon: false,
-                    isSelect: false
+                    isSelect: false,
+                    code: 'xtgl_sjzd_page',
+                    isShow: false
                   },
                 
             ]
@@ -465,9 +478,14 @@ const SystemManagement = (state=initialState, action) => {
             return newState;
 
         default:
-            if(store !== undefined){
+            if(store !== undefined ){
                 return store.getState().SystemManagement;
             }else{
+                if(sessionStorage.getItem('user')!== null && sessionStorage.getItem('id_token')!== null ){
+                    let menus = state.uiData.menus;
+                    isAllowMenu(menus);
+                    // state.uiData.menus = menus;
+                }
                 return state;
             }
     }

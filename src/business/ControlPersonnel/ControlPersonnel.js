@@ -424,7 +424,7 @@ export  class ControlPersonnel extends Component{
                                     label="更新时间"
                                 >
                                     {getFieldDecorator('time', {
-                                        setFieldsValue:this.state.modalType === 'edit' ? moment(this.state.personInfo.updatetime, 'YYYY-MM-DD HH:mm:ss') : '',
+                                        initialValue:this.state.modalType === 'edit' ? moment(this.state.personInfo.updatetime, 'YYYY-MM-DD HH:mm:ss') : '',
                                     })(
                                         <DatePicker placeholder="" allowClear={false} style={{width:"190px"}}/>
                                     )}

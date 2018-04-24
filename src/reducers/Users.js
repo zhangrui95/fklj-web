@@ -29,7 +29,7 @@ const initialState = {
                     search: 'type=all',
                     haveSon: false,
                     isSelect: true,
-                    isShow: true,
+                    isShow: false,
                     code:'dtgk_qb_page',
                 },
                 {

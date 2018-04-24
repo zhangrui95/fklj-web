@@ -78,17 +78,6 @@ export class Header extends Component{
       let user = JSON.parse(sessionStorage.getItem('user'));
       let navigations = store.getState().root.uiData.navigations;
       let  navigationList = [];
-      user.menu.map((col) => {
-          if(col.resourceCode === 'dtgk_menu'){
-              navigations[1].isShow = true;
-          }else if(col.resourceCode === 'tjbb_menu'){
-              navigations[5].isShow = true;
-          }else if(col.resourceCode === 'gkry_menu'){
-              navigations[3].isShow = true;
-          }else if(col.resourceCode === 'xtgl_menu'){
-              navigations[7].isShow = true;
-          }
-      })
       navigations.forEach(function(navigation, i){
           let css;
           if(navigation.isShow){

@@ -140,7 +140,7 @@ export function postActivityStatisticsData(creds) {
             dispatch(receivedActivityStatisticsData(json));
         }).catch((e)=>{
             dispatch(receivedActivityStatisticsError(e.toString()))
-        });;
+        });
     }
 }
 export function receivedActivityStatisticsData(data) {

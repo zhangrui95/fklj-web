@@ -65,6 +65,7 @@ require("echarts/map/js/province/guangxi.js");
 require("echarts/map/js/province/shandong.js");
 require("echarts/map/js/province/liaoning.js");
 require("echarts/map/js/province/jilin.js");
+require("echarts/map/js/city/huhehaote.js");
 // 样式
 const p16 = {
     fontSize: "16px",
@@ -157,8 +158,6 @@ const smallIcon2 = {
 const clear = {
     clear: "both"
 }
-
-
 
 class Home extends Component {
     constructor(props) {
@@ -395,21 +394,38 @@ class Home extends Component {
 }
 // 地图
 class ChinaMap extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            mapType: "china",
+            distributeMapData: [{name:'内蒙古',value:'2'}]
+        }
+    }
 
-
+    mapCity = (e) => {
+        console.log(e)
+        if(e.name.length > 0){
+            this.setState({
+                mapType: e.name.toString(),
+                distributeMapData: [{name:'呼和浩特市',value:'2'}]
+            });
+        } else {
+            this.setState({
+                mapType: "china",
+                distributeMapData: [{name:'内蒙古',value:'2'}]
+            });
+        }
+    }
     render() {
 
-        let distributeMapData = this.props.distributeMapData;
         let numData = [];
-        for (var i = 0; i < distributeMapData.length; i++) {
-            var distribute = distributeMapData[i];
+        for (var i = 0; i < this.state.distributeMapData.length; i++) {
+            var distribute = this.state.distributeMapData[i];
             var number = distribute.value;
             var num = parseInt(number);
             numData.push(
                 num
             );
-            //var maxInNumbers = Math.max.apply(Math, number);
-            // console.log('original',number);
         }
         var maxInNumbers = Math.max.apply(Math, numData);
         let maxNum = maxInNumbers * constants.doubleNum;
@@ -449,10 +465,8 @@ class ChinaMap extends Component {
             series: [{
                 name: '数据',
                 type: 'map',
-                mapType: global.configUrl.clientArea,
-                roam: true,
-                left: "26%",
-                top: '20px',
+                mapType: this.state.mapType,
+                roam: false,
                 label: {
                     normal: {
                         show: true,
@@ -472,16 +486,20 @@ class ChinaMap extends Component {
 
                     }
                 },
-                data: distributeMapData,
+                data: this.state.distributeMapData,
                 silent: false
             }]
         };
+        let onEvents = {
+            'click': this.mapCity,
+        }
         return (
-            <div style={{width:"100%"}}>
+            <div style={{width:"50%",margin:"0 25%"}}>
                 <div>
                     <EchartsReact
                         option={optionMap}
                         style={{height: '84%', width: '100%'}}
+                        onEvents={onEvents}
                     />
                 </div>
             </div>

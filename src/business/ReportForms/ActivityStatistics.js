@@ -300,10 +300,10 @@ class ActivityStatistics extends Component {
                         }
                         <div style={{float: "left", marginLeft: "50px"}}>
                             <label htmlFor="" style={labelStyle2}>其他时间：</label>
-                            <DatePicker format={dateFormat} allowClear={false} style={{marginRight: "10px"}}
+                            <DatePicker placeholder="" format={dateFormat} allowClear={false} style={{marginRight: "10px"}}
                                         value={beginDateValue} onChange={this.handleBeginDeteClick}/>
                             <span className="font14" style={{marginRight: "10px"}}>至</span>
-                            <DatePicker format={dateFormat} allowClear={false} style={{marginRight: "10px"}}
+                            <DatePicker placeholder="" format={dateFormat} allowClear={false} style={{marginRight: "10px"}}
                                         value={endDateValue} onChange={this.handleEndDeteClick}/>
                             <ShallowBlueBtn text="查询" margin="0 0 0 20px" width="60px"  onClick={this.handleQueryClick}/>
 
