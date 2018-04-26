@@ -14,7 +14,7 @@ export function fetchPointTaskData(creds) {
             dispatch( {type: 'TaskManagement-data',data: json} );
         }).catch((e)=>{
             dispatch({type: 'TaskManagement-error',message: e.toString()} )
-        });;
+        });
     }
 }
 //修改卡点任务
@@ -39,7 +39,7 @@ export function updatePointTaskData(creds, fun, clearUnit,initEntity,params,load
                 loadchange()
             }
         }).catch((e)=>{
-        });;
+        });
     }
 }
 //添加卡点任务
@@ -65,7 +65,7 @@ export function addPointTaskData(creds, fun, clearUnit,initEntity,params,loadcha
                 loadchange();
             }
         }).catch((e)=>{
-        });;
+        });
     }
 }
 //终止卡点任务
@@ -83,7 +83,7 @@ export function endPointTaskData(creds,initEntity) {
             store.dispatch(fetchPointTaskData(creds));
             initEntity();
         }).catch((e)=>{
-        });;
+        });
     }
 }
 //根据ID获取卡点任务详情
@@ -97,7 +97,7 @@ export function getPointTaskDetailsById(taskId) {
             dispatch( {type: 'Task-Tree-data',data: json} );
 
         }).catch((e)=>{
-        });;
+        });
     }
 }
 
@@ -112,7 +112,7 @@ export function fetchPatrolTaskData(creds) {
             dispatch( {type: 'TaskManagement-data',data: json} );
         }).catch((e)=>{
             dispatch({type: 'TaskManagement-error',message: e.toString()} )
-        });;
+        });
     }
 }
 //修改巡逻任务
@@ -136,7 +136,7 @@ export function updatePatrolTaskData(creds, fun, clearUnit,initEntity,params,loa
                 loadchange();
             }
         }).catch((e)=>{
-        });;
+        });
     }
 }
 
@@ -165,7 +165,7 @@ export function addPatrolTaskData(creds, fun, clearUnit,initEntity,params,loadch
                 // console.log('错误提示Loading',this.state.Loading);
             }
         }).catch((e)=>{
-        });;
+        });
     }
 }
 
@@ -185,7 +185,7 @@ export function endPatrolTaskData(creds,initEntity) {
             store.dispatch(fetchPatrolTaskData(creds));
             initEntity();
         }).catch((e)=>{
-        });;
+        });
     }
 }
 //根据ID获取巡逻任务详情
@@ -199,7 +199,7 @@ export function getPatrolTaskDetailsById(taskId) {
             dispatch( {type: 'Task-Tree-data',data: json} );
 
         }).catch((e)=>{
-        });;
+        });
     }
 }
 

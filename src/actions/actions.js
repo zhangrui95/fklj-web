@@ -162,7 +162,7 @@ export function saveMessAttention(creds,queryCreds,pageType) {
             }
             message.success('提示：收藏成功！');
         }).catch((e)=>{
-        });;
+        });
     }
 }
 //取消关注人/data/DelMessAttention
@@ -190,7 +190,7 @@ export function DelMessAttention(creds,queryCreds,pageType) {
             message.success('提示：取消收藏成功！');
              //store.dispatch(PostUsersData(creds));
         }).catch((e)=>{
-        });;
+        });
     }
 }
 
@@ -263,7 +263,7 @@ export function changeMenu(menu, type, moduleName){//改变目录状态
         }else if(type==='getData'){//点击目录
             return {type:SYSTEMMANAGEMENT_MENU_CHANGE_CURRENT,menu:menu};
         }
-    } else if(moduleName===AREAMANAGEMENT_MODULE){//片区管理模块
+    } else if(moduleName===AREAMANAGEMENT_MODULE){//卡点管理模块
         if(type==='openAndClose'){//菜单打开关闭
 
         }else if(type==='getData'){//点击目录
@@ -331,7 +331,7 @@ export  function initIntelligentRetrievalMenu(menu) {
 export  function initPersonalCenterMenu(menu) {
     return {type:PERSONALCENTER_MENU_INIT,menu:menu};
 }
-//初始片区管理菜单
+//初始卡点管理菜单
 export  function initAreaManagementCenterMenu(menu) {
     return {type:AREAMANAGEMENT_MENU_INIT,menu:menu};
 }
@@ -382,7 +382,7 @@ export const DYNAMICCONTROL_MENU_INIT = 'dynamiccontrol_menu_init';
 export const INTELLIGENTRETRIEVAL_MENU_INIT = 'intelligentretrieval_menu_init';
 //设置管理菜单初始化
 export const SYSTEMMANAGEMENT_MENU_INIT = 'systemmanagement_menu_init';
-//设置片区管理菜单初始化
+//设置卡点管理菜单初始化
 export const AREAMANAGEMENT_MENU_INIT = 'areaManagement_menu_init';
 //设置智能检索初始化
 export const INTELLIGENTRETRIEVA_MENU_INIT = 'intelligentretrieva_menu_init';
@@ -442,7 +442,7 @@ export function fetchAreaProvinceData(path,search='') {
             dispatch(receivedAreaProvinceData(json));
         }).catch((e)=>{
             dispatch(receivedAreaProvinceError(e.toString()))
-        });;
+        });
     }
 }
 export function receivedAreaProvinceData(data) {
@@ -461,7 +461,7 @@ export function fetchAreaCityData(path,search='',project='') {
             dispatch(receivedAreaCityData(json,project));
         }).catch((e)=>{
             dispatch(receivedAreaCityError(e.toString()))
-        });;
+        });
     }
 }
 export function receivedAreaCityData(data,project) {
@@ -480,7 +480,7 @@ export function fetchDict(path,search='',type='') {
                 dispatch(receivedTerrorTypeData(json));
             }).catch((e)=>{
                 dispatch(receivedTerrorTypeError(e.toString()))
-            });;
+            });
         }
 
     }else if(type === constants.DICT_JUDGMENT_LEVEL ){ //研判级别
@@ -489,7 +489,7 @@ export function fetchDict(path,search='',type='') {
                 dispatch(receivedJudgmentLevelData(json));
             }).catch((e)=>{
                 dispatch(receivedJudgmentLevelError(e.toString()))
-            });;
+            });
         }
     }else if(type === constants.DICT_DISPOSITIONL ){ //处置措施
         return dispatch => {
@@ -497,7 +497,7 @@ export function fetchDict(path,search='',type='') {
                 dispatch(receivedDispositionlData(json));
             }).catch((e)=>{
                 dispatch(receivedDispositionlError(e.toString()))
-            });;
+            });
         }
     }
 }
@@ -512,7 +512,7 @@ export function postjudmentlevelData(creds) {
             dispatch(receivedJudgmentLevelData(json));
         }).catch((e)=>{
             dispatch(receivedJudgmentLevelError(e.toString()))
-        });;
+        });
     }
 }
 export function receivedJudgmentLevelData(data) {
@@ -532,7 +532,7 @@ export function postTerrortypeData(creds) {
             dispatch(receivedTerrorTypeData(json));
         }).catch((e)=>{
             dispatch(receivedTerrorTypeError(e.toString()))
-        });;
+        });
     }
 }
 export function receivedTerrorTypeData(data) {
@@ -552,7 +552,7 @@ export function postDispositionlData(creds) {
             dispatch(receivedDispositionlData(json));
         }).catch((e)=>{
             dispatch(receivedDispositionlError(e.toString()))
-        });;
+        });
     }
 }
 export function receivedDispositionlData(data) {
@@ -573,7 +573,7 @@ export function fetchPoliceUnitsData(creds) {
             dispatch(receivedPoliceUnitsData(json));
         }).catch((e)=>{
             dispatch(receivedPoliceUnitsError(e.toString()))
-        });;
+        });
     }
 }
 export function receivedPoliceUnitsData(data) {
@@ -603,7 +603,7 @@ export function fetchPersonTagsData() {
             dispatch(receivedPersonTagsData(json));
         }).catch((e)=>{
             dispatch(receivedPersonTagsError(e.toString()))
-        });;
+        });
     }
 }
 export function receivedPersonTagsData(data) {
@@ -633,7 +633,7 @@ export function fetchCarTagsData() {
             dispatch(receivedCarTagsData(json));
         }).catch((e)=>{
             dispatch(receivedCarTagsError(e.toString()))
-        });;
+        });
     }
 }
 export function receivedCarTagsData(data) {
@@ -712,7 +712,7 @@ export function routingChange(routing) {
 //             }
 //         }).catch((e)=>{
 //             dispatch(receivedUnitTreeError(e.toString()))
-//         });;
+//         });
 //     }
 // }
 // export const UNIT_TREE_DATA = 'unit_tree_data';

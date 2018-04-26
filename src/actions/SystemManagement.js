@@ -186,7 +186,7 @@ export function DeleteInterrogationInformationData(creds,params) {
             message.success('删除成功！');
              store.dispatch(PostInterrogationInformationData(creds));
         }).catch((e)=>{
-        });;
+        });
     }
 }
 
@@ -225,7 +225,7 @@ export function postExceptionParameterReminderData(creds) {
             dispatch(receivedExceptionParameterReminderData(json));
         }).catch((e)=>{
             dispatch(receivedExceptionParameterReminderError(e.toString()))
-        });;
+        });
     }
 }
 
@@ -911,7 +911,7 @@ export function postPlaceProvinceData(id) {
             
         }).catch((e) => {
             dispatch(receivedPlaceProvinceError(e.toString()))
-        });;
+        });
     }
 }
 export function receivedPlaceProvinceData(data) {
@@ -1006,7 +1006,7 @@ export function delRedList(creds) {
 //                 }
 //             }).catch((e)=>{
 //                 dispatch(receivedUnitTreeError(e.toString()))
-//             });;
+//             });
 //         }
 //     }
 //     export const UNIT_TREE_DATA = 'unit_tree_data';
@@ -1050,7 +1050,7 @@ export function postCodeData(id) {
             
         }).catch((e) => {
             dispatch(receivedCodeError(e.toString()))
-        });;
+        });
     }
 }
 export function receivedCodeData(data) {
@@ -1082,7 +1082,7 @@ export function postCodeTableData(creds) {
                         
         }).catch((e) => {
             dispatch(receivedCodeTableError(e.toString()))
-        });;
+        });
     }
 }
 export function receivedCodeTableData(data) {

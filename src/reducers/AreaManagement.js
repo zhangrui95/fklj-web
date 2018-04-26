@@ -1,5 +1,5 @@
 /**
- * 片区管理
+ * 卡点管理
  */
 import * as AreaManagementAction from "../actions/AreaManagement";
 import {AREAMANAGEMENT_MENU_INIT} from "../actions/actions";
@@ -17,13 +17,22 @@ const initialState = {
                 total: 0,
                 list: [],
             }
+        },
+        FindTreeList:{
+            reason: {
+                "code": "",
+                "text": ""
+            },
+            result: {
+                list: [],
+            }
         }
     },
     uiData: {
         menus: [
             {
                 id: '101',
-                menuName: '片区管理',
+                menuName: '卡点管理',
                 isOpen: false,
                 search: 'type=pqgl',
                 haveSon: false,
@@ -37,6 +46,7 @@ const initialState = {
 
 const AreaManagement =(state = initialState, action)=>{
     let newState = Object.assign({}, state);
+    console.log('action.type ======>',action.type)
     switch (action.type) {
         case 'AREA_MANAGAMENT':
             return {
@@ -50,6 +60,8 @@ const AreaManagement =(state = initialState, action)=>{
         }
             newState.uiData.menus[0].isSelect = true;
             return newState;
+        case 'Find_Dept_Tree':
+            newState.data.FindTreeList.result.list = action.data.result.list;
         default:
             if(store !== undefined){
                 return store.getState().AreaManagement;

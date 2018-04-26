@@ -29,9 +29,9 @@ export const REPORTFORMS_MENU_ACTIVITY = "活动数据统计"
 export const PERSONALCENTER_MODULE = 'personalcenter_module';
 //动态管控模块
 export const DYNAMICCONTROL_MODULE = 'dynamiccontrol_module';
-//片区管理模块
-export const AREAMANAGEMENT_MODULE = '片区管理';
-//片区管理模块
+//卡点管理模块
+export const AREAMANAGEMENT_MODULE = '卡点管理';
+//卡点管理模块
 export const CONTROLPERSONNEL_MODULE = '管控人员';
 export const CONTROLPERSONNEL_MODULE_GZ_NLHRY = '拟来呼人员';
 export const CONTROLPERSONNEL_MODULE_GZ_ZALY = '治安来源';

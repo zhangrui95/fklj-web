@@ -1,4 +1,4 @@
-//片区管理
+//卡点管理
 import React, {Component} from 'react'
 import {connect} from "react-redux";
 import AreaManagementRight from "./AreaManagementRight";

@@ -32,10 +32,12 @@ import {
     Icon,
     Row,
     Col,
+    TreeSelect
 } from 'antd';
 
 import moment from 'moment';
 moment.locale('zh-cn');
+import {findDeptTree} from "../../actions/AreaManagement";
 
 // 样式
 const sliderdyHeader = {
@@ -75,6 +77,7 @@ const formItemLayout = {
 export  class AreaManage extends Component{
     constructor(props) { //初始化nowPage为1
         super(props);
+        this.treeData = []
         this.state = {
             nowPage: 1,
             ModalDialogueShow: 'none',
@@ -87,9 +90,9 @@ export  class AreaManage extends Component{
             enddate: '',
             key: '',
             data: [
-                {key: 1, serial: 1, value: '011233001', label: '海邻科片区', updatetime: '2018-04-10'},
-                {key: 2, serial: 2, value: '011233002', label: 'hylink片区', updatetime: '2018-04-09'},
-                {key: 3, serial: 3, value: '011233003', label: '海邻科片区', updatetime: '2018-04-08'},
+                {key: 1, serial: 1, value: '呼和浩特市公安局', name: '海邻科卡点', updatetime: '2018-04-10'},
+                {key: 2, serial: 2, value: '呼和浩特市公安局', name: 'hylink卡点', updatetime: '2018-04-09'},
+                {key: 3, serial: 3, value: '呼和浩特市公安局', name: '海邻科卡点', updatetime: '2018-04-08'},
             ],
             record: null,
             pagination: pagination,
@@ -103,6 +106,8 @@ export  class AreaManage extends Component{
             text:null,
         };
         this.pageChange = this.pageChange.bind(this);
+        let creds = {name: "", policetpyes: []}
+        store.dispatch(findDeptTree(creds))
     }
     editShowModal = (record) => {
         this.setState({
@@ -110,12 +115,18 @@ export  class AreaManage extends Component{
             personInfo: record,
             modalType: 'edit'
         });
+        this.treeData = [];
+        const list = store.getState().AreaManagement.data.FindTreeList.result.list
+        this.getListTree(list, false , this.treeData)
     }
     addShowModal = (record) => {
         this.setState({
             visible: true,
             modalType: 'add',
         });
+        this.treeData = [];
+        const list = store.getState().AreaManagement.data.FindTreeList.result.list
+        this.getListTree(list, false , this.treeData)
     }
     handleCancel = () => {
         this.setState({
@@ -195,7 +206,7 @@ export  class AreaManage extends Component{
                     let data = this.state.data;
                     let len = this.state.data.length - 1;
                     let key = data[len].key + 1
-                    let value = {key: key, serial: key, value: values.value, label: values.label, updatetime: "2018-04-10"}
+                    let value = {key: key, serial: key, name: values.name, value: values.label, updatetime: "2018-04-10"}
                     data.push(value)
                     this.setState({
                         data: data,
@@ -262,6 +273,25 @@ export  class AreaManage extends Component{
             nowPage: 1,
         })
     }
+    getListTree = (list, child ,tree) => {
+        for(let i in list){
+            if(!child){
+                if(i !== 'remove'){
+                    tree.push({label:list[i].name,value:list[i].name,key:list[i].name,children:[]})
+                    if(list[i].childrenList.length > 0){
+                        this.getListTree(list[i].childrenList,true , tree[i])
+                    }
+                }
+            } else{
+                if(i !== 'remove') {
+                    tree.children.push({label: list[i].name, value: list[i].name, key: list[i].name, children:[]})
+                    if (list[i].childrenList.length > 0) {
+                        this.getListTree(list[i].childrenList, true, tree.children[i])
+                    }
+                }
+            }
+        }
+    }
     render() {
         const { getFieldDecorator } = this.props.form;
         let nowPage = this.state.nowPage;
@@ -270,11 +300,11 @@ export  class AreaManage extends Component{
             title: '序号',
             dataIndex: 'serial',
         }, {
-            title: '编码',
-            dataIndex: 'value',
+            title: '卡点名称',
+            dataIndex: 'name',
         }, {
-            title: '片区名称',
-            dataIndex: 'label',
+            title: '所属单位',
+            dataIndex: 'value',
         }, {
             title: '更新时间',
             dataIndex: 'updatetime',
@@ -304,7 +334,6 @@ export  class AreaManage extends Component{
                 disabled: record.name === 'Disabled User',    // Column configuration not to be checked
             }),
         };
-
         return(
             <div className="sliderWrap">
                 <div className="sliderItemDiv">
@@ -338,7 +367,7 @@ export  class AreaManage extends Component{
                 {/*分页*/}
                 <Pag pageSize={10} nowPage={nowPage} totalRecord={10} pageChange={this.pageChange} />
                 <Modal
-                    title="片区管理"
+                    title="卡点管理"
                     visible={this.state.visible}
                     onCancel={this.handleCancel}
                     footer={null}
@@ -348,15 +377,16 @@ export  class AreaManage extends Component{
                         <div className="formItemLeft">
                             <FormItem
                                 {...formItemLayout}
-                                label="编码"
+                                label="卡点名称"
                             >
-                                {getFieldDecorator('value', {
+                                {getFieldDecorator('name', {
                                     rules: [{
-                                        required: true, message: '请输入编码!'
+                                        required: true, message: '请输入名称!',
+
                                     },{
-                                        max:14,message:'最多输入十四个字符!'
+                                        max:20,message:'最多输入二十个字符!',
                                     }],
-                                    initialValue:this.state.modalType === 'edit' ? this.state.personInfo.value : '',
+                                    initialValue:this.state.modalType === 'edit' ? this.state.personInfo.name : '',
                                     validateFirst:true
                                 })(
                                     <Input />
@@ -366,19 +396,17 @@ export  class AreaManage extends Component{
                         <div className="formItemLeft">
                             <FormItem
                                 {...formItemLayout}
-                                label="片区名称"
+                                label="所属单位"
                             >
                                 {getFieldDecorator('label', {
                                     rules: [{
-                                        required: true, message: '请输入名称!',
+                                        required: true, message: '请选择所属单位!',
 
-                                    },{
-                                        max:20,message:'最多输入二十个字符!',
                                     }],
-                                    initialValue:this.state.modalType === 'edit' ? this.state.personInfo.label : '',
+                                    initialValue:this.state.modalType === 'edit' ? this.state.personInfo.value : '',
                                     validateFirst:true
                                 })(
-                                    <Input />
+                                    <TreeSelect treeData={this.treeData} placeholder="请选择所属单位"/>
                                 )}
                             </FormItem>
                         </div>
@@ -405,7 +433,8 @@ const SearchArea = React.createClass({
             enddate: '',
             nameClear:'',
             begindateClear:'',
-            enddateClear:''
+            enddateClear:'',
+            treeData:[]
         };
     },
     handleNameChange: function(e) {
@@ -438,12 +467,41 @@ const SearchArea = React.createClass({
             visible: false,
         });
     },
+    getTreeList:function(){
+        this.treeData = [];
+        const list = store.getState().AreaManagement.data.FindTreeList.result.list
+        this.getListTree(list, false , this.treeData)
+    },
+    getListTree:function(list, child ,tree){
+        for(let i in list){
+            if(!child){
+                if(i !== 'remove'){
+                    tree.push({label:list[i].name,value:list[i].name,key:list[i].name,children:[]})
+                    if(list[i].childrenList.length > 0){
+                        this.getListTree(list[i].childrenList,true , tree[i])
+                    }
+                }
+            } else{
+                if(i !== 'remove') {
+                    tree.children.push({label: list[i].name, value: list[i].name, key: list[i].name, children:[]})
+                    if (list[i].childrenList.length > 0) {
+                        this.getListTree(list[i].childrenList, true, tree.children[i])
+                    }
+                }
+            }
+        }
+        this.setState({
+            treeData: this.treeData
+        });
+    },
     render() {
         let name = this.state.name;
         return (
             <div className="marLeft40 fl z_searchDiv">
-                <label htmlFor="" className="font14">片区名称：</label>
-                <Input style={{width:'121px',marginRight:"10px"}} type="text"  id='name' placeholder='请输入片区名称'  value={name}  onChange={this.handleNameChange}/>
+                <label htmlFor="" className="font14">卡点名称：</label>
+                <Input style={{width:'150px',marginRight:"10px"}} type="text"  id='name' placeholder='请输入卡点名称'  value={name}  onChange={this.handleNameChange}/>
+                <label htmlFor="" className="font14">所属单位：</label>
+                <TreeSelect style={{width:'150px',marginRight:"10px"}} treeData={this.state.treeData} placeholder="请选择所属单位" onClick={this.getTreeList}/>
                 <ShallowBlueBtn width="80px" text="查询" margin="0 10px 0 0" onClick={this.handleClick} />
                 <ShallowBlueBtn width="80px" text="重置" margin="0 10px 0 0" onClick={this.init} />
                 <div style={{marginTop:"15px"}}>

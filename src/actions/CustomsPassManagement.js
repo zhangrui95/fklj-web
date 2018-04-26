@@ -13,7 +13,7 @@ export function fetchCardPointData(creds) {
             dispatch( {type: 'CardPoint-data',data: json} );
         }).catch((e)=>{
             dispatch({type: 'CardPoint-error',message: e.toString()} )
-        });;
+        });
     }
 }
 
@@ -36,7 +36,7 @@ export function saveCardPointData(creds,fun) {
                 message.error("提示："+json.reason.text+"!");
             }
         }).catch((e)=>{
-        });;
+        });
     }
 }
 
@@ -60,7 +60,7 @@ export function addCardPointData(creds,fun) {
                 message.error(json.reason.text);
             }
         }).catch((e)=>{
-        });;
+        });
     }
 }
 
@@ -77,6 +77,6 @@ export function DeleteCardPointData(creds) {
             }
             store.dispatch(fetchCardPointData(creds));
         }).catch((e)=>{
-        });;
+        });
     }
 }

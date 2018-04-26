@@ -13,7 +13,7 @@ export function fetchTaskStatisticsData(path,search='') {
             dispatch(receivedTaskStatisticsData(json));
         }).catch((e)=>{
             dispatch(receivedTaskStatisticsError(e.toString()))
-        });;
+        });
     }
 }
 export function postTaskStatisticsData(creds) {
@@ -24,7 +24,7 @@ export function postTaskStatisticsData(creds) {
             dispatch(receivedTaskStatisticsData(json));
         }).catch((e)=>{
             dispatch(receivedTaskStatisticsError(e.toString()))
-        });;
+        });
     }
 }
 export function receivedTaskStatisticsData(data) {
@@ -42,7 +42,7 @@ export function fetchInventoryTotalData(path,search='') {
             dispatch(receivedInventoryTotalData(json));
         }).catch((e)=>{
             dispatch(receivedInventoryTotalError(e.toString()))
-        });;
+        });
     }
 }
 export function postInventoryTotalData(creds) {
@@ -52,7 +52,7 @@ export function postInventoryTotalData(creds) {
             dispatch(receivedInventoryTotalData(json));
         }).catch((e)=>{
             dispatch(receivedInventoryTotalError(e.toString()))
-        });;
+        });
     }
 }
 export function receivedInventoryTotalData(data) {
@@ -71,7 +71,7 @@ export function fetchPopulationData(path,search='') {
             dispatch(receivedPopulationData(json));
         }).catch((e)=>{
             dispatch(receivedPopulationError(e.toString()))
-        });;
+        });
     }
 }
 export function postPopulationData(creds) {
@@ -82,7 +82,7 @@ export function postPopulationData(creds) {
             dispatch(receivedPopulationData(json));
         }).catch((e)=>{
             dispatch(receivedPopulationError(e.toString()))
-        });;
+        });
     }
 }
 export function receivedPopulationData(data) {
@@ -100,7 +100,7 @@ export function fetchConcernTotalData(path,search='') {
             dispatch(receivedConcernTotalData(json));
         }).catch((e)=>{
             dispatch(receivedConcernTotalError(e.toString()))
-        });;
+        });
     }
 }
 export function postConcernTotalData(creds) {
@@ -110,7 +110,7 @@ export function postConcernTotalData(creds) {
             dispatch(receivedConcernTotalData(json));
         }).catch((e)=>{
             dispatch(receivedConcernTotalError(e.toString()))
-        });;
+        });
     }
 }
 export function receivedConcernTotalData(data) {
@@ -129,7 +129,7 @@ export function fetchActivityStatisticsData(path,search='') {
             dispatch(receivedActivityStatisticsData(json));
         }).catch((e)=>{
             dispatch(receivedActivityStatisticsError(e.toString()))
-        });;
+        });
     }
 }
 export function postActivityStatisticsData(creds) {
@@ -158,7 +158,7 @@ export function fetchInflowTotalData(path,search='') {
             dispatch(receivedInflowTotalData(json));
         }).catch((e)=>{
             dispatch(receivedInflowTotalError(e.toString()))
-        });;
+        });
     }
 }
 export function postInflowTotalData(creds) {
@@ -168,7 +168,7 @@ export function postInflowTotalData(creds) {
             dispatch(receivedInflowTotalData(json));
         }).catch((e)=>{
             dispatch(receivedInflowTotalError(e.toString()))
-        });;
+        });
     }
 }
 export function receivedInflowTotalData(data) {
@@ -186,7 +186,7 @@ export function fetchOutflowTotalData(path,search='') {
             dispatch(receivedOutflowTotalData(json));
         }).catch((e)=>{
             dispatch(receivedOutflowTotalError(e.toString()))
-        });;
+        });
     }
 }
 export function postOutflowTotalData(creds) {
@@ -196,7 +196,7 @@ export function postOutflowTotalData(creds) {
             dispatch(receivedOutflowTotalData(json));
         }).catch((e)=>{
             dispatch(receivedOutflowTotalError(e.toString()))
-        });;
+        });
     }
 }
 export function receivedOutflowTotalData(data) {
@@ -222,7 +222,7 @@ export function fetchPersonnelListData(path,search='',type) {
                 dispatch(receivedKeyAttentionData(json));
             }).catch((e)=>{
                 dispatch(receivedKeyAttentionError(e.toString()))
-            });;
+            });
         }else if(type==="wld"){
             dispatch({type:"REQUEST_NOT_PERSON_REPORT"});
             get(api + path + '?' + search).then((json) => {
@@ -230,7 +230,7 @@ export function fetchPersonnelListData(path,search='',type) {
                 dispatch(receivedNotLandedData(json));
             }).catch((e)=>{
                 dispatch(receivedNotLandedError(e.toString()))
-            });;
+            });
            
         }else if(type==="szry"){
             dispatch({type:"REQUEST_BEMISS_PERSON_REPORT"});
@@ -238,7 +238,7 @@ export function fetchPersonnelListData(path,search='',type) {
                 dispatch(receivedBeMissingData(json));
             }).catch((e)=>{
                 dispatch(receivedBeMissingError(e.toString()))
-            });;
+            });
         }
        
     }
@@ -256,7 +256,7 @@ export function postPersonnelListData(creds,type) {
                 dispatch(receivedKeyAttentionData(json));
             }).catch((e)=>{
                 dispatch(receivedKeyAttentionError(e.toString()))
-            });;
+            });
         }else if(type==="wld"){
             let path = '/data/getNoArrivelistPage';
             dispatch({type:"REQUEST_NOT_PERSON_REPORT"});
@@ -264,7 +264,7 @@ export function postPersonnelListData(creds,type) {
                 dispatch(receivedNotLandedData(json));
             }).catch((e)=>{
                 dispatch(receivedNotLandedError(e.toString()))
-            });;
+            });
            
         }else if(type==="szry"){
             let path = '/data/getDisappearlistPage';
@@ -273,7 +273,7 @@ export function postPersonnelListData(creds,type) {
                 dispatch(receivedBeMissingData(json));
             }).catch((e)=>{
                 dispatch(receivedBeMissingError(e.toString()))
-            });;
+            });
         }
        
     }
@@ -313,7 +313,7 @@ export function fetchDistributeMapData(path,search='') {
             dispatch(receivedDistributeMapData(json));
         }).catch((e)=>{
             dispatch(receivedDistributeMapError(e.toString()))
-        });;
+        });
     }
 }
 export function postDistributeMapData(creds) {
@@ -323,7 +323,7 @@ export function postDistributeMapData(creds) {
             dispatch(receivedDistributeMapData(json));
         }).catch((e)=>{
             dispatch(receivedDistributeMapError(e.toString()))
-        });;
+        });
     }
 }
 export function receivedDistributeMapData(data) {
@@ -341,7 +341,7 @@ export function fetchAirportCoordMapData(path,search='') {
             dispatch(receivedAirportCoordMapData(json));
         }).catch((e)=>{
             dispatch(receivedAirportCoordMapError(e.toString()))
-        });;
+        });
     }
 }
 export function postAirportCoordMapData(creds) {
@@ -352,7 +352,7 @@ export function postAirportCoordMapData(creds) {
             dispatch(receivedAirportCoordMapData(json));
         }).catch((e)=>{
             dispatch(receivedAirportCoordMapError(e.toString()))
-        });;
+        });
     }
 }
 export function receivedAirportCoordMapData(data) {

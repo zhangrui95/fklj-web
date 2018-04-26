@@ -2,7 +2,7 @@
  * 系统管理异常比对规则-右侧
  */
 import React, { Component } from 'react';
-import {connect} from 'react-redux';;
+import {connect} from 'react-redux';
 import {mainReducer} from "../../reducers/reducers";
 import {fetchInterrogationInformationData
 } from "../../actions/SystemManagement";

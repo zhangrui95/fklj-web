@@ -17,7 +17,7 @@ export function fetchPersonnelInventoryData(creds) {
             dispatch(receivedPersonnelInventoryData(json));
         }).catch((e)=>{
             dispatch(receivedPersonnelInventoryError(e.toString()))
-        });;
+        });
     }
 }
 export function receivedPersonnelInventoryData(data) {
@@ -37,7 +37,7 @@ export function fetchExportPersonExcel(search='') {
             dispatch({type: 'ExportPersonExcel-Data', message: json});
         }).catch((e)=>{
             dispatch( {type: 'ExportPersonExcel-Error', message: e.toString()} )
-        });;
+        });
     }
 }
 
@@ -51,7 +51,7 @@ export function fetchRelevancePersonData(creds) {
             dispatch( {type: 'RelevancePerson-data',data: json} );
         }).catch((e)=>{
             dispatch({type: 'RelevancePerson-error',message: e.toString()} )
-        });;
+        });
     }
 }
 
@@ -65,7 +65,7 @@ export function fetchRelevanceCarData(creds) {
             dispatch( {type: 'RelevanceCar-data',data: json} );
         }).catch((e)=>{
             dispatch({type: 'RelevanceCar-error',message: e.toString()} )
-        });;
+        });
     }
 }
 
@@ -80,7 +80,7 @@ export function fetchCarInventoryData(creds) {
             dispatch(receivedCarInventoryData(json));
         }).catch((e)=>{
             dispatch(receivedCarInventoryError(e.toString()))
-        });;
+        });
     }
 }
 export function receivedCarInventoryData(data) {
@@ -129,7 +129,7 @@ export function fetchCumtomerPersonnelData(path,creds) {
             dispatch(receivedCumtomerPersonnelData(json));
         }).catch((e)=>{
             dispatch(receivedCumtomerPersonnelError(e.toString()))
-        });;
+        });
     }
 }
 export function receivedCumtomerPersonnelData(data) {
@@ -148,7 +148,7 @@ export function fetchCumtomerCarData(path,creds) {
             dispatch(receivedCumtomerCarData(json));
         }).catch((e)=>{
             dispatch(receivedCumtomerCarError(e.toString()))
-        });;
+        });
     }
 }
 export function receivedCumtomerCarData(data) {

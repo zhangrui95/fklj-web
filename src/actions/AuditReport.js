@@ -15,7 +15,7 @@ export function fetchCommonResourcesData(path, search = '') {
             dispatch(receivedCommonResourcesData(json));
         }).catch((e) => {
             dispatch(receivedCommonResourcesError(e.toString()))
-        });;
+        });
     }
 }
 export function postCommonResourcesData(creds) {
@@ -25,7 +25,7 @@ export function postCommonResourcesData(creds) {
             dispatch(receivedCommonResourcesData(json));
         }).catch((e) => {
             dispatch(receivedCommonResourcesError(e.toString()))
-        });;
+        });
     }
 }
 export function receivedCommonResourcesData(data) {
@@ -43,7 +43,7 @@ export function fetchJudgeHistoryData(path, search = '') {
             dispatch(receivedJudgeHistoryData(json));
         }).catch((e) => {
             dispatch(receivedJudgeHistoryError(e.toString()))
-        });;
+        });
     }
 }
 export function postJudgeHistoryData(creds) {
@@ -53,7 +53,7 @@ export function postJudgeHistoryData(creds) {
             dispatch(receivedJudgeHistoryData(json));
         }).catch((e) => {
             dispatch(receivedJudgeHistoryError(e.toString()))
-        });;
+        });
     }
 }
 export function receivedJudgeHistoryData(data) {
@@ -72,7 +72,7 @@ export function postJudgeCodeData(creds) {
             dispatch(receivedJudgeCodeData(json));
         }).catch((e) => {
             dispatch(receivedJudgeCodeError(e.toString()))
-        });;
+        });
     }
 }
 export function receivedJudgeCodeData(data) {
@@ -92,7 +92,7 @@ export function postBasicInformationData(cread) {
             dispatch(receivedBasicInformationData(json));
         }).catch((e) => {
             dispatch(receivedBasicInformationError(e.toString()))
-        });;
+        });
     }
 }
 export function receivedBasicInformationData(data) {
@@ -133,7 +133,7 @@ export function fetchOnlineInformationData(search = '') {
             dispatch(receivedOnlineInformationData(json));
         }).catch((e) => {
             dispatch(receivedOnlineInformationError(e.toString()))
-        });;
+        });
     }
 }
 export function postOnlineInformationData(creds) {
@@ -144,7 +144,7 @@ export function postOnlineInformationData(creds) {
             dispatch(receivedOnlineInformationData(json));
         }).catch((e) => {
             dispatch(receivedOnlineInformationError(e.toString()))
-        });;
+        });
     }
 }
 export function receivedOnlineInformationData(data) {
@@ -195,7 +195,7 @@ export function fetchBankInformationData(search = '') {
             dispatch(receivedBankInformationData(json));
         }).catch((e) => {
             dispatch(receivedBankInformationError(e.toString()))
-        });;
+        });
     }
 }
 export function postBankInformationData(creds) {
@@ -205,7 +205,7 @@ export function postBankInformationData(creds) {
             dispatch(receivedBankInformationData(json));
         }).catch((e) => {
             dispatch(receivedBankInformationError(e.toString()))
-        });;
+        });
     }
 }
 export function receivedBankInformationData(data) {
@@ -256,7 +256,7 @@ export function fetchRelatedPersonData(search = '') {
             dispatch(receivedRelatedPersonData(json));
         }).catch((e) => {
             dispatch(receivedRelatedPersonError(e.toString()))
-        });;
+        });
     }
 }
 export function postRelatedPersonData(creds) {
@@ -267,7 +267,7 @@ export function postRelatedPersonData(creds) {
             dispatch(receivedRelatedPersonData(json));
         }).catch((e) => {
             dispatch(receivedRelatedPersonError(e.toString()))
-        });;
+        });
     }
 }
 export function receivedRelatedPersonData(data) {
@@ -318,7 +318,7 @@ export function fetchHouseholdInformationData(search = '') {
             dispatch(receivedHouseholdInformationData(json));
         }).catch((e) => {
             dispatch(receivedHouseholdInformationError(e.toString()))
-        });;
+        });
     }
 }
 export function postHouseholdInformationData(creds) {
@@ -329,7 +329,7 @@ export function postHouseholdInformationData(creds) {
             dispatch(receivedHouseholdInformationData(json));
         }).catch((e) => {
             dispatch(receivedHouseholdInformationError(e.toString()))
-        });;
+        });
     }
 }
 export function receivedHouseholdInformationData(data) {
@@ -380,7 +380,7 @@ export function fetchDomicilePlaceData(search = '') {
             dispatch(receivedDomicilePlaceData(json));
         }).catch((e) => {
             dispatch(receivedDomicilePlaceError(e.toString()))
-        });;
+        });
     }
 }
 export function postDomicilePlaceData(creds) {
@@ -390,7 +390,7 @@ export function postDomicilePlaceData(creds) {
             dispatch(receivedDomicilePlaceData(json));
         }).catch((e) => {
             dispatch(receivedDomicilePlaceError(e.toString()))
-        });;
+        });
     }
 }
 export function receivedDomicilePlaceData(data) {
@@ -442,7 +442,7 @@ export function fetchIllegalCrimeData(search = '') {
             dispatch(receivedIllegalCrimeData(json));
         }).catch((e) => {
             dispatch(receivedIllegalCrimeError(e.toString()))
-        });;
+        });
     }
 }
 export function postIllegalCrimeData(creds) {
@@ -453,7 +453,7 @@ export function postIllegalCrimeData(creds) {
             dispatch(receivedIllegalCrimeData(json));
         }).catch((e) => {
             dispatch(receivedIllegalCrimeError(e.toString()))
-        });;
+        });
     }
 }
 export function receivedIllegalCrimeData(data) {
@@ -506,7 +506,7 @@ export function postDrugData(creds) {
             dispatch(receivedDrugData(json));
         }).catch((e) => {
             dispatch(receivedDrugError(e.toString()))
-        });;
+        });
     }
 }
 export function receivedDrugData(data) {
@@ -558,7 +558,7 @@ export function postTrafviolateData(creds) {
             dispatch(receivedTrafviolateData(json));
         }).catch((e) => {
             dispatch(receivedTrafviolateError(e.toString()))
-        });;
+        });
     }
 }
 export function receivedTrafviolateData(data) {
@@ -611,7 +611,7 @@ export function postCriminalData(creds) {
             dispatch(receivedCriminalData(json));
         }).catch((e) => {
             dispatch(receivedCriminalError(e.toString()))
-        });;
+        });
     }
 }
 export function receivedCriminalData(data) {
@@ -662,7 +662,7 @@ export function fetchTrajectoryInformationData(search = '') {
             dispatch(receivedTrajectoryInformationData(json));
         }).catch((e) => {
             dispatch(receivedTrajectoryInformationError(e.toString()))
-        });;
+        });
     }
 }
 export function postTrajectoryInformationData(creds) {
@@ -673,7 +673,7 @@ export function postTrajectoryInformationData(creds) {
             dispatch(receivedTrajectoryInformationData(json));
         }).catch((e) => {
             dispatch(receivedTrajectoryInformationError(e.toString()))
-        });;
+        });
     }
 }
 export function receivedTrajectoryInformationData(data) {
@@ -724,7 +724,7 @@ export function receivedDeleteTrajectoryData(data) {
 //                 alert('保存成功!');
 //             }
 //         }).catch((e)=>{
-//         });;
+//         });
 //     }
 // }
 // //保存银行信息
@@ -735,7 +735,7 @@ export function receivedDeleteTrajectoryData(data) {
 //                 alert('保存成功!');
 //             }
 //         }).catch((e)=>{
-//         });;
+//         });
 //     }
 // }
 //研判分析-研判级别改变
@@ -828,7 +828,7 @@ export function saveAuditReportData(creds, disabledChange) {
                 message.error(json.reason.text);
             }
         }).catch((e) => {
-        });;
+        });
     }
 }
 // 修改保存和预览的按钮状态
@@ -851,7 +851,7 @@ export function editAuditReportData(creds) {
             dispatch(receivEdeditAuditReportData(json));
         }).catch((e) => {
             dispatch(receivedEditAuditReportError(e.toString()))
-        });;
+        });
     }
 }
 export function receivEdeditAuditReportData(data) {
@@ -869,7 +869,7 @@ export function editPersonAuditReportData(creds) {
             dispatch(receivEdeditPersonAuditReportData(json));
         }).catch((e) => {
             dispatch(receivedEditPersonAuditReportError(e.toString()))
-        });;
+        });
     }
 }
 export function receivEdeditPersonAuditReportData(data) {

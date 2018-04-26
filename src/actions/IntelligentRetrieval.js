@@ -17,7 +17,7 @@ export function fetchIntelligentRetrievalData(path,creds) {
             dispatch(receivedIntelligentRetrievalData(json));
         }).catch((e)=>{
             dispatch(receivedIntelligentRetrievalError(e.toString()))
-        });;
+        });
     }
 }
 export function postIntelligentRetrievalData(creds) {
@@ -28,7 +28,7 @@ export function postIntelligentRetrievalData(creds) {
             dispatch(receivedIntelligentRetrievalData(json));
         }).catch((e)=>{
             dispatch(receivedIntelligentRetrievalError(e.toString()))
-        });;
+        });
     }
 }
 //初始化记录
@@ -54,7 +54,7 @@ export function postIntelligentRetrievalTrrorismData(creds) {
             dispatch(receivedIntelligentRetrievalTrrorismData(json));
         }).catch((e)=>{
             dispatch(receivedIntelligentRetrievalTrrorismError(e.toString()))
-        });;
+        });
     }
 }
 export function receivedIntelligentRetrievalTrrorismData(data) {
@@ -75,7 +75,7 @@ export function postIntelligentRetrievalJudgeData(creds) {
             dispatch(receivedIntelligentRetrievalJudgeData(json));
         }).catch((e)=>{
             dispatch(receivedIntelligentRetrievalJudgeError(e.toString()))
-        });;
+        });
     }
 }
 export function receivedIntelligentRetrievalJudgeData(data) {

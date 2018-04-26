@@ -14,7 +14,7 @@ export function fetchDistributeChartsData(path,search='') {
             dispatch(receivedDistributeChartsData(json));
         }).catch((e)=>{
             dispatch(receivedDistributeChartsError(e.toString()))
-        });;
+        });
     }
 }
 export function postDistributeChartsData(creds) {
@@ -25,7 +25,7 @@ export function postDistributeChartsData(creds) {
             dispatch(receivedDistributeChartsData(json));
         }).catch((e)=>{
             dispatch(receivedDistributeChartsError(e.toString()))
-        });;
+        });
     }
 }
 export function receivedDistributeChartsData(data) {
@@ -44,7 +44,7 @@ export function fetchOriginalChartsData(path,search='') {
             dispatch(receivedOriginalChartsData(json));
         }).catch((e)=>{
             dispatch(receivedOriginalChartsError(e.toString()))
-        });;
+        });
     }
 }
 export function postOriginalChartsData(creds) {
@@ -55,7 +55,7 @@ export function postOriginalChartsData(creds) {
             dispatch(receivedOriginalChartsData(json));
         }).catch((e)=>{
             dispatch(receivedOriginalChartsError(e.toString()))
-        });;
+        });
     }
 }
 export function receivedOriginalChartsData(data) {
@@ -74,7 +74,7 @@ export function fetchLiveChartsData(path,search='') {
             dispatch(receivedLiveChartsData(json));
         }).catch((e)=>{
             dispatch(receivedLiveChartsError(e.toString()))
-        });;
+        });
     }
 }
 export function postLiveChartsData(creds) {
@@ -85,7 +85,7 @@ export function postLiveChartsData(creds) {
             dispatch(receivedLiveChartsData(json));
         }).catch((e)=>{
             dispatch(receivedLiveChartsError(e.toString()))
-        });;
+        });
     }
 }
 export function receivedLiveChartsData(data) {
@@ -104,7 +104,7 @@ export function fetchSexChartsData(path,search='') {
             dispatch(receivedSexChartsData(json));
         }).catch((e)=>{
             dispatch(receivedSexChartsError(e.toString()))
-        });;
+        });
     }
 }
 export function postSexChartsData(creds) {
@@ -115,7 +115,7 @@ export function postSexChartsData(creds) {
             dispatch(receivedSexChartsData(json));
         }).catch((e)=>{
             dispatch(receivedSexChartsError(e.toString()))
-        });;
+        });
     }
 }
 export function receivedSexChartsData(data) {
@@ -134,7 +134,7 @@ export function fetchObtainEmploymentChartsData(path,search='') {
             dispatch(receivedObtainEmploymentChartsData(json));
         }).catch((e)=>{
             dispatch(receivedObtainEmploymentChartsError(e.toString()))
-        });;
+        });
     }
 }
 export function postObtainEmploymentChartsData(creds) {
@@ -145,7 +145,7 @@ export function postObtainEmploymentChartsData(creds) {
             dispatch(receivedObtainEmploymentChartsData(json));
         }).catch((e)=>{
             dispatch(receivedObtainEmploymentChartsError(e.toString()))
-        });;
+        });
     }
 }
 export function receivedObtainEmploymentChartsData(data) {
@@ -164,7 +164,7 @@ export function fetchAgeChartsData(path,search='') {
             dispatch(receivedAgeChartsData(json));
         }).catch((e)=>{
             dispatch(receivedAgeChartsError(e.toString()))
-        });;
+        });
     }
 }
 export function postAgeChartsData(creds) {
@@ -175,7 +175,7 @@ export function postAgeChartsData(creds) {
             dispatch(receivedAgeChartsData(json));
         }).catch((e)=>{
             dispatch(receivedAgeChartsError(e.toString()))
-        });;
+        });
     }
 }
 export function receivedAgeChartsData(data) {
@@ -194,7 +194,7 @@ export function fetchAbnormalChartsData(path,search='') {
             dispatch(receivedAbnormalChartsData(json));
         }).catch((e)=>{
             dispatch(receivedAbnormalChartsError(e.toString()))
-        });;
+        });
     }
 }
 export function postAbnormalChartsData(creds) {
@@ -205,7 +205,7 @@ export function postAbnormalChartsData(creds) {
             dispatch(receivedAbnormalChartsData(json));
         }).catch((e)=>{
             dispatch(receivedAbnormalChartsError(e.toString()))
-        });;
+        });
     }
 }
 export function receivedAbnormalChartsData(data) {
@@ -224,7 +224,7 @@ export function fetchAttentionCategoryChartsData(path,search='') {
             dispatch(receivedAttentionCategoryChartsData(json));
         }).catch((e)=>{
             dispatch(receivedAttentionCategoryChartsError(e.toString()))
-        });;
+        });
     }
 }
 export function postAttentionCategoryChartsData(creds) {
@@ -235,7 +235,7 @@ export function postAttentionCategoryChartsData(creds) {
             dispatch(receivedAttentionCategoryChartsData(json));
         }).catch((e)=>{
             dispatch(receivedAttentionCategoryChartsError(e.toString()))
-        });;
+        });
     }
 }
 export function receivedAttentionCategoryChartsData(data) {
@@ -255,7 +255,7 @@ export function fetchCompleteChartsData(path,search='') {
             dispatch(receivedCompleteChartsData(json));
         }).catch((e)=>{
             dispatch(receivedCompleteChartsError(e.toString()))
-        });;
+        });
     }
 }
 export function postCompleteChartsData(creds) {
@@ -266,7 +266,7 @@ export function postCompleteChartsData(creds) {
             dispatch(receivedCompleteChartsData(json));
         }).catch((e)=>{
             dispatch(receivedCompleteChartsError(e.toString()))
-        });;
+        });
     }
 }
 export function receivedCompleteChartsData(data) {
@@ -286,7 +286,7 @@ export function fetchInflowChartsData(path,search='') {
             dispatch(receivedInflowChartsData(json));
         }).catch((e)=>{
             dispatch(receivedInflowChartsError(e.toString()))
-        });;
+        });
     }
 }
 export function postInflowChartsData(creds) {
@@ -297,7 +297,7 @@ export function postInflowChartsData(creds) {
             dispatch(receivedInflowChartsData(json));
         }).catch((e)=>{
             dispatch(receivedInflowChartsError(e.toString()))
-        });;
+        });
     }
 }
 export function receivedInflowChartsData(data) {
@@ -316,7 +316,7 @@ export function fetchDataSourcesChartsData(path,search='') {
             dispatch(receivedDataSourcesChartsData(json));
         }).catch((e)=>{
             dispatch(receivedDataSourcesChartsError(e.toString()))
-        });;
+        });
     }
 }
 export function postDataSourcesChartsData(creds) {
@@ -327,7 +327,7 @@ export function postDataSourcesChartsData(creds) {
             dispatch(receivedDataSourcesChartsData(json));
         }).catch((e)=>{
             dispatch(receivedDataSourcesChartsError(e.toString()))
-        });;
+        });
     }
 }
 export function receivedDataSourcesChartsData(data) {
@@ -347,7 +347,7 @@ export function fetchFlowoutChartsData(path,search='') {
             dispatch(receivedFlowoutChartsData(json));
         }).catch((e)=>{
             dispatch(receivedFlowoutChartsError(e.toString()))
-        });;
+        });
     }
 }
 export function postFlowoutChartsData(creds) {
@@ -358,7 +358,7 @@ export function postFlowoutChartsData(creds) {
             dispatch(receivedFlowoutChartsData(json));
         }).catch((e)=>{
             dispatch(receivedFlowoutChartsError(e.toString()))
-        });;
+        });
     }
 }
 export function receivedFlowoutChartsData(data) {
@@ -378,7 +378,7 @@ export function fetchActivePersonnelChartsData(path,search='') {
             dispatch(receivedActivePersonnelChartsData(json));
         }).catch((e)=>{
             dispatch(receivedActivePersonnelChartsError(e.toString()))
-        });;
+        });
     }
 }
 export function postActivePersonnelChartsData(creds) {
@@ -389,7 +389,7 @@ export function postActivePersonnelChartsData(creds) {
             dispatch(receivedActivePersonnelChartsData(json));
         }).catch((e)=>{
             dispatch(receivedActivePersonnelChartsError(e.toString()))
-        });;
+        });
     }
 }
 export function receivedActivePersonnelChartsData(data) {
@@ -409,7 +409,7 @@ export function fetchTotalAttentionData(path,search='') {
             dispatch(receivedTotalAttentionData(json));
         }).catch((e)=>{
             dispatch(receivedTotalAttentionError(e.toString()))
-        });;
+        });
     }
 }
 export function postTotalAttentionData(creds) {
@@ -420,7 +420,7 @@ export function postTotalAttentionData(creds) {
             dispatch(receivedTotalAttentionData(json));
         }).catch((e)=>{
             dispatch(receivedTotalAttentionError(e.toString()))
-        });;
+        });
     }
 }
 export function receivedTotalAttentionData(data) {
@@ -439,7 +439,7 @@ export function fetchTaskTotalAttentionData(path,search='') {
             dispatch(receivedTaskTotalAttentionData(json));
         }).catch((e)=>{
             dispatch(receivedTaskTotalAttentionError(e.toString()))
-        });;
+        });
     }
 }
 export function postTaskTotalAttentionData(creds) {
@@ -450,7 +450,7 @@ export function postTaskTotalAttentionData(creds) {
             dispatch(receivedTaskTotalAttentionData(json));
         }).catch((e)=>{
             dispatch(receivedTaskTotalAttentionError(e.toString()))
-        });;
+        });
     }
 }
 export function receivedTaskTotalAttentionData(data) {
@@ -469,7 +469,7 @@ export function fetchActivityInflowData(path,search='') {
             dispatch(receivedActivityInflowData(json));
         }).catch((e)=>{
             dispatch(receivedActivityInflowError(e.toString()))
-        });;
+        });
     }
 }
 export function postActivityInflowData(creds) {
@@ -480,7 +480,7 @@ export function postActivityInflowData(creds) {
             dispatch(receivedActivityInflowData(json));
         }).catch((e)=>{
             dispatch(receivedActivityInflowError(e.toString()))
-        });;
+        });
     }
 }
 export function receivedActivityInflowData(data) {
@@ -499,7 +499,7 @@ export function fetchActivityOutflowData(path,search='') {
             dispatch(receivedActivityOutflowData(json));
         }).catch((e)=>{
             dispatch(receivedActivityOutflowError(e.toString()))
-        });;
+        });
     }
 }
 export function postActivityOutflowData(creds) {
@@ -510,7 +510,7 @@ export function postActivityOutflowData(creds) {
             dispatch(receivedActivityOutflowData(json));
         }).catch((e)=>{
             dispatch(receivedActivityOutflowError(e.toString()))
-        });;
+        });
     }
 }
 export function receivedActivityOutflowData(data) {

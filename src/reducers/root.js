@@ -40,7 +40,7 @@ const initialState = {
             },
             {
                 id: '109',
-                navigationName: '片区管理',
+                navigationName: '卡点管理',
                 isSelect: false,
                 path: "/AreaManagement",
                 isShow: true
