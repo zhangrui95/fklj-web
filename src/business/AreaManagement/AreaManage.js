@@ -32,7 +32,8 @@ import {
     Icon,
     Row,
     Col,
-    TreeSelect
+    TreeSelect,
+    DatePicker
 } from 'antd';
 
 import moment from 'moment';
@@ -90,9 +91,9 @@ export  class AreaManage extends Component{
             enddate: '',
             key: '',
             data: [
-                {key: 1, serial: 1, value: '呼和浩特市公安局', name: '海邻科卡点', updatetime: '2018-04-10'},
-                {key: 2, serial: 2, value: '呼和浩特市公安局', name: 'hylink卡点', updatetime: '2018-04-09'},
-                {key: 3, serial: 3, value: '呼和浩特市公安局', name: '海邻科卡点', updatetime: '2018-04-08'},
+                {key: 1, serial: 1, value: '呼和浩特市公安局', name: '海邻科卡点', updatetime: '2018-04-10',operatingPerson:'张三'},
+                {key: 2, serial: 2, value: '呼和浩特市公安局', name: 'hylink卡点', updatetime: '2018-04-09',operatingPerson:'李四'},
+                {key: 3, serial: 3, value: '呼和浩特市公安局', name: '海邻科卡点', updatetime: '2018-04-08',operatingPerson:'王二'},
             ],
             record: null,
             pagination: pagination,
@@ -306,6 +307,10 @@ export  class AreaManage extends Component{
             title: '所属单位',
             dataIndex: 'value',
         }, {
+            title: '操作人',
+            dataIndex: 'operatingPerson',
+            width:180,
+        },{
             title: '更新时间',
             dataIndex: 'updatetime',
             width:180,
@@ -434,12 +439,18 @@ const SearchArea = React.createClass({
             nameClear:'',
             begindateClear:'',
             enddateClear:'',
-            treeData:[]
+            treeData:[],
+            Pname: ''
         };
     },
     handleNameChange: function(e) {
         this.setState({
             name: e.target.value
+        });
+    },
+    handlePnameChange: function(e) {
+        this.setState({
+            Pname: e.target.value
         });
     },
     handleClick: function() { //点击查询
@@ -448,7 +459,10 @@ const SearchArea = React.createClass({
     },
     init:function () {
         this.setState({
-            name:''
+            name:'',
+            begindate: '',
+            enddate: '',
+            Pname: ''
         });
     },
     showModal: function() {
@@ -465,6 +479,16 @@ const SearchArea = React.createClass({
     hideModal: function() {
         this.setState({
             visible: false,
+        });
+    },
+    handleBeginDeteClick: function(date, dateString) {
+        this.setState({
+            begindate: dateString,
+        });
+    },
+    handleEndDeteClick: function(date, dateString) {
+        this.setState({
+            enddate: dateString,
         });
     },
     getTreeList:function(){
@@ -495,13 +519,27 @@ const SearchArea = React.createClass({
         });
     },
     render() {
-        let name = this.state.name;
+        let {name, enddate, begindate,Pname} = this.state;
+        let beginDateValue = '';
+        if (begindate === '') {} else {
+            beginDateValue = moment(begindate, dateFormat);
+        }
+        let endDateValue = '';
+        if (enddate === '') {} else {
+            endDateValue = moment(enddate, dateFormat);
+        }
         return (
             <div className="marLeft40 fl z_searchDiv">
                 <label htmlFor="" className="font14">卡点名称：</label>
                 <Input style={{width:'150px',marginRight:"10px"}} type="text"  id='name' placeholder='请输入卡点名称'  value={name}  onChange={this.handleNameChange}/>
                 <label htmlFor="" className="font14">所属单位：</label>
-                <TreeSelect style={{width:'150px',marginRight:"10px"}} treeData={this.state.treeData} placeholder="请选择所属单位" onClick={this.getTreeList}/>
+                <TreeSelect style={{width:'150px',marginRight:"10px"}} treeData={this.state.treeData} placeholder="全部" onClick={this.getTreeList}/>
+                <label htmlFor="" className="font14">起止时间：</label>
+                <DatePicker placeholder="请选择日期"  format={dateFormat} allowClear={false} style={{marginRight:"10px"}} value={beginDateValue} defaultValue="" onChange={this.handleBeginDeteClick}/>
+                <span className="font14" style={{margin:"0 10px 0 0"}}>至</span>
+                <DatePicker placeholder="请选择日期"  format={dateFormat} allowClear={false} style={{marginRight:"10px"}} value={endDateValue} defaultValue="" onChange={this.handleEndDeteClick}/>
+                <label htmlFor="" className="font14">操作人：</label>
+                <Input style={{width:'150px',marginRight:"10px"}} type="text"  id='name' placeholder='请输入操作人'  value={Pname}  onChange={this.handlePnameChange}/>
                 <ShallowBlueBtn width="80px" text="查询" margin="0 10px 0 0" onClick={this.handleClick} />
                 <ShallowBlueBtn width="80px" text="重置" margin="0 10px 0 0" onClick={this.init} />
                 <div style={{marginTop:"15px"}}>
