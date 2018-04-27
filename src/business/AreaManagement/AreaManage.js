@@ -421,7 +421,6 @@ export  class AreaManage extends Component{
                                 <Button style={{marginLeft: 30}} onClick={this.handleCancel} className="btn_delete">取消</Button>
                             </Col>
                         </Row>
-
                     </Form>
                 </Modal>
             </div>
@@ -533,7 +532,7 @@ const SearchArea = React.createClass({
                 <label htmlFor="" className="font14">卡点名称：</label>
                 <Input style={{width:'150px',marginRight:"10px"}} type="text"  id='name' placeholder='请输入卡点名称'  value={name}  onChange={this.handleNameChange}/>
                 <label htmlFor="" className="font14">所属单位：</label>
-                <TreeSelect style={{width:'150px',marginRight:"10px"}} treeData={this.state.treeData} placeholder="全部" onClick={this.getTreeList}/>
+                <TreeSelect style={{width:'150px',marginRight:"10px"}} dropdownClassName="treeStyle" treeData={this.state.treeData} placeholder="全部" onClick={this.getTreeList}/>
                 <label htmlFor="" className="font14">起止时间：</label>
                 <DatePicker placeholder="请选择日期"  format={dateFormat} allowClear={false} style={{marginRight:"10px"}} value={beginDateValue} defaultValue="" onChange={this.handleBeginDeteClick}/>
                 <span className="font14" style={{margin:"0 10px 0 0"}}>至</span>

@@ -25,11 +25,16 @@ class WebSocket extends Component{
         })
     }
     handleData(data) {
+        console.log('data===>',data)
         let result = JSON.parse(data);
         that.setState({
             data: result,
             show: true
         });
+    }
+    sendMessage(message){
+        this.refWebSocket.sendMessage(message);
+        console.log('message===>',message)
     }
     onItemClick = (item, tabProps) => {
         console.log(item, tabProps);
@@ -83,6 +88,7 @@ class WebSocket extends Component{
                         cursor:'pointer'
                     }}
                 >
+                    {/*<div onClick={() => this.sendMessage("Hello,hyLink!")}>点击</div>*/}
                     <NoticeIcon
                         className="notice-icon"
                         count={data.length}
@@ -99,9 +105,10 @@ class WebSocket extends Component{
                         />
                     </NoticeIcon>
                 </div>
-                <Websocket url='ws://172.19.12.232:8081/JavaWebSocket/websocket' onMessage={this.handleData} reconnect={true}/>
+                <Websocket url='ws://172.19.12.213:8083/websocketServer' onMessage={this.handleData} reconnect={true} ref={Websocket => {this.refWebSocket = Websocket}}/>
             </div>
         )
     }
 }
 export default WebSocket;
+// ws://172.19.12.213:8083/websocketServer

@@ -50,7 +50,8 @@ require("echarts/map/js/province/xinjiang.js");
 require("echarts/map/js/province/shandong.js");
 require("echarts/map/js/province/liaoning.js");
 require("echarts/map/js/province/jilin.js");
-require("echarts/map/js/city/huhehaote.js");
+// require("echarts/map/js/city/huhehaote.js");
+require("../../components/map/city/huhehaote.js");
 import {
     DatePicker,
     Spin,
