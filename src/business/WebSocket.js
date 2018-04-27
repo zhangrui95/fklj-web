@@ -1,5 +1,6 @@
 import React, { Component} from 'react';
-import Websocket from 'react-websocket';
+// import Websocket from 'react-websocket';
+import Websocket from './WebSocket/index';
 import 'ant-design-pro/dist/ant-design-pro.css';
 // import { notification } from 'antd';
 // import NoticeIcon from 'ant-design-pro/lib/NoticeIcon';
@@ -34,7 +35,6 @@ class WebSocket extends Component{
     }
     sendMessage(message){
         this.refWebSocket.sendMessage(message);
-        console.log('message===>',message)
     }
     onItemClick = (item, tabProps) => {
         console.log(item, tabProps);
@@ -88,7 +88,7 @@ class WebSocket extends Component{
                         cursor:'pointer'
                     }}
                 >
-                    {/*<div onClick={() => this.sendMessage("Hello,hyLink!")}>点击</div>*/}
+                    <div onClick={() => this.sendMessage("Hello,hyLink!")}>点击</div>
                     <NoticeIcon
                         className="notice-icon"
                         count={data.length}
@@ -105,7 +105,7 @@ class WebSocket extends Component{
                         />
                     </NoticeIcon>
                 </div>
-                <Websocket url='ws://172.19.12.213:8083/websocketServer' onMessage={this.handleData} reconnect={true} ref={Websocket => {this.refWebSocket = Websocket}}/>
+                <Websocket url='ws://172.19.12.213:8083/myHandler' onMessage={this.handleData} reconnect={true} ref={Websocket => {this.refWebSocket = Websocket}}/>
             </div>
         )
     }
