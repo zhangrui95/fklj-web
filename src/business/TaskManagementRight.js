@@ -5,6 +5,8 @@ import {connect} from "react-redux";
 import {store} from '../index.js';
 import  {PointTask}  from "./TaskManagement/PointTask";
 import  {PatrolTask}  from "./TaskManagement/PatrolTask";
+import  {DoneTask}  from "./TaskManagement/DoneTask";
+import  {OverTask}  from "./TaskManagement/OverTask";
 
 // import {fetchTaskStatisticsData,fetchTaskHistoryData
 // } from "../../actions/Luoyang/DefineWarehouse";
@@ -27,12 +29,16 @@ export class TaskManagementRight extends Component{
         });
         switch(isSelectMenu.menuName){
             case constants.TASKMANAGEMENT_MENU_POINT:
-                content = <PointTask  />
-                // content = '卡点任务'
+                content = <PointTask />
                 break
             case constants.TASKMANAGEMENT_MENU_PATROL:
-                content = <PatrolTask  />
-                // content = '巡逻任务'
+                content = <PatrolTask />
+                break
+            case constants.TASKMANAGEMENT_MENU_DONE:
+                content = <DoneTask />
+                break
+            case constants.TASKMANAGEMENT_MENU_OUT:
+                content = <OverTask />
                 break
             default:
                 break

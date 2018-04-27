@@ -24,7 +24,7 @@ const initialState = {
         menus: [
             {
                 id: '102',
-                menuName: '巡逻任务',
+                menuName: '任务设置',
                 isOpen: false,
                 search: 'type=rwgl',
                 haveSon: false,
@@ -33,12 +33,30 @@ const initialState = {
             },
             {
                 id: '101',
-                menuName: '卡点任务',
+                menuName: '待办任务',
                 isOpen: false,
                 search: 'type=rwgl',
                 haveSon: false,
                 isSelect: false,
                 code: "jyydpt_rwgl_kdrw",
+            },
+            {
+                id: '103',
+                menuName: '已办任务',
+                isOpen: false,
+                search: 'type=rwgl',
+                haveSon: false,
+                isSelect: false,
+                code: "",
+            },
+            {
+                id: '104',
+                menuName: '超期任务',
+                isOpen: false,
+                search: 'type=rwgl',
+                haveSon: false,
+                isSelect: false,
+                code: "",
             }
         ]
     }

@@ -35,7 +35,8 @@ import {
     DatePicker,
     TreeSelect,
     Checkbox,
-    Select
+    Select,
+    Divider
 } from 'antd';
 
 import moment from 'moment';
@@ -306,32 +307,37 @@ export  class PointTask extends Component{
             title: '任务名称',
             dataIndex: 'label',
         }, {
-            title: '描述',
-            dataIndex: 'content',
+            title: '任务类别',
+            dataIndex: 'status',
+        },{
+            title: '任务周期',
+            dataIndex: 'cycle',
         }, {
-            title: '开始时间',
+            title: '任务开始时间',
             dataIndex: 'startTime',
             width:180,
         },{
-            title: '结束时间',
+            title: '任务结束时间',
             dataIndex: 'endTime',
             width:180,
         },{
-            title: '状态',
-            dataIndex: 'status',
-            width:100,
+            title: '任务创造者',
+            dataIndex: 'person',
+            width:180,
         }, {
             title: '操作',
             key: 'action',
             render: (text, record) => (
                 <span>
-                        <span onClick={(e)=>this.editShowModal(record)} style={{cursor:'pointer'}}>编辑</span>
-                </span>
+                     <span style={{cursor:'pointer'}}>{record.state === '0' ? '启动':'关闭'}</span>
+                     <Divider type="vertical" />
+                    <span onClick={(e)=>this.editShowModal(record)} style={{cursor:'pointer'}}>编辑</span>
+                    </span>
             ),
         }];
         const data = [
-            {key: 1, serial: 1, label: '卡点任务A', startTime: '2018-01-10 10:00:30',endTime: '2018-03-12 22:00:00',status: '已终止',content:'卡点任务AAAAAAA',checkedList:['二级'], evelTwo: [{value: "ec02ed04ad6147b7a421ab912a7cf6b6"}]},
-            {key: 2, serial: 2, label: 'hylink卡点任务', startTime: '2017-12-09 18:55:59',endTime: '2018-04-10 20:15:00',status: '已过期',content:'hylink卡点任务的描述',checkedList:['一级','三级'], evelOne: [{value: "ec02ed04ad6147b7a421ab912a7cf6b6"}], evelThree: [{value:"ec02ed04ad6147b7a421ab912a7cf6b6"}, {value: "410300000000"}]},
+            {key: 1, serial: 1, label: '卡点任务A', startTime: '2018-01-10 10:00:30',endTime: '2018-03-12 22:00:00',status: '循环任务',content:'卡点任务AAAAAAA',checkedList:['二级'], evelTwo: [{value: "ec02ed04ad6147b7a421ab912a7cf6b6"}],cycle:'按天',person:'系统创建',state: '1'},
+            {key: 2, serial: 2, label: 'hylink卡点任务', startTime: '2017-12-09 18:55:59',endTime: '2018-04-10 20:15:00',status: '循环任务',content:'hylink卡点任务的描述',checkedList:['一级','三级'], evelOne: [{value: "ec02ed04ad6147b7a421ab912a7cf6b6"}], evelThree: [{value:"ec02ed04ad6147b7a421ab912a7cf6b6"}, {value: "410300000000"}],cycle:'按周',person:'系统创建',state: '0'},
         ];
         const rowSelection = {
             onChange: (selectedRowKeys, selectedRows) => {
@@ -641,64 +647,67 @@ const SearchArea = React.createClass({
         unit = (unit === '' ? '全部' :unit );
         return (
             <div className="marLeft40 fl z_searchDiv">
+                <Button style={{width:"100px",marginRight:'10px'}}
+                        onClick={this.props.addShowModal}
+                        className="btn_ok"
+                >
+                    新增任务
+                </Button>
                 <label htmlFor="" className="font14">任务名称：</label>
                 <Input style={{width:'121px',marginRight:"10px"}} type="text"  id='name' placeholder='请输入任务名称'  value={name}  onChange={this.handleNameChange}/>
-                <label htmlFor="" className="font14">派发单位：</label>
-                <TreeSelect
-                    style={{ width: 121, marginRight: '10px' }}
-                    value={unit}
-                    dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-                    treeData={this.state.treeList}
-                    placeholder="请选择派发单位"
-                    onChange={this.unitChange}
-                    showSearch={false}
-                    dropdownMatchSelectWidth={false}
-                    notFoundContent='暂无'
-                />
-                <label htmlFor="" className="font14">开始时间：</label>
+                <label htmlFor="" className="font14">任务类别：</label>
+                <Select value={status} style={{ width: 100 ,margin:"0 10px 0 0" }} onChange={this.statusChange} notFoundContent='暂无'>
+                    <Option value="">全部</Option>
+                    <Option value="循环任务">循环任务</Option>
+                </Select>
+                {/*<label htmlFor="" className="font14">派发单位：</label>*/}
+                {/*<TreeSelect*/}
+                {/*style={{ width: 121, marginRight: '10px' }}*/}
+                {/*value={unit}*/}
+                {/*dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}*/}
+                {/*treeData={this.state.treeList}*/}
+                {/*placeholder="请选择派发单位"*/}
+                {/*onChange={this.unitChange}*/}
+                {/*showSearch={false}*/}
+                {/*dropdownMatchSelectWidth={false}*/}
+                {/*notFoundContent='暂无'*/}
+                {/*/>*/}
+                <label htmlFor="" className="font14">任务时间：</label>
                 <DatePicker  placeholder="" format={dateFormat} allowClear={false} style={{marginRight:"10px"}} value={beginDateValue} defaultValue="" onChange={this.handleBeginDeteClick}/>
                 <span className="font14" style={{margin:"0 10px 0 0"}}>至</span>
                 <DatePicker  placeholder="" format={dateFormat} allowClear={false} style={{marginRight:"10px"}} value={endDateValue} defaultValue="" onChange={this.handleEndDeteClick}/>
-                <label htmlFor="" className="font14">状态：</label>
-                <Select value={status} style={{ width: 100 ,margin:"0 10px 0 0" }} onChange={this.statusChange} notFoundContent='暂无'>
-                    <Option value="">全部</Option>
-                    <Option value="未开始">未开始</Option>
-                    <Option value="进行中">进行中</Option>
-                    <Option value="已过期">已过期</Option>
-                    <Option value="已终止">已终止</Option>
-                </Select>
                 <ShallowBlueBtn width="80px" text="查询" margin="0 10px 0 0" onClick={this.handleClick} />
                 <ShallowBlueBtn width="80px" text="重置" margin="0 10px 0 0" onClick={this.init} />
-                <div style={{marginTop:"15px"}}>
-                    <Button style={{width:"80px"}}
-                            onClick={this.props.addShowModal}
-                            className="btn_ok"
-                    >
-                        <Icon type="file-add" /> 增加
-                    </Button>
-                    <Button style={{margin:'0 0 0 10px',width:"80px"}} onClick={this.showModal} className="btn_delete">
-                        <Icon type="delete" />  删除
-                    </Button>
-                    <Modal style={{top:"38%"}}
-                           title="提示"
-                           visible={this.state.visible}
-                           footer={null}
-                           maskClosable={false}
-                           closable={false}
-                    >
-                        <p style={{fontSize:"16px",}}>是否删除选中项？</p>
-                        <p style={{marginTop:"20px",textAlign:"center"}}>
-                            <Button style={{margin:'0 20px 0 0 ',width:"80px"}} onClick={this.hideModalOk} className="btn_ok">
-                                确定
-                            </Button>
-                            <Button style={{margin:'',width:"80px"}} onClick={this.hideModal} className="btn_delete">
-                                取消
-                            </Button>
-                        </p>
+                {/*<div style={{marginTop:"15px"}}>*/}
+                {/*<Button style={{width:"80px"}}*/}
+                {/*onClick={this.props.addShowModal}*/}
+                {/*className="btn_ok"*/}
+                {/*>*/}
+                {/*<Icon type="file-add" /> 增加*/}
+                {/*</Button>*/}
+                {/*<Button style={{margin:'0 0 0 10px',width:"80px"}} onClick={this.showModal} className="btn_delete">*/}
+                {/*<Icon type="delete" />  删除*/}
+                {/*</Button>*/}
+                {/*<Modal style={{top:"38%"}}*/}
+                {/*title="提示"*/}
+                {/*visible={this.state.visible}*/}
+                {/*footer={null}*/}
+                {/*maskClosable={false}*/}
+                {/*closable={false}*/}
+                {/*>*/}
+                {/*<p style={{fontSize:"16px",}}>是否删除选中项？</p>*/}
+                {/*<p style={{marginTop:"20px",textAlign:"center"}}>*/}
+                {/*<Button style={{margin:'0 20px 0 0 ',width:"80px"}} onClick={this.hideModalOk} className="btn_ok">*/}
+                {/*确定*/}
+                {/*</Button>*/}
+                {/*<Button style={{margin:'',width:"80px"}} onClick={this.hideModal} className="btn_delete">*/}
+                {/*取消*/}
+                {/*</Button>*/}
+                {/*</p>*/}
 
-                    </Modal>
-                    <div className="clear"></div>
-                </div>
+                {/*</Modal>*/}
+                {/*<div className="clear"></div>*/}
+                {/*</div>*/}
             </div>
         );
     }

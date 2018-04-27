@@ -86,8 +86,10 @@ export const DEFINEWAREHOUSE_MENU_CAR = "临控车辆"
 // 任务管理 菜单名称
 export const TASKMANAGEMENT_MENU = "任务管理"
 // 任务管理 菜单名称
-export const TASKMANAGEMENT_MENU_PATROL = "巡逻任务"
-export const TASKMANAGEMENT_MENU_POINT = "卡点任务"
+export const TASKMANAGEMENT_MENU_PATROL = "任务设置"
+export const TASKMANAGEMENT_MENU_POINT = "待办任务"
+export const TASKMANAGEMENT_MENU_DONE = "已办任务"
+export const TASKMANAGEMENT_MENU_OUT = "超期任务"
 ////////////////////////////////////////////////////////////////////
 export const SYSTEMMANAGEMENT_MENU_HORRORSOFTWARE = "涉恐软件"
 export const SYSTEMMANAGEMENT_MENU_INTERROGATIONINFORMATION = "特征设置"

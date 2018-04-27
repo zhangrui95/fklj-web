@@ -79,7 +79,7 @@ const formItemLayout = {
     },
 };
 
-export  class PatrolTask extends Component{
+export  class DoneTask extends Component{
     constructor(props) { //初始化nowPage为1
         super(props);
         this.state = {
@@ -247,7 +247,7 @@ export  class PatrolTask extends Component{
         //     },
         //     showCount: constants.pageSize
         // }
-        // store.dispatch(fetchPatrolTaskData(creds));
+        // store.dispatch(fetchDoneTaskData(creds));
         this.setState({
             selectedRowsId:[],
             selectedRowKeys:[],
@@ -276,6 +276,9 @@ export  class PatrolTask extends Component{
             {key: 1, serial: 1, content:'', label: '我的任务001', startTime: '2018-01-10 01:32:12',endTime: '2018-03-12 12:10:29',status: '循环任务',treeValue: [{value: "ec02ed04ad6147b7a421ab912a7cf6b6"}],cycle:'按天',person:'系统创建',state: '0'},
             {key: 2, serial: 2, content:'hylink任务的描述', label: 'hylink任务', startTime: '2017-12-09 13:30:00',endTime: '2018-04-10 22:00:00',status: '循环任务',treeValue: [{value: "ec02ed04ad6147b7a421ab912a7cf6b6"}, {value: "f24c58a0aadb42ca826c02c26f74a461"}],cycle:'按周',person:'王二',state: '1'},
             {key: 3, serial: 3, content:'', label: '海邻科任务', startTime: '2018-02-18 14:50:32',endTime: '2018-02-07 18:12:59',status: '循环任务',treeValue: [{value: "ec02ed04ad6147b7a421ab912a7cf6b6"}],cycle:'按天',person:'系统创建',state: '0'},
+            {key: 4, serial: 4, content:'', label: '我的任务001', startTime: '2018-01-10 01:32:12',endTime: '2018-03-12 12:10:29',status: '循环任务',treeValue: [{value: "ec02ed04ad6147b7a421ab912a7cf6b6"}],cycle:'按天',person:'系统创建',state: '0'},
+            {key: 5, serial: 5, content:'hylink任务的描述', label: 'hylink任务', startTime: '2017-12-09 13:30:00',endTime: '2018-04-10 22:00:00',status: '循环任务',treeValue: [{value: "ec02ed04ad6147b7a421ab912a7cf6b6"}, {value: "f24c58a0aadb42ca826c02c26f74a461"}],cycle:'按周',person:'王二',state: '1'},
+            {key: 6, serial: 6, content:'', label: '海邻科任务', startTime: '2018-02-18 14:50:32',endTime: '2018-02-07 18:12:59',status: '循环任务',treeValue: [{value: "ec02ed04ad6147b7a421ab912a7cf6b6"}],cycle:'按天',person:'系统创建',state: '0'},
         ];
         const columns = [{
             title: '序号',
@@ -306,7 +309,7 @@ export  class PatrolTask extends Component{
             title: '操作',
             key: 'action',
             render: (text, record) => (
-                    <span>
+                <span>
                      <span style={{cursor:'pointer'}}>{record.state === '0' ? '启动':'关闭'}</span>
                      <Divider type="vertical" />
                     <span onClick={(e)=>this.editShowModal(record)} style={{cursor:'pointer'}}>编辑</span>
@@ -346,7 +349,7 @@ export  class PatrolTask extends Component{
             return;
         }
         const treeList=[{"children":[{"children":[{"label":"(卡点)测试","value":"ec02ed04ad6147b7a421ab912a7cf6b6","key":"ec02ed04ad6147b7a421ab912a7cf6b6"}],"label":"洛阳市公安局","value":"410300000000","key":"410300000000"},{"label":"(卡点)01018","value":"9ec30a5f4e554bc78f13fea61a61452c","key":"9ec30a5f4e554bc78f13fea61a61452c"},{"label":"(卡点)1221卡点","value":"713141c655624b86acae70b4a674d8a7","key":"713141c655624b86acae70b4a674d8a7"},{"label":"(卡点)001","value":"8cd3a75ab7fa49979f67eef4d59a9cad","key":"8cd3a75ab7fa49979f67eef4d59a9cad"},{"label":"(卡点)M78卡点","value":"f24c58a0aadb42ca826c02c26f74a461","key":"f24c58a0aadb42ca826c02c26f74a461"},{"label":"(卡点)002","value":"aad06faa7acf49df9504a6e97ae7946f","key":"aad06faa7acf49df9504a6e97ae7946f"}],"label":"河南省公安厅","value":"410000000000","key":"410000000000"}]
-            return(
+        return(
             <div className="sliderWrap">
                 <div className="sliderItemDiv">
                     {/*查询条件*/}
@@ -378,116 +381,6 @@ export  class PatrolTask extends Component{
                 </div>
                 {/*分页*/}
                 <Pag pageSize={10} nowPage={nowPage} totalRecord={10} pageChange={this.pageChange} />
-                {/*<Modal width={600}*/}
-                    {/*title="任务设置"*/}
-                    {/*visible={this.state.visible}*/}
-                    {/*onCancel={this.handleCancel}*/}
-                    {/*footer={null}*/}
-                    {/*key={this.state.modalKey}*/}
-                {/*>*/}
-                    {/*<Form onSubmit={this.saveModel}>*/}
-                        {/*<div className="formItemLeft">*/}
-                            {/*<FormItem*/}
-                                {/*{...formItemLayout}*/}
-                                {/*label="任务名称"*/}
-                            {/*>*/}
-                                {/*{getFieldDecorator('label', {*/}
-                                {/*rules: [{*/}
-                                {/*required: true, message: '请输入名称!',*/}
-
-                                {/*},{*/}
-                                {/*max:20,message:'最多输入二十个字符!',*/}
-                                {/*}],*/}
-                                {/*initialValue:this.state.modalType === 'edit' ? this.state.personInfo.label : '',*/}
-                                {/*validateFirst:true*/}
-                                {/*})(*/}
-                                    {/*<Input />*/}
-                                {/*)}*/}
-                            {/*</FormItem>*/}
-                            {/*<FormItem*/}
-                                {/*{...formItemLayout}*/}
-                                {/*label="派发节点"*/}
-                            {/*>*/}
-                                {/*{getFieldDecorator('unit_scope', {*/}
-                                    {/*rules: [{*/}
-                                        {/*required: true,*/}
-                                        {/*message: '请选择派发节点!'*/}
-                                    {/*}],*/}
-                                    {/*initialValue:this.state.modalType === 'edit' ? this.state.personInfo.unit_scope : this.state.unit_scope,*/}
-                                    {/*validateFirst:true*/}
-                                {/*})(*/}
-                                    {/*<Select onChange={this.onChange} >*/}
-                                        {/*<Option value="116001">仅自身节点</Option>*/}
-                                        {/*<Option value="116002">自身节点及子节点</Option>*/}
-                                        {/*<Option value="116003">仅子节点</Option>*/}
-                                    {/*</Select>*/}
-                                {/*)}*/}
-                            {/*</FormItem>*/}
-                            {/*<FormItem*/}
-                                {/*{...formItemLayout}*/}
-                                {/*label="派发单位"*/}
-                            {/*>*/}
-                                {/*{getFieldDecorator('unit', {*/}
-                                    {/*rules: [{*/}
-                                        {/*required: true,*/}
-                                        {/*message: '请选择派发单位!'*/}
-                                    {/*}],*/}
-                                    {/*initialValue:this.state.modalType === 'edit' ? this.state.personInfo.treeValue : [],*/}
-                                    {/*validateFirst:true*/}
-                                {/*})(*/}
-                                    {/*<TreeSelect  treeData={treeList} placeholder="请选择派发单位" treeCheckable={true} showCheckedStrategy={SHOW_PARENT} treeCheckStrictly={true}/>*/}
-                                {/*)}*/}
-                            {/*</FormItem>*/}
-                            {/*<FormItem {...formItemLayout}*/}
-                                      {/*label="任务时间">*/}
-                                {/*{getFieldDecorator('beginDate', {*/}
-                                    {/*rules: [{required: true}],*/}
-                                    {/*validateFirst:true*/}
-                                {/*})(*/}
-                                    {/*<div>*/}
-                                        {/*<DatePicker*/}
-                                            {/*showTime*/}
-                                            {/*allowClear={false}*/}
-                                            {/*format="YYYY-MM-DD HH:mm:ss"*/}
-                                            {/*placeholder="开始时间"*/}
-                                            {/*value={this.state.modalType === 'edit' ? moment(this.state.personInfo.startTime, 'YYYY-MM-DD HH:mm:ss') : ''}*/}
-                                        {/*/>*/}
-                                        {/*<DatePicker*/}
-                                            {/*showTime*/}
-                                            {/*allowClear={false}*/}
-                                            {/*format="YYYY-MM-DD HH:mm:ss"*/}
-                                            {/*placeholder="结束时间"*/}
-                                            {/*style={{marginLeft: '15px'}}*/}
-                                            {/*value={this.state.modalType === 'edit' ? moment(this.state.personInfo.endTime, 'YYYY-MM-DD HH:mm:ss') : ''}*/}
-                                        {/*/>*/}
-                                    {/*</div>*/}
-                                {/*)}*/}
-                            {/*</FormItem>*/}
-                            {/*<FormItem*/}
-                                {/*{...formItemLayout}*/}
-                                {/*label="任务描述"*/}
-                                {/*style={{clear: 'both'}}*/}
-                            {/*>*/}
-                                {/*{getFieldDecorator('content', {*/}
-                                    {/*rules: [{*/}
-                                        {/*required: false,*/}
-                                    {/*}],*/}
-                                    {/*initialValue:this.state.modalType === 'edit' ? this.state.personInfo.content : '',*/}
-                                    {/*validateFirst:true*/}
-                                {/*})(*/}
-                                    {/*<TextArea rows={3}/>*/}
-                                {/*)}*/}
-                            {/*</FormItem>*/}
-                        {/*</div>*/}
-                        {/*<Row>*/}
-                            {/*<Col span={16} style={{textAlign: 'right'}}>*/}
-                                {/*<Button htmlType="submit"  className="btn_ok">保存</Button>*/}
-                                {/*<Button style={{marginLeft: 30}} onClick={this.handleCancel} className="btn_delete">取消</Button>*/}
-                            {/*</Col>*/}
-                        {/*</Row>*/}
-
-                    {/*</Form>*/}
-                {/*</Modal>*/}
                 <Modal width={600}
                        title="任务设置"
                        visible={this.state.visible}
@@ -674,7 +567,7 @@ const SearchArea = React.createClass({
                         onClick={this.props.addShowModal}
                         className="btn_ok"
                 >
-                   新增任务
+                    新增任务
                 </Button>
                 <label htmlFor="" className="font14">任务名称：</label>
                 <Input style={{width:'121px',marginRight:"10px"}} type="text"  id='name' placeholder='请输入任务名称'  value={name}  onChange={this.handleNameChange}/>
@@ -685,15 +578,15 @@ const SearchArea = React.createClass({
                 </Select>
                 {/*<label htmlFor="" className="font14">派发单位：</label>*/}
                 {/*<TreeSelect*/}
-                    {/*style={{ width: 121, marginRight: '10px' }}*/}
-                    {/*value={unit}*/}
-                    {/*dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}*/}
-                    {/*treeData={this.state.treeList}*/}
-                    {/*placeholder="请选择派发单位"*/}
-                    {/*onChange={this.unitChange}*/}
-                    {/*showSearch={false}*/}
-                    {/*dropdownMatchSelectWidth={false}*/}
-                    {/*notFoundContent='暂无'*/}
+                {/*style={{ width: 121, marginRight: '10px' }}*/}
+                {/*value={unit}*/}
+                {/*dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}*/}
+                {/*treeData={this.state.treeList}*/}
+                {/*placeholder="请选择派发单位"*/}
+                {/*onChange={this.unitChange}*/}
+                {/*showSearch={false}*/}
+                {/*dropdownMatchSelectWidth={false}*/}
+                {/*notFoundContent='暂无'*/}
                 {/*/>*/}
                 <label htmlFor="" className="font14">任务时间：</label>
                 <DatePicker  placeholder="" format={dateFormat} allowClear={false} style={{marginRight:"10px"}} value={beginDateValue} defaultValue="" onChange={this.handleBeginDeteClick}/>
@@ -702,38 +595,38 @@ const SearchArea = React.createClass({
                 <ShallowBlueBtn width="80px" text="查询" margin="0 10px 0 0" onClick={this.handleClick} />
                 <ShallowBlueBtn width="80px" text="重置" margin="0 10px 0 0" onClick={this.init} />
                 {/*<div style={{marginTop:"15px"}}>*/}
-                    {/*<Button style={{width:"80px"}}*/}
-                            {/*onClick={this.props.addShowModal}*/}
-                            {/*className="btn_ok"*/}
-                    {/*>*/}
-                        {/*<Icon type="file-add" /> 增加*/}
-                    {/*</Button>*/}
-                    {/*<Button style={{margin:'0 0 0 10px',width:"80px"}} onClick={this.showModal} className="btn_delete">*/}
-                        {/*<Icon type="delete" />  删除*/}
-                    {/*</Button>*/}
-                    {/*<Modal style={{top:"38%"}}*/}
-                           {/*title="提示"*/}
-                           {/*visible={this.state.visible}*/}
-                           {/*footer={null}*/}
-                           {/*maskClosable={false}*/}
-                           {/*closable={false}*/}
-                    {/*>*/}
-                        {/*<p style={{fontSize:"16px",}}>是否删除选中项？</p>*/}
-                        {/*<p style={{marginTop:"20px",textAlign:"center"}}>*/}
-                            {/*<Button style={{margin:'0 20px 0 0 ',width:"80px"}} onClick={this.hideModalOk} className="btn_ok">*/}
-                                {/*确定*/}
-                            {/*</Button>*/}
-                            {/*<Button style={{margin:'',width:"80px"}} onClick={this.hideModal} className="btn_delete">*/}
-                                {/*取消*/}
-                            {/*</Button>*/}
-                        {/*</p>*/}
+                {/*<Button style={{width:"80px"}}*/}
+                {/*onClick={this.props.addShowModal}*/}
+                {/*className="btn_ok"*/}
+                {/*>*/}
+                {/*<Icon type="file-add" /> 增加*/}
+                {/*</Button>*/}
+                {/*<Button style={{margin:'0 0 0 10px',width:"80px"}} onClick={this.showModal} className="btn_delete">*/}
+                {/*<Icon type="delete" />  删除*/}
+                {/*</Button>*/}
+                {/*<Modal style={{top:"38%"}}*/}
+                {/*title="提示"*/}
+                {/*visible={this.state.visible}*/}
+                {/*footer={null}*/}
+                {/*maskClosable={false}*/}
+                {/*closable={false}*/}
+                {/*>*/}
+                {/*<p style={{fontSize:"16px",}}>是否删除选中项？</p>*/}
+                {/*<p style={{marginTop:"20px",textAlign:"center"}}>*/}
+                {/*<Button style={{margin:'0 20px 0 0 ',width:"80px"}} onClick={this.hideModalOk} className="btn_ok">*/}
+                {/*确定*/}
+                {/*</Button>*/}
+                {/*<Button style={{margin:'',width:"80px"}} onClick={this.hideModal} className="btn_delete">*/}
+                {/*取消*/}
+                {/*</Button>*/}
+                {/*</p>*/}
 
-                    {/*</Modal>*/}
-                    {/*<div className="clear"></div>*/}
+                {/*</Modal>*/}
+                {/*<div className="clear"></div>*/}
                 {/*</div>*/}
             </div>
         );
     }
 })
-PatrolTask = Form.create()(PatrolTask);
-export default connect(mainReducer)(PatrolTask);
+DoneTask = Form.create()(DoneTask);
+export default connect(mainReducer)(DoneTask);
