@@ -213,7 +213,9 @@ export const REPORT_MENU__CHANGE_CURRENT = 'Report_menu_change_current';//统计
 export const DEFINWARE_MENU__CHANGE_CURRENT = 'DefinWare_menu_change_current';//临控管理-更换选-洛阳
 export const TASK_MENU__CHANGE_CURRENT = 'Task_menu_change_current';//任务管理-更换选-洛阳
 export const CONTROL_PERSONNEL_CURRENT = 'Control_personnel_current';//管控人员-更选项-呼市
-export const CONTROLPERSONNEL_TYPE = 'Control_personnel_type';//管控人员-更选项-呼市
+export const CONTROLPERSONNEL_TYPE = 'Control_personnel_type';//管控人员-更选项-呼市-关注人员
+export const CONTROLPERSONNEL_Person = 'Control_personnel_person';//管控人员-更选项-呼市-管控人员
+export const CONTROLPERSONNEL_AddOrOut = 'Control_personnel_addorout';//管控人员-更选项-呼市-管控人员
 
 export const INVENTORY_MENU_LDPC_CHAGE = 'inventory-menu-change';//一级菜单流动盘查
 export const INVENTORY_MENU_KKPC_CHAGE = 'customsPass-data-flow';//一级菜单卡口盘查
@@ -241,8 +243,12 @@ export function changeMenu(menu, type, moduleName){//改变目录状态
         }
     }else if(moduleName===CONTROLPERSONNEL_MODULE){//管控人员模块
         if(type==='openAndClose'){//菜单打开关闭
-            if(menu.menuName === '关注人员'){
+            if(menu.id === '101'){
                 return {type:CONTROLPERSONNEL_TYPE}
+            }else if(menu.id=== '102'){
+                return {type:CONTROLPERSONNEL_Person}
+            }else if(menu.id=== '103'){
+                return {type:CONTROLPERSONNEL_AddOrOut}
             }
         }else if(type==='getData'){//点击目录
             // store.dispatch(fetchUsersData('/data/getDArcPersonList',menu.search));

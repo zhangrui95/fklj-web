@@ -35,8 +35,12 @@ export const AREAMANAGEMENT_MODULE = '卡点管理';
 export const CONTROLPERSONNEL_MODULE = '管控人员';
 export const CONTROLPERSONNEL_MODULE_GZ_NLHRY = '拟来呼人员';
 export const CONTROLPERSONNEL_MODULE_GZ_ZALY = '治安来源';
-export const CONTROLPERSONNEL_MODULE_GK = '管控人员';
-export const CONTROLPERSONNEL_MODULE_YCC = '已撤出管控';
+export const CONTROLPERSONNEL_MODULE_GK_WGK = '未管控';
+export const CONTROLPERSONNEL_MODULE_GK_YGK = '已管控';
+export const CONTROLPERSONNEL_MODULE_GK_LKZRQ = '离开责任区';
+export const CONTROLPERSONNEL_MODULE_GK_SK = '失控';
+export const CONTROLPERSONNEL_MODULE_DR = '导入';
+export const CONTROLPERSONNEL_MODULE_XZ = '新增';
 //智能检索模块
 export const INTELLIGENTRETRIEVAL_MODULE = 'intelligentretrieval_module';
 //设置管理模块

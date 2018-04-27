@@ -47,7 +47,7 @@ const formItemLayout = {
     },
 };
 
-export  class ControlPersonnel extends Component{
+export  class RunAway extends Component{
     constructor(props) { //初始化nowPage为1
         super(props);
         this.state = {
@@ -62,9 +62,9 @@ export  class ControlPersonnel extends Component{
             enddate: '',
             key: '',
             data: [
-                {key: 1, serial: 1, cardId: '230106196201222121', label: '张三', sex:'男',age:'26', state:'暂住', phone:'13936003633',zrdw:'呼伦浩特市XX单位', updatetime: '2018-04-10'},
-                {key: 2, serial: 2, cardId: '230105199605262631', label: '李四', sex:'女',age:'18', state:'暂住', phone:'13936003633',zrdw:'呼伦浩特市XX单位', updatetime: '2018-04-09'},
-                {key: 3, serial: 3, cardId: '20610819740122292X', label: '王二', sex:'男',age:'39', state:'暂住', phone:'13936003633',zrdw:'呼伦浩特市XX单位', updatetime: '2018-04-08'},
+                {key: 1, serial: 1, cardId: '230106196201222121', label: '张三', sex:'男',age:'26', state:'暂住', phone:'13936003633',zrdw:'呼伦浩特市XX单位', updatetime: '2018-04-10',cycle:'按周',address:'玉泉区兴隆巷1106号'},
+                {key: 2, serial: 2, cardId: '230105199605262631', label: '李四', sex:'女',age:'18', state:'暂住', phone:'13936003633',zrdw:'呼伦浩特市XX单位', updatetime: '2018-04-09',cycle:'按天',address:'玉泉区兴隆巷1106号'},
+                {key: 3, serial: 3, cardId: '20610819740122292X', label: '王二', sex:'男',age:'39', state:'暂住', phone:'13936003633',zrdw:'呼伦浩特市XX单位', updatetime: '2018-04-08',cycle:'按周',address:'玉泉区兴隆巷1106号'},
             ],
             record: null,
             pagination: pagination,
@@ -261,11 +261,17 @@ export  class ControlPersonnel extends Component{
             title: '居住类型',
             dataIndex: 'state',
         },{
+            title: '现居住地址',
+            dataIndex: 'address',
+        },{
             title: '联系电话',
             dataIndex: 'phone',
         },{
             title: '责任单位',
             dataIndex: 'zrdw',
+        },{
+            title: '任务周期',
+            dataIndex: 'cycle',
         }, {
             title: '更新时间',
             dataIndex: 'updatetime',
@@ -380,10 +386,6 @@ export  class ControlPersonnel extends Component{
                                         <Input/>
                                     )}
                                 </FormItem>
-                            </Form>
-                        </Col>
-                        <Col span={12}>
-                            <Form>
                                 <FormItem
                                     {...formItemLayout}
                                     label="居住类型"
@@ -397,6 +399,20 @@ export  class ControlPersonnel extends Component{
                                             <Option value="暂住">暂住</Option>
                                             <Option value="流动">流动</Option>
                                         </Select>
+                                    )}
+                                </FormItem>
+                            </Form>
+                        </Col>
+                        <Col span={12}>
+                            <Form>
+                                <FormItem
+                                    {...formItemLayout}
+                                    label="现居住地址"
+                                >
+                                    {getFieldDecorator('address', {
+                                        initialValue:this.state.modalType === 'edit' ? this.state.personInfo.address : '',
+                                    })(
+                                        <Input/>
                                     )}
                                 </FormItem>
                                 <FormItem
@@ -417,6 +433,20 @@ export  class ControlPersonnel extends Component{
                                         initialValue: this.state.modalType === 'edit' ? this.state.personInfo.zrdw : '',
                                     })(
                                         <Input/>
+                                    )}
+                                </FormItem>
+                                <FormItem
+                                    {...formItemLayout}
+                                    label="任务周期"
+                                >
+                                    {getFieldDecorator('cycle', {
+                                        initialValue:this.state.modalType === 'edit' ? this.state.personInfo.cycle : '',
+                                    })(
+                                        <Select notFoundContent='暂无'>
+                                            <Option value="">全部</Option>
+                                            <Option value="按周">按周</Option>
+                                            <Option value="按天">按天</Option>
+                                        </Select>
                                     )}
                                 </FormItem>
                                 <FormItem
@@ -455,6 +485,7 @@ const SearchArea = React.createClass({
             WorkPlace:'',
             begindate: '',
             enddate: '',
+            cycle: ''
         };
     },
     handleNameChange: function(e) {
@@ -470,6 +501,11 @@ const SearchArea = React.createClass({
     statusChange:function(value){
         this.setState({
             status: value
+        });
+    },
+    cycleChange:function(value){
+        this.setState({
+            cycle: value
         });
     },
     WorkPlaceChange:function (e) {
@@ -519,7 +555,7 @@ const SearchArea = React.createClass({
         });
     },
     render() {
-        let {name,cardId,status,WorkPlace, enddate, begindate} = this.state;
+        let {name,cardId,status,WorkPlace, enddate, begindate,cycle} = this.state;
         let beginDateValue = '';
         if (begindate === '') {} else {
             beginDateValue = moment(begindate, dateFormat);
@@ -531,9 +567,9 @@ const SearchArea = React.createClass({
         return (
             <div className="marLeft40 fl z_searchDiv">
                 <label htmlFor="" className="font14">身份证号：</label>
-                <Input style={{width:'150px',marginRight:"10px"}} type="text"  id='name' placeholder='请输入身份证号'  value={cardId} onChange={this.handleCardChange}/>
+                <Input style={{width:'130px',marginRight:"10px"}} type="text"  id='name' placeholder='请输入身份证号'  value={cardId} onChange={this.handleCardChange}/>
                 <label htmlFor="" className="font14">姓名：</label>
-                <Input style={{width:'150px',marginRight:"10px"}} type="text"  id='name' placeholder='请输入人员姓名'  value={name}  onChange={this.handleNameChange}/>
+                <Input style={{width:'130px',marginRight:"10px"}} type="text"  id='name' placeholder='请输入人员姓名'  value={name}  onChange={this.handleNameChange}/>
                 <label htmlFor="" className="font14">居住类型：</label>
                 <Select value={status} style={{ width: 100 ,marginRight:"10px" }} onChange={this.statusChange} notFoundContent='暂无'>
                     <Option value="">全部</Option>
@@ -542,26 +578,36 @@ const SearchArea = React.createClass({
                     <Option value="流动">流动</Option>
                 </Select>
                 <label htmlFor="" className="font14">责任单位：</label>
-                <Input style={{width:'150px',marginRight:"10px"}} type="text"  id='name' placeholder='请输入责任单位'  value={WorkPlace}  onChange={this.WorkPlaceChange}/>
+                <Input style={{width:'130px',marginRight:"10px"}} type="text"  id='name' placeholder='请输入责任单位'  value={WorkPlace}  onChange={this.WorkPlaceChange}/>
+                <label htmlFor="" className="font14">任务周期：</label>
+                <Select value={cycle} style={{ width: 100 ,marginRight:"10px" }} onChange={this.cycleChange} notFoundContent='暂无'>
+                    <Option value="">全部</Option>
+                    <Option value="按周">按周</Option>
+                    <Option value="按天">按天</Option>
+                </Select>
                 <label htmlFor="" className="font14">更新时间：</label>
-                <DatePicker format={dateFormat} allowClear={false} style={{marginRight:"10px"}} value={beginDateValue} placeholder="请选择日期" onChange={this.handleBeginDeteClick}/>
+                <DatePicker format={dateFormat} allowClear={false} style={{marginRight:"10px",width:'130px'}} value={beginDateValue} placeholder="请选择日期" onChange={this.handleBeginDeteClick}/>
                 <span className="font14" style={{margin:"0 10px 0 0"}}>至</span>
-                <DatePicker format={dateFormat} allowClear={false} style={{marginRight:"10px"}} placeholder="请选择日期"  value={endDateValue} onChange={this.handleEndDeteClick}/>
+                <DatePicker format={dateFormat} allowClear={false} style={{marginRight:"10px",width:'130px'}} placeholder="请选择日期"  value={endDateValue} onChange={this.handleEndDeteClick}/>
                 <ShallowBlueBtn width="80px" text="查询" margin="0 10px 0 0" onClick={this.handleClick} />
                 <ShallowBlueBtn width="80px" text="重置" margin="0 10px 0 0" onClick={this.init} />
                 <div style={{marginTop:"15px"}}>
-                    <Button style={{width:"80px"}}
+                    <Button style={{width:"110px", marginRight:"10px"}}
                             onClick={this.props.addShowModal}
                             className="btn_ok"
                     >
-                        <Icon type="file-add" /> 增加
+                       添加到任务
                     </Button>
-                    <Button style={{margin:'0 10px 0 10px',width:"80px"}} onClick={this.showModal} className="btn_delete">
-                        <Icon type="delete" />  删除
+                    <Button style={{width:"110px", marginRight:"10px"}} className="btn_ok">
+                        选择责任单位
                     </Button>
-                    <Button style={{width:"80px"}} className="btn_ok">导入</Button>
-                    <Button style={{width:"80px", marginLeft:"10px"}} className="btn_ok">导出</Button>
-                    <Button style={{width:"80px", marginLeft:"10px"}} className="btn_ok">模板下载</Button>
+                    {/*<Button style={{margin:'0 10px 0 10px',width:"80px"}} onClick={this.showModal} className="btn_delete">*/}
+                        {/*<Icon type="delete" />  删除*/}
+                    {/*</Button>*/}
+                    <Button style={{width:"80px", marginRight:"10px"}} className="btn_ok">导入</Button>
+                    <Button style={{width:"80px", marginRight:"10px"}} className="btn_ok">导出</Button>
+                    <Button style={{width:"110px", marginRight:"10px"}} className="btn_ok">模板下载</Button>
+                    <Button style={{width:"110px", marginRight:"10px"}} className="btn_ok">自定义字段</Button>
                     <Modal style={{top:"38%"}}
                            title="提示"
                            visible={this.state.visible}
@@ -586,5 +632,5 @@ const SearchArea = React.createClass({
         );
     }
 })
-ControlPersonnel = Form.create()(ControlPersonnel);
-export default connect(mainReducer)(ControlPersonnel);
+RunAway = Form.create()(RunAway);
+export default connect(mainReducer)(RunAway);

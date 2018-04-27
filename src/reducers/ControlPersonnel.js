@@ -2,7 +2,7 @@
  * 管控人员-呼市
  */
 import {lyInitialStateReturn} from "./initialState"
-import {CONTROL_PERSONNEL_CURRENT, CONTROLPERSONNEL_MENU_INIT, CONTROLPERSONNEL_TYPE} from "../actions/actions";
+import {CONTROL_PERSONNEL_CURRENT, CONTROLPERSONNEL_MENU_INIT, CONTROLPERSONNEL_TYPE,CONTROLPERSONNEL_Person,CONTROLPERSONNEL_AddOrOut} from "../actions/actions";
 import {store} from '../index.js';
 import {isAllowMenu} from '../utils/index';
 
@@ -55,20 +55,72 @@ const initialState = {
                 menuName: '管控人员',
                 isOpen: false,
                 search: 'type=rwgl',
-                haveSon: false,
+                haveSon: true,
                 isSelect: false,
                 code: "",
                 isShow: true,
+                sonMenu: [
+                    {
+                        id: '1003',
+                        menuName: '未管控',
+                        search: 'type=gzry&state=1',
+                        isSelect: false,
+                        isShow: true,
+                        code: ""
+                    },
+                    {
+                        id: '1004',
+                        menuName: '已管控',
+                        search: 'type=gzry&state=2',
+                        isSelect: false,
+                        isShow: true,
+                        code: ""
+                    },
+                    {
+                        id: '1005',
+                        menuName: '离开责任区',
+                        search: 'type=gzry&state=1',
+                        isSelect: false,
+                        isShow: true,
+                        code: ""
+                    },
+                    {
+                        id: '1006',
+                        menuName: '失控',
+                        search: 'type=gzry&state=2',
+                        isSelect: false,
+                        isShow: true,
+                        code: ""
+                    }
+                ]
             },
             {
                 id: '103',
-                menuName: '已撤出管控',
+                menuName: '人员来源',
                 isOpen: false,
                 search: 'type=rwgl',
-                haveSon: false,
+                haveSon: true,
                 isSelect: false,
                 code: "",
                 isShow: true,
+                sonMenu: [
+                    {
+                        id: '1007',
+                        menuName: '导入',
+                        search: 'type=gzry&state=1',
+                        isSelect: false,
+                        isShow: true,
+                        code: ""
+                    },
+                    {
+                        id: '1008',
+                        menuName: '新增',
+                        search: 'type=gzry&state=2',
+                        isSelect: false,
+                        isShow: true,
+                        code: ""
+                    }
+                ]
             }
         ]
     }
@@ -77,6 +129,7 @@ const initialState = {
 
 
 const ControlPersonnel =(state = initialState, action) =>{
+    console.log('action.type',action.type)
     let newState = Object.assign({}, state);
     switch (action.type) {
         case 'REQUEST_TASK_MANAGEMENT':
@@ -108,6 +161,20 @@ const ControlPersonnel =(state = initialState, action) =>{
                 newState.uiData.menus[0].isOpen=false;
             }else{
                 newState.uiData.menus[0].isOpen=true;
+            }
+            return newState;
+        case CONTROLPERSONNEL_Person:
+            if(newState.uiData.menus[1].isOpen===true){
+                newState.uiData.menus[1].isOpen=false;
+            }else{
+                newState.uiData.menus[1].isOpen=true;
+            }
+            return newState;
+        case CONTROLPERSONNEL_AddOrOut:
+            if(newState.uiData.menus[2].isOpen===true){
+                newState.uiData.menus[2].isOpen=false;
+            }else{
+                newState.uiData.menus[2].isOpen=true;
             }
             return newState;
         case CONTROL_PERSONNEL_CURRENT:

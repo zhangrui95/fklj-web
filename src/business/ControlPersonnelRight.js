@@ -6,8 +6,12 @@ import {connect} from 'react-redux';
 import {mainReducer} from "../reducers/reducers";
 import {ComePerson}  from "./ControlPersonnel/ComePerson";
 import {PublicSecurity}  from "./ControlPersonnel/PublicSecurity";
-import {ControlPersonnel}  from "./ControlPersonnel/ControlPersonnel";
+import {RunAway}  from "./ControlPersonnel/RunAway";
+import {NotControlled}  from "./ControlPersonnel/NotControlled";
+import {LeaveArea}  from "./ControlPersonnel/LeaveArea";
+import {Control}  from "./ControlPersonnel/Control";
 import {WithdrawPerson}  from "./ControlPersonnel/WithdrawPerson";
+import {AddPerson}  from "./ControlPersonnel/AddPerson";
 import {store} from '../index.js';
 import  * as constants from "../utils/Constants";
 
@@ -40,11 +44,23 @@ class ControlPersonnelRight extends Component{
             case constants.CONTROLPERSONNEL_MODULE_GZ_ZALY:
                 content = <PublicSecurity/>
                 break
-            case constants.CONTROLPERSONNEL_MODULE_GK:
-                content = <ControlPersonnel/>
+            case constants.CONTROLPERSONNEL_MODULE_GK_WGK:
+                content = <NotControlled/>
                 break
-            case constants.CONTROLPERSONNEL_MODULE_YCC:
+            case constants.CONTROLPERSONNEL_MODULE_GK_YGK:
+                content = <Control/>
+                break
+            case constants.CONTROLPERSONNEL_MODULE_GK_LKZRQ:
+                content = <LeaveArea/>
+                break
+            case constants.CONTROLPERSONNEL_MODULE_GK_SK:
+                content = <RunAway/>
+                break
+            case constants.CONTROLPERSONNEL_MODULE_DR:
                 content = <WithdrawPerson/>
+                break
+            case constants.CONTROLPERSONNEL_MODULE_XZ:
+                content = <AddPerson/>
                 break
             default:
                 break

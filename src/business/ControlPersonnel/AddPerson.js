@@ -46,7 +46,7 @@ const formItemLayout = {
     },
 };
 
-export  class ComePerson extends Component{
+export  class AddPerson extends Component{
     constructor(props) { //初始化nowPage为1
         super(props);
         this.state = {
@@ -579,5 +579,5 @@ const SearchArea = React.createClass({
         );
     }
 })
-ComePerson = Form.create()(ComePerson);
-export default connect(mainReducer)(ComePerson);
+AddPerson = Form.create()(AddPerson);
+export default connect(mainReducer)(AddPerson);
