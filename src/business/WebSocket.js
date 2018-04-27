@@ -88,7 +88,7 @@ class WebSocket extends Component{
                         cursor:'pointer'
                     }}
                 >
-                    <div onClick={() => this.sendMessage("Hello,hyLink!")}>点击</div>
+                    {/*<div onClick={() => this.sendMessage("Hello,hyLink!")}>点击</div>*/}
                     <NoticeIcon
                         className="notice-icon"
                         count={data.length}
