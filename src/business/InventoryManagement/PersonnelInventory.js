@@ -91,6 +91,7 @@ export  class PersonnelInventory extends Component{
             arrayImg: [],
             currentImg: '',
             index: 0,
+            ModalKey: 0
         };
         this.pageChange = this.pageChange.bind(this);
     }
@@ -265,7 +266,8 @@ export  class PersonnelInventory extends Component{
             visibles: false,
             arrayImg: [],
             currentImg: '',
-            index: 0
+            index: 0,
+            ModalKey: this.state.ModalKey + 1
         });
     }
     render() {
@@ -538,6 +540,7 @@ export  class PersonnelInventory extends Component{
                             <Col span={24}>
                                 {imgArray}
                                 <Modal
+                                    key={this.state.ModalKey}
                                     visible={this.state.visibles}
                                     onCancel={this.handleCancels}
                                     footer={false}
