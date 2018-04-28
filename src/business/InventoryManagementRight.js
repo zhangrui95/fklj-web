@@ -35,18 +35,10 @@ class InventoryManagementRight extends Component{
                 }
             })
         });
+        console.log('isSelectMenu',isSelectMenu)
         switch(isSelectMenu.id){ //赋值显示页面
-            case '101001'://人员盘查-巡逻
+            case '101'://人员盘查-巡逻
                 content = <PersonnelInventory   type={constants.inventoryType.patrolPerson}  />
-                break
-            case '101002'://车辆盘查-巡逻
-                content = <CarInventory  type={constants.inventoryType.patrolCar}   />
-                break
-            case '102001'://人员盘查-卡口
-                content = <PersonnelInventory   type={constants.inventoryType.customsPassPerson}  />
-                break
-            case '102002'://车辆盘查-卡口
-                content = <CarInventory  type={constants.inventoryType.customsPassCar}   />
                 break
             default:
                 break

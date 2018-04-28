@@ -56,6 +56,7 @@ const AreaManagement = require('./AreaManagement');
 const ControlPersonnel = require('./ControlPersonnel');
 const DynamicControl = require('./Users');
 const ElectronicArchivesUsers = require('./ElectronicArchives');
+const InventoryManagement = require('./InventoryManagement');
 
 export const mainReducer = combineReducers({
   ...login,
@@ -73,5 +74,6 @@ export const mainReducer = combineReducers({
   ...DynamicControl,
   ...ElectronicArchivesUsers,
   ...ControlPersonnel,
+    ...InventoryManagement,
   routing:routerReducer,
 });

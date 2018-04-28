@@ -36,7 +36,7 @@ const collapseB = {
 };
 
 const collapseLi = {
-    width:"8%",
+    width:"7%",
     margin:"0 2%",
     color:"#fff",
    // padding:"1% 2.22%",

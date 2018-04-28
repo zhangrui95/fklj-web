@@ -39,6 +39,13 @@ const initialState = {
                 code:'dtgk_menu'
             },
             {
+                id: '112',
+                navigationName: '盘查管理',
+                isSelect: true,
+                path: "/InventoryManagement",
+                isShow: true
+            },
+            {
                 id: '109',
                 navigationName: '卡点管理',
                 isSelect: false,
@@ -56,7 +63,8 @@ const initialState = {
                 navigationName: '任务管理',
                 isSelect: false,
                 path: "/TaskManagement",
-                isShow: true
+                isShow: false,
+                code: 'rwgl_menu'
             },
             // {
             //     id: '103',

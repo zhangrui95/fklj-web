@@ -15,6 +15,8 @@ import {INVENTORYMANAGEMENT_MODULE} from "../utils/Constants";
 import InventoryManagementRight from "./InventoryManagementRight";
 import  * as constants from "../utils/Constants";
 import {Header} from "../components/Header";
+import {filterMenu} from '../utils/index';
+
 import {
     fetchPersonnelInventoryData,fetchCarInventoryData,fetchBayonetInventoryData
 } from "../actions/InventoryManagement";
@@ -31,6 +33,10 @@ class InventoryManagement extends Component {
     render() {
         //遮罩状态
         let isBlock = store.getState().root.uiData.ModalDialogueBg;
+
+        /*  let menus = this.props.InventoryManagement.uiData.menus;
+          menus = filterMenu(menus);//权限判断菜单*/
+
         return (
             <div>
                 <Shade isBlock={isBlock}/>
