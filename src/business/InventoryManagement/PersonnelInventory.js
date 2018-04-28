@@ -537,6 +537,14 @@ export  class PersonnelInventory extends Component{
                         <Row style={{padding:'32px'}}>
                             <Col span={24}>
                                 {imgArray}
+                                <Modal
+                                    visible={this.state.visibles}
+                                    onCancel={this.handleCancels}
+                                    footer={false}
+                                    wrapClassName='zoomImg'
+                                >
+                                    <BannerAnimImg arrayImg={this.state.arrayImg} currentImg={this.state.currentImg} index={this.state.index} />
+                                </Modal>
                             </Col>
                             <Col span={24}>
                                 <FormItem
@@ -552,14 +560,6 @@ export  class PersonnelInventory extends Component{
                             </Col>
                         </Row>
                     </Row>
-                </Modal>
-                <Modal
-                    visible={this.state.visibles}
-                    onCancel={this.handleCancels}
-                    footer={false}
-                    wrapClassName='zoomImg'
-                >
-                    <BannerAnimImg arrayImg={this.state.arrayImg} currentImg={this.state.currentImg} index={this.state.index} />
                 </Modal>
             </div>
         )

@@ -61,7 +61,6 @@ export class BannerAnimImg extends Component {
             
         } 
            console.log('show',showCurret); 
-           console.log('this.index',this.index);
         return(
             <div>
                     <BannerAnim prefixCls="banner-user" type='acrossOverlay' style={{height:"100%"}} initShow={this.index?this.index : 0}>
