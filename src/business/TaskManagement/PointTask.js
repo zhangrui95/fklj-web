@@ -36,7 +36,8 @@ import {
     TreeSelect,
     Checkbox,
     Select,
-    Divider
+    Divider,
+    Popconfirm
 } from 'antd';
 
 import moment from 'moment';
@@ -329,10 +330,12 @@ export  class PointTask extends Component{
             key: 'action',
             render: (text, record) => (
                 <span>
-                     <span style={{cursor:'pointer'}}>{record.state === '0' ? '启动':'关闭'}</span>
+                    <Popconfirm title={record.state === '0' ? '确定启动该任务？':'确定关闭该任务？'} okText="确定" cancelText="取消">
+                         <span style={{cursor:'pointer'}}>{record.state === '0' ? '启动':'关闭'}</span>
+                    </Popconfirm>
                      <Divider type="vertical" />
                     <span onClick={(e)=>this.editShowModal(record)} style={{cursor:'pointer'}}>编辑</span>
-                    </span>
+                </span>
             ),
         }];
         const data = [
