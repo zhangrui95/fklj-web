@@ -5,7 +5,7 @@ import {StylePage, ShallowBlueBtn, Pag,} from "../generalPurposeModule";
 import {store} from '../../index.js';
 import * as constants from "../../utils/Constants";
 import {monthFormat, dateFormat, serverUrl} from '../../utils/';
-import {Spin, Table, message, Input, Modal, Button, Form, Icon, Row, Col, Select, DatePicker, Tag} from 'antd';
+import {Spin, Table, message, Input, Modal, Button, Form, Icon, Row, Col, Select, DatePicker, Tag, Divider} from 'antd';
 
 import moment from 'moment';
 moment.locale('zh-cn');
@@ -333,6 +333,7 @@ export  class PersonnelInventory extends Component{
                 <Pag pageSize={10} nowPage={nowPage} totalRecord={10} pageChange={this.pageChange} />
                 <Modal
                     width={900}
+                    style={{top:'20px'}}
                     title="详情"
                     visible={this.state.visible}
                     onCancel={this.handleCancel}
@@ -340,7 +341,7 @@ export  class PersonnelInventory extends Component{
                     key={this.state.modalKey}
                 >
                     <Row>
-                        <Col span={24}  style={{fontSize:'16px',padding:'5px 0'}}>人员信息</Col>
+                        <Col span={24}  style={{fontSize:'16px'}}>人员信息</Col>
                         <Col span={12}>
                             <Row style={{padding:'32px'}}>
                                 <Col span={4}>照片：</Col>
@@ -435,8 +436,9 @@ export  class PersonnelInventory extends Component{
                             </Form>
                         </Col>
                     </Row>
+                    <Divider style={{background:'rgb(29, 40, 81)',height:'2px'}}/>
                     <Row>
-                        <Col span={24} style={{borderTop: '2px solid rgb(30, 42, 85)',fontSize:'16px',padding:'5px 0'}}>警员信息</Col>
+                        <Col span={24} style={{fontSize:'16px'}}>警员信息</Col>
                         <Col span={12}>
                             <Form>
                                 <FormItem
@@ -490,8 +492,9 @@ export  class PersonnelInventory extends Component{
                             </Form>
                         </Col>
                     </Row>
+                    <Divider style={{background:'rgb(29, 40, 81)',height:'2px'}}/>
                     <Row>
-                        <Col span={24}  style={{borderTop: '2px solid rgb(30, 42, 85)',fontSize:'16px',padding:'5px 0'}}>写实详情</Col>
+                        <Col span={24}  style={{fontSize:'16px'}}>写实详情</Col>
                         <Row style={{padding:'32px'}}>
                             <Col span={24}>
                                 <img src="../../images/zanwu.png" style={{width:'100px',height:'120px',margin:'5px'}}/>
