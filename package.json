@@ -73,6 +73,7 @@
     "object-assign": "4.1.1",
     "postcss-loader": "1.2.2",
     "promise": "7.1.1",
+    "rc-banner-anim": "^1.0.0",
     "react-dev-utils": "^0.5.2",
     "redux-devtools": "^3.3.2",
     "redux-devtools-dock-monitor": "^1.1.1",

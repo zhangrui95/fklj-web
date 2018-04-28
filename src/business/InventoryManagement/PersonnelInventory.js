@@ -6,6 +6,7 @@ import {store} from '../../index.js';
 import * as constants from "../../utils/Constants";
 import {monthFormat, dateFormat, serverUrl} from '../../utils/';
 import {Spin, Table, message, Input, Modal, Button, Form, Icon, Row, Col, Select, DatePicker, Tag, Divider} from 'antd';
+import { BannerAnimImg } from '../../components/BannerAnim';
 
 import moment from 'moment';
 moment.locale('zh-cn');
@@ -86,6 +87,10 @@ export  class PersonnelInventory extends Component{
             zoomvisible:false,
             imgtext:'',
             text:null,
+            visibles: false,
+            arrayImg: [],
+            currentImg: '',
+            index: 0,
         };
         this.pageChange = this.pageChange.bind(this);
     }
@@ -247,6 +252,22 @@ export  class PersonnelInventory extends Component{
             nowPage: 1,
         })
     }
+    handleImgClick = (arrayImg, currentImg, index) => {
+        this.setState({
+            visibles: true,
+            arrayImg: arrayImg,
+            currentImg: currentImg,
+            index: index,
+        });
+    }
+    handleCancels = () => {
+        this.setState({
+            visibles: false,
+            arrayImg: [],
+            currentImg: '',
+            index: 0
+        });
+    }
     render() {
         const { getFieldDecorator } = this.props.form;
         let nowPage = this.state.nowPage;
@@ -298,6 +319,24 @@ export  class PersonnelInventory extends Component{
                 disabled: record.name === 'Disabled User',    // Column configuration not to be checked
             }),
         };
+        let imgArray = [];
+        // if (paint_real) {
+        //     let imgObj = JSON.parse(paint_real.value);
+        //     var imgObjText = imgObj.text;
+            let arrayImg = ["../../images/zanwu.png","../../images/zanwu.png","../../images/zanwu.png"];
+            if (arrayImg && arrayImg.length > 0) {
+                for (let i = 0; i < arrayImg.length; i++) {
+                    imgArray.push(
+                        <img src={arrayImg[i]} key={i} alt="" style={{width:'100px',height:'120px',margin:'5px'}}
+                             onClick={handleImgClick => this.handleImgClick(arrayImg, arrayImg[i], i)} />
+                    );
+                }
+            } else {
+                imgArray.push(
+                    <div style={{ fontSize: 16, color: '#fff', width: '100%', textAlign: "center" }}>暂无写实照片</div>
+                );
+            }
+        // }
 
         return(
             <div className="sliderWrap">
@@ -473,7 +512,7 @@ export  class PersonnelInventory extends Component{
                                     style={{marginBottom:'5px'}}
                                 >
                                     {getFieldDecorator('value', {
-                                        initialValue:this.state.personInfo.zrdw,
+                                        initialValue:this.state.personInfo.policeId,
                                     })(
                                         <Input disabled/>
                                     )}
@@ -497,9 +536,7 @@ export  class PersonnelInventory extends Component{
                         <Col span={24}  style={{fontSize:'16px'}}>写实详情</Col>
                         <Row style={{padding:'32px'}}>
                             <Col span={24}>
-                                <img src="../../images/zanwu.png" style={{width:'100px',height:'120px',margin:'5px'}}/>
-                                <img src="../../images/zanwu.png" style={{width:'100px',height:'120px',margin:'5px'}}/>
-                                <img src="../../images/zanwu.png" style={{width:'100px',height:'120px',margin:'5px'}}/>
+                                {imgArray}
                             </Col>
                             <Col span={24}>
                                 <FormItem
@@ -515,6 +552,14 @@ export  class PersonnelInventory extends Component{
                             </Col>
                         </Row>
                     </Row>
+                </Modal>
+                <Modal
+                    visible={this.state.visibles}
+                    onCancel={this.handleCancels}
+                    footer={false}
+                    wrapClassName='zoomImg'
+                >
+                    <BannerAnimImg arrayImg={this.state.arrayImg} currentImg={this.state.currentImg} index={this.state.index} />
                 </Modal>
             </div>
         )
