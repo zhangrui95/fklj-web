@@ -41,7 +41,7 @@ class TaskManagement extends Component{
             
             <div>
                 <Shade isBlock={isBlock}/>
-                <Header />
+                <Header homeType="hs_fklj_sys"/>
                 <div className="sileder_left">
                     <SliderMenuItem menus={store.getState().TaskManagement.uiData.menus}
                                     handleMenuClick={this.handleMenuClick}/>

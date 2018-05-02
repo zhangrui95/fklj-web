@@ -21,7 +21,7 @@ class PersonalCenter extends Component {
     render(){
         return (
             <div>
-                <Header />
+                <Header homeType="fklj_sys"/>
                 <div  className="sileder_left">
                     <SliderMenuItem  menus={store.getState().PersonalCenter.uiData.menus} handleMenuClick={this.handleMenuClick}/>
                 </div>

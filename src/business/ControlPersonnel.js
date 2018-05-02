@@ -38,7 +38,7 @@ class ControlPersonnel extends Component{
         return (
             <div>
                 <Shade isBlock={isBlock}/>
-                <Header />
+                <Header homeType="hs_fklj_sys"/>
                 <div className="sileder_left">
                     <SliderMenuItem menus={menusList}
                                     handleMenuClick={this.handleMenuClick}/>

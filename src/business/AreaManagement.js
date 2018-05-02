@@ -30,7 +30,7 @@ class AreaManagement extends Component {
         return (
             <div style={{overflow:'hidden',width:"100%"}}>
                 <Shade isBlock={isBlock}/>
-                <Header />
+                <Header homeType="hs_fklj_sys"/>
                 <div  className="sileder_left">
                     <SliderMenuItem  menus={this.props.AreaManagement.uiData.menus}
                                      handleMenuClick={this.handleMenuClick}   />

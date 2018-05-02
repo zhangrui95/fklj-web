@@ -281,7 +281,7 @@ class Home extends Component {
 
         return (
             <div style={{overflow:"hidden",width:"100%"}}>
-                <Header />
+                <Header homeType="hs_fklj_sys"/>
                 {/*内容*/}
                 <div>
                     <div>

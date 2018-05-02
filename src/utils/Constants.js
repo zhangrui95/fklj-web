@@ -41,11 +41,17 @@ export const CONTROLPERSONNEL_MODULE_GK_LKZRQ = '离开责任区';
 export const CONTROLPERSONNEL_MODULE_GK_SK = '失控';
 export const CONTROLPERSONNEL_MODULE_DR = '导入';
 export const CONTROLPERSONNEL_MODULE_XZ = '新增';
+//系统设置模块（呼市）
+export const SYSREMSETUP_MODULE = '系统设置';
+export const SYSREMSETUP_MODULE_Add = '添加到任务';
+export const SYSREMSETUP_MODULE_Choice = '选择责任单位';
 //智能检索模块
 export const INTELLIGENTRETRIEVAL_MODULE = 'intelligentretrieval_module';
 //设置管理模块
 export const SYSTEMMANAGEMENT_MODULE = 'systemmanagement_module';
-//统计报表模块
+//统计报表模块(反恐利剑)
+export const REPORTFORM_MODULE = 'reportform_module';
+//统计报表模块(呼市)
 export const REPORTFORMS_MODULE = 'reportforms_module';
 //盘查详情页模块
 export const INTERROGATIONDETAILS_MODULE = 'interrogationdetails_module';

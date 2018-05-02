@@ -64,7 +64,7 @@ export function loginUser(creds) {
                 isAllowMenu(store.getState().DynamicControl.uiData.menus)
                 isAllowMenu(store.getState().SystemManagement.uiData.menus)
                 message.success('提示：登录成功!');
-                browserHistory.push('/Home');
+                browserHistory.push('/Transfer');
                 //盘查管理菜单
             }
         }).catch(err => {console.log("Error: ", err); message.warning('提示：登录失败，与服务器交互发生异常!');});

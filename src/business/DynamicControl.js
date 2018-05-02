@@ -39,7 +39,7 @@ class DynamicControl extends Component {
         return (
             <div style={{overflow:'hidden',width:"100%"}}>
                 <Shade isBlock={isBlock}/>
-                <Header />
+                <Header homeType="fklj_sys"/>
                 <div  className="sileder_left">
                     <SliderMenuItem  menus={menus}
                                      handleMenuClick={this.handleMenuClick}   />

@@ -1,8 +1,8 @@
 /**
- * 管控人员-呼市
+ * 系统设置-呼市
  */
 import {lyInitialStateReturn} from "./initialState"
-import {CONTROL_PERSONNEL_CURRENT, CONTROLPERSONNEL_MENU_INIT, CONTROLPERSONNEL_TYPE,CONTROLPERSONNEL_Person,CONTROLPERSONNEL_AddOrOut} from "../actions/actions";
+import {SYSTEM_SETUP_CURRENT, SYSREMSETUP_MENU_INIT, SYSTEMSETUP_ADD} from "../actions/actions";
 import {store} from '../index.js';
 import {isAllowMenu} from '../utils/index';
 
@@ -24,7 +24,7 @@ const initialState = {
         menus: [
             {
                 id: '101',
-                menuName: '关注人员',
+                menuName: '管控人员',
                 haveSon: true,
                 isOpen: true,
                 search: 'type=rwgl',
@@ -34,7 +34,7 @@ const initialState = {
                 sonMenu: [
                     {
                         id: '1001',
-                        menuName: '拟来呼人员',
+                        menuName: '添加到任务',
                         search: 'type=gzry&state=1',
                         isSelect: true,
                         isShow: false,
@@ -42,83 +42,11 @@ const initialState = {
                     },
                     {
                         id: '1002',
-                        menuName: '治安来源',
+                        menuName: '选择责任单位',
                         search: 'type=gzry&state=2',
                         isSelect: false,
                         isShow: false,
                         code: "gkry_gzry_zaly_page"
-                    }
-                ]
-            },
-            {
-                id: '102',
-                menuName: '管控人员',
-                isOpen: false,
-                search: 'type=rwgl',
-                haveSon: true,
-                isSelect: false,
-                code: "",
-                isShow: true,
-                sonMenu: [
-                    {
-                        id: '1003',
-                        menuName: '未管控',
-                        search: 'type=gzry&state=1',
-                        isSelect: false,
-                        isShow: true,
-                        code: ""
-                    },
-                    {
-                        id: '1004',
-                        menuName: '已管控',
-                        search: 'type=gzry&state=2',
-                        isSelect: false,
-                        isShow: true,
-                        code: ""
-                    },
-                    {
-                        id: '1005',
-                        menuName: '离开责任区',
-                        search: 'type=gzry&state=1',
-                        isSelect: false,
-                        isShow: true,
-                        code: ""
-                    },
-                    {
-                        id: '1006',
-                        menuName: '失控',
-                        search: 'type=gzry&state=2',
-                        isSelect: false,
-                        isShow: true,
-                        code: ""
-                    }
-                ]
-            },
-            {
-                id: '103',
-                menuName: '人员来源',
-                isOpen: false,
-                search: 'type=rwgl',
-                haveSon: true,
-                isSelect: false,
-                code: "",
-                isShow: true,
-                sonMenu: [
-                    {
-                        id: '1007',
-                        menuName: '导入',
-                        search: 'type=gzry&state=1',
-                        isSelect: false,
-                        isShow: true,
-                        code: ""
-                    },
-                    {
-                        id: '1008',
-                        menuName: '新增',
-                        search: 'type=gzry&state=2',
-                        isSelect: false,
-                        isShow: true,
-                        code: ""
                     }
                 ]
             }
@@ -128,7 +56,7 @@ const initialState = {
 }
 
 
-const ControlPersonnel =(state = initialState, action) =>{
+const SystemSetup =(state = initialState, action) =>{
     let newState = Object.assign({}, state);
     switch (action.type) {
         case 'REQUEST_TASK_MANAGEMENT':
@@ -137,7 +65,7 @@ const ControlPersonnel =(state = initialState, action) =>{
                 isFetching: true,
                 didInvalidate: false
             }
-        case 'ControlPersonnel-data': //任务
+        case 'SystemSetup-data': //任务
             newState.data.taskList.result.list = action.data.result.list;
             newState.data.taskList.result.total = action.data.result.page.totalResult;//page?reason
             newState.isFetching = false;
@@ -146,7 +74,7 @@ const ControlPersonnel =(state = initialState, action) =>{
             newState.data.task = action.data.result;//page?
             return newState;
 
-        case CONTROLPERSONNEL_MENU_INIT://初始化菜单
+        case SYSREMSETUP_MENU_INIT://初始化菜单
             for (let x in newState.uiData.menus) {
                 newState.uiData.menus[x].isSelect = false;
                 for(let i in  newState.uiData.menus[x].sonMenu){
@@ -155,28 +83,14 @@ const ControlPersonnel =(state = initialState, action) =>{
             }
             newState.uiData.menus[0].sonMenu[0].isSelect = true;
             return newState;
-        case CONTROLPERSONNEL_TYPE:
+        case SYSTEMSETUP_ADD:
             if(newState.uiData.menus[0].isOpen===true){
                 newState.uiData.menus[0].isOpen=false;
             }else{
                 newState.uiData.menus[0].isOpen=true;
             }
             return newState;
-        case CONTROLPERSONNEL_Person:
-            if(newState.uiData.menus[1].isOpen===true){
-                newState.uiData.menus[1].isOpen=false;
-            }else{
-                newState.uiData.menus[1].isOpen=true;
-            }
-            return newState;
-        case CONTROLPERSONNEL_AddOrOut:
-            if(newState.uiData.menus[2].isOpen===true){
-                newState.uiData.menus[2].isOpen=false;
-            }else{
-                newState.uiData.menus[2].isOpen=true;
-            }
-            return newState;
-        case CONTROL_PERSONNEL_CURRENT:
+        case SYSTEM_SETUP_CURRENT:
             //遍历一级目录
             for(let x in newState.uiData.menus){
                 if(action.menu.id==newState.uiData.menus[x].id){ //根据ID相等判断，是否选中
@@ -197,7 +111,7 @@ const ControlPersonnel =(state = initialState, action) =>{
             return newState;
         default:
             if(store !== undefined ){
-                return store.getState().ControlPersonnel;
+                return store.getState().SystemSetup;
             }else{
                 if(sessionStorage.getItem('user')!== null && sessionStorage.getItem('id_token')!== null ){
                     let menus = state.uiData.menus;
@@ -208,4 +122,4 @@ const ControlPersonnel =(state = initialState, action) =>{
             }
     }
 }
-module.exports = {ControlPersonnel}
+module.exports = {SystemSetup}

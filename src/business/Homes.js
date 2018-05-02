@@ -280,7 +280,7 @@ class Home extends Component {
 
         return (
             <div style={{overflow:"hidden",width:"100%"}}>
-                <Header />
+                <Header homeType="fklj_sys"/>
                 {/*内容*/}
                 <div>
                     <div>
@@ -1228,7 +1228,6 @@ class ActiveDataStatistics extends Component {
                     <div>
                         <img src="/images/guanbi.png" alt="" style={{float:"left",marginRight:"20px"}} onClick={this.chartsClick}/>
                         <p style={titleP}>活动数据统计</p>
-
                         <div style={clear}></div>
                     </div>
                     {/*图表*/}

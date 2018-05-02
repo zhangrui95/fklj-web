@@ -75,6 +75,7 @@ const fontSize14= {
 const user = JSON.parse(sessionStorage.getItem('user'));
 export class Header extends Component{
   render(){
+      let {hideNav,homeType} = this.props;
       let user = JSON.parse(sessionStorage.getItem('user'));
       let navigations = store.getState().root.uiData.navigations;
       let  navigationList = [];
@@ -82,13 +83,31 @@ export class Header extends Component{
           let css;
           if(navigation.isShow){
               {navigation.isSelect===true?css=collapseLi1:css=collapseLi}
-              navigationList.push(
-                  <li className="fl" style={css} key={i}>
-                      <Link to={navigation.path} style={{color:"#fff"}}>{navigation.navigationName}</Link>
-                  </li>
-              );
+              if(homeType==='fklj_sys'&&navigation.homeType==='fklj'){
+                  navigationList.push(
+                      <li className="fl" style={css} key={i}>
+                          <Link to={navigation.path} style={{color:"#fff"}}>{navigation.navigationName}</Link>
+                      </li>
+                  );
+              }else if(homeType==='hs_fklj_sys'&&navigation.homeType===''){
+                  navigationList.push(
+                      <li className="fl" style={css} key={i}>
+                          <Link to={navigation.path} style={{color:"#fff"}}>{navigation.navigationName}</Link>
+                      </li>
+                  );
+              }
           }
       });
+      let nav = '';
+      if(!hideNav){
+          nav =  (<div style={collapseDiv}>
+              <ul>
+                  {navigationList}
+                  {/*<span><img src="/images/cyzy_1.png" alt="" style={{float:"right"}}/></span>*/}
+                  <div style={{clear:"both"}}></div>
+              </ul>
+          </div>)
+      }
     return (
         <div>
 
@@ -111,13 +130,7 @@ export class Header extends Component{
                 </div>
                 <div className="clear"></div>
              </div>
-            <div style={collapseDiv}>
-                <ul>
-                    {navigationList}
-                    {/*<span><img src="/images/cyzy_1.png" alt="" style={{float:"right"}}/></span>*/}
-                    <div style={{clear:"both"}}></div>
-                </ul>
-            </div>
+            {nav}
         </div>
                  
     )

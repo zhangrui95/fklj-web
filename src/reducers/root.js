@@ -23,12 +23,22 @@ const initialState = {
     uiData: {
         navigations: [ //导航集合
             {
+                id: '100',
+                navigationName: '首页',
+                isSelect: true,
+                path: "/Homes",
+                isShow: true,
+                code:'home_menu',
+                homeType:'fklj'
+            },
+            {
                 id: '101',
                 navigationName: '首页',
                 isSelect: true,
                 path: "/Home",
                 isShow: true,
-                code:'home_menu'
+                code:'home_menu',
+                homeType:''
             },
             {
                 id: '102',
@@ -36,35 +46,38 @@ const initialState = {
                 isSelect: false,
                 path: "/DynamicControl",
                 isShow: false,
-                code:'dtgk_menu'
-            },
-            {
-                id: '112',
-                navigationName: '盘查管理',
-                isSelect: true,
-                path: "/InventoryManagement",
-                isShow: true
-            },
-            {
-                id: '109',
-                navigationName: '卡点管理',
-                isSelect: false,
-                path: "/AreaManagement",
-                isShow: true
+                code:'dtgk_menu',
+                homeType:'fklj'
             }, {
                 id: '111',
                 navigationName: '管控人员',
                 isSelect: false,
                 path: "/ControlPersonnel",
                 isShow: false,
-                code: 'gkry_menu'
+                code: 'gkry_menu',
+                homeType:''
             }, {
                 id: '110',
                 navigationName: '任务管理',
                 isSelect: false,
                 path: "/TaskManagement",
                 isShow: false,
-                code: 'rwgl_menu'
+                code: 'rwgl_menu',
+                homeType:''
+            }, {
+                id: '112',
+                navigationName: '盘查管理',
+                isSelect: true,
+                path: "/InventoryManagement",
+                isShow: true,
+                homeType:''
+            }, {
+                id: '109',
+                navigationName: '卡点管理',
+                isSelect: false,
+                path: "/AreaManagement",
+                isShow: true,
+                homeType:''
             },
             // {
             //     id: '103',
@@ -76,9 +89,18 @@ const initialState = {
                 id: '104',
                 navigationName: '统计报表',
                 isSelect: false,
+                path: "/ReportForm",
+                isShow: true,
+                code: 'tjbb_menu',
+                homeType:'fklj'
+            },{
+                id: '113',
+                navigationName: '数据统计',
+                isSelect: false,
                 path: "/ReportForms",
                 isShow: true,
-                code: 'tjbb_menu'
+                code: 'tjbb_menu',
+                homeType:''
             },
             // {
             //     id:'105',
@@ -91,7 +113,8 @@ const initialState = {
                 navigationName: '个人中心',
                 isSelect: false,
                 path: "/PersonalCenter",
-                isShow: true
+                isShow: true,
+                homeType:'fklj'
             },
             {
                 id: '108',
@@ -99,7 +122,16 @@ const initialState = {
                 isSelect: false,
                 path: "/SystemManagement",
                 isShow: false,
-                code:'xtgl_menu'
+                code:'xtgl_menu',
+                homeType:'fklj'
+            }, {
+                id: '114',
+                navigationName: '系统设置',
+                isSelect: false,
+                path: "/SystemSetup",
+                isShow: false,
+                code:'xtgl_menu',
+                homeType:''
             }
         ],
         ModalDialogueBg: 'none'//遮罩展示与隐藏

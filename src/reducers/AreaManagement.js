@@ -46,7 +46,6 @@ const initialState = {
 
 const AreaManagement =(state = initialState, action)=>{
     let newState = Object.assign({}, state);
-    console.log('action.type ======>',action.type)
     switch (action.type) {
         case 'AREA_MANAGAMENT':
             return {

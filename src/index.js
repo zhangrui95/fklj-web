@@ -18,13 +18,17 @@ import InterrogationRecord from "./business/InterrogationRecord";
 import InterrogationDetails from "./business/InterrogationDetails";
 import ElectronicArchives from "./business/ElectronicArchives";
 import SystemManagement from "./business/SystemManagement";
+import SystemSetup from "./business/SystemSetup";
 import AreaManagement from "./business/AreaManagement";
 import TaskManagement from "./business/TaskManagement";
 import ControlPersonnel from "./business/ControlPersonnel";
 import AuditReport from "./business/AuditReport";
 import Preview from "./business/AuditReport/Preview";
 import ReportForms from "./business/ReportForms";
+import ReportForm from "./business/ReportForm";
 import Home from "./business/Home";
+import Homes from "./business/Homes";
+import Transfer from "./business/Transfer";
 import Login from "./business/Login";
 import InventoryManagement from "./business/InventoryManagement";
 import {connect} from "react-redux";
@@ -68,10 +72,13 @@ class Index extends Component{
                         <div>
                             <Route exact path="/" component={Login}></Route>
                             <Route exact path="/Home" component={Home} onEnter={this.requireAuth}></Route>
+                            <Route exact path="/Homes" component={Homes} onEnter={this.requireAuth}></Route>
+                            <Route exact path="/Transfer" component={Transfer} onEnter={this.requireAuth}></Route>
                             <Route exact path="/DynamicControl" component={DynamicControl} onEnter={this.requireAuth} />
                             <Route exact path="/IntelligentRetrieval" component={IntelligentRetrieval} onEnter={this.requireAuth} />
                             <Route exact path="/PersonalCenter" component={PersonalCenter} onEnter={this.requireAuth} />
                             <Route exact path="/SystemManagement" component={SystemManagement} onEnter={this.requireAuth} />
+                            <Route exact path="/SystemSetup" component={SystemSetup} onEnter={this.requireAuth} />
                             <Route exact path="/AreaManagement" component={AreaManagement} onEnter={this.requireAuth} />
                             <Route exact path="/TaskManagement" component={TaskManagement} onEnter={this.requireAuth} />
                             <Route exact path="/AuditReport/:idcard/:personId" component={AuditReport}  onEnter={this.requireAuth}/>
@@ -80,6 +87,7 @@ class Index extends Component{
                             <Route exact path="/ElectronicArchives/:idcard" component={ElectronicArchives}  onEnter={this.requireAuth} />
                             <Route exact path="/Preview" component={Preview}  onEnter={this.requireAuth} />
                             <Route exact path="/ReportForms" component={ReportForms}  onEnter={this.requireAuth}  />
+                            <Route exact path="/ReportForm" component={ReportForm}  onEnter={this.requireAuth}  />
                             <Route exact path="/InventoryManagement" component={InventoryManagement}   onEnter={this.requireAuth}  />
                             <Route exact path="/PhoneDetails/:phoneId" component={PhoneDetails}   onEnter={this.requireAuth}  />
                             <Route exact path="/ControlPersonnel" component={ControlPersonnel}   onEnter={this.requireAuth}  />

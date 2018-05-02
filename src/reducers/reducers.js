@@ -51,7 +51,9 @@ const InterrogationDetailsUsers = require('./InterrogationDetails');
 const InterrogationRecordUsers = require('./InterrogationRecord');
 const TaskManagement = require('./TaskManagement')
 const ReportForms = require('./ReportForms');
+const ReportForm = require('./ReportForm');
 const SystemManagement = require('./SystemManagement');
+const SystemSetup = require('./SystemSetup');
 const AreaManagement = require('./AreaManagement');
 const ControlPersonnel = require('./ControlPersonnel');
 const DynamicControl = require('./Users');
@@ -68,12 +70,14 @@ export const mainReducer = combineReducers({
   ...InterrogationDetailsUsers,
   ...InterrogationRecordUsers,
   ...ReportForms,
+  ...ReportForm,
   ...SystemManagement,
+  ...SystemSetup,
   ...AreaManagement,
   ...TaskManagement,
   ...DynamicControl,
   ...ElectronicArchivesUsers,
   ...ControlPersonnel,
-    ...InventoryManagement,
+  ...InventoryManagement,
   routing:routerReducer,
 });

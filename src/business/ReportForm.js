@@ -6,7 +6,7 @@ import React, {Component} from 'react'
 import {mainReducer} from "../reducers/reducers";
 import {connect} from "react-redux";
 // import DynamicRightContent from "./DynamicRightContent";
-import {fetchUsersData, changeMenu, initDynamicControlMenu, fetchLogin,initReportFormsMenu} from "../actions/actions";
+import {fetchUsersData, changeMenu, initDynamicControlMenu, fetchLogin,initReportFormMenu} from "../actions/actions";
 import {
     StylePage,
     ShallowBlueBtn,
@@ -24,16 +24,16 @@ import WebSocket from './WebSocket';
 //import { Line } from './';
 import ReactHighcharts from 'react-highcharts';
 import EchartsReact from 'echarts-for-react';
-import ReportFormsRight from './ReportFormsRight';
+import ReportFormRight from './ReportFormRight';
 require("echarts/map/js/province/heilongjiang.js");
 
 // require("../resources/bundle");
 
 
 
-class ReportForms extends Component {
+class ReportForm extends Component {
     componentWillUnmount() { //销毁
-        store.dispatch(initReportFormsMenu(this.props.ReportForms.uiData.menus))
+        store.dispatch(initReportFormMenu(this.props.ReportForms.uiData.menus))
     }
 
     componentDidMount() {
@@ -54,12 +54,12 @@ class ReportForms extends Component {
 
         return (
             <div style={{overflow: 'hidden', width: "100%"}}>
-                <Header homeType="hs_fklj_sys"/>
+                <Header homeType="fklj_sys"/>
                 <div className="sileder_left">
                     <SliderMenuItem menus={this.props.ReportForms.uiData.menus} handleMenuClick={this.handleMenuClick}/>
                 </div>
                 <div className="sileder_right">
-                    <ReportFormsRight />
+                    <ReportFormRight />
                 </div>
                 <div className="clear"></div>
                 <WebSocket/>
@@ -71,4 +71,4 @@ class ReportForms extends Component {
     }
 
 }
-export default connect(mainReducer)(ReportForms);
+export default connect(mainReducer)(ReportForm);

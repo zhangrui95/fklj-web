@@ -6,9 +6,9 @@ import {store} from '../index.js';
 // import {createDevToolsStore} from "../configStore";
 import {
     PERSONALCENTER_MODULE, DYNAMICCONTROL_MODULE, SYSTEMMANAGEMENT_MODULE, INTELLIGENTRETRIEVAL_MODULE,
-    AUDIT_REPORT_MODULE, REPORTFORMS_MODULE, INVENTORYMANAGEMENT_MODULE, CUSTOMMANAGEMENT_MODULE, REPORTLY_MODULE,
+    AUDIT_REPORT_MODULE, REPORTFORMS_MODULE, REPORTFORM_MODULE, INVENTORYMANAGEMENT_MODULE, CUSTOMMANAGEMENT_MODULE, REPORTLY_MODULE,
     DEFINEWARE_MODULE,
-    TaskMANAGEMENT_MODULE, ELETRO_MODULE, AREAMANAGEMENT_MODULE,CONTROLPERSONNEL_MODULE
+    TaskMANAGEMENT_MODULE, ELETRO_MODULE, AREAMANAGEMENT_MODULE,CONTROLPERSONNEL_MODULE,SYSREMSETUP_MODULE
 } from "../utils/Constants";
 import {fetchData} from "./request";
 import {INTERROGATIONDETAILS_TAB_CHANGE_CURRENT,INTERROGATIONDETAILS_TAB_INIT} from "./InterrogationDetails";
@@ -205,7 +205,8 @@ export const AREAMANAGEMENT_MENU_CHANGE_CURRENT = 'areamanagement_menu_change_cu
 export const INTELLIGENT_RETRIEVAL_MENU_CHANGE_CURRENT = 'intelligent_retrieval_menu_change_current';//智能检索更换选中菜单
 export  const SYSTEMMANAGEMENT_HIGHRISKAREA_CHAGE='systemmanagement_highriskarea_chage';//高危地区打开关闭
 export const AUDIT_REPORT_MENU_CHANGE_CURRENT = 'audit_report_menu_change_current';//研判报告
-export const REPORT_FORMS_MENU_CHANGE_CURRENT = 'report_forms_menu_change_current';//统计报表
+export const REPORT_FORMS_MENU_CHANGE_CURRENT = 'report_forms_menu_change_current';//统计报表（呼市）
+export const REPORT_FORM_MENU_CHANGE_CURRENT = 'report_form_menu_change_current';//统计报表（反恐利剑）
 
 export const INVENTORYMANAGEMENT_MENU__CHANGE_CURRENT = 'Inventorymanagement_menu_change_current';//盘查管理-更换选
 export const CUSTOMERMANAGEMENT_MENU__CHANGE_CURRENT = 'customermanagement_menu_change_current';//卡口管理-更换选
@@ -213,9 +214,13 @@ export const REPORT_MENU__CHANGE_CURRENT = 'Report_menu_change_current';//统计
 export const DEFINWARE_MENU__CHANGE_CURRENT = 'DefinWare_menu_change_current';//临控管理-更换选-洛阳
 export const TASK_MENU__CHANGE_CURRENT = 'Task_menu_change_current';//任务管理-更换选-洛阳
 export const CONTROL_PERSONNEL_CURRENT = 'Control_personnel_current';//管控人员-更选项-呼市
+export const SYSTEM_SETUP_CURRENT = 'System_Setup_current';//系统设置-更选项-呼市
 export const CONTROLPERSONNEL_TYPE = 'Control_personnel_type';//管控人员-更选项-呼市-关注人员
 export const CONTROLPERSONNEL_Person = 'Control_personnel_person';//管控人员-更选项-呼市-管控人员
 export const CONTROLPERSONNEL_AddOrOut = 'Control_personnel_addorout';//管控人员-更选项-呼市-管控人员
+
+export const SYSTEMSETUP_ADD = 'System_Setup_add';//更选项-呼市-系统设置-添加到任务
+// export const SYSTEMSETUP_CHOICE = 'System_Setup_choice';//更选项-呼市-系统设置-选择责任单位
 
 export const INVENTORY_MENU_LDPC_CHAGE = 'inventory-menu-change';//一级菜单流动盘查
 export const INVENTORY_MENU_KKPC_CHAGE = 'customsPass-data-flow';//一级菜单卡口盘查
@@ -254,6 +259,14 @@ export function changeMenu(menu, type, moduleName){//改变目录状态
             // store.dispatch(fetchUsersData('/data/getDArcPersonList',menu.search));
             return {type:CONTROL_PERSONNEL_CURRENT,menu:menu};
         }
+    }else if(moduleName===SYSREMSETUP_MODULE){//系统设置模块
+        if(type==='openAndClose'){//菜单打开关闭
+            if(menu.id === '101'){
+                return {type:SYSTEMSETUP_ADD}
+            }
+        }else if(type==='getData'){//点击目录
+            return {type:SYSTEM_SETUP_CURRENT,menu:menu};
+        }
     }else if(moduleName===PERSONALCENTER_MODULE){//个人中心模块
         if(type==='openAndClose'){//菜单打开关闭
         }else if(type==='getData'){//点击目录
@@ -280,11 +293,17 @@ export function changeMenu(menu, type, moduleName){//改变目录状态
         }else if(type==='getData'){//点击目录
             return {type:AUDIT_REPORT_MENU_CHANGE_CURRENT,menu:menu};
         }
-    }else if(moduleName===REPORTFORMS_MODULE){//统计报表模块
+    }else if(moduleName===REPORTFORMS_MODULE){//统计报表模块（呼市）
         if(type==='openAndClose'){//菜单打开关闭
         }else if(type==='getData'){//点击目录
             // store.dispatch(fetchUsersData('/getUsers',menu.search));
             return {type:REPORT_FORMS_MENU_CHANGE_CURRENT,menu:menu};
+        }
+    }else if(moduleName===REPORTFORM_MODULE){//统计报表模块（反恐利剑）
+        if(type==='openAndClose'){//菜单打开关闭
+        }else if(type==='getData'){//点击目录
+            // store.dispatch(fetchUsersData('/getUsers',menu.search));
+            return {type:REPORT_FORM_MENU_CHANGE_CURRENT,menu:menu};
         }
     }else if(moduleName===INVENTORYMANAGEMENT_MODULE){//盘查管理模块
         if(type==='openAndClose'){//菜单打开关闭
@@ -349,9 +368,13 @@ export  function initSystemManagementMenu(menu) {
 export  function initIntelligentRetrievaMenu(menu) {
     return {type:INTELLIGENTRETRIEVA_MENU_INIT,menu:menu};
 }
-//初始化统计报表
+//初始化统计报表（呼市）
 export  function initReportFormsMenu(menu) {
     return {type:REPORTFORMS_MENU_INIT,menu:menu};
+}
+//初始化统计报表（反恐利剑）
+export  function initReportFormMenu(menu) {
+    return {type:REPORTFORM_MENU_INIT,menu:menu};
 }
 
 // 洛阳
@@ -379,6 +402,10 @@ export  function initTaskManagementMenu(menu) {
 export  function initControlPersonnelMenu(menu) {
     return {type:CONTROLPERSONNEL_MENU_INIT,menu:menu};
 }
+//系统设置菜单
+export  function initSyetemSetupMenu(menu) {
+    return {type:SYSREMSETUP_MENU_INIT,menu:menu};
+}
 
 //个人中心菜单初始化
 export const PERSONALCENTER_MENU_INIT = 'personalcenter_menu_init';
@@ -392,8 +419,10 @@ export const SYSTEMMANAGEMENT_MENU_INIT = 'systemmanagement_menu_init';
 export const AREAMANAGEMENT_MENU_INIT = 'areaManagement_menu_init';
 //设置智能检索初始化
 export const INTELLIGENTRETRIEVA_MENU_INIT = 'intelligentretrieva_menu_init';
-//设置统计报表初始化
+//设置统计报表初始化（呼市）
 export const REPORTFORMS_MENU_INIT = 'reportforms_menu_init';
+//设置统计报表初始化(反恐利剑)
+export const REPORTFORM_MENU_INIT = 'reportform_menu_init';
 //研判报告初始化
 export const AUDITREPOT_MENU_INIT = 'auditreport_menu_init';
 //设置盘查管理初始化--洛阳
@@ -402,6 +431,8 @@ export const INVENTORYMANAGEMENT_MENU_INIT = 'InventoryManagement_menu_init';
 export const TASKMANAGEMENT_MENU_INIT = 'TaskManagement_menu_init';
 //设置任务管理初始化--管控人员-呼市
 export const CONTROLPERSONNEL_MENU_INIT = 'Controlpersonnel_menu_init';
+//设置任务管理初始化--管控人员-呼市
+export const SYSREMSETUP_MENU_INIT = 'SystemSetup_menu_init';
 //设置卡口管理初始化--洛阳
 export const CUSTOMMANAGEMENT_MENU_INIT = 'CustomManagement_menu_init';
 //设置统计报表初始化--洛阳
