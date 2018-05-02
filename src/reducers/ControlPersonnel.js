@@ -29,7 +29,7 @@ const initialState = {
                 isOpen: true,
                 search: 'type=rwgl',
                 isSelect: false,
-                code: "fkry_gzry_page",
+                code: "gkry_gzry_page",
                 isShow: false,
                 sonMenu: [
                     {

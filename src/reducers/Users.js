@@ -29,7 +29,7 @@ const initialState = {
                     search: 'type=all',
                     haveSon: false,
                     isSelect: true,
-                    isShow: false,
+                    isShow: true,
                     code:'dtgk_qb_page',
                 },
                 {
@@ -40,7 +40,7 @@ const initialState = {
                     haveSon: true,
                     isSelect: false,
                     code:'dtgk_gzry_page',
-                    isShow: false,
+                    isShow: true,
                     sonMenu: [
                         {
                             id: '1021',
@@ -80,7 +80,7 @@ const initialState = {
                     haveSon: true,
                     isSelect: false,
                     code:'dtgk_ldry_page',
-                    isShow: false,
+                    isShow: true,
                     sonMenu: [
                         {
                             id: '1031',

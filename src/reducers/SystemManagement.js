@@ -189,7 +189,7 @@ const initialState = { //系统管理
                     haveSon: false,
                     isSelect: true,
                     code:'xtgl_skrj_page',
-                    isShow: false
+                    isShow: true
                 },
                 {
                     id: '102',
@@ -199,7 +199,7 @@ const initialState = { //系统管理
                     haveSon: false,
                     isSelect: false,
                     code:'xtgl_tzsz_page',
-                    isShow: false
+                    isShow: true
                 },
                 {
                     id: '103',
@@ -209,7 +209,7 @@ const initialState = { //系统管理
                     haveSon: false,
                     isSelect: false,
                     code:'xtgl_ycbdgz_page',
-                    isShow: false
+                    isShow: true
                 },
                 // {
                 //     id: '104',
@@ -256,7 +256,7 @@ const initialState = { //系统管理
                     haveSon: false,
                     isSelect: false,
                     code:'xtgl_yjdlxr_page',
-                    isShow: false
+                    isShow: true
                 },
                 {
                     id: '108',
@@ -266,7 +266,7 @@ const initialState = { //系统管理
                     haveSon: false,
                     isSelect: false,
                     code:'xtgl_lrdlxr_page',
-                    isShow: false
+                    isShow: true
                 },
                 // {
                 //   id: '109',
@@ -284,7 +284,7 @@ const initialState = { //系统管理
                     haveSon: false,
                     isSelect: false,
                     code: 'xtgl_sjzd_page',
-                    isShow: false
+                    isShow: true
                   },
                 
             ]

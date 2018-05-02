@@ -79,6 +79,8 @@ export class Header extends Component{
       let user = JSON.parse(sessionStorage.getItem('user'));
       let navigations = store.getState().root.uiData.navigations;
       let  navigationList = [];
+      let fk = false;
+      let hs = false;
       navigations.forEach(function(navigation, i){
           let css;
           if(navigation.isShow){
@@ -108,21 +110,36 @@ export class Header extends Component{
               </ul>
           </div>)
       }
+      user.menu.map((menu) =>  {
+          if(menu.resourceCode === 'yfklj_sys'){
+              fk = true;
+          }else if(menu.resourceCode === 'hsfklj_sys'){
+              hs = true;
+          }
+      })
+      let pathUrl;
+      if(fk&&hs) {
+          pathUrl = '/Transfer';
+      } else if(fk&&!hs) {
+          pathUrl = '/Homes';
+      } else if(hs&&!fk) {
+          pathUrl = '/Home';
+      }
+
     return (
         <div>
-
             <div className="headTop" style={{height:"94px",position:"relative"}}>
-
             <DevTools/>
-
                 <div style={{position:"absolute",top:22,left:44}}>
-                    <div>
-                        <img  src= "/images/guohui.png" style={{float:"left"}}   alt=""/>
-                        <div  style={{float:"left"}}>
-                            <p className="headTitle">{sysName}</p>
+                    <Link to= {pathUrl}>
+                        <div>
+                            <img  src= "/images/guohui.png" style={{float:"left"}}   alt=""/>
+                            <div  style={{float:"left"}}>
+                                <p className="headTitle">{sysName}</p>
+                            </div>
+                            <div style={{clear:"both"}}></div>
                         </div>
-                        <div style={{clear:"both"}}></div>
-                    </div>
+                    </Link>
                 </div>
                 <div className="headIconDiv fr" style={{position:"absolute",right:0}}>
                     {/*封装的组件*/}
@@ -164,7 +181,7 @@ class LoginIcon extends Component{
       let user = this.props.user;
       let btnShow;
       user.menu.map((col, index) => {
-          if(col.resourceCode === 'yhgl_btn'){
+          if(col.resourceCode === 'yhgl_btn'||col.resourceCode === 'fklj_yhgl_btn'){
               btnShow = true;
           }
       })
@@ -172,10 +189,10 @@ class LoginIcon extends Component{
           <div>
               <div className="fl" style={marginT220}>
                   <div className="fl" style={marring}>
-                    <img src="/images/head.png" width="57" height="57" />
+                      <img src="/images/head.png" width="57" height="57" />
                   </div>
                   <div className="fl" style={{margin:"19px 20px 0 0"}}>
-                    <p style={fontSize14}>{user.user.name}</p>
+                      <p style={fontSize14}>{user.user.name}</p>
                   </div>
                   <div className="clear"></div>
               </div>

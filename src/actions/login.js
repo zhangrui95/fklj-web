@@ -48,6 +48,8 @@ export function loginUser(creds) {
         dispatch(requestLogin(creds))
 
         let cred = {username: creds.username, password: hex_md5(creds.password),sid:'fklj_sys'}
+        let fk = false;
+        let hs = false;
         post(loginUrl+'/aqzx/api/login', cred).then((res) => {
             if(res.error !== null){
                 message.warning('提示：'+res.error.text+"!",3);
@@ -63,9 +65,22 @@ export function loginUser(creds) {
                 isAllowMenu(store.getState().ControlPersonnel.uiData.menus)
                 isAllowMenu(store.getState().DynamicControl.uiData.menus)
                 isAllowMenu(store.getState().SystemManagement.uiData.menus)
+                user.menu.map((menu) =>  {
+                    console.log(menu.resourceCode)
+                    if(menu.resourceCode === 'yfklj_sys'){
+                        fk = true;
+                    }else if(menu.resourceCode === 'hsfklj_sys'){
+                        hs = true;
+                    }
+                })
+                if(fk&&hs) {
+                    browserHistory.push('/Transfer');
+                } else if(fk&&!hs) {
+                    browserHistory.push('/Homes');
+                } else if(hs&&!fk) {
+                    browserHistory.push('/Home');
+                }
                 message.success('提示：登录成功!');
-                browserHistory.push('/Transfer');
-                //盘查管理菜单
             }
         }).catch(err => {console.log("Error: ", err); message.warning('提示：登录失败，与服务器交互发生异常!');});
 

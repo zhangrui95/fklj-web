@@ -28,7 +28,7 @@ const initialState = {
                 isSelect: true,
                 path: "/Homes",
                 isShow: true,
-                code:'home_menu',
+                code:'',
                 homeType:'fklj'
             },
             {
@@ -45,8 +45,8 @@ const initialState = {
                 navigationName: '动态管控',
                 isSelect: false,
                 path: "/DynamicControl",
-                isShow: false,
-                code:'dtgk_menu',
+                isShow: true,
+                code:'',
                 homeType:'fklj'
             }, {
                 id: '111',
@@ -91,7 +91,7 @@ const initialState = {
                 isSelect: false,
                 path: "/ReportForm",
                 isShow: true,
-                code: 'tjbb_menu',
+                code: '',
                 homeType:'fklj'
             },{
                 id: '113',
@@ -99,7 +99,7 @@ const initialState = {
                 isSelect: false,
                 path: "/ReportForms",
                 isShow: true,
-                code: 'tjbb_menu',
+                code: '',
                 homeType:''
             },
             // {
@@ -121,15 +121,15 @@ const initialState = {
                 navigationName: '系统管理',
                 isSelect: false,
                 path: "/SystemManagement",
-                isShow: false,
-                code:'xtgl_menu',
+                isShow: true,
+                code:'',
                 homeType:'fklj'
             }, {
                 id: '114',
                 navigationName: '系统设置',
                 isSelect: false,
                 path: "/SystemSetup",
-                isShow: false,
+                isShow: true,
                 code:'xtgl_menu',
                 homeType:''
             }

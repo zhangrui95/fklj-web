@@ -29,24 +29,24 @@ const initialState = {
                 isOpen: true,
                 search: 'type=rwgl',
                 isSelect: false,
-                code: "fkry_gzry_page",
-                isShow: false,
+                code: "",
+                isShow: true,
                 sonMenu: [
                     {
                         id: '1001',
                         menuName: '添加到任务',
                         search: 'type=gzry&state=1',
                         isSelect: true,
-                        isShow: false,
-                        code: "gkry_gzry_nlhry_page"
+                        isShow: true,
+                        code: ""
                     },
                     {
                         id: '1002',
                         menuName: '选择责任单位',
                         search: 'type=gzry&state=2',
                         isSelect: false,
-                        isShow: false,
-                        code: "gkry_gzry_zaly_page"
+                        isShow: true,
+                        code: ""
                     }
                 ]
             }
