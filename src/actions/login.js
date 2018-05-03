@@ -66,7 +66,6 @@ export function loginUser(creds) {
                 isAllowMenu(store.getState().DynamicControl.uiData.menus)
                 isAllowMenu(store.getState().SystemManagement.uiData.menus)
                 user.menu.map((menu) =>  {
-                    console.log(menu.resourceCode)
                     if(menu.resourceCode === 'yfklj_sys'){
                         fk = true;
                     }else if(menu.resourceCode === 'hsfklj_sys'){

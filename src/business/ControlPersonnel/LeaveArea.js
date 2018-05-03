@@ -365,7 +365,7 @@ export  class LeaveArea extends Component{
                             addShowModal={this.addShowModal}
                             handleDelete={this.handleDelete}
                             serchChange={this.serchChange}
-                            getFieldDecorator={getFieldDecorator}
+                            form={this.props.form}
                         />
 
                         <div className="clear"></div>
@@ -659,6 +659,7 @@ const SearchArea = React.createClass({
         this.hideModal();
     },
     render() {
+        const {getFieldDecorator} = this.props.form
         let {name,cardId,status,WorkPlace, enddate, begindate,cycle,wordType,showInput,wordName,OptionWords} = this.state;
         let beginDateValue = '';
         if (begindate === '') {} else {
@@ -668,6 +669,13 @@ const SearchArea = React.createClass({
         if (enddate === '') {} else {
             endDateValue = moment(enddate, dateFormat);
         }
+        let zdyStyle = {width:"110px", marginRight:"10px",display:'none'}
+        let userItem = JSON.parse(sessionStorage.getItem('user'));
+        userItem.menu.map((menu)=>{
+            if(menu.resourceCode === 'gkry_zdyzd_btn'){
+                zdyStyle = {width:"110px", marginRight:"10px"}
+            }
+        })
         return (
             <div className="marLeft40 fl z_searchDiv">
                 <label htmlFor="" className="font14">身份证号：</label>
@@ -711,7 +719,7 @@ const SearchArea = React.createClass({
                     <Button style={{width:"80px", marginRight:"10px"}} className="btn_ok">导入</Button>
                     <Button style={{width:"80px", marginRight:"10px"}} className="btn_ok">导出</Button>
                     <Button style={{width:"110px", marginRight:"10px"}} className="btn_ok">模板下载</Button>
-                    <Button style={{width:"110px", marginRight:"10px"}} className="btn_ok" onClick={this.getNewWords}>自定义字段</Button>
+                    <Button style={zdyStyle} className="btn_ok" onClick={this.getNewWords}>自定义字段</Button>
                     <Modal style={{top:"38%"}}
                            title="提示"
                            visible={this.state.visible}
