@@ -46,6 +46,7 @@ const formItemLayout = {
         sm: { span: 14 },
     },
 };
+const newWord = []
 
 export  class Control extends Component{
     constructor(props) { //初始化nowPage为1
@@ -65,7 +66,6 @@ export  class Control extends Component{
                 {key: 1, serial: 1, cardId: '230106196201222121', label: '张三', sex:'男',age:'26', state:'暂住', phone:'13936003633',zrdw:'呼伦浩特市XX单位', updatetime: '2018-04-10',cycle:'按周',address:'玉泉区兴隆巷1106号'},
                 {key: 2, serial: 2, cardId: '230105199605262631', label: '李四', sex:'女',age:'18', state:'暂住', phone:'13936003633',zrdw:'呼伦浩特市XX单位', updatetime: '2018-04-09',cycle:'按天',address:'玉泉区兴隆巷1106号'},
                 {key: 3, serial: 3, cardId: '20610819740122292X', label: '王二', sex:'男',age:'39', state:'暂住', phone:'13936003633',zrdw:'呼伦浩特市XX单位', updatetime: '2018-04-08',cycle:'按周',address:'玉泉区兴隆巷1106号'},
-                {key: 4, serial: 4, cardId: '230106196201222121', label: '张三', sex:'男',age:'26', state:'暂住', phone:'13936003633',zrdw:'呼伦浩特市XX单位', updatetime: '2018-04-10',cycle:'按周',address:'玉泉区兴隆巷1106号'},
             ],
             record: null,
             pagination: pagination,
@@ -77,6 +77,7 @@ export  class Control extends Component{
             zoomvisible:false,
             imgtext:'',
             text:null,
+            newWords:[]
         };
         this.pageChange = this.pageChange.bind(this);
     }
@@ -84,13 +85,15 @@ export  class Control extends Component{
         this.setState({
             visible: true,
             personInfo: record,
-            modalType: 'edit'
+            modalType: 'edit',
+            newWords:newWord
         });
     }
     addShowModal = (record) => {
         this.setState({
             visible: true,
             modalType: 'add',
+            newWords:newWord
         });
     }
     handleCancel = () => {
@@ -242,6 +245,7 @@ export  class Control extends Component{
         const { getFieldDecorator } = this.props.form;
         let nowPage = this.state.nowPage;
         let isFetching = store.getState().ControlPersonnel.isFetching;
+        let newWords = this.state.newWords;
         const columns = [{
             title: '序号',
             dataIndex: 'serial',
@@ -303,7 +307,52 @@ export  class Control extends Component{
                 disabled: record.name === 'Disabled User',    // Column configuration not to be checked
             }),
         };
-
+        const newFormList = [];
+        if(newWords.length > 0){
+            for(let i in newWords){
+                if(newWords[i].type === '文本'){
+                    newFormList.push(
+                        <Col span={12}>
+                            <FormItem
+                                {...formItemLayout}
+                                label={newWords[i].name}
+                            >
+                                {getFieldDecorator('wordText' + i, {
+                                    initialValue:this.state.modalType === 'edit' ? '' : '',
+                                })(
+                                    <Input/>
+                                )}
+                            </FormItem>
+                        </Col>
+                    )
+                }else if(newWords[i].type === '下拉框'){
+                    let strs = []
+                    strs=newWords[i].option.split("，");
+                    const children = [];
+                    for(let j in strs){
+                        if(j!='remove'){
+                            children.push(<Option key={j}>{strs[j]}</Option>);
+                        }
+                    }
+                    newFormList.push(
+                        <Col span={12}>
+                            <FormItem
+                                {...formItemLayout}
+                                label={newWords[i].name}
+                            >
+                                {getFieldDecorator('wordName', {
+                                    initialValue:this.state.modalType === 'edit' ? '' : '',
+                                })(
+                                    <Select>
+                                        {children}
+                                    </Select>
+                                )}
+                            </FormItem>
+                        </Col>
+                    )
+                }
+            }
+        }
         return(
             <div className="sliderWrap">
                 <div className="sliderItemDiv">
@@ -318,6 +367,7 @@ export  class Control extends Component{
                             addShowModal={this.addShowModal}
                             handleDelete={this.handleDelete}
                             serchChange={this.serchChange}
+                            getFieldDecorator={getFieldDecorator}
                         />
 
                         <div className="clear"></div>
@@ -338,15 +388,15 @@ export  class Control extends Component{
                 <Pag pageSize={10} nowPage={nowPage} totalRecord={10} pageChange={this.pageChange} />
                 <Modal
                     width={700}
-                    title="编辑"
+                    title="任务"
                     visible={this.state.visible}
                     onCancel={this.handleCancel}
                     footer={null}
                     key={this.state.modalKey}
                 >
                     <Row>
-                        <Col span={12}>
-                            <Form onSubmit={this.saveModel}>
+                        <Form onSubmit={this.saveModel}>
+                            <Col span={12}>
                                 <FormItem
                                     {...formItemLayout}
                                     label="身份证号"
@@ -357,6 +407,8 @@ export  class Control extends Component{
                                         <Input/>
                                     )}
                                 </FormItem>
+                            </Col>
+                            <Col span={12}>
                                 <FormItem
                                     {...formItemLayout}
                                     label="姓名"
@@ -367,6 +419,8 @@ export  class Control extends Component{
                                         <Input/>
                                     )}
                                 </FormItem>
+                            </Col>
+                            <Col span={12}>
                                 <FormItem
                                     {...formItemLayout}
                                     label="性别"
@@ -377,6 +431,8 @@ export  class Control extends Component{
                                         <Input/>
                                     )}
                                 </FormItem>
+                            </Col>
+                            <Col span={12}>
                                 <FormItem
                                     {...formItemLayout}
                                     label="年龄"
@@ -387,6 +443,8 @@ export  class Control extends Component{
                                         <Input/>
                                     )}
                                 </FormItem>
+                            </Col>
+                            <Col span={12}>
                                 <FormItem
                                     {...formItemLayout}
                                     label="居住类型"
@@ -402,10 +460,8 @@ export  class Control extends Component{
                                         </Select>
                                     )}
                                 </FormItem>
-                            </Form>
-                        </Col>
-                        <Col span={12}>
-                            <Form>
+                            </Col>
+                            <Col span={12}>
                                 <FormItem
                                     {...formItemLayout}
                                     label="现居住地址"
@@ -416,6 +472,8 @@ export  class Control extends Component{
                                         <Input/>
                                     )}
                                 </FormItem>
+                            </Col>
+                            <Col span={12}>
                                 <FormItem
                                     {...formItemLayout}
                                     label="联系电话"
@@ -426,6 +484,8 @@ export  class Control extends Component{
                                         <Input/>
                                     )}
                                 </FormItem>
+                            </Col>
+                            <Col span={12}>
                                 <FormItem
                                     {...formItemLayout}
                                     label="责任单位"
@@ -436,6 +496,8 @@ export  class Control extends Component{
                                         <Input/>
                                     )}
                                 </FormItem>
+                            </Col>
+                            <Col span={12}>
                                 <FormItem
                                     {...formItemLayout}
                                     label="任务周期"
@@ -450,6 +512,8 @@ export  class Control extends Component{
                                         </Select>
                                     )}
                                 </FormItem>
+                            </Col>
+                            <Col span={12}>
                                 <FormItem
                                     {...formItemLayout}
                                     label="更新时间"
@@ -460,8 +524,9 @@ export  class Control extends Component{
                                         <DatePicker placeholder="" allowClear={false} style={{width:"190px"}}/>
                                     )}
                                 </FormItem>
-                            </Form>
-                        </Col>
+                            </Col>
+                            {newFormList}
+                        </Form>
                     </Row>
                     <Row>
                         <Col span={15} style={{textAlign: 'right'}}>
@@ -486,7 +551,12 @@ const SearchArea = React.createClass({
             WorkPlace:'',
             begindate: '',
             enddate: '',
-            cycle: ''
+            cycle: '',
+            zdyModal: false,
+            wordType: '',
+            showInput:{display:'none'},
+            wordName:'',
+            OptionWords:''
         };
     },
     handleNameChange: function(e) {
@@ -516,7 +586,6 @@ const SearchArea = React.createClass({
     },
     handleClick: function() { //点击查询
         let {name} = this.state;
-        console.log('查询', name);
     },
     init:function () {
         this.setState({
@@ -553,10 +622,46 @@ const SearchArea = React.createClass({
     hideModal: function() {
         this.setState({
             visible: false,
+            zdyModal: false,
         });
     },
+    getNewWords: function(){
+        this.setState({
+            zdyModal: true,
+            wordType: '',
+            showInput:{display:'none'},
+            wordName:''
+        });
+    },
+    getSelects: function(value){
+        if(value=='0'){
+            this.setState({
+                showInput: {display:'none'},
+                wordType:'文本'
+            });
+        }else if(value=='1'){
+            this.setState({
+                showInput: {display:'block'},
+                wordType:'下拉框'
+            });
+        }
+    },
+    getOptions:function(e){
+        this.setState({
+            OptionWords:e.target.value
+        })
+    },
+    changeWordName:function (e) {
+        this.setState({
+            wordName:e.target.value
+        });
+    },
+    saveNewWord:function () {
+        newWord.push({name:this.state.wordName,type:this.state.wordType,option:this.state.OptionWords})
+        this.hideModal();
+    },
     render() {
-        let {name,cardId,status,WorkPlace, enddate, begindate,cycle} = this.state;
+        let {name,cardId,status,WorkPlace, enddate, begindate,cycle,wordType,showInput,wordName,OptionWords} = this.state;
         let beginDateValue = '';
         if (begindate === '') {} else {
             beginDateValue = moment(begindate, dateFormat);
@@ -608,7 +713,7 @@ const SearchArea = React.createClass({
                     <Button style={{width:"80px", marginRight:"10px"}} className="btn_ok">导入</Button>
                     <Button style={{width:"80px", marginRight:"10px"}} className="btn_ok">导出</Button>
                     <Button style={{width:"110px", marginRight:"10px"}} className="btn_ok">模板下载</Button>
-                    <Button style={{width:"110px", marginRight:"10px"}} className="btn_ok">自定义字段</Button>
+                    <Button style={{width:"110px", marginRight:"10px"}} className="btn_ok" onClick={this.getNewWords}>自定义字段</Button>
                     <Modal style={{top:"38%"}}
                            title="提示"
                            visible={this.state.visible}
@@ -622,6 +727,47 @@ const SearchArea = React.createClass({
                                 确定
                             </Button>
                             <Button style={{margin:'',width:"80px"}} onClick={this.hideModal} className="btn_delete">
+                                取消
+                            </Button>
+                        </p>
+
+                    </Modal>
+                    <Modal style={{top:"38%"}}
+                           title="自定义字段"
+                           visible={this.state.zdyModal}
+                           footer={null}
+                           maskClosable={false}
+                           closable={false}
+                    >
+                        <Form onSubmit={this.saveModel}>
+                            <FormItem
+                                {...formItemLayout}
+                                label="字段名称"
+                            >
+                                <Input value={wordName} onChange={this.changeWordName}/>
+                            </FormItem>
+                            <FormItem
+                                {...formItemLayout}
+                                label="字段类型"
+                            >
+                                <Select value={wordType} onChange={this.getSelects}>
+                                    <Option value="0">文本</Option>
+                                    <Option value="1">下拉框</Option>
+                                </Select>
+                            </FormItem>
+                            <FormItem
+                                {...formItemLayout}
+                                label="下拉值"
+                                style={showInput}
+                            >
+                                <Input value={OptionWords} onChange={this.getOptions}/>
+                            </FormItem>
+                        </Form>
+                        <p style={{marginTop:"20px",textAlign:"center"}}>
+                            <Button style={{margin:'0 15px 0 0 '}} onClick={this.saveNewWord} className="btn_ok">
+                                保存
+                            </Button>
+                            <Button style={{margin:'0 0 0 15px'}} onClick={this.hideModal} className="btn_delete">
                                 取消
                             </Button>
                         </p>

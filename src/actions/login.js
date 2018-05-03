@@ -75,14 +75,18 @@ export function loginUser(creds) {
                 })
                 if(fk&&hs) {
                     browserHistory.push('/Transfer');
+                    message.success('提示：登录成功!');
                 } else if(fk&&!hs) {
                     browserHistory.push('/Homes');
+                    message.success('提示：登录成功!');
                 } else if(hs&&!fk) {
                     browserHistory.push('/Home');
+                    message.success('提示：登录成功!');
+                } else{
+                    message.warning('用户无权限登陆!');
                 }
-                message.success('提示：登录成功!');
             }
-        }).catch(err => {console.log("Error: ", err); message.warning('提示：登录失败，与服务器交互发生异常!');});
+        }).catch(err => {message.warning('用户名或密码错误!');});
 
     }
 
