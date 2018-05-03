@@ -26,10 +26,10 @@ export function isAllowMenu(store) {
             if(idx == 'remove'){
                 idx = 0;
             }
-            // if(item.sonMenu[idx].isSelect&&!item.sonMenu[idx].isShow){
-            //     let j = parseInt(idx) + 1;
-            //     item.sonMenu[j].isSelect = true;
-            // }
+            if(item.sonMenu[idx].isSelect&&!item.sonMenu[idx].isShow){
+                let j = parseInt(idx) + 1;
+                item.sonMenu[j].isSelect = true;
+            }
         }
         if(store[idx]!== undefined){
             if(store[idx].isSelect&&!store[idx].isShow){
