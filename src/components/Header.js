@@ -44,7 +44,7 @@ const collapseLi = {
     fontSize:16
 };
 const collapseLi1 = {
-    width:"8%",
+    width:"7%",
     margin:"0 2%",
     background:"#153073",
     // padding:"1% 2.22%",

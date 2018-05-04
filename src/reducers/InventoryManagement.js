@@ -190,7 +190,7 @@ const InventoryManagement = (state = initialState, action) =>{
                     }
                 }
             }
-            newState.uiData.menus[0].isSelect = false;
+            newState.uiData.menus[0].isSelect = true;
             newState.uiData.menus[0].isOpen = true;
             // newState.uiData.menus[0].sonMenu[0].isSelect = true;
             return newState;
