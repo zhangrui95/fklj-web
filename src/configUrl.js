@@ -11,7 +11,7 @@ global.configUrl = {
   //测试主机  http://172.19.1.140:8100   http://172.19.4.4:7070
   securityCenterUrl: "http://172.19.1.145:8100",//平时测试接口
     securityCenterUrls: "http://172.19.12.249:8200",//跳转安全中心
-    loginUrl: "http://172.19.12.249",//登陆地址
+    loginUrl: "http://172.19.12.249:8100",//登陆地址
     // loginUrl: "http://172.19.12.249:8100",//登陆地址
   //   securityCenterUrl: "http://172.19.12.249:8200",//平时测试接口
   //   loginUrl: "http://172.19.12.249:8100",

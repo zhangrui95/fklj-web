@@ -36,7 +36,8 @@ import {
     TreeSelect,
     Select,
     Divider,
-    Popconfirm
+    Popconfirm,
+    Radio
 } from 'antd';
 
 import moment from 'moment';
@@ -49,6 +50,7 @@ const sliderdyHeader = {
     // overflow: "hidden"
 }
 const FormItem = Form.Item;
+const RadioGroup = Radio.Group;
 const Option = Select.Option;
 const SHOW_PARENT = TreeSelect.SHOW_PARENT;
 const { TextArea } = Input;
@@ -72,11 +74,21 @@ const pagination = {
 const formItemLayout = {
     labelCol: {
         xs: { span: 24 },
-        sm: { span: 5 },
+        sm: { span: 8 },
     },
     wrapperCol: {
         xs: { span: 24 },
-        sm: { span: 16 },
+        sm: { span: 14 },
+    },
+};
+const formItemLayouts = {
+    labelCol: {
+        xs: { span: 24 },
+        sm: { span: 4 },
+    },
+    wrapperCol: {
+        xs: { span: 24 },
+        sm: { span: 19 },
     },
 };
 
@@ -105,7 +117,9 @@ export  class PatrolTask extends Component{
             imgtext:'',
             text:null,
             unit_scope:'116001',
-            treeValue:[]
+            treeValue:[],
+            RadioValue:'',
+            TaskNewShow:{display: 'none'}
         };
         this.pageChange = this.pageChange.bind(this);
     }
@@ -113,7 +127,8 @@ export  class PatrolTask extends Component{
         this.setState({
             visible: true,
             personInfo: record,
-            modalType: 'edit'
+            modalType: 'edit',
+            RadioValue:'',
         });
     }
     addShowModal = (record) => {
@@ -269,6 +284,20 @@ export  class PatrolTask extends Component{
             treeValue: e,
         });
     }
+    onRadioChange= (e) => {
+        this.setState({
+            RadioValue: e.target.value,
+        });
+        if(e.target.value === 0){
+            this.setState({
+                TaskNewShow: {display:'block'}
+            });
+        }else{
+            this.setState({
+                TaskNewShow: {display:'none'}
+            });
+        }
+    }
     render() {
         const { getFieldDecorator } = this.props.form;
         let nowPage = this.state.nowPage;
@@ -313,6 +342,8 @@ export  class PatrolTask extends Component{
                         </Popconfirm>
                          <Divider type="vertical" />
                         <span onClick={(e)=>this.editShowModal(record)} style={{cursor:'pointer'}}>编辑</span>
+                        <Divider type="vertical" />
+                        <span style={{cursor:'pointer'}}>子任务</span>
                     </span>
             ),
         }];
@@ -375,219 +406,173 @@ export  class PatrolTask extends Component{
                             <Spin size="large" />
                         </div>:
                         <div style={{padding:"0 15px"}}>
-                            <Table locale={{emptyText:'暂无数据'}} rowSelection={rowSelection} columns={columns} dataSource={data} bordered  pagination={false}/>
+                            <Table locale={{emptyText:'暂无数据'}} columns={columns} dataSource={data} bordered  pagination={false}/>
                         </div>}
                     <div className="clear"></div>
                 </div>
                 {/*分页*/}
                 <Pag pageSize={10} nowPage={nowPage} totalRecord={10} pageChange={this.pageChange} />
-                {/*<Modal width={600}*/}
-                    {/*title="任务设置"*/}
-                    {/*visible={this.state.visible}*/}
-                    {/*onCancel={this.handleCancel}*/}
-                    {/*footer={null}*/}
-                    {/*key={this.state.modalKey}*/}
-                {/*>*/}
-                    {/*<Form onSubmit={this.saveModel}>*/}
-                        {/*<div className="formItemLeft">*/}
-                            {/*<FormItem*/}
-                                {/*{...formItemLayout}*/}
-                                {/*label="任务名称"*/}
-                            {/*>*/}
-                                {/*{getFieldDecorator('label', {*/}
-                                {/*rules: [{*/}
-                                {/*required: true, message: '请输入名称!',*/}
-
-                                {/*},{*/}
-                                {/*max:20,message:'最多输入二十个字符!',*/}
-                                {/*}],*/}
-                                {/*initialValue:this.state.modalType === 'edit' ? this.state.personInfo.label : '',*/}
-                                {/*validateFirst:true*/}
-                                {/*})(*/}
-                                    {/*<Input />*/}
-                                {/*)}*/}
-                            {/*</FormItem>*/}
-                            {/*<FormItem*/}
-                                {/*{...formItemLayout}*/}
-                                {/*label="派发节点"*/}
-                            {/*>*/}
-                                {/*{getFieldDecorator('unit_scope', {*/}
-                                    {/*rules: [{*/}
-                                        {/*required: true,*/}
-                                        {/*message: '请选择派发节点!'*/}
-                                    {/*}],*/}
-                                    {/*initialValue:this.state.modalType === 'edit' ? this.state.personInfo.unit_scope : this.state.unit_scope,*/}
-                                    {/*validateFirst:true*/}
-                                {/*})(*/}
-                                    {/*<Select onChange={this.onChange} >*/}
-                                        {/*<Option value="116001">仅自身节点</Option>*/}
-                                        {/*<Option value="116002">自身节点及子节点</Option>*/}
-                                        {/*<Option value="116003">仅子节点</Option>*/}
-                                    {/*</Select>*/}
-                                {/*)}*/}
-                            {/*</FormItem>*/}
-                            {/*<FormItem*/}
-                                {/*{...formItemLayout}*/}
-                                {/*label="派发单位"*/}
-                            {/*>*/}
-                                {/*{getFieldDecorator('unit', {*/}
-                                    {/*rules: [{*/}
-                                        {/*required: true,*/}
-                                        {/*message: '请选择派发单位!'*/}
-                                    {/*}],*/}
-                                    {/*initialValue:this.state.modalType === 'edit' ? this.state.personInfo.treeValue : [],*/}
-                                    {/*validateFirst:true*/}
-                                {/*})(*/}
-                                    {/*<TreeSelect  treeData={treeList} placeholder="请选择派发单位" treeCheckable={true} showCheckedStrategy={SHOW_PARENT} treeCheckStrictly={true}/>*/}
-                                {/*)}*/}
-                            {/*</FormItem>*/}
-                            {/*<FormItem {...formItemLayout}*/}
-                                      {/*label="任务时间">*/}
-                                {/*{getFieldDecorator('beginDate', {*/}
-                                    {/*rules: [{required: true}],*/}
-                                    {/*validateFirst:true*/}
-                                {/*})(*/}
-                                    {/*<div>*/}
-                                        {/*<DatePicker*/}
-                                            {/*showTime*/}
-                                            {/*allowClear={false}*/}
-                                            {/*format="YYYY-MM-DD HH:mm:ss"*/}
-                                            {/*placeholder="开始时间"*/}
-                                            {/*value={this.state.modalType === 'edit' ? moment(this.state.personInfo.startTime, 'YYYY-MM-DD HH:mm:ss') : ''}*/}
-                                        {/*/>*/}
-                                        {/*<DatePicker*/}
-                                            {/*showTime*/}
-                                            {/*allowClear={false}*/}
-                                            {/*format="YYYY-MM-DD HH:mm:ss"*/}
-                                            {/*placeholder="结束时间"*/}
-                                            {/*style={{marginLeft: '15px'}}*/}
-                                            {/*value={this.state.modalType === 'edit' ? moment(this.state.personInfo.endTime, 'YYYY-MM-DD HH:mm:ss') : ''}*/}
-                                        {/*/>*/}
-                                    {/*</div>*/}
-                                {/*)}*/}
-                            {/*</FormItem>*/}
-                            {/*<FormItem*/}
-                                {/*{...formItemLayout}*/}
-                                {/*label="任务描述"*/}
-                                {/*style={{clear: 'both'}}*/}
-                            {/*>*/}
-                                {/*{getFieldDecorator('content', {*/}
-                                    {/*rules: [{*/}
-                                        {/*required: false,*/}
-                                    {/*}],*/}
-                                    {/*initialValue:this.state.modalType === 'edit' ? this.state.personInfo.content : '',*/}
-                                    {/*validateFirst:true*/}
-                                {/*})(*/}
-                                    {/*<TextArea rows={3}/>*/}
-                                {/*)}*/}
-                            {/*</FormItem>*/}
-                        {/*</div>*/}
-                        {/*<Row>*/}
-                            {/*<Col span={16} style={{textAlign: 'right'}}>*/}
-                                {/*<Button htmlType="submit"  className="btn_ok">保存</Button>*/}
-                                {/*<Button style={{marginLeft: 30}} onClick={this.handleCancel} className="btn_delete">取消</Button>*/}
-                            {/*</Col>*/}
-                        {/*</Row>*/}
-
-                    {/*</Form>*/}
-                {/*</Modal>*/}
-                <Modal width={600}
-                       title="任务设置"
+                <Modal width={800}
+                       title="新增任务"
                        visible={this.state.visible}
                        onCancel={this.handleCancel}
                        footer={null}
                        key={this.state.modalKey}
                 >
-                    <Form onSubmit={this.saveModel}>
-                        <div className="formItemLeft">
-                            <FormItem
-                                {...formItemLayout}
-                                label="任务名称"
-                            >
-                                {getFieldDecorator('label', {
-                                    rules: [{
-                                        required: true, message: '请输入名称!',
+                        <Form onSubmit={this.saveModel}>
+                            <Row className="formItemLeft">
+                                <Col span={24}>
+                                    <FormItem
+                                        {...formItemLayouts}
+                                        label="任务名称"
+                                    >
+                                        {getFieldDecorator('label', {
+                                            rules: [{
+                                                required: true, message: '请输入名称!',
 
-                                    },{
-                                        max:20,message:'最多输入二十个字符!',
-                                    }],
-                                    initialValue:this.state.modalType === 'edit' ? this.state.personInfo.label : '',
-                                    validateFirst:true
-                                })(
-                                    <Input />
-                                )}
-                            </FormItem>
-                            <FormItem
-                                {...formItemLayout}
-                                label="任务类别"
-                            >
-                                {getFieldDecorator('status', {
-                                    rules: [{
-                                        required: true,
-                                        message: '请选择任务类别!'
-                                    }],
-                                    initialValue:this.state.modalType === 'edit' ? this.state.personInfo.status : '',
-                                    validateFirst:true
-                                })(
-                                    <Select onChange={this.onChange} >
-                                        <Option value="">全部</Option>
-                                        <Option value="循环任务">循环任务</Option>
-                                    </Select>
-                                )}
-                            </FormItem>
-                            <FormItem
-                                {...formItemLayout}
-                                label="任务周期"
-                            >
-                                {getFieldDecorator('cycle', {
-                                    rules: [{
-                                        required: true,
-                                        message: '请选择任务周期!'
-                                    }],
-                                    initialValue:this.state.modalType === 'edit' ? this.state.personInfo.cycle : '',
-                                    validateFirst:true
-                                })(
-                                    <Select onChange={this.onChange} >
-                                        <Option value="">全部</Option>
-                                        <Option value="按周">按周</Option>
-                                        <Option value="按天">按天</Option>
-                                    </Select>
-                                )}
-                            </FormItem>
-                            <FormItem {...formItemLayout}
-                                      label="任务时间">
-                                {getFieldDecorator('beginDate', {
-                                    rules: [{required: true}],
-                                    validateFirst:true
-                                })(
-                                    <div>
-                                        <DatePicker
-                                            showTime
-                                            allowClear={false}
-                                            format="YYYY-MM-DD HH:mm:ss"
-                                            placeholder="开始时间"
-                                            value={this.state.modalType === 'edit' ? moment(this.state.personInfo.startTime, 'YYYY-MM-DD HH:mm:ss') : ''}
-                                        />
-                                        <DatePicker
-                                            showTime
-                                            allowClear={false}
-                                            format="YYYY-MM-DD HH:mm:ss"
-                                            placeholder="结束时间"
-                                            style={{marginLeft: '15px'}}
-                                            value={this.state.modalType === 'edit' ? moment(this.state.personInfo.endTime, 'YYYY-MM-DD HH:mm:ss') : ''}
-                                        />
-                                    </div>
-                                )}
-                            </FormItem>
-                        </div>
-                        <Row>
-                            <Col span={16} style={{textAlign: 'right'}}>
-                                <Button htmlType="submit"  className="btn_ok">保存</Button>
-                                <Button style={{marginLeft: 30}} onClick={this.handleCancel} className="btn_delete">取消</Button>
-                            </Col>
-                        </Row>
-
-                    </Form>
+                                            },{
+                                                max:20,message:'最多输入二十个字符!',
+                                            }],
+                                            initialValue:this.state.modalType === 'edit' ? this.state.personInfo.label : '',
+                                            validateFirst:true
+                                        })(
+                                            <Input />
+                                        )}
+                                    </FormItem>
+                                </Col>
+                                <Col span={12}>
+                                    <FormItem
+                                        {...formItemLayout}
+                                        label="任务开始时间"
+                                    >
+                                        {getFieldDecorator('startTime', {
+                                            rules: [{
+                                                required: true,
+                                                message: '请选择任务开始时间!'
+                                            }],
+                                            initialValue:this.state.modalType === 'edit' ? moment(this.state.personInfo.startTime, 'YYYY-MM-DD HH:mm:ss') : '',
+                                        })(
+                                            <DatePicker showTime placeholder="" format="YYYY-MM-DD HH:mm:ss" allowClear={false} style={{width:'220px'}}/>
+                                        )}
+                                    </FormItem>
+                                </Col>
+                                <Col span={12}>
+                                    <FormItem
+                                        {...formItemLayout}
+                                        label="任务结束时间"
+                                    >
+                                        {getFieldDecorator('endTime', {
+                                            rules: [{
+                                                required: true,
+                                                message: '请选择任务结束时间!'
+                                            }],
+                                            initialValue:this.state.modalType === 'edit' ? moment(this.state.personInfo.endTime, 'YYYY-MM-DD HH:mm:ss') : '',
+                                        })(
+                                            <DatePicker showTime placeholder="" format="YYYY-MM-DD HH:mm:ss" allowClear={false} style={{width:'220px'}}/>
+                                        )}
+                                    </FormItem>
+                                </Col>
+                                <Col span={12}>
+                                    <FormItem
+                                        {...formItemLayout}
+                                        label="任务类别"
+                                    >
+                                        {getFieldDecorator('status', {
+                                            rules: [{
+                                                required: true,
+                                                message: '请选择任务类别!'
+                                            }],
+                                            initialValue:this.state.modalType === 'edit' ? this.state.personInfo.status : '',
+                                            validateFirst:true
+                                        })(
+                                            <Select onChange={this.onChange} >
+                                                <Option value="">全部</Option>
+                                                <Option value="循环任务">循环任务</Option>
+                                            </Select>
+                                        )}
+                                    </FormItem>
+                                </Col>
+                                <Col span={12}>
+                                    <FormItem
+                                        {...formItemLayout}
+                                        label="任务周期"
+                                    >
+                                        {getFieldDecorator('cycle', {
+                                            rules: [{
+                                                required: true,
+                                                message: '请选择任务周期!'
+                                            }],
+                                            initialValue:this.state.modalType === 'edit' ? this.state.personInfo.cycle : '',
+                                            validateFirst:true
+                                        })(
+                                            <Select onChange={this.onChange} >
+                                                <Option value="">全部</Option>
+                                                <Option value="按周">按周</Option>
+                                                <Option value="按天">按天</Option>
+                                            </Select>
+                                        )}
+                                    </FormItem>
+                                </Col>
+                                <Col span={24} style={{padding:'0 55px 16px'}}>
+                                    <RadioGroup onChange={this.onRadioChange} value={this.state.RadioValue}>
+                                        <Radio value={0}>有盘查对象</Radio>
+                                        <Radio value={1}>全部盘查对象</Radio>
+                                    </RadioGroup>
+                                </Col>
+                                <Col span={24} style={this.state.TaskNewShow}>
+                                    <FormItem
+                                        {...formItemLayouts}
+                                        label="盘查对象"
+                                    >
+                                        {getFieldDecorator('TaskName', {
+                                            initialValue:this.state.modalType === 'edit' ? this.state.personInfo.TaskName : '',
+                                            validateFirst:true
+                                        })(
+                                            <Input />
+                                        )}
+                                    </FormItem>
+                                    <FormItem
+                                        {...formItemLayouts}
+                                        label="责任单位"
+                                    >
+                                        {getFieldDecorator('TaskCom', {
+                                            initialValue:this.state.modalType === 'edit' ? this.state.personInfo.TaskCom : '',
+                                            validateFirst:true
+                                        })(
+                                            <Input />
+                                        )}
+                                    </FormItem>
+                                    <FormItem
+                                        {...formItemLayouts}
+                                        label="执行地点"
+                                    >
+                                        {getFieldDecorator('TaskAddress', {
+                                            initialValue:this.state.modalType === 'edit' ? this.state.personInfo.TaskAddress : '',
+                                            validateFirst:true
+                                        })(
+                                            <Input />
+                                        )}
+                                    </FormItem>
+                                    <FormItem
+                                        {...formItemLayouts}
+                                        label="备注"
+                                    >
+                                        {getFieldDecorator('TaskContent', {
+                                            initialValue:this.state.modalType === 'edit' ? this.state.personInfo.TaskContent : '',
+                                            validateFirst:true
+                                        })(
+                                            <TextArea rows={2}/>
+                                        )}
+                                    </FormItem>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col span={15} style={{textAlign: 'right'}}>
+                                    <Button htmlType="submit"  className="btn_ok">保存</Button>
+                                    <Button style={{marginLeft: 30}} onClick={this.handleCancel} className="btn_delete">取消</Button>
+                                </Col>
+                            </Row>
+                        </Form>
                 </Modal>
             </div>
         )

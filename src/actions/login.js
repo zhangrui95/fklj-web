@@ -50,7 +50,7 @@ export function loginUser(creds) {
         let cred = {username: creds.username, password: hex_md5(creds.password),sid:'fklj_sys'}
         let fk = false;
         let hs = false;
-        post(loginUrl+'/aqzx/api/login', cred).then((res) => {
+        post(loginUrl+'/api/login', cred).then((res) => {
             if(res.error !== null){
                 message.warning('提示：'+res.error.text+"!",3);
             } else {
