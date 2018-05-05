@@ -73,39 +73,39 @@ class WebSocket extends Component{
         const noticeData = this.getNoticeData(data);
         return (
             <div>
-                <div
-                    style={{
-                        position: 'fixed',
-                        right: '30px',
-                        bottom: '20px',
-                        textAlign: 'right',
-                        boxShadow: '0 1px 4px rgba(0,21,41,.12)',
-                        width: '60px',
-                        float:'right',
-                        color: '#fff',
-                        background: 'rgba(43, 108, 197, 0.7)',
-                        padding: '7px 0 0',
-                        cursor:'pointer'
-                    }}
-                >
-                    {/*<div onClick={() => this.sendMessage("Hello,hyLink!")}>点击</div>*/}
-                    <NoticeIcon
-                        className="notice-icon"
-                        count={data.length}
-                        onItemClick={this.onItemClick}
-                        onClear={this.onClear}
-                        onPopupVisibleChange = {this.onPopupChange}
-                        popupVisible={show}
-                    >
-                        <NoticeIcon.Tab
-                            list={noticeData['通知']}
-                            title="通知"
-                            emptyText="你已查看所有通知"
-                            emptyImage="https://gw.alipayobjects.com/zos/rmsportal/wAhyIChODzsoKIOBHcBk.svg"
-                        />
-                    </NoticeIcon>
-                </div>
-                <Websocket url='ws://172.19.12.213:8083/myHandler' onMessage={this.handleData} reconnect={true} ref={Websocket => {this.refWebSocket = Websocket}}/>
+                {/*<div*/}
+                    {/*style={{*/}
+                        {/*position: 'fixed',*/}
+                        {/*right: '30px',*/}
+                        {/*bottom: '20px',*/}
+                        {/*textAlign: 'right',*/}
+                        {/*boxShadow: '0 1px 4px rgba(0,21,41,.12)',*/}
+                        {/*width: '60px',*/}
+                        {/*float:'right',*/}
+                        {/*color: '#fff',*/}
+                        {/*background: 'rgba(43, 108, 197, 0.7)',*/}
+                        {/*padding: '7px 0 0',*/}
+                        {/*cursor:'pointer'*/}
+                    {/*}}*/}
+                {/*>*/}
+                    {/*/!*<div onClick={() => this.sendMessage("Hello,hyLink!")}>点击</div>*!/*/}
+                    {/*<NoticeIcon*/}
+                        {/*className="notice-icon"*/}
+                        {/*count={data.length}*/}
+                        {/*onItemClick={this.onItemClick}*/}
+                        {/*onClear={this.onClear}*/}
+                        {/*onPopupVisibleChange = {this.onPopupChange}*/}
+                        {/*popupVisible={show}*/}
+                    {/*>*/}
+                        {/*<NoticeIcon.Tab*/}
+                            {/*list={noticeData['通知']}*/}
+                            {/*title="通知"*/}
+                            {/*emptyText="你已查看所有通知"*/}
+                            {/*emptyImage="https://gw.alipayobjects.com/zos/rmsportal/wAhyIChODzsoKIOBHcBk.svg"*/}
+                        {/*/>*/}
+                    {/*</NoticeIcon>*/}
+                {/*</div>*/}
+                {/*<Websocket url='ws://172.19.12.213:8083/myHandler' onMessage={this.handleData} reconnect={true} ref={Websocket => {this.refWebSocket = Websocket}}/>*/}
             </div>
         )
     }

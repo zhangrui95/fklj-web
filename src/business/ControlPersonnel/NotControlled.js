@@ -759,7 +759,7 @@ const SearchArea = React.createClass({
                            width={750}
                     >
                         <div style={{margin:'0 0 16px 0'}}>
-                            <Input style={{width:'520px',marginRight:"10px"}} type="text"  id='name' placeholder='请输入任务名称'  value={cardId} onChange={this.handleCardChange}/>
+                            <Input style={{width:'520px',marginRight:"10px"}} type="text"  id='name' placeholder='请输入任务名称' onChange={this.handleCardChange}/>
                             <ShallowBlueBtn width="80px" text="查询" margin="0 10px 0 0" onClick={this.handleClick} />
                             <ShallowBlueBtn width="80px" text="重置" onClick={this.init} />
                         </div>

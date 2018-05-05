@@ -20,8 +20,9 @@ export default function request (method, url, body) {
     })
         .then((res) => {
             if (res.status === 401) {
-                hashHistory.push('/login');
-                return Promise.reject('Unauthorized.');
+               // hashHistory.push('/login');
+               // return Promise.reject('Unauthorized.');
+                return res.json();
             } else {
                 const token = res.headers.get('test_token');
                 if (token) {

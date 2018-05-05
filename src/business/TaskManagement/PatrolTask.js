@@ -119,13 +119,16 @@ export  class PatrolTask extends Component{
             unit_scope:'116001',
             treeValue:[],
             RadioValue:'',
-            TaskNewShow:{display: 'none'}
+            TaskNewShow:{display: 'none'},
+            updateVisible: false,
+            childrenModal: false,
+            look:[]
         };
         this.pageChange = this.pageChange.bind(this);
     }
     editShowModal = (record) => {
         this.setState({
-            visible: true,
+            updateVisible: true,
             personInfo: record,
             modalType: 'edit',
             RadioValue:'',
@@ -137,9 +140,16 @@ export  class PatrolTask extends Component{
             modalType: 'add',
         });
     }
+    showChildren = (record) => {
+        this.setState({
+            childrenModal: true
+        });
+    }
     handleCancel = () => {
         this.setState({
             visible: false,
+            updateVisible:false,
+            childrenModal:false,
             modalKey: this.state.modalKey + 1
         });
     }
@@ -298,6 +308,12 @@ export  class PatrolTask extends Component{
             });
         }
     }
+    RowsChagne=(e)=>{
+        console.log(e)
+        this.setState({
+            look: e,
+        });
+    }
     render() {
         const { getFieldDecorator } = this.props.form;
         let nowPage = this.state.nowPage;
@@ -307,6 +323,30 @@ export  class PatrolTask extends Component{
             {key: 2, serial: 2, content:'hylink任务的描述', label: 'hylink任务', startTime: '2017-12-09 13:30:00',endTime: '2018-04-10 22:00:00',status: '循环任务',treeValue: [{value: "ec02ed04ad6147b7a421ab912a7cf6b6"}, {value: "f24c58a0aadb42ca826c02c26f74a461"}],cycle:'按周',person:'王二',state: '1'},
             {key: 3, serial: 3, content:'', label: '海邻科任务', startTime: '2018-02-18 14:50:32',endTime: '2018-02-07 18:12:59',status: '循环任务',treeValue: [{value: "ec02ed04ad6147b7a421ab912a7cf6b6"}],cycle:'按天',person:'系统创建',state: '0'},
         ];
+        const colu = [{
+            title: '序号',
+            dataIndex: 'serial',
+            width:80,
+        }, {
+            title: '任务名称',
+            dataIndex: 'label',
+        }, {
+            title: '任务开始时间',
+            dataIndex: 'startTime',
+            width:180,
+        }, {
+            title: '任务状态',
+            key: 'state',
+            render: (text, record) => (
+                <span>{record.state === '0' ? '完成':'超期'}</span>
+            ),
+        }, {
+            title: '查看对象',
+            key: 'action',
+            render: (text, record) => (
+                <span style={{cursor:'pointer'}}>查看</span>
+            ),
+        }]
         const columns = [{
             title: '序号',
             dataIndex: 'serial',
@@ -343,7 +383,7 @@ export  class PatrolTask extends Component{
                          <Divider type="vertical" />
                         <span onClick={(e)=>this.editShowModal(record)} style={{cursor:'pointer'}}>编辑</span>
                         <Divider type="vertical" />
-                        <span style={{cursor:'pointer'}}>子任务</span>
+                        <span style={{cursor:'pointer'}} onClick={this.showChildren}>子任务</span>
                     </span>
             ),
         }];
@@ -379,7 +419,7 @@ export  class PatrolTask extends Component{
             message.error('提示：开始时间不能大于结束时间！');
             return;
         }
-        const treeList=[{"children":[{"children":[{"label":"(卡点)测试","value":"ec02ed04ad6147b7a421ab912a7cf6b6","key":"ec02ed04ad6147b7a421ab912a7cf6b6"}],"label":"洛阳市公安局","value":"410300000000","key":"410300000000"},{"label":"(卡点)01018","value":"9ec30a5f4e554bc78f13fea61a61452c","key":"9ec30a5f4e554bc78f13fea61a61452c"},{"label":"(卡点)1221卡点","value":"713141c655624b86acae70b4a674d8a7","key":"713141c655624b86acae70b4a674d8a7"},{"label":"(卡点)001","value":"8cd3a75ab7fa49979f67eef4d59a9cad","key":"8cd3a75ab7fa49979f67eef4d59a9cad"},{"label":"(卡点)M78卡点","value":"f24c58a0aadb42ca826c02c26f74a461","key":"f24c58a0aadb42ca826c02c26f74a461"},{"label":"(卡点)002","value":"aad06faa7acf49df9504a6e97ae7946f","key":"aad06faa7acf49df9504a6e97ae7946f"}],"label":"河南省公安厅","value":"410000000000","key":"410000000000"}]
+        const treeList=[{"children":[{"label":"张三","value":"4103000000001","key":"4103000000001"},{"label":"李四","value":"4103000000002","key":"4103000000002"},{"label":"王二","value":"4103000000003","key":"4103000000003"}],"label":"全部","value":"410000000000","key":"410000000000"}]
             return(
             <div className="sliderWrap">
                 <div className="sliderItemDiv">
@@ -486,7 +526,6 @@ export  class PatrolTask extends Component{
                                             validateFirst:true
                                         })(
                                             <Select onChange={this.onChange} >
-                                                <Option value="">全部</Option>
                                                 <Option value="循环任务">循环任务</Option>
                                             </Select>
                                         )}
@@ -506,7 +545,6 @@ export  class PatrolTask extends Component{
                                             validateFirst:true
                                         })(
                                             <Select onChange={this.onChange} >
-                                                <Option value="">全部</Option>
                                                 <Option value="按周">按周</Option>
                                                 <Option value="按天">按天</Option>
                                             </Select>
@@ -574,6 +612,191 @@ export  class PatrolTask extends Component{
                             </Row>
                         </Form>
                 </Modal>
+                <Modal width={800}
+                       title="任务编辑"
+                       visible={this.state.updateVisible}
+                       onCancel={this.handleCancel}
+                       footer={null}
+                >
+                    <Form onSubmit={this.saveModel}>
+                        <Row className="formItemLeft">
+                            <Col span={24}>
+                                <FormItem
+                                    {...formItemLayouts}
+                                    label="任务名称"
+                                >
+                                    {getFieldDecorator('label', {
+                                        rules: [{
+                                            required: true, message: '请输入名称!',
+
+                                        },{
+                                            max:20,message:'最多输入二十个字符!',
+                                        }],
+                                        initialValue:this.state.modalType === 'edit' ? this.state.personInfo.label : '',
+                                        validateFirst:true
+                                    })(
+                                        <Input />
+                                    )}
+                                </FormItem>
+                            </Col>
+                            <Col span={12}>
+                                <FormItem
+                                    {...formItemLayout}
+                                    label="任务开始时间"
+                                >
+                                    {getFieldDecorator('startTime', {
+                                        rules: [{
+                                            required: true,
+                                            message: '请选择任务开始时间!'
+                                        }],
+                                        initialValue:this.state.modalType === 'edit' ? moment(this.state.personInfo.startTime, 'YYYY-MM-DD HH:mm:ss') : '',
+                                    })(
+                                        <DatePicker showTime placeholder="" format="YYYY-MM-DD HH:mm:ss" allowClear={false} style={{width:'220px'}}/>
+                                    )}
+                                </FormItem>
+                            </Col>
+                            <Col span={12}>
+                                <FormItem
+                                    {...formItemLayout}
+                                    label="任务结束时间"
+                                >
+                                    {getFieldDecorator('endTime', {
+                                        rules: [{
+                                            required: true,
+                                            message: '请选择任务结束时间!'
+                                        }],
+                                        initialValue:this.state.modalType === 'edit' ? moment(this.state.personInfo.endTime, 'YYYY-MM-DD HH:mm:ss') : '',
+                                    })(
+                                        <DatePicker showTime placeholder="" format="YYYY-MM-DD HH:mm:ss" allowClear={false} style={{width:'220px'}}/>
+                                    )}
+                                </FormItem>
+                            </Col>
+                            <Col span={12}>
+                                <FormItem
+                                    {...formItemLayout}
+                                    label="任务类别"
+                                >
+                                    {getFieldDecorator('status', {
+                                        rules: [{
+                                            required: true,
+                                            message: '请选择任务类别!'
+                                        }],
+                                        initialValue:this.state.modalType === 'edit' ? this.state.personInfo.status : '',
+                                        validateFirst:true
+                                    })(
+                                        <Select onChange={this.onChange} >
+                                            <Option value="循环任务">循环任务</Option>
+                                        </Select>
+                                    )}
+                                </FormItem>
+                            </Col>
+                            <Col span={12}>
+                                <FormItem
+                                    {...formItemLayout}
+                                    label="任务周期"
+                                >
+                                    {getFieldDecorator('cycle', {
+                                        rules: [{
+                                            required: true,
+                                            message: '请选择任务周期!'
+                                        }],
+                                        initialValue:this.state.modalType === 'edit' ? this.state.personInfo.cycle : '',
+                                        validateFirst:true
+                                    })(
+                                        <Select onChange={this.onChange} >
+                                            <Option value="按周">按周</Option>
+                                            <Option value="按天">按天</Option>
+                                        </Select>
+                                    )}
+                                </FormItem>
+                            </Col>
+                            <Col span={12}>
+                                <FormItem
+                                    {...formItemLayout}
+                                    label="任务创建者"
+                                >
+                                    {getFieldDecorator('person', {
+                                        rules: [{
+                                            required: true,
+                                            message: '请选择任务创建者!'
+                                        }],
+                                        initialValue:this.state.modalType === 'edit' ? this.state.personInfo.person : '',
+                                        validateFirst:true
+                                    })(
+                                        <Select onChange={this.onChange} >
+                                            <Option value="循环任务">系统默认</Option>
+                                        </Select>
+                                    )}
+                                </FormItem>
+                            </Col>
+                            <Col span={12}>
+                                <FormItem
+                                    {...formItemLayout}
+                                    label="任务状态"
+                                >
+                                    {getFieldDecorator('state', {
+                                        rules: [{
+                                            required: true,
+                                            message: '请选择任务状态!'
+                                        }],
+                                        initialValue:this.state.modalType === 'edit' ? this.state.personInfo.state : '',
+                                        validateFirst:true
+                                    })(
+                                        <Select onChange={this.onChange} >
+                                            <Option value="0">启动</Option>
+                                            <Option value="1">关闭</Option>
+                                        </Select>
+                                    )}
+                                </FormItem>
+                            </Col>
+                            <Col span={24}>
+                                <FormItem
+                                    {...formItemLayouts}
+                                    label="盘查对象"
+                                >
+                                    {getFieldDecorator('TaskPerson', {
+                                        initialValue:this.state.modalType === 'edit' ? this.state.personInfo.TaskPerson : '',
+                                        validateFirst:true
+                                    })(
+                                        <TreeSelect
+                                            style={{ marginRight: '10px' }}
+                                            value={unit}
+                                            dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                                            treeData={treeList}
+                                            placeholder="请选择派发单位"
+                                            onChange={this.unitChange}
+                                            showSearch={false}
+                                            treeCheckable={true}
+                                            dropdownMatchSelectWidth={false}
+                                            showCheckedStrategy="SHOW_PARENT"
+                                            notFoundContent='暂无'
+                                        />
+                                    )}
+                                </FormItem>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col span={15} style={{textAlign: 'right'}}>
+                                <Button htmlType="submit"  className="btn_ok">保存</Button>
+                                <Button style={{marginLeft: 30}} onClick={this.handleCancel} className="btn_delete">取消</Button>
+                            </Col>
+                        </Row>
+                    </Form>
+                </Modal>
+                <Modal style={{top:"38%"}}
+                       title="子任务列表"
+                       visible={this.state.childrenModal}
+                       footer={null}
+                       onCancel={this.handleCancel}
+                       width={750}
+                >
+                    <div style={{margin:'0 0 16px 0'}}>
+                        <Input style={{width:'520px',marginRight:"10px"}} type="text"  id='name' placeholder='请输入任务名称'/>
+                        <ShallowBlueBtn width="80px" text="查询" margin="0 10px 0 0" onClick={this.handleClick} />
+                        <ShallowBlueBtn width="80px" text="重置" onClick={this.init} />
+                    </div>
+                    <Table locale={{emptyText:'暂无数据'}} columns={colu} dataSource={data} bordered onExpandedRowsChange={this.RowsChagne} expandRowByClick={true} expandIconAsCell={false}  expandedRowRender={record => <div style={{ margin: 0 }}><span style={{padding:'2px 5px',background:'#2b6cc5',borderRadius:'2px',margin:'5px',float:'left'}}>张三</span></div>}/>
+                </Modal>
             </div>
         )
     }
@@ -627,6 +850,8 @@ const SearchArea = React.createClass({
     hideModal: function() {
         this.setState({
             visible: false,
+            updateVisible: false,
+            childrenModal:false
         });
     },
     unitChange:function(value,label) {
@@ -671,54 +896,12 @@ const SearchArea = React.createClass({
                     <Option value="">全部</Option>
                     <Option value="循环任务">循环任务</Option>
                 </Select>
-                {/*<label htmlFor="" className="font14">派发单位：</label>*/}
-                {/*<TreeSelect*/}
-                    {/*style={{ width: 121, marginRight: '10px' }}*/}
-                    {/*value={unit}*/}
-                    {/*dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}*/}
-                    {/*treeData={this.state.treeList}*/}
-                    {/*placeholder="请选择派发单位"*/}
-                    {/*onChange={this.unitChange}*/}
-                    {/*showSearch={false}*/}
-                    {/*dropdownMatchSelectWidth={false}*/}
-                    {/*notFoundContent='暂无'*/}
-                {/*/>*/}
                 <label htmlFor="" className="font14">任务时间：</label>
                 <DatePicker  placeholder="" format={dateFormat} allowClear={false} style={{marginRight:"10px"}} value={beginDateValue} defaultValue="" onChange={this.handleBeginDeteClick}/>
                 <span className="font14" style={{margin:"0 10px 0 0"}}>至</span>
                 <DatePicker  placeholder="" format={dateFormat} allowClear={false} style={{marginRight:"10px"}} value={endDateValue} defaultValue="" onChange={this.handleEndDeteClick}/>
                 <ShallowBlueBtn width="80px" text="查询" margin="0 10px 0 0" onClick={this.handleClick} />
                 <ShallowBlueBtn width="80px" text="重置" margin="0 10px 0 0" onClick={this.init} />
-                {/*<div style={{marginTop:"15px"}}>*/}
-                    {/*<Button style={{width:"80px"}}*/}
-                            {/*onClick={this.props.addShowModal}*/}
-                            {/*className="btn_ok"*/}
-                    {/*>*/}
-                        {/*<Icon type="file-add" /> 增加*/}
-                    {/*</Button>*/}
-                    {/*<Button style={{margin:'0 0 0 10px',width:"80px"}} onClick={this.showModal} className="btn_delete">*/}
-                        {/*<Icon type="delete" />  删除*/}
-                    {/*</Button>*/}
-                    {/*<Modal style={{top:"38%"}}*/}
-                           {/*title="提示"*/}
-                           {/*visible={this.state.visible}*/}
-                           {/*footer={null}*/}
-                           {/*maskClosable={false}*/}
-                           {/*closable={false}*/}
-                    {/*>*/}
-                        {/*<p style={{fontSize:"16px",}}>是否删除选中项？</p>*/}
-                        {/*<p style={{marginTop:"20px",textAlign:"center"}}>*/}
-                            {/*<Button style={{margin:'0 20px 0 0 ',width:"80px"}} onClick={this.hideModalOk} className="btn_ok">*/}
-                                {/*确定*/}
-                            {/*</Button>*/}
-                            {/*<Button style={{margin:'',width:"80px"}} onClick={this.hideModal} className="btn_delete">*/}
-                                {/*取消*/}
-                            {/*</Button>*/}
-                        {/*</p>*/}
-
-                    {/*</Modal>*/}
-                    {/*<div className="clear"></div>*/}
-                {/*</div>*/}
             </div>
         );
     }
