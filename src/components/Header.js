@@ -192,7 +192,7 @@ class LoginIcon extends Component {
                 modalVisible: true
             });
         } else if (key === 'usermanage') {
-            let url = securityCenterUrls + "/home?token=" + sessionStorage.getItem('id_token') || '';
+            let url = securityCenterUrls + "/loginToken?token="+sessionStorage.getItem('id_token') || '';
             // http://172.19.12.249:8200/user/login
             window.open(url);
         } else if (key === 'logout') {
