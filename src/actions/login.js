@@ -51,7 +51,6 @@ export function loginUser(creds) {
         let fk = false;
         let hs = false;
         post(loginUrl+'/api/login', cred).then((res) => {
-            console.info('res.error',res.error);
             if(res.error !== null){
                 message.warning('提示：'+res.error.text+"!",3);
             } else {

@@ -286,7 +286,7 @@ class Home extends Component {
                     <div>
                         <div style={{position:"relative"}}>
                             {mapType === "migrate"?<div>
-                                <div style={{width:"40%",margin:"0 auto",paddingTop:"15px",paddingBottom:"20px",position:"absolute",left:"30%",top:"0",zIndex:'99999'}}>
+                                <div style={{width:"40%",margin:"0 auto",paddingTop:"15px",paddingBottom:"20px",position:"absolute",left:"30%",top:"0",zIndex:'99'}}>
                                     <div style={{float:"left"}}>
                                         <ul style={smallIcon2}>
                                             <li style={IconLi} onClick={(event) => this.handleChinaMap(event)}>分布图</li>
@@ -326,7 +326,7 @@ class Home extends Component {
 
                                 <AirportCoordComponent airportCoordMapData={airportCoordMapData} dateSet={dateSet}/>
                             </div>:<div>
-                                <div style={{width:"40%",margin:"0 auto",paddingTop:"15px",paddingBottom:"20px",position:"absolute",left:"30%",top:"0",zIndex:'99999'}}>
+                                <div style={{width:"40%",margin:"0 auto",paddingTop:"15px",paddingBottom:"20px",position:"absolute",left:"30%",top:"0",zIndex:'99'}}>
                                     <div style={{float:"left"}}>
                                         <ul style={smallIcon2}>
                                             <li style={IconLiActive} onClick={(event)=>this.handleChinaMap(event)}>分布图</li>

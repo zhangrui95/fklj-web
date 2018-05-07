@@ -1,7 +1,8 @@
 import {
-    LOGIN_REQUEST, LOGIN_SUCCESS, LOGIN_FAILURE, LOGOUT_SUCCESS
+    LOGIN_REQUEST, LOGIN_SUCCESS, LOGIN_FAILURE, LOGOUT_SUCCESS,
 } from '../actions/login'
 import {store} from '../index.js';
+import { css } from 'styled-components';
 
 const initialState = {
     isFetching: false,
