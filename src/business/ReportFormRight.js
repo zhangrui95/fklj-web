@@ -13,10 +13,10 @@ import ActivityStatistics from "./ReportForm/ActivityStatistics";
 
 class ReportFormRight extends Component{
     render(){
-         let isSelectMenu;
+        let isSelectMenu;
         let content;
         //查找被选中菜单
-        this.props.ReportForms.uiData.menus.forEach(function(menu){
+        this.props.ReportFormChart.uiData.menus.forEach(function(menu){
             if(menu.isSelect === true){//判断一级目录是否选中
                 isSelectMenu = menu;
                 return
@@ -30,9 +30,9 @@ class ReportFormRight extends Component{
                 content =<TaskStatistics />
                 break
             case constants.REPORTFORMS_MENU_ACTIVITY:
-                content =<ActivityStatistics />  
+                content =<ActivityStatistics />
                 break
-            
+
             default:
                 break
         }

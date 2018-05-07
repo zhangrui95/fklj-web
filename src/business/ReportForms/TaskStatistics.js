@@ -275,23 +275,23 @@ class TaskStatistics extends Component {
                 <div className="sliderItemDiv">
                     {/*查询条件*/}
                     <div style={sliderdyHeader}>
-                        <p style={{fontSize: "18px", color: "#fff", float: "left", marginRight: "50px"}}>关注人员总数：
+                        <p style={{fontSize: "18px", color: "#fff", float: "left", marginRight: "50px"}}>任务总数：
                             <span
-                            style={{
-                                width: "80px",
-                                display: "inline-block",
-                                _display: "inline",
-                                zoom: "1"
-                            }}>{taskTotalAttention}</span>
+                                style={{
+                                    width: "80px",
+                                    display: "inline-block",
+                                    _display: "inline",
+                                    zoom: "1"
+                                }}>{taskTotalAttention}</span>
                         </p>
                         {dateSwitching}
                         <div style={{float: "left", marginLeft: "50px"}}>
                             <label htmlFor="" style={labelStyle2}>其他时间：</label>
                             <DatePicker  placeholder="" format={dateFormat} allowClear={false} style={{marginRight: "10px"}}
-                                        value={beginDateValue} onChange={this.handleBeginDeteClick}/>
+                                         value={beginDateValue} onChange={this.handleBeginDeteClick}/>
                             <span className="font14" style={{marginRight: "10px"}}>至</span>
                             <DatePicker  placeholder="" format={dateFormat} allowClear={false} style={{marginRight: "10px"}}
-                                        value={endDateValue} onChange={this.handleEndDeteClick}/>
+                                         value={endDateValue} onChange={this.handleEndDeteClick}/>
                             <ShallowBlueBtn text="查询" margin="0 0 0 20px" width="60px" onClick={this.handleQueryClick}/>
 
                         </div>
@@ -300,20 +300,38 @@ class TaskStatistics extends Component {
                     {/*统计内容*/}
                     {/*第一行*/}
                     <div style={{background: "rgba(25,41,85,0.5)"}}>
-                        <div style={{borderBottom: '1px solid #0C5F93', width: "99.99%", height: "43%"}}>
+                        <div style={{
+                            float: "left",
+                            borderRight: "1px solid #0C5F93",
+                            borderBottom: '1px solid #0C5F93',
+                            width: "49.9%",
+                            height: "43%"
+                        }}>
                             <p style={{
                                 fontSize: "16px",
                                 color: "#fff",
                                 fontWeight: "bold",
                                 paddingLeft: "20px",
                                 margin: "20px 0"
-                            }}>异常人员</p>
+                            }}>任务完成情况</p>
                             {/*添加图表*/}
                             <div>
-                                <AbnormalCharts dateSet={dateSet}/>
+                                <TaskDoneCharts dateSet={dateSet}/>
                             </div>
                         </div>
-
+                        <div style={{float: "left", borderBottom: '1px solid #0C5F93', width: "49.9%", height: "43%"}}>
+                            <p style={{
+                                fontSize: "16px",
+                                color: "#fff",
+                                fontWeight: "bold",
+                                paddingLeft: "20px",
+                                margin: "20px 0"
+                            }}>任务状态</p>
+                            {/*添加图表*/}
+                            <div>
+                                <TaskStateCharts dateSet={dateSet}/>
+                            </div>
+                        </div>
                     </div>
                     {/*第二行*/}
                     <div style={{background: "rgba(25,41,85,0.5)", marginBottom: "20px"}}>
@@ -330,10 +348,10 @@ class TaskStatistics extends Component {
                                 fontWeight: "bold",
                                 paddingLeft: "20px",
                                 margin: "20px 0"
-                            }}>关注人员类别</p>
+                            }}>任务类别</p>
                             {/*添加图表*/}
                             <div>
-                                <AttentionCategory dateSet={dateSet}/>
+                                <TaskTypeCharts dateSet={dateSet}/>
                             </div>
                         </div>
                         <div style={{float: "left", borderBottom: '1px solid #0C5F93', width: "49.9%", height: "43%"}}>
@@ -343,10 +361,10 @@ class TaskStatistics extends Component {
                                 fontWeight: "bold",
                                 paddingLeft: "20px",
                                 margin: "20px 0"
-                            }}>数据完整性</p>
+                            }}>任务周期</p>
                             {/*添加图表*/}
                             <div>
-                                <CompleteCharts dateSet={dateSet}/>
+                                <TaskCycleCharts dateSet={dateSet}/>
                             </div>
                         </div>
                         <div style={clear}></div>
@@ -358,26 +376,23 @@ class TaskStatistics extends Component {
         );
     }
 }
-//异常人员图表
-class AbnormalCharts extends Component {
+//任务完成情况图表
+class TaskDoneCharts extends Component {
     componentDidMount() {
         var myDate = new Date();
         let NowYEAR = myDate.getFullYear();
         let creds = {
-            currentPage: 1,
             entityOrField: true,
             pd: {
-                //  code:this.props.type
                 beginTime: NowYEAR + '-01' + '-01',
                 endTime: NowYEAR + '-12' + '-31',
             },
-            showCount: constants.pageSize
         }
-        store.dispatch(postAbnormalChartsData(creds));
+        // store.dispatch(postLiveChartsData(creds));
     }
-
     //组件props发生变化，更新state
     // componentWillReceiveProps(nextProps) {
+    //     //下一个类型
     //     let isTrue = Compare(this.props.dateSet, nextProps.dateSet);
     //     if (isTrue === false) {
     //         let creds = {
@@ -389,243 +404,16 @@ class AbnormalCharts extends Component {
     //             },
     //             showCount: constants.pageSize
     //         }
-    //         store.dispatch(postAbnormalChartsData(creds));
+    //         store.dispatch(postLiveChartsData(creds));
     //     }
     // }
 
     render() {
-        let AbnormalList = store.getState().ReportForms.data.AbnormalList.result.list;
-        let isFetching = store.getState().ReportForms.data.AbnormalList.isFetching;
-        var AbnormalOption = {
-            color: ['#F88A6F'],
-            textStyle: {
-                color: "#fff"
-            },
-            tooltip: {
-                trigger: 'axis',
-                axisPointer: {
-                    type: 'shadow'
-                }
-            },
-
-            grid: {
-                left: '3%',
-                right: '4%',
-
-                containLabel: true
-            },
-            xAxis: {
-                type: 'value',
-                boundaryGap: [0, 0.01],
-                axisLine: {
-                    lineStyle: {
-                        color: '#FFFAF0', //Y轴线条颜色
-                        width: 1
-                    }
-                },
-            },
-            yAxis: {
-                type: 'category',
-                data: ['在逃人员', '违法犯罪', '吸贩毒人员', '涉恐背景人员', ],
-                axisLine: {
-                    lineStyle: {
-                        color: '#FFFAF0', //Y轴线条颜色
-                        width: 1
-                    }
-                },
-            },
-            series: [{
-                name: '数据',
-                type: 'bar',
-                label: {
-                    normal: {
-                        show: true,
-                        position: 'right'
-                    }
-                },
-                data: AbnormalList,
-                itemStyle: {
-                    normal: {
-                        //好，这里就是重头戏了，定义一个list，然后根据所以取得不同的值，这样就实现了，
-                        color: function(params) {
-                            // build a color map as your need.
-                            var colorList = [
-                                "#3DC7D1", '#F88A6F', '#00ACEE', "#3dc7d1"
-                            ];
-                            return colorList[params.dataIndex]
-                        }
-                    }
-                }
-            }]
-        };
-        return (
-            <div style={{position: "relative", height: "99%"}}>
-                {isFetching === true ?
-                    <div style={{textAlign: "center", position: "absolute", left: "45%", top: "30%"}}>
-                        <Spin size="large"/>
-                    </div> :
-                    <EchartsReact
-                        option={AbnormalOption}
-                        style={{height: '90%', width: '98%', margin: "0 auto"}}
-                    />}
-            </div>
-        );
-    }
-}
-//关注人员类别
-class AttentionCategory extends Component {
-    componentDidMount() {
-        var myDate = new Date();
-        let NowYEAR = myDate.getFullYear();
-        let creds = {
-            entityOrField: true,
-            pd: {
-                beginTime: NowYEAR + '-01' + '-01',
-                endTime: NowYEAR + '-12' + '-31',
-            },
-        }
-        store.dispatch(postAttentionCategoryChartsData(creds));
-    }
-
-    //组件props发生变化，更新state
-    // componentWillReceiveProps(nextProps) {
-    //     let isTrue = Compare(this.props.dateSet, nextProps.dateSet);
-    //     if (isTrue === false) {
-    //         let creds = {
-    //             currentPage: 1,
-    //             entityOrField: true,
-    //             pd: {
-    //                 beginTime: nextProps.dateSet.beginTimeSet,
-    //                 endTime: nextProps.dateSet.endTimeSet,
-    //             },
-    //             showCount: constants.pageSize
-    //         }
-    //         store.dispatch(postAttentionCategoryChartsData(creds));
-    //     }
-    // }
-
-    render() {
-        let AttentionCategoryList = store.getState().ReportForms.data.AttentionCategoryList.result.list;
-        let isFetching = store.getState().ReportForms.data.AttentionCategoryList.isFetching;
-        var AttentionOption = {
-            tooltip: {
-                trigger: 'axis',
-                axisPointer: { // 坐标轴指示器，坐标轴触发有效
-                    type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
-                }
-            },
-            // grid: {
-            //     left: '3%',
-            //     right: '4%',
-            //     bottom: '3%',
-            //     containLabel: true
-            // },
-            xAxis: [{
-                type: 'category',
-                data: [
-                    '盘查异常', '重点人员', '临控对象', '在侦在控'
-                ],
-                axisLine: {
-                    lineStyle: {
-                        color: '#FFFAF0', //Y轴线条颜色
-                        width: 1
-                    }
-                },
-                axisTick: {
-                    alignWithLabel: true
-                }
-            }],
-            yAxis: [{
-                type: 'value',
-                boundaryGap: [0, 0.01],
-                axisLine: {
-                    lineStyle: {
-                        color: '#FFFAF0', //Y轴线条颜色
-                        width: 1
-                    }
-                },
-            }],
-            textStyle: {
-                color: "#fff"
-            },
-
-            series: [{
-                name: '数据',
-                type: 'bar',
-                label: {
-                    normal: {
-                        show: true,
-                        position: 'top'
-                    }
-                },
-                barWidth: '50%',
-                data: AttentionCategoryList,
-                itemStyle: {
-                    normal: {
-                        //好，这里就是重头戏了，定义一个list，然后根据所以取得不同的值，这样就实现了，
-                        color: function(params) {
-                            // build a color map as your need.
-                            var colorList = [
-                                "#3DC7D1", '#F88A6F', '#00ACEE', "#3DC7D1"
-                            ];
-                            return colorList[params.dataIndex]
-                        }
-                    }
-                }
-
-            }]
-        };
-        return (
-            <div style={{position: "relative", height: "99%"}}>
-                {isFetching === true ?
-                    <div style={{textAlign: "center", position: "absolute", left: "45%", top: "30%"}}>
-                        <Spin size="large"/>
-                    </div> :
-                    <EchartsReact
-                        option={AttentionOption}
-                        style={{height: '90%', width: '100%',}}
-                    />}
-            </div>
-        );
-    }
-}
-//数据完整性
-class CompleteCharts extends Component {
-    componentDidMount() {
-        var myDate = new Date();
-        let NowYEAR = myDate.getFullYear();
-        let creds = {
-            entityOrField: true,
-            pd: {
-                beginTime: NowYEAR + '-01' + '-01',
-                endTime: NowYEAR + '-12' + '-31',
-            },
-        }
-        store.dispatch(postCompleteChartsData(creds));
-    }
-
-    //组件props发生变化，更新state
-    // componentWillReceiveProps(nextProps) {
-       
-    //     let isTrue = Compare(this.props.dateSet, nextProps.dateSet);
-    //     if (isTrue === false) {
-    //         let creds = {
-    //             currentPage: 1,
-    //             entityOrField: true,
-    //             pd: {
-    //                 beginTime: nextProps.dateSet.beginTimeSet,
-    //                 endTime: nextProps.dateSet.endTimeSet,
-    //             },
-    //             showCount: constants.pageSize
-    //         }
-    //         store.dispatch(postCompleteChartsData(creds));
-    //     }
-    // }
-
-    render() {
-        let completeList = store.getState().ReportForms.data.completeList.result.list;
-        let isFetching = store.getState().ReportForms.data.completeList.isFetching;
-        var completeOption = {
+        // let liveChartsList = store.getState().ReportForms.data.liveChartsList.result.list;
+        let liveChartsList = [{name: "超期", value: 12}, {name: "已办", value: 26}, {name: "待办", value: 5}];
+        // let isFetching = store.getState().ReportForms.data.liveChartsList.isFetching;
+        let isFetching = false;
+        var liveOption = {
             // title : {
             //     text: '某站点用户访问来源',
             //     subtext: '纯属虚构',
@@ -636,23 +424,20 @@ class CompleteCharts extends Component {
                 formatter: "{a} <br/>{b} : {c} ({d}%)"
             },
             // legend: {
-            //     orient: 'horizontal',
-            //     // left: 'left',
-            //     data: ['数据完整','数据不完整'],
-            //     textStyle:{
-            //         color:"#fff"
-            //     }
+            //     orient: 'vertical',
+            //     left: 'left',
+            //     data: ['暂住人员','暂住关注人员','常住关注人员'],
+
             // },
-            color: ['#AAE8FF', '#00ACEE'],
+            color: ['#3dc7d1', '#00acee', '#f88a6f'],
             textStyle: {
                 color: "#fff"
             },
             series: [{
-                name: '数据完整性',
+                name: '任务完成情况',
                 type: 'pie',
                 radius: '55%',
                 center: ['50%', '50%'],
-                data: completeList,
                 label: {
                     normal: {
                         show: true,
@@ -669,6 +454,8 @@ class CompleteCharts extends Component {
                         }
                     }
                 },
+
+                data: liveChartsList,
                 itemStyle: {
                     emphasis: {
                         shadowBlur: 10,
@@ -680,14 +467,329 @@ class CompleteCharts extends Component {
         };
 
         return (
-            <div style={{position: "relative", height: "99%"}}>
-                {isFetching === true ?
-                    <div style={{textAlign: "center", position: "absolute", left: "45%", top: "30%"}}>
-                        <Spin size="large"/>
-                    </div> :
+            <div style={{position:"relative",height:"99%"}}>
+                {isFetching ===  true?
+                    <div style={{textAlign:"center",position:"absolute",left:"45%",top:"30%"}}>
+                        <Spin size="large" />
+                    </div>:
                     <EchartsReact
-                        option={completeOption}
-                        style={{height: '90%', width: '100%',}}
+                        option={liveOption}
+                        style={{height: '90%', width: '100%'}}
+                    />}
+            </div>
+        );
+    }
+}
+//任务状态
+class TaskStateCharts extends Component {
+    componentDidMount() {
+        var myDate = new Date();
+        let NowYEAR = myDate.getFullYear();
+        let creds = {
+            entityOrField: true,
+            pd: {
+                beginTime: NowYEAR + '-01' + '-01',
+                endTime: NowYEAR + '-12' + '-31',
+            },
+        }
+        // store.dispatch(postSexChartsData(creds));
+    }
+    //组件props发生变化，更新state
+    // componentWillReceiveProps(nextProps) {
+    //     let isTrue = Compare(this.props.dateSet, nextProps.dateSet);
+    //     if (isTrue === false) {
+    //         let creds = {
+    //             currentPage: 1,
+    //             entityOrField: true,
+    //             pd: {
+    //                 beginTime: nextProps.dateSet.beginTimeSet,
+    //                 endTime: nextProps.dateSet.endTimeSet,
+    //             },
+    //             showCount: constants.pageSize
+    //         }
+    //         store.dispatch(postSexChartsData(creds));
+    //     }
+    // }
+    render() {
+        // let sexChartsList = store.getState().ReportForms.data.sexChartsList.result.list;
+        let sexChartsList = [{name: "启动", value: "75"}, {name: "关闭", value: "38"}];
+        // let isFetching = store.getState().ReportForms.data.sexChartsList.isFetching;
+        let isFetching = false;
+        let option = {
+            tooltip: {
+                trigger: 'item',
+                formatter: "{a} <br/>{b}: {c} ({d}%)"
+            },
+            legend: {
+                orient: 'horizontal',
+                left: 'center',
+                top: "bottom",
+                data: [{
+                    name: '启动',
+                    textStyle: {
+                        color: '#fff'
+                    }
+                }, {
+                    name: '关闭',
+                    textStyle: {
+                        color: '#fff'
+                    }
+                }]
+            },
+            color: ['#39a0ff', '#fad336'],
+            series: [{
+                name: '任务状态',
+                type: 'pie',
+                radius: ['55%', '70%'],
+                avoidLabelOverlap: false,
+
+                top: 'top',
+
+                label: {
+                    normal: {
+                        show: true,
+                        position: 'outside',
+                        formatter: '{b}\n{c}',
+                        textStyle: {
+                            color: "#fff"
+                        }
+                    },
+                    emphasis: {
+                        show: true,
+                        textStyle: {
+                            color: "#fff"
+                        }
+                    }
+                },
+                labelLine: {
+                    normal: {
+                        show: true,
+                    }
+                },
+                data: sexChartsList,
+            },
+
+            ]
+        };
+        return (
+            <div style={{position:"relative",height:"99%"}}>
+                {isFetching ===  true?
+                    <div style={{textAlign:"center",position:"absolute",left:"45%",top:"30%"}}>
+                        <Spin size="large" />
+                    </div>:
+                    <EchartsReact
+                        option={option}
+                        style={{height: '80%', width: '100%',}}
+                    />}
+            </div>
+        );
+    }
+}
+//任务类别
+class TaskTypeCharts extends Component {
+    componentDidMount() {
+        var myDate = new Date();
+        let NowYEAR = myDate.getFullYear();
+        let creds = {
+            entityOrField: true,
+            pd: {
+                beginTime: NowYEAR + '-01' + '-01',
+                endTime: NowYEAR + '-12' + '-31',
+            },
+        }
+        // store.dispatch(postSexChartsData(creds));
+    }
+    //组件props发生变化，更新state
+    // componentWillReceiveProps(nextProps) {
+    //     let isTrue = Compare(this.props.dateSet, nextProps.dateSet);
+    //     if (isTrue === false) {
+    //         let creds = {
+    //             currentPage: 1,
+    //             entityOrField: true,
+    //             pd: {
+    //                 beginTime: nextProps.dateSet.beginTimeSet,
+    //                 endTime: nextProps.dateSet.endTimeSet,
+    //             },
+    //             showCount: constants.pageSize
+    //         }
+    //         store.dispatch(postSexChartsData(creds));
+    //     }
+    // }
+    render() {
+        // let sexChartsList = store.getState().ReportForms.data.sexChartsList.result.list;
+        let sexChartsList = [{name: "周期任务", value: "75"}, {name: "一次性任务", value: "38"}];
+        // let isFetching = store.getState().ReportForms.data.sexChartsList.isFetching;
+        let isFetching = false;
+        let option = {
+            tooltip: {
+                trigger: 'item',
+                formatter: "{a} <br/>{b}: {c} ({d}%)"
+            },
+            legend: {
+                orient: 'horizontal',
+                left: 'center',
+                top: "bottom",
+                data: [{
+                    name: '周期任务',
+                    textStyle: {
+                        color: '#fff'
+                    }
+                }, {
+                    name: '一次性任务',
+                    textStyle: {
+                        color: '#fff'
+                    }
+                }]
+            },
+            color: ['#39a0ff', '#fad336'],
+            series: [{
+                name: '任务类别',
+                type: 'pie',
+                radius: ['55%', '70%'],
+                avoidLabelOverlap: false,
+
+                top: 'top',
+
+                label: {
+                    normal: {
+                        show: true,
+                        position: 'outside',
+                        formatter: '{b}\n{c}',
+                        textStyle: {
+                            color: "#fff"
+                        }
+                    },
+                    emphasis: {
+                        show: true,
+                        textStyle: {
+                            color: "#fff"
+                        }
+                    }
+                },
+                labelLine: {
+                    normal: {
+                        show: true,
+                    }
+                },
+                data: sexChartsList,
+            },
+
+            ]
+        };
+        return (
+            <div style={{position:"relative",height:"99%"}}>
+                {isFetching ===  true?
+                    <div style={{textAlign:"center",position:"absolute",left:"45%",top:"30%"}}>
+                        <Spin size="large" />
+                    </div>:
+                    <EchartsReact
+                        option={option}
+                        style={{height: '80%', width: '100%',}}
+                    />}
+            </div>
+        );
+    }
+}
+//任务周期
+class TaskCycleCharts extends Component {
+    componentDidMount() {
+        var myDate = new Date();
+        let NowYEAR = myDate.getFullYear();
+        let creds = {
+            entityOrField: true,
+            pd: {
+                beginTime: NowYEAR + '-01' + '-01',
+                endTime: NowYEAR + '-12' + '-31',
+            },
+        }
+        // store.dispatch(postSexChartsData(creds));
+    }
+    //组件props发生变化，更新state
+    // componentWillReceiveProps(nextProps) {
+    //     let isTrue = Compare(this.props.dateSet, nextProps.dateSet);
+    //     if (isTrue === false) {
+    //         let creds = {
+    //             currentPage: 1,
+    //             entityOrField: true,
+    //             pd: {
+    //                 beginTime: nextProps.dateSet.beginTimeSet,
+    //                 endTime: nextProps.dateSet.endTimeSet,
+    //             },
+    //             showCount: constants.pageSize
+    //         }
+    //         store.dispatch(postSexChartsData(creds));
+    //     }
+    // }
+    render() {
+        // let sexChartsList = store.getState().ReportForms.data.sexChartsList.result.list;
+        let sexChartsList = [{name: "按天任务", value: "75"}, {name: "按周任务", value: "38"}];
+        // let isFetching = store.getState().ReportForms.data.sexChartsList.isFetching;
+        let isFetching = false;
+        let option = {
+            tooltip: {
+                trigger: 'item',
+                formatter: "{a} <br/>{b}: {c} ({d}%)"
+            },
+            legend: {
+                orient: 'horizontal',
+                left: 'center',
+                top: "bottom",
+                data: [{
+                    name: '按天任务',
+                    textStyle: {
+                        color: '#fff'
+                    }
+                }, {
+                    name: '按周任务',
+                    textStyle: {
+                        color: '#fff'
+                    }
+                }]
+            },
+            color: ['#39a0ff', '#fad336'],
+            series: [{
+                name: '任务周期',
+                type: 'pie',
+                radius: ['55%', '70%'],
+                avoidLabelOverlap: false,
+
+                top: 'top',
+
+                label: {
+                    normal: {
+                        show: true,
+                        position: 'outside',
+                        formatter: '{b}\n{c}',
+                        textStyle: {
+                            color: "#fff"
+                        }
+                    },
+                    emphasis: {
+                        show: true,
+                        textStyle: {
+                            color: "#fff"
+                        }
+                    }
+                },
+                labelLine: {
+                    normal: {
+                        show: true,
+                    }
+                },
+                data: sexChartsList,
+            },
+
+            ]
+        };
+        return (
+            <div style={{position:"relative",height:"99%"}}>
+                {isFetching ===  true?
+                    <div style={{textAlign:"center",position:"absolute",left:"45%",top:"30%"}}>
+                        <Spin size="large" />
+                    </div>:
+                    <EchartsReact
+                        option={option}
+                        style={{height: '80%', width: '100%',}}
                     />}
             </div>
         );
