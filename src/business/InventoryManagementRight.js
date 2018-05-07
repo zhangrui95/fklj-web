@@ -8,8 +8,7 @@ import {connect} from "react-redux";
 import {store} from '../index.js';
 import  {PersonnelInventory}  from "./InventoryManagement/PersonnelInventory";
 import  {CarInventory}  from "./InventoryManagement/CarInventory";
-import {fetchPersonnelInventoryData,fetchCarInventoryData,fetchBayonetInventoryData
-} from "../actions/InventoryManagement";
+import {fetchPersonnelInventoryData,fetchCarInventoryData,fetchBayonetInventoryData} from "../actions/InventoryManagement";
 import  * as constants from "../utils/Constants";
 
 
@@ -38,7 +37,7 @@ class InventoryManagementRight extends Component{
         console.log('isSelectMenu',isSelectMenu)
         switch(isSelectMenu.id){ //赋值显示页面
             case '101'://人员盘查-巡逻
-                content = <PersonnelInventory   type={constants.inventoryType.patrolPerson}  />
+                content = <PersonnelInventory   type={constants.inventoryType.patrolPerson}/>
                 break
             default:
                 break

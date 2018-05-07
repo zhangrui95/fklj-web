@@ -61,31 +61,36 @@ export function loginUser(creds) {
                 sessionStorage.setItem('id_token', res.data.token);
                 // sessionStorage.setItem('id_token', 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJjNTFmZDQwMS1hYTQ1LTQ3NzctOTkyZC1mODA5ODg5MGE2NGMiLCJpYXQiOjE1MjMyNTE0NDMsInN1YiI6IjEiLCJpc3MiOiJTZWN1cmUgQ2VudGVyIiwiZ3JvdXBjb2RlIjoiNDEwMzAwMDAwMDAwIiwidXR5cGUiOiIxIiwiaWRjYXJkIjoiYWRtaW4iLCJleHAiOjE1MjMzMzc4NDN9.WzBKSsbIkSOZy60FTmfGfliJxDYohkadUaArP1po2Wo');
                 dispatch(receiveLogin(res.data));
-                isAllowMenu(store.getState().root.uiData.navigations)
-                isAllowMenu(store.getState().ControlPersonnel.uiData.menus)
-                isAllowMenu(store.getState().DynamicControl.uiData.menus)
-                isAllowMenu(store.getState().SystemManagement.uiData.menus)
-                user.menu.map((menu) =>  {
-                    if(menu.resourceCode === 'yfklj_sys'){
-                        fk = true;
-                    }else if(menu.resourceCode === 'hsfklj_sys'){
-                        hs = true;
+                console.info('user.menu',user.menu);
+                if(user.menu.length > 0){
+                    isAllowMenu(store.getState().root.uiData.navigations)
+                    isAllowMenu(store.getState().ControlPersonnel.uiData.menus)
+                    isAllowMenu(store.getState().DynamicControl.uiData.menus)
+                    isAllowMenu(store.getState().SystemManagement.uiData.menus)
+                    user.menu.map((menu) =>  {
+                        if(menu.resourceCode === 'yfklj_sys'){
+                            fk = true;
+                        }else if(menu.resourceCode === 'hsfklj_sys'){
+                            hs = true;
+                        }
+                    })
+                    if(fk&&hs) {
+                        browserHistory.push('/Transfer');
+                        message.success('提示：登录成功!');
+                    } else if(fk&&!hs) {
+                        browserHistory.push('/Homes');
+                        message.success('提示：登录成功!');
+                    } else if(hs&&!fk) {
+                        browserHistory.push('/Home');
+                        message.success('提示：登录成功!');
+                    } else{
+                        message.warning('用户无权限登陆!');
                     }
-                })
-                if(fk&&hs) {
-                    browserHistory.push('/Transfer');
-                    message.success('提示：登录成功!');
-                } else if(fk&&!hs) {
-                    browserHistory.push('/Homes');
-                    message.success('提示：登录成功!');
-                } else if(hs&&!fk) {
-                    browserHistory.push('/Home');
-                    message.success('提示：登录成功!');
-                } else{
+                }else{
                     message.warning('用户无权限登陆!');
                 }
             }
-        }).catch(err => {message.warning('用户名或密码错误!');});
+        }).catch(err => {message.warning('提示：登录失败，与服务器交互发生异常!');});
 
     }
 

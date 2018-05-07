@@ -559,7 +559,8 @@ const SearchArea = React.createClass({
             wordType: '',
             showInput:{display:'none'},
             wordName:'',
-            OptionWords:''
+            OptionWords:'',
+            addModal: false
         };
     },
     handleNameChange: function(e) {
@@ -626,6 +627,7 @@ const SearchArea = React.createClass({
         this.setState({
             visible: false,
             zdyModal: false,
+            addModal:false
         });
     },
     getNewWords: function(){
@@ -663,6 +665,11 @@ const SearchArea = React.createClass({
         newWord.push({name:this.state.wordName,type:this.state.wordType,option:this.state.OptionWords})
         this.hideModal();
     },
+    getAddModal:function(){
+        this.setState({
+            addModal:true
+        });
+    },
     render() {
         const {getFieldDecorator} = this.props.form
         let {name,cardId,status,WorkPlace, enddate, begindate,cycle,wordType,showInput,wordName,OptionWords} = this.state;
@@ -681,6 +688,25 @@ const SearchArea = React.createClass({
                 zdyStyle = {width:"110px", marginRight:"10px"}
             }
         })
+        const columns = [{
+            title: '序号',
+            dataIndex: 'serial',
+            width:80,
+        },{
+            title: '任务名称',
+            dataIndex: 'name',
+        },{
+            title: '任务类别',
+            dataIndex: 'type',
+        },{
+            title: '任务周期',
+            dataIndex: 'cycle',
+            width:80,
+        }];
+        const data = [
+            {serial:'1',name:'玉泉区兴隆派出所按天盘查',type:'周期任务',cycle:'按天'},
+            {serial:'2',name:'玉泉区兴隆派出所按周盘查',type:'周期任务',cycle:'按周'}
+        ]
         return (
             <div className="marLeft40 fl z_searchDiv">
                 <label htmlFor="" className="font14">身份证号：</label>
@@ -710,7 +736,7 @@ const SearchArea = React.createClass({
                 <ShallowBlueBtn width="80px" text="重置" margin="0 10px 0 0" onClick={this.init} />
                 <div style={{marginTop:"15px"}}>
                     <Button style={{width:"110px", marginRight:"10px"}}
-                            onClick={this.props.addShowModal}
+                            onClick={this.getAddModal}
                             className="btn_ok"
                     >
                         添加到任务
@@ -725,6 +751,20 @@ const SearchArea = React.createClass({
                     <Button style={{width:"80px", marginRight:"10px"}} className="btn_ok">导出</Button>
                     <Button style={{width:"110px", marginRight:"10px"}} className="btn_ok">模板下载</Button>
                     <Button style={zdyStyle} className="btn_ok" onClick={this.getNewWords}>自定义字段</Button>
+                    <Modal style={{top:"38%"}}
+                           title="任务列表"
+                           visible={this.state.addModal}
+                           footer={null}
+                           onCancel={this.hideModal}
+                           width={750}
+                    >
+                        <div style={{margin:'0 0 16px 0'}}>
+                            <Input style={{width:'520px',marginRight:"10px"}} type="text"  id='name' placeholder='请输入任务名称' onChange={this.handleCardChange}/>
+                            <ShallowBlueBtn width="80px" text="查询" margin="0 10px 0 0" onClick={this.handleClick} />
+                            <ShallowBlueBtn width="80px" text="重置" onClick={this.init} />
+                        </div>
+                        <Table locale={{emptyText:'暂无数据'}} columns={columns} dataSource={data} bordered/>
+                    </Modal>
                     <Modal style={{top:"38%"}}
                            title="提示"
                            visible={this.state.visible}
