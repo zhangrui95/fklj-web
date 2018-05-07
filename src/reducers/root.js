@@ -1,24 +1,33 @@
-import {DYNAMICCONTROL_MENU_INIT,USERS_ERROR,USERS_TIMEOUT,USERS_DATA,DTGK_MENU_LDRY_CHAGE,DTGK_MENU_ZDGZ_CHAGE,DTGK_MENU_ALL_CHANGE,DTGK_MENU_CHANGE_CURRENT,
-    NAVIGATION_CHANGE,SHADE_CHANGE,AREA_CITY_DATA,AREA_PROVINCE_DATA,AREA_CITY_ERROR,AREA_PROVINCE_ERROR,TERROR_TYPE_DATA,JUDGMENT_LEVEL_DATA,DISPOSITIONL_DATA,
-    POLICE_UNITS_DATA,PERSON_TAGS_DATA,CAR_TAGS_DATA} from "../actions/actions";
-import {store} from '../index.js';
-import {history} from '../index.js';
-import {isAllowMenu} from '../utils/index';
+import {
+    DYNAMICCONTROL_MENU_INIT, USERS_ERROR, USERS_TIMEOUT, USERS_DATA, DTGK_MENU_LDRY_CHAGE, DTGK_MENU_ZDGZ_CHAGE, DTGK_MENU_ALL_CHANGE, DTGK_MENU_CHANGE_CURRENT,
+    NAVIGATION_CHANGE, SHADE_CHANGE, AREA_CITY_DATA, AREA_PROVINCE_DATA, AREA_CITY_ERROR, AREA_PROVINCE_ERROR, TERROR_TYPE_DATA, JUDGMENT_LEVEL_DATA, DISPOSITIONL_DATA,
+    POLICE_UNITS_DATA, PERSON_TAGS_DATA, CAR_TAGS_DATA, MODIFIY_PASSWORD, MODIFIY_PASSWORD_ERROR
+} from "../actions/actions";
+import { store } from '../index.js';
+import { history } from '../index.js';
+import { isAllowMenu } from '../utils/index';
 
 
 const initialState = {
     data: {
         provinceList: [], //省份集合
-            cityList: [],//城市集合
-            cityListReserve: [],//储备城市集合
-            judgmentLevelList: [],//研判级别集合
-            terrorTypeList: [],//涉恐类别集合
-            dispositionlList: [],//处置措施集合
-            policeUnitsList:[], //警员单位集合
-            personTagsList:[],//人员标签集合
-            carTagsList:[],//车辆标签集合
-            taskTypeList:[],//任务类型集合
-            taskStatusList:[],//任务状态集合
+        cityList: [],//城市集合
+        cityListReserve: [],//储备城市集合
+        judgmentLevelList: [],//研判级别集合
+        terrorTypeList: [],//涉恐类别集合
+        dispositionlList: [],//处置措施集合
+        policeUnitsList: [], //警员单位集合
+        personTagsList: [],//人员标签集合
+        carTagsList: [],//车辆标签集合
+        taskTypeList: [],//任务类型集合
+        taskStatusList: [],//任务状态集合
+        modifiyMessage: {
+            reason: {
+                "code": "",
+                "text": ""
+            },
+            result: ''
+        }
     },
     uiData: {
         navigations: [ //导航集合
@@ -28,8 +37,8 @@ const initialState = {
                 isSelect: true,
                 path: "/Homes",
                 isShow: true,
-                code:'',
-                homeType:'fklj'
+                code: '',
+                homeType: 'fklj'
             },
             {
                 id: '101',
@@ -37,8 +46,8 @@ const initialState = {
                 isSelect: true,
                 path: "/Home",
                 isShow: true,
-                code:'home_menu',
-                homeType:''
+                code: 'home_menu',
+                homeType: ''
             },
             {
                 id: '102',
@@ -46,8 +55,8 @@ const initialState = {
                 isSelect: false,
                 path: "/DynamicControl",
                 isShow: true,
-                code:'',
-                homeType:'fklj'
+                code: '',
+                homeType: 'fklj'
             }, {
                 id: '111',
                 navigationName: '管控人员',
@@ -55,7 +64,7 @@ const initialState = {
                 path: "/ControlPersonnel",
                 isShow: false,
                 code: 'gkry_menu',
-                homeType:''
+                homeType: ''
             }, {
                 id: '110',
                 navigationName: '任务管理',
@@ -63,21 +72,21 @@ const initialState = {
                 path: "/TaskManagement",
                 isShow: false,
                 code: 'rwgl_menu',
-                homeType:''
+                homeType: ''
             }, {
                 id: '112',
                 navigationName: '盘查管理',
                 isSelect: true,
                 path: "/InventoryManagement",
                 isShow: true,
-                homeType:''
+                homeType: ''
             }, {
                 id: '109',
                 navigationName: '卡点管理',
                 isSelect: false,
                 path: "/AreaManagement",
                 isShow: true,
-                homeType:''
+                homeType: ''
             },
             // {
             //     id: '103',
@@ -92,15 +101,15 @@ const initialState = {
                 path: "/ReportForm",
                 isShow: true,
                 code: '',
-                homeType:'fklj'
-            },{
+                homeType: 'fklj'
+            }, {
                 id: '113',
                 navigationName: '数据统计',
                 isSelect: false,
                 path: "/ReportForms",
                 isShow: true,
                 code: '',
-                homeType:''
+                homeType: ''
             },
             // {
             //     id:'105',
@@ -114,7 +123,7 @@ const initialState = {
                 isSelect: false,
                 path: "/PersonalCenter",
                 isShow: true,
-                homeType:'fklj'
+                homeType: 'fklj'
             },
             {
                 id: '108',
@@ -122,33 +131,34 @@ const initialState = {
                 isSelect: false,
                 path: "/SystemManagement",
                 isShow: true,
-                code:'',
-                homeType:'fklj'
+                code: '',
+                homeType: 'fklj'
             }, {
                 id: '114',
                 navigationName: '系统设置',
                 isSelect: false,
                 path: "/SystemSetup",
                 isShow: true,
-                code:'xtgl_menu',
-                homeType:''
+                code: 'xtgl_menu',
+                homeType: ''
             }
         ],
-        ModalDialogueBg: 'none'//遮罩展示与隐藏
+        ModalDialogueBg: 'none',//遮罩展示与隐藏
+
     }
 }
 
 //全局变量通用
-const root = (state=initialState, action) => {
+const root = (state = initialState, action) => {
     let newState = Object.assign({}, state);
-    switch(action.type) {
+    switch (action.type) {
         case NAVIGATION_CHANGE:  //导航切换
             let navigations = action.navigations;
-            let navigationList=[];
-            for(let i in  navigations){
-                if(navigations[i].path === action.navigationPath){
+            let navigationList = [];
+            for (let i in navigations) {
+                if (navigations[i].path === action.navigationPath) {
                     navigations[i].isSelect = true;
-                }else{
+                } else {
                     navigations[i].isSelect = false;
                 }
                 navigationList.push(navigations[i]);
@@ -164,9 +174,9 @@ const root = (state=initialState, action) => {
             newState.data.provinceList = action.data.data.provinceList;
             return newState;
         case AREA_CITY_DATA: //获取城市集合
-            if(action.project === 'first'){
+            if (action.project === 'first') {
                 newState.data.cityList = action.data.data.cityList;
-            }else if(action.project === 'second'){
+            } else if (action.project === 'second') {
                 newState.data.cityListReserve = action.data.data.cityList;
             }
             return newState;
@@ -182,17 +192,21 @@ const root = (state=initialState, action) => {
         case CAR_TAGS_DATA: //车辆标签
             newState.data.carTagsList = action.data.result.list;
             return newState;
-        case   PERSON_TAGS_DATA: //人员标签
+        case PERSON_TAGS_DATA: //人员标签
             newState.data.personTagsList = action.data.result.list;
             return newState;
-        case   POLICE_UNITS_DATA: //警员单位
+        case POLICE_UNITS_DATA: //警员单位
             newState.data.policeUnitsList = action.data.result.list;
             return newState;
+        // 修改密码
+        case MODIFIY_PASSWORD: 
+            newState.data.modifiyMessage = action.data;
+            return newState;
         default:
-            if(store !== undefined ){
+            if (store !== undefined) {
                 return store.getState().root;
-            }else{
-                if(sessionStorage.getItem('user')!== null && sessionStorage.getItem('id_token')!== null ){
+            } else {
+                if (sessionStorage.getItem('user') !== null && sessionStorage.getItem('id_token') !== null) {
                     let menus = state.uiData.navigations;
                     isAllowMenu(menus);
                 }
@@ -201,7 +215,7 @@ const root = (state=initialState, action) => {
     }
 }
 
-module.exports = {root}
+module.exports = { root }
 
 
 

@@ -176,3 +176,23 @@ input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill{
   background: rgba(37, 51, 100, 0.8) !important;
   color: rgba(255,255,255,0.8) !important;
 }
+/* 头部显示下拉样式 */
+.ant-dropdown{
+  top:80px !important;
+  /* left:0 !important;
+  right:20px !important; */
+}
+.ant-dropdown-menu{
+  background-color: rgb(36,51,99) !important;
+}
+.ant-dropdown-menu-item{
+  /* width: 160px; */
+  padding: 5px 22px !important;
+  color: rgba(255, 255, 255,0.8) !important;
+}
+.ant-dropdown-menu-item:hover, .ant-dropdown-menu-submenu-title:hover{
+  background-color:#283565 !important;
+}
+.ant-dropdown-menu-item-divider, .ant-dropdown-menu-submenu-title-divider{
+  background-color:  #283565 !important;
+}
