@@ -37,7 +37,8 @@ import {
     Select,
     Divider,
     Popconfirm,
-    Radio
+    Radio,
+    Tag
 } from 'antd';
 
 import moment from 'moment';
@@ -816,7 +817,7 @@ export  class PatrolTask extends Component{
                         <ShallowBlueBtn width="80px" text="查询" margin="0 10px 0 0" onClick={this.handleClick} />
                         <ShallowBlueBtn width="80px" text="重置" onClick={this.init} />
                     </div>
-                    <Table locale={{emptyText:'暂无数据'}} columns={colu} expandedRowKeys={this.state.expandKeys} dataSource={this.state.data} bordered onExpandedRowsChange={this.RowsChange} expandRowByClick={true} expandIconAsCell={false}  expandedRowRender={record => <div style={{ margin: 0 }}><span style={{padding:'2px 5px',background:'#2b6cc5',borderRadius:'2px',margin:'5px',float:'left'}}>张三</span></div>}/>
+                    <Table locale={{emptyText:'暂无数据'}} columns={colu} expandedRowKeys={this.state.expandKeys} dataSource={this.state.data} bordered onExpandedRowsChange={this.RowsChange} expandRowByClick={true} expandIconAsCell={false}  expandedRowRender={record => <div><Tag style={{float:'left',margin:'4px 0 0 8px'}} color="#2b6cc5">张三</Tag><Tag style={{float:'left',margin:'4px 0 0 8px'}} color="#2b6cc5">李四</Tag></div>}/>
                 </Modal>
             </div>
         )
@@ -832,6 +833,8 @@ const SearchArea = React.createClass({
             enddate: '',
             unit: '',
             status:'',
+            cycle:'',
+            questionName:'',
             treeList:[{"children":[{"children":[{"label":"(卡点)测试","value":"ec02ed04ad6147b7a421ab912a7cf6b6","key":"ec02ed04ad6147b7a421ab912a7cf6b6"}],"label":"洛阳市公安局","value":"410300000000","key":"410300000000"},{"label":"(卡点)01018","value":"9ec30a5f4e554bc78f13fea61a61452c","key":"9ec30a5f4e554bc78f13fea61a61452c"},{"label":"(卡点)1221卡点","value":"713141c655624b86acae70b4a674d8a7","key":"713141c655624b86acae70b4a674d8a7"},{"label":"(卡点)001","value":"8cd3a75ab7fa49979f67eef4d59a9cad","key":"8cd3a75ab7fa49979f67eef4d59a9cad"},{"label":"(卡点)M78卡点","value":"f24c58a0aadb42ca826c02c26f74a461","key":"f24c58a0aadb42ca826c02c26f74a461"},{"label":"(卡点)002","value":"aad06faa7acf49df9504a6e97ae7946f","key":"aad06faa7acf49df9504a6e97ae7946f"}],"label":"河南省公安厅","value":"410000000000","key":"410000000000"}],
         };
     },
@@ -854,7 +857,10 @@ const SearchArea = React.createClass({
             name: '',
             begindate: '',
             enddate: '',
+            unit: '',
             status:'',
+            cycle:'',
+            questionName:'',
         });
     },
     showModal: function() {
@@ -891,8 +897,18 @@ const SearchArea = React.createClass({
             enddate: dateString,
         });
     },
+    cycleChange:function (value) {
+        this.setState({
+            cycle: value,
+        });
+    },
+    questionNameChange:function (e) {
+        this.setState({
+            questionName: e.target.value,
+        });
+    },
     render() {
-        let {name, unit, enddate, begindate, status} = this.state;
+        let {name, unit, enddate, begindate, status,cycle,questionName} = this.state;
         let beginDateValue = '';
         if (begindate === '') {} else {
             beginDateValue = moment(begindate, dateFormat);
@@ -917,6 +933,13 @@ const SearchArea = React.createClass({
                     <Option value="">全部</Option>
                     <Option value="循环任务">循环任务</Option>
                 </Select>
+                <label htmlFor="" className="font14">任务周期：</label>
+                <Select value={cycle} style={{ width: 100 ,margin:"0 10px 0 0" }} onChange={this.cycleChange} notFoundContent='暂无'>
+                    <Option value="按周">按周</Option>
+                    <Option value="按天">按天</Option>
+                </Select>
+                <label htmlFor="" className="font14">盘查对象：</label>
+                <Input style={{width:'121px',marginRight:"10px"}} type="text"  id='name' placeholder='请输入盘查对象'  value={questionName}  onChange={this.questionNameChange}/>
                 <label htmlFor="" className="font14">任务时间：</label>
                 <DatePicker  placeholder="" format={dateFormat} allowClear={false} style={{marginRight:"10px"}} value={beginDateValue} defaultValue="" onChange={this.handleBeginDeteClick}/>
                 <span className="font14" style={{margin:"0 10px 0 0"}}>至</span>
