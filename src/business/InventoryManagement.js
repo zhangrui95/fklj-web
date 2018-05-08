@@ -11,7 +11,7 @@ import {
     Shade
 } from "./generalPurposeModule";
 import {fetchUsersData, changeMenu, initInventoryManagementMenu} from "../actions/actions";
-import {INVENTORYMANAGEMENT_MODULE} from "../utils/Constants";
+import {INVENTORYMANAGEMENT_HUSHI_MODULE} from "../utils/Constants";
 import InventoryManagementRight from "./InventoryManagementRight";
 import  * as constants from "../utils/Constants";
 import {Header} from "../components/Header";
@@ -27,7 +27,7 @@ class InventoryManagement extends Component {
 
     //设置管理菜单点击-获取数据-开关事件
     handleMenuClick = (menu, type) => {
-        store.dispatch(changeMenu(menu, type, INVENTORYMANAGEMENT_MODULE));
+        store.dispatch(changeMenu(menu, type, INVENTORYMANAGEMENT_HUSHI_MODULE));
     }
 
     render() {
@@ -36,7 +36,7 @@ class InventoryManagement extends Component {
 
         /*  let menus = this.props.InventoryManagement.uiData.menus;
           menus = filterMenu(menus);//权限判断菜单*/
-
+console.log('pancha**',this.props.InventoryManagement.uiData.menus);
         return (
             <div>
                 <Shade isBlock={isBlock}/>

@@ -783,7 +783,7 @@ export  class PatrolTask extends Component{
                         </Row>
                     </Form>
                 </Modal>
-                <Modal style={{top:"38%"}}
+                <Modal 
                        title="子任务列表"
                        visible={this.state.childrenModal}
                        footer={null}
@@ -897,9 +897,9 @@ const SearchArea = React.createClass({
                     <Option value="循环任务">循环任务</Option>
                 </Select>
                 <label htmlFor="" className="font14">任务时间：</label>
-                <DatePicker  placeholder="" format={dateFormat} allowClear={false} style={{marginRight:"10px"}} value={beginDateValue} defaultValue="" onChange={this.handleBeginDeteClick}/>
+                <DatePicker  placeholder="请选择日期" format={dateFormat} allowClear={false} style={{marginRight:"10px"}} value={beginDateValue} defaultValue="" onChange={this.handleBeginDeteClick}/>
                 <span className="font14" style={{margin:"0 10px 0 0"}}>至</span>
-                <DatePicker  placeholder="" format={dateFormat} allowClear={false} style={{marginRight:"10px"}} value={endDateValue} defaultValue="" onChange={this.handleEndDeteClick}/>
+                <DatePicker  placeholder="请选择日期" format={dateFormat} allowClear={false} style={{marginRight:"10px"}} value={endDateValue} defaultValue="" onChange={this.handleEndDeteClick}/>
                 <ShallowBlueBtn width="80px" text="查询" margin="0 10px 0 0" onClick={this.handleClick} />
                 <ShallowBlueBtn width="80px" text="重置" margin="0 10px 0 0" onClick={this.init} />
             </div>

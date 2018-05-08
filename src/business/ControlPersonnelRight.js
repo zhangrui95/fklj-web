@@ -14,7 +14,6 @@ import {WithdrawPerson}  from "./ControlPersonnel/WithdrawPerson";
 import {AddPerson}  from "./ControlPersonnel/AddPerson";
 import {store} from '../index.js';
 import  * as constants from "../utils/Constants";
-
 class ControlPersonnelRight extends Component{
     render(){
         let isSelectMenu, haveSonMenu;

@@ -1,3 +1,4 @@
+// 超期任务
 import React, {
     Component
 } from 'react';
@@ -373,7 +374,7 @@ export  class OverTask extends Component{
                             <Spin size="large" />
                         </div>:
                         <div style={{padding:"0 15px"}}>
-                            <Table locale={{emptyText:'暂无数据'}} rowSelection={rowSelection} columns={columns} dataSource={data} bordered  pagination={false}/>
+                            <Table locale={{emptyText:'暂无数据'}} columns={columns} dataSource={data} bordered  pagination={false}/>
                         </div>}
                     <div className="clear"></div>
                 </div>
@@ -561,12 +562,6 @@ const SearchArea = React.createClass({
         unit = (unit === '' ? '全部' :unit );
         return (
             <div className="marLeft40 fl z_searchDiv">
-                <Button style={{width:"100px",marginRight:'10px'}}
-                        onClick={this.props.addShowModal}
-                        className="btn_ok"
-                >
-                    新增任务
-                </Button>
                 <label htmlFor="" className="font14">任务名称：</label>
                 <Input style={{width:'121px',marginRight:"10px"}} type="text"  id='name' placeholder='请输入任务名称'  value={name}  onChange={this.handleNameChange}/>
                 <label htmlFor="" className="font14">任务类别：</label>

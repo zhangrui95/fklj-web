@@ -2,15 +2,14 @@
  * 设置盘查管理-洛阳
  */
 import * as InventoryManagementAction from "../actions/InventoryManagement";
-import {lyInitialStateReturn} from "./initialState"
+import { lyInitialStateReturn } from "./initialState"
 import {
-    INVENTORYMANAGEMENT_MENU__CHANGE_CURRENT,
-    INVENTORYMANAGEMENT_MENU_INIT,
-    INVENTORY_MENU_KKPC_CHAGE,
-    INVENTORY_MENU_LDPC_CHAGE,
+    NVENTORYMANAGEMENT_MENU_HUSHI_INIT,
+    INVENTORYMANAGEMENT_HUSHI_ZQRW,
+    INVENTORYMANAGEMENT_HUSHI_CURRENT,
 } from "../actions/actions";
-import {store} from '../index.js';
-import {filterMenu} from '../utils/index';
+import { store } from '../index.js';
+import { filterMenu } from '../utils/index';
 
 const initialState = { //盘查管理
     success: true,
@@ -111,20 +110,38 @@ const initialState = { //盘查管理
         menus: [
             {
                 id: '101',
-                menuName: '人员盘查',
-                isOpen: false,
-                search: 'type=ldpc',
-                haveSon: false,
-                isSelect: true,
-                isShow: true,
+                menuName: '周期任务',
+                isOpen: true,
+                search: 'type=pcgl',
+                haveSon: true,
+                isSelect: false,
+                isShow: false,
                 code: "",
+                sonMenu: [
+                    {
+                        id: '1001',
+                        menuName: '按天',
+                        search: 'type=zqrw&state=1',
+                        isSelect: true,
+                        isShow: true,
+                        code: ""
+                    },
+                    {
+                        id: '1002',
+                        menuName: '按周',
+                        search: 'type=zqrw&state=2',
+                        isSelect: false,
+                        isShow: true,
+                        code: ""
+                    }
+                ]
             }
         ]
     }
 }
 
 
-const InventoryManagement = (state = initialState, action) =>{
+const InventoryManagement = (state = initialState, action) => {
     let newState = Object.assign({}, state);
     switch (action.type) {
         case 'REQUEST_PERSONNEL_INVENTORY':
@@ -133,84 +150,72 @@ const InventoryManagement = (state = initialState, action) =>{
                 isFetching: true,
                 didInvalidate: false
             }
-//         //请求成功，调用这个数据
-//         case InventoryManagementAction.PERSONNELINVENTORY_DATA: //人员盘查
-//             newState.data.personnelInventoryList.result.list = action.data.result.list;
-//             newState.data.personnelInventoryList.result.total = action.data.result.page.totalResult;
-//             newState.isFetching = false;
-//             return newState;
-//         case 'REQUEST_CAR_INVENTORY':
-//             return {
-//                 ...state,
-//                 isFetching: true,
-//                 didInvalidate: false
-//             }
-//         case InventoryManagementAction.CARINVENTORY_DATA: //车辆盘查
-//             newState.data.CarInventoryList.result.list = action.data.result.list;//等号右侧的是接口的格式
-//             newState.data.CarInventoryList.result.total = action.data.result.page.totalResult;
-//             newState.isFetching = false;
-//             return newState;
-//         case InventoryManagementAction.BAYONETINVENTORY_DATA: //卡口盘查
-//             newState.data.BayonetInventoryList.result.list = action.data.result.list;
-//             newState.data.BayonetInventoryList.result.total = action.data.result.total;
-//             return newState;
-// //卡口管理
-//         //人盘查 REQUEST_PERSON_INVENTORY_POINT
-//         case 'REQUEST_PERSON_INVENTORY_POINT':
-//             return {
-//                 ...state,//原状态
-//                 isFetching: true,
-//                 didInvalidate: false
-//             }
-//         case InventoryManagementAction.PERSONNELINVENTORYPOIT_DATA: //人员盘查
-//             newState.data.personnelInventoryPointList.result.list = action.data.result.list;
-//             newState.data.personnelInventoryPointList.result.total = action.data.result.page.totalResult;
-//             newState.isFetching = false;
-//             return newState;
-//         case 'REQUEST_CAR_INVENTORY_POINT':
-//             return {
-//                 ...state,//原状态
-//                 isFetching: true,
-//                 didInvalidate: false
-//             }
-//         case InventoryManagementAction.CARINVENTORYPOINT_DATA: //车辆盘查
-//             newState.data.carInventoryPointList.result.list = action.data.result.list;//等号右侧的是接口的格式
-//             newState.data.carInventoryPointList.result.total = action.data.result.page.totalResult;
-//             newState.isFetching = false;
-//             return newState;
-//
+        //         //请求成功，调用这个数据
+        //         case InventoryManagementAction.PERSONNELINVENTORY_DATA: //人员盘查
+        //             newState.data.personnelInventoryList.result.list = action.data.result.list;
+        //             newState.data.personnelInventoryList.result.total = action.data.result.page.totalResult;
+        //             newState.isFetching = false;
+        //             return newState;
+        //         case 'REQUEST_CAR_INVENTORY':
+        //             return {
+        //                 ...state,
+        //                 isFetching: true,
+        //                 didInvalidate: false
+        //             }
+        //         case InventoryManagementAction.CARINVENTORY_DATA: //车辆盘查
+        //             newState.data.CarInventoryList.result.list = action.data.result.list;//等号右侧的是接口的格式
+        //             newState.data.CarInventoryList.result.total = action.data.result.page.totalResult;
+        //             newState.isFetching = false;
+        //             return newState;
+        //         case InventoryManagementAction.BAYONETINVENTORY_DATA: //卡口盘查
+        //             newState.data.BayonetInventoryList.result.list = action.data.result.list;
+        //             newState.data.BayonetInventoryList.result.total = action.data.result.total;
+        //             return newState;
+        // //卡口管理
+        //         //人盘查 REQUEST_PERSON_INVENTORY_POINT
+        //         case 'REQUEST_PERSON_INVENTORY_POINT':
+        //             return {
+        //                 ...state,//原状态
+        //                 isFetching: true,
+        //                 didInvalidate: false
+        //             }
+        //         case InventoryManagementAction.PERSONNELINVENTORYPOIT_DATA: //人员盘查
+        //             newState.data.personnelInventoryPointList.result.list = action.data.result.list;
+        //             newState.data.personnelInventoryPointList.result.total = action.data.result.page.totalResult;
+        //             newState.isFetching = false;
+        //             return newState;
+        //         case 'REQUEST_CAR_INVENTORY_POINT':
+        //             return {
+        //                 ...state,//原状态
+        //                 isFetching: true,
+        //                 didInvalidate: false
+        //             }
+        //         case InventoryManagementAction.CARINVENTORYPOINT_DATA: //车辆盘查
+        //             newState.data.carInventoryPointList.result.list = action.data.result.list;//等号右侧的是接口的格式
+        //             newState.data.carInventoryPointList.result.total = action.data.result.page.totalResult;
+        //             newState.isFetching = false;
+        //             return newState;
+        //
 
-        case INVENTORYMANAGEMENT_MENU_INIT://初始化菜单
+        case NVENTORYMANAGEMENT_MENU_HUSHI_INIT://初始化菜单
             for (let x in newState.uiData.menus) {
                 newState.uiData.menus[x].isSelect = false;
-                if (newState.uiData.menus[x].haveSon === true) {
-                    let haveSonmenus = newState.uiData.menus[x];
-                    for (let x in haveSonmenus.sonMenu) {
-                        haveSonmenus.sonMenu[x].isSelect = false;
-                    }
+                for (let i in newState.uiData.menus[x].sonMenu) {
+                    newState.uiData.menus[x].sonMenu[i].isSelect = false;
                 }
             }
-            newState.uiData.menus[0].isSelect = true;
             newState.uiData.menus[0].isOpen = true;
-            // newState.uiData.menus[0].sonMenu[0].isSelect = true;
+            newState.uiData.menus[0].sonMenu[0].isSelect = true;
             return newState;
-
-        case INVENTORY_MENU_LDPC_CHAGE: //巡逻盘查二级菜打开关闭
+        case INVENTORYMANAGEMENT_HUSHI_ZQRW: //呼市-周期任务
             if (newState.uiData.menus[0].isOpen === true) {
                 newState.uiData.menus[0].isOpen = false;
             } else {
                 newState.uiData.menus[0].isOpen = true;
             }
             return newState;
-        case    INVENTORY_MENU_KKPC_CHAGE://卡口盘查二级菜打开关闭
-            if (newState.uiData.menus[1].isOpen === true) {
-                newState.uiData.menus[1].isOpen = false;
-            } else {
-                newState.uiData.menus[1].isOpen = true;
-            }
-            return newState;
 
-        case INVENTORYMANAGEMENT_MENU__CHANGE_CURRENT:
+        case INVENTORYMANAGEMENT_HUSHI_CURRENT:
             //遍历一级目录
             for (let x in newState.uiData.menus) {
                 if (action.menu.id == newState.uiData.menus[x].id) { //根据ID相等判断，是否选中
@@ -219,7 +224,7 @@ const InventoryManagement = (state = initialState, action) =>{
                     newState.uiData.menus[x].isSelect = false;
                 }
                 //遍历子目录
-                for (let i in  newState.uiData.menus[x].sonMenu) {
+                for (let i in newState.uiData.menus[x].sonMenu) {
                     if (action.menu.id == newState.uiData.menus[x].sonMenu[i].id) {
                         newState.uiData.menus[x].sonMenu[i].isSelect = true;
                     } else {
@@ -229,35 +234,14 @@ const InventoryManagement = (state = initialState, action) =>{
             }
             return newState;
 
-        case 'REQUEST_CAR_PERSON': //车关联人调用中
-            return {
-                ...state,//原状态
-                isLoadinging: true,
-                didInvalidate: false
-            }
-        case 'RelevancePerson-data': //关联人员
-            newState.data.relevancePersonList.result.list = action.data.result.list;
-            newState.data.relevancePersonList.result.total = action.data.result.page.totalResult;
-            newState.isLoadinging = false;
-            return newState;
-        case 'REQUEST_PERSONNEL_CAR'://人关联车调用中
-            return {
-                ...state,//原状态
-                isLoadinging: true,
-                didInvalidate: false
-            }
-        case 'RelevanceCar-data': //关联车辆
-            newState.data.relevanceCarList.result.list = action.data.result.list;
-            newState.data.relevanceCarList.result.total = action.data.result.page.totalResult;
-            newState.isLoadinging = false;
-            return newState;
         default:
-            if(store !== undefined){
+            if (store !== undefined) {
                 return store.getState().InventoryManagement;
-            }else{
-                if(sessionStorage.getItem('allowMenus')!== undefined && sessionStorage.getItem('allowMenus')!== null && sessionStorage.getItem('allowMenus')!== ''){
+            } else {
+                if (sessionStorage.getItem('allowMenus') !== undefined && sessionStorage.getItem('allowMenus') !== null && sessionStorage.getItem('allowMenus') !== '') {
                     //盘查管理菜单
                     let inventoryManagementMenus = state.uiData.menus;
+                    console.log('inventoryManagementMenus',inventoryManagementMenus);
                     inventoryManagementMenus = filterMenu(inventoryManagementMenus);//权限判断菜单
                     state.uiData.menus = inventoryManagementMenus;
                 }
@@ -265,4 +249,4 @@ const InventoryManagement = (state = initialState, action) =>{
             }
     }
 }
-module.exports = {InventoryManagement}
+module.exports = { InventoryManagement }
