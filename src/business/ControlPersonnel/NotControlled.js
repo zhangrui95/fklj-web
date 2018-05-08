@@ -5,7 +5,7 @@ import {StylePage, ShallowBlueBtn, Pag,} from "../generalPurposeModule";
 import {store} from '../../index.js';
 import * as constants from "../../utils/Constants";
 import {monthFormat, dateFormat, serverUrl} from '../../utils/';
-import {Spin, Table, message, Input, Modal, Button, Form, Icon, Row, Col, Select, DatePicker, Divider} from 'antd';
+import {Spin, Table, message, Input, Modal, Button, Form, Icon, Row, Col, Select, DatePicker, Divider, List} from 'antd';
 
 import moment from 'moment';
 import 'moment/locale/zh-cn';
@@ -556,11 +556,13 @@ const SearchArea = React.createClass({
             enddate: '',
             cycle: '',
             zdyModal: false,
+            zdyModals: false,
             wordType: '',
             showInput:{display:'none'},
             wordName:'',
             OptionWords:'',
-            addModal: false
+            addModal: false,
+            showDel:{display:'none'},
         };
     },
     handleNameChange: function(e) {
@@ -630,6 +632,12 @@ const SearchArea = React.createClass({
             addModal:false
         });
     },
+    hideModals: function() {
+        this.setState({
+            zdyModals: false,
+            zdyModal: true,
+        });
+    },
     getNewWords: function(){
         this.setState({
             zdyModal: true,
@@ -662,17 +670,43 @@ const SearchArea = React.createClass({
         });
     },
     saveNewWord:function () {
-        newWord.push({name:this.state.wordName,type:this.state.wordType,option:this.state.OptionWords})
-        this.hideModal();
+        if(this.state.wordName !== ''){
+            newWord.push({name:this.state.wordName,type:this.state.wordType,option:this.state.OptionWords})
+            this.hideModals();
+        }
     },
     getAddModal:function(){
         this.setState({
             addModal:true
         });
     },
+    addNewsWord:function (type, record) {
+        if(type === 'update'){
+            this.setState({
+                showDel:{margin:'0 0 0 30px'},
+                wordName:record.name,
+                wordType:record.type
+            })
+            this.getSelects(record.type)
+        }else if(type === 'add'){
+            this.setState({
+                showDel:{display:'none'},
+                wordName:'',
+                wordType:''
+            })
+            this.getSelects('0')
+        }
+        this.setState({
+            zdyModals:true,
+            zdyModal:false
+        });
+    },
+    getDelete:function () {
+
+    },
     render() {
         const {getFieldDecorator} = this.props.form
-        let {name,cardId,status,WorkPlace, enddate, begindate,cycle,wordType,showInput,wordName,OptionWords} = this.state;
+        let {name,cardId,status,WorkPlace, enddate, begindate,cycle,wordType,showInput,wordName,OptionWords,showDel} = this.state;
         let beginDateValue = '';
         if (begindate === '') {} else {
             beginDateValue = moment(begindate, dateFormat);
@@ -707,6 +741,16 @@ const SearchArea = React.createClass({
             {serial:'1',name:'玉泉区兴隆派出所按天盘查',type:'周期任务',cycle:'按天'},
             {serial:'2',name:'玉泉区兴隆派出所按周盘查',type:'周期任务',cycle:'按周'}
         ]
+        const newWord = [
+            {name:'类型',type:'0'},
+            {name:'任务描述',type:'1'},
+        ]
+        const list = [{
+            key: 'name',
+            render: (text, record) => (
+                <span onClick={(e)=>this.addNewsWord('update', record)} style={{cursor:'pointer'}}>{record.name}</span>
+            ),
+        }];
         return (
             <div className="marLeft40 fl z_searchDiv">
                 <label htmlFor="" className="font14">身份证号：</label>
@@ -787,15 +831,39 @@ const SearchArea = React.createClass({
                            title="自定义字段"
                            visible={this.state.zdyModal}
                            footer={null}
-                           maskClosable={false}
-                           closable={false}
+                           className="ModalList"
+                           onCancel={this.hideModal}
+                    >
+                        <Table locale={{emptyText:'暂无数据'}} columns={list} dataSource={newWord} bordered  pagination={false} showHeader={false}/>
+                        <p style={{marginTop:"20px",textAlign:"center"}}>
+                            <Button style={{margin:'0 15px 0 0 ',width:'100%',fontSize:'30px',lineHeight:'0'}} onClick={() => this.addNewsWord('add')} className="btn_ok">
+                                +
+                            </Button>
+                        </p>
+                    </Modal>
+                    <Modal style={{top:"38%"}}
+                           title="自定义字段"
+                           visible={this.state.zdyModals}
+                           footer={null}
+                           onCancel={this.hideModals}
                     >
                         <Form onSubmit={this.saveModel}>
                             <FormItem
                                 {...formItemLayout}
                                 label="字段名称"
                             >
-                                    <Input value={wordName} onChange={this.changeWordName}/>
+                                {getFieldDecorator('name', {
+                                    rules: [{
+                                        required: true, message: '请输入字段名称!',
+
+                                    },{
+                                        max:20,message:'最多输入二十个字符!',
+                                    }],
+                                    initialValue: wordName,
+                                    validateFirst:true
+                                })(
+                                    <Input onChange={this.changeWordName}/>
+                                )}
                             </FormItem>
                             <FormItem
                                 {...formItemLayout}
@@ -815,11 +883,11 @@ const SearchArea = React.createClass({
                             </FormItem>
                         </Form>
                         <p style={{marginTop:"20px",textAlign:"center"}}>
-                            <Button style={{margin:'0 15px 0 0 '}} onClick={this.saveNewWord} className="btn_ok">
+                            <Button htmlType="submit" onClick={this.saveNewWord} className="btn_ok">
                                 保存
                             </Button>
-                            <Button style={{margin:'0 0 0 15px'}} onClick={this.hideModal} className="btn_delete">
-                                取消
+                            <Button style={showDel} onClick={this.getDelete} className="btn_delete">
+                                删除
                             </Button>
                         </p>
 

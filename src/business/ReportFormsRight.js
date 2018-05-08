@@ -13,7 +13,7 @@ import ActivityStatistics from "./ReportForms/ActivityStatistics";
 
 class ReportFormsRight extends Component{
     render(){
-         let isSelectMenu;
+        let isSelectMenu;
         let content;
         //查找被选中菜单
         this.props.ReportForms.uiData.menus.forEach(function(menu){
@@ -23,16 +23,16 @@ class ReportFormsRight extends Component{
             }
         });
         switch(isSelectMenu.menuName){
-            case constants.REPORTFORMS_MENU_POPULATION:
+            case constants.REPORTFORMS_MENU_POPULATIONS:
                 content = <PopulationStatistics  />
                 break
-            case constants.REPORTFORMS_MENU_TASK:
+            case constants.REPORTFORMS_MENU_TASKS:
                 content =<TaskStatistics />
                 break
-            case constants.REPORTFORMS_MENU_ACTIVITY:
-                content =<ActivityStatistics />  
+            case constants.REPORTFORMS_MENU_ACTIVITYS:
+                content =<ActivityStatistics />
                 break
-            
+
             default:
                 break
         }

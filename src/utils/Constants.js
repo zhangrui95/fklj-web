@@ -25,6 +25,11 @@ export const REPORTFORMS_MENU_POPULATION = "总体数据统计"
 export const REPORTFORMS_MENU_TASK = "盘查数据统计"
 export const REPORTFORMS_MENU_ACTIVITY = "活动数据统计"
 
+//呼市统计报表菜单
+export const REPORTFORMS_MENU_POPULATIONS = "管控人员统计"
+export const REPORTFORMS_MENU_TASKS = "任务统计"
+export const REPORTFORMS_MENU_ACTIVITYS = "盘查统计"
+
 //个人中心模块
 export const PERSONALCENTER_MODULE = 'personalcenter_module';
 //动态管控模块
@@ -181,7 +186,7 @@ export const dybamicControlCode = {
     inflow: '1032', //流入人员
     outflow: '1033', //流出人员
     beMissing: '1034', //失踪人员
-   
+
 }
 
 //个人中心

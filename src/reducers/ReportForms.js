@@ -1,7 +1,7 @@
 /**
  * 统计报表
  */
- import * as ReportForm from "../actions/ReportForms";
+import * as ReportForm from "../actions/ReportForms";
 import {REPORT_FORMS_MENU_CHANGE_CURRENT,REPORTFORMS_MENU_INIT} from "../actions/actions";
 import {store} from '../index.js';
 // import {getNowFormatDate} from "../utils/Date";
@@ -23,7 +23,7 @@ const initialState = {
                 "code": "",
                 "text": ""
             },
-             result: {
+            result: {
                 list:[]
             },
             isFetching:true,
@@ -33,7 +33,7 @@ const initialState = {
                 "code": "",
                 "text": ""
             },
-             result: {
+            result: {
                 list:[]
             },
             isFetching:true,
@@ -43,7 +43,7 @@ const initialState = {
                 "code": "",
                 "text": ""
             },
-             result: {
+            result: {
                 list:[]
             },
             isFetching:true,
@@ -53,7 +53,7 @@ const initialState = {
                 "code": "",
                 "text": ""
             },
-             result: {
+            result: {
                 list:[]
             },
             isFetching:true,
@@ -83,7 +83,7 @@ const initialState = {
                 "code": "",
                 "text": ""
             },
-             result: {
+            result: {
                 list:[]
             },
             isFetching:true,
@@ -93,7 +93,7 @@ const initialState = {
                 "code": "",
                 "text": ""
             },
-             result: {
+            result: {
                 list:[]
             },
             isFetching:true,
@@ -103,7 +103,7 @@ const initialState = {
                 "code": "",
                 "text": ""
             },
-             result: {
+            result: {
                 list:[]
             },
             isFetching:true,
@@ -113,7 +113,7 @@ const initialState = {
                 "code": "",
                 "text": ""
             },
-             result: {
+            result: {
                 list:[]
             },
             isFetching:true,
@@ -139,7 +139,7 @@ const initialState = {
             isFetching:true,
         },
         totalAttention: {//查询-关注人员总和
-             reason: {
+            reason: {
                 "code": "",
                 "text": ""
             },
@@ -152,7 +152,7 @@ const initialState = {
                 "code": "",
                 "text": ""
             },
-             result: {
+            result: {
                 list:''
             },
         },
@@ -170,7 +170,7 @@ const initialState = {
                 "code": "",
                 "text": ""
             },
-             result: {
+            result: {
                 list:''
             },
         },
@@ -179,7 +179,7 @@ const initialState = {
         menus: [
             {
                 id: '101',
-                menuName: '总体数据统计',
+                menuName: '管控人员统计',
                 isOpen: false,
                 search: 'type=ztsjtj',
                 haveSon: false,
@@ -187,7 +187,7 @@ const initialState = {
             },
             {
                 id: '102',
-                menuName: '盘查数据统计',
+                menuName: '任务统计',
                 isOpen: false,
                 search: 'type=ljsjtj',
                 haveSon: false,
@@ -195,7 +195,7 @@ const initialState = {
             },
             {
                 id: '103',
-                menuName: '活动数据统计',
+                menuName: '盘查统计',
                 isOpen: false,
                 search: 'type=hdsjtj',
                 haveSon: false,
@@ -220,7 +220,7 @@ const ReportForms = (state=initialState, action) =>{
                 }
             }
             return newState;
-            //分布情况加载
+        //分布情况加载
         case 'REQUEST_DISTRIBUTE_REPORTFORM':
 
             newState.data.distributeChartsList.isFetching = true;
@@ -264,7 +264,7 @@ const ReportForms = (state=initialState, action) =>{
             return newState;
         //年龄
         case 'REQUEST_AGE_REPORTFORM':
-           newState.data.ageChartsList.isFetching = true;
+            newState.data.ageChartsList.isFetching = true;
             return newState;
         case ReportForm.AGE_CHARTS_DATA: //获取统计报表-年龄情况 REQUEST_AGE_REPORTFORM
             newState.data.ageChartsList.result.list = action.data.result.list;
@@ -306,7 +306,7 @@ const ReportForms = (state=initialState, action) =>{
             newState.data.inflowList.result.list = action.data.result.list;
             newState.data.inflowList.isFetching = false;
             return newState;
-         //数据来源
+        //数据来源
         case 'REQUEST_DATASOURCES_REPORTFORM':
             newState.data.dataSourcesList.isFetching = true;
             return newState;
@@ -314,7 +314,7 @@ const ReportForms = (state=initialState, action) =>{
             newState.data.dataSourcesList.result.list = action.data.result.list;
             newState.data.dataSourcesList.isFetching = false;
             return newState;
-         //流出方式
+        //流出方式
         case 'REQUEST_FLOWOUT_REPORTFORM':
             newState.data.flowOutList.isFetching = true;
             return newState;

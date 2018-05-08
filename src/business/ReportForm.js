@@ -33,7 +33,7 @@ require("echarts/map/js/province/heilongjiang.js");
 
 class ReportForm extends Component {
     componentWillUnmount() { //销毁
-        store.dispatch(initReportFormMenu(this.props.ReportForms.uiData.menus))
+        store.dispatch(initReportFormMenu(this.props.ReportFormChart.uiData.menus))
     }
 
     componentDidMount() {
@@ -56,7 +56,7 @@ class ReportForm extends Component {
             <div style={{overflow: 'hidden', width: "100%"}}>
                 <Header homeType="fklj_sys"/>
                 <div className="sileder_left">
-                    <SliderMenuItem menus={this.props.ReportForms.uiData.menus} handleMenuClick={this.handleMenuClick}/>
+                    <SliderMenuItem menus={this.props.ReportFormChart.uiData.menus} handleMenuClick={this.handleMenuClick}/>
                 </div>
                 <div className="sileder_right">
                     <ReportFormRight />
