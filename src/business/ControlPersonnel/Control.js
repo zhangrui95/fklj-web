@@ -245,7 +245,6 @@ export  class Control extends Component{
         })
     }
     render() {
-        console.log('controlType====>',this.props.controlType)
         const { getFieldDecorator } = this.props.form;
         let nowPage = this.state.nowPage;
         let isFetching = store.getState().ControlPersonnel.isFetching;
@@ -276,7 +275,7 @@ export  class Control extends Component{
             title: '联系电话',
             dataIndex: 'phone',
         },{
-            title: '责任单位',
+            title: '隶属任务',
             dataIndex: 'zrdw',
         },{
             title: '任务周期',
@@ -767,8 +766,8 @@ const SearchArea = React.createClass({
                     <Option value="暂住">暂住</Option>
                     <Option value="流动">流动</Option>
                 </Select>
-                <label htmlFor="" className="font14">责任单位：</label>
-                <Input style={{width:'130px',marginRight:"10px"}} type="text"  id='name' placeholder='请输入责任单位'  value={WorkPlace}  onChange={this.WorkPlaceChange}/>
+                <label htmlFor="" className="font14">隶属任务：</label>
+                <Input style={{width:'130px',marginRight:"10px"}} type="text"  id='name' placeholder='请输入隶属任务'  value={WorkPlace}  onChange={this.WorkPlaceChange}/>
                 <label htmlFor="" className="font14">任务周期：</label>
                 <Select value={cycle} style={{ width: 100 ,marginRight:"10px" }} onChange={this.cycleChange} notFoundContent='暂无'>
                     <Option value="">全部</Option>
@@ -789,7 +788,7 @@ const SearchArea = React.createClass({
                         添加到任务
                     </Button>
                     {/*<Button style={{width:"110px", marginRight:"10px"}} className="btn_ok">*/}
-                        {/*选择责任单位*/}
+                        {/*选择隶属任务*/}
                     {/*</Button>*/}
                     <Button style={{width:"80px", marginRight:"10px"}} className="btn_ok">导入</Button>
                     <Button style={{width:"80px", marginRight:"10px"}} className="btn_ok">导出</Button>

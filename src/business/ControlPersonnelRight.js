@@ -7,7 +7,6 @@ import {mainReducer} from "../reducers/reducers";
 import {Control}  from "./ControlPersonnel/Control";
 import {store} from '../index.js';
 import  * as constants from "../utils/Constants";
-
 class ControlPersonnelRight extends Component{
     render(){
         let isSelectMenu, haveSonMenu;

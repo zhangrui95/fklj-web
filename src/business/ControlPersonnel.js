@@ -18,18 +18,19 @@ import ControlPersonnelRight from "./ControlPersonnelRight"
 const font = {
     fontSize: 30, color:"rgb(231, 231, 231)" , marginBottom: 10,marginTop: 250, textAlign: 'center'
 }
-
 class ControlPersonnel extends Component{
-    // componentWillUnmount() { //销毁
-    //     store.dispatch(initControlPersonnelMenu(this.props.TaskManagement.uiData.menus))
-    // }
-    //
+    
+    componentWillUnmount() { //销毁
+        store.dispatch(initControlPersonnelMenu(this.props.ControlPersonnel.uiData.menus))
+    }
+    
     // //设置管理菜单点击-获取数据-开关事件
     handleMenuClick = (menu, type) => {
         store.dispatch(changeMenu(menu, type, CONTROLPERSONNEL_MODULE));
     }
 
     render() {
+        console.log('this.props.ControlPersonnel.uiData.menus',this.props.ControlPersonnel.uiData.menus);
         //遮罩状态
         let isBlock = store.getState().root.uiData.ModalDialogueBg;
         let menusList = [];

@@ -8,7 +8,7 @@ import {
     PERSONALCENTER_MODULE, DYNAMICCONTROL_MODULE, SYSTEMMANAGEMENT_MODULE, INTELLIGENTRETRIEVAL_MODULE,
     AUDIT_REPORT_MODULE, REPORTFORMS_MODULE, REPORTFORM_MODULE, INVENTORYMANAGEMENT_MODULE, CUSTOMMANAGEMENT_MODULE, REPORTLY_MODULE,
     DEFINEWARE_MODULE,
-    TaskMANAGEMENT_MODULE, ELETRO_MODULE, AREAMANAGEMENT_MODULE, CONTROLPERSONNEL_MODULE, SYSREMSETUP_MODULE
+    TaskMANAGEMENT_MODULE, ELETRO_MODULE, AREAMANAGEMENT_MODULE, CONTROLPERSONNEL_MODULE, SYSREMSETUP_MODULE, INVENTORYMANAGEMENT_HUSHI_MODULE
 } from "../utils/Constants";
 import { fetchData } from "./request";
 import { INTERROGATIONDETAILS_TAB_CHANGE_CURRENT, INTERROGATIONDETAILS_TAB_INIT } from "./InterrogationDetails";
@@ -218,9 +218,11 @@ export const SYSTEM_SETUP_CURRENT = 'System_Setup_current';//系统设置-更选
 export const CONTROLPERSONNEL_TYPE = 'Control_personnel_type';//管控人员-更选项-呼市-关注人员
 export const CONTROLPERSONNEL_Person = 'Control_personnel_person';//管控人员-更选项-呼市-管控人员
 export const CONTROLPERSONNEL_AddOrOut = 'Control_personnel_addorout';//管控人员-更选项-呼市-管控人员
+export const INVENTORYMANAGEMENT_HUSHI_ZQRW = 'Inventorymanagement_hushi_zqrw';//盘查管理-呼市-周期任务
+export const INVENTORYMANAGEMENT_HUSHI_CURRENT = 'Inventorymanagement_hushi_current';//盘查管理-更选项-呼市
 
 export const SYSTEMSETUP_ADD = 'System_Setup_add';//更选项-呼市-系统设置-添加到任务
-// export const SYSTEMSETUP_CHOICE = 'System_Setup_choice';//更选项-呼市-系统设置-选择责任单位
+// export const SYSTEMSETUP_CHOICE = 'System_Setup_choice';//更选项-呼市-系统设置-选择隶属任务
 
 export const INVENTORY_MENU_LDPC_CHAGE = 'inventory-menu-change';//一级菜单流动盘查
 export const INVENTORY_MENU_KKPC_CHAGE = 'customsPass-data-flow';//一级菜单卡口盘查
@@ -337,6 +339,14 @@ export function changeMenu(menu, type, moduleName) {//改变目录状态
             // store.dispatch(fetchUsersData('/getUsers',menu.search));
             return { type: TASK_MENU__CHANGE_CURRENT, menu: menu };
         }
+    } else if (moduleName === INVENTORYMANAGEMENT_HUSHI_MODULE) {//盘查管理-呼市
+        if (type === 'openAndClose') {
+            if (menu.id === '101') {
+                return { type: INVENTORYMANAGEMENT_HUSHI_ZQRW }
+            }
+        } else if (type === 'getData') {//点击目录
+            return { type: INVENTORYMANAGEMENT_HUSHI_CURRENT, menu: menu };
+        }
     }
 }
 //初始化动态管控菜单
@@ -433,6 +443,8 @@ export const TASKMANAGEMENT_MENU_INIT = 'TaskManagement_menu_init';
 export const CONTROLPERSONNEL_MENU_INIT = 'Controlpersonnel_menu_init';
 //设置任务管理初始化--管控人员-呼市
 export const SYSREMSETUP_MENU_INIT = 'SystemSetup_menu_init';
+//设置盘查管理初始化--盘查管理-呼市
+export const NVENTORYMANAGEMENT_MENU_HUSHI_INIT = 'InventoryManagement_menu_hushi_init';
 //设置卡口管理初始化--洛阳
 export const CUSTOMMANAGEMENT_MENU_INIT = 'CustomManagement_menu_init';
 //设置统计报表初始化--洛阳

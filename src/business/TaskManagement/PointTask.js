@@ -1,6 +1,4 @@
-/**
- * 任务管理=>待办任务右侧组件
- */
+// 待办任务
 import React, {
     Component
 } from 'react';
@@ -730,9 +728,9 @@ const SearchArea = React.createClass({
                 <label htmlFor="" className="font14">盘查对象：</label>
                 <Input style={{width:'121px',marginRight:"10px"}} type="text"  id='name' placeholder='请输入盘查对象'  value={questionName}  onChange={this.questionNameChange}/>
                 <label htmlFor="" className="font14">任务时间：</label>
-                <DatePicker  placeholder="" format={dateFormat} allowClear={false} style={{marginRight:"10px"}} value={beginDateValue} defaultValue="" onChange={this.handleBeginDeteClick}/>
+                <DatePicker  placeholder="请选择日期" format={dateFormat} allowClear={false} style={{marginRight:"10px"}} value={beginDateValue} defaultValue="" onChange={this.handleBeginDeteClick}/>
                 <span className="font14" style={{margin:"0 10px 0 0"}}>至</span>
-                <DatePicker  placeholder="" format={dateFormat} allowClear={false} style={{marginRight:"10px"}} value={endDateValue} defaultValue="" onChange={this.handleEndDeteClick}/>
+                <DatePicker  placeholder="请选择日期" format={dateFormat} allowClear={false} style={{marginRight:"10px"}} value={endDateValue} defaultValue="" onChange={this.handleEndDeteClick}/>
                 <ShallowBlueBtn width="80px" text="查询" margin="0 10px 0 0" onClick={this.handleClick} />
                 <ShallowBlueBtn width="80px" text="重置" margin="0 10px 0 0" onClick={this.init} />
             </div>

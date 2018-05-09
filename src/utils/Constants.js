@@ -74,7 +74,12 @@ export const REPORTLY_MODULE = 'ReportLy_module';
 export const DEFINEWARE_MODULE = 'DefineWare_module';
 //设置任务管理模块
 export const TaskMANAGEMENT_MODULE = 'TaskManagement_module';
-
+// 盘查管理（呼市）
+export const INVENTORYMANAGEMENT_HUSHI_MODULE = '盘查管理';
+//设置周期任务-按天(呼市)
+export const INVENTORYMANAGEMENT_HUSHI_MODULE_AT = '按天';
+//设置周期任务-按周(呼市)
+export const INVENTORYMANAGEMENT_HUSHI_MODULE_AZ = '按周';
 //自定义库模块
 // export const DEFINE_WAREHOUSE_MODULE = 'define_warehouse_module';
 

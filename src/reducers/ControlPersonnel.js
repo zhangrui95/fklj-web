@@ -153,6 +153,9 @@ const ControlPersonnel =(state = initialState, action) =>{
                     newState.uiData.menus[x].sonMenu[i].isSelect = false;
                 }
             }
+            newState.uiData.menus[0].isOpen = true;
+            newState.uiData.menus[1].isOpen = false;
+            newState.uiData.menus[2].isOpen = false;
             newState.uiData.menus[0].sonMenu[0].isSelect = true;
             return newState;
         case CONTROLPERSONNEL_TYPE:
