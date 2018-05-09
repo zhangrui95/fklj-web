@@ -705,8 +705,6 @@ const SearchArea = React.createClass({
 
     },
     render() {
-        const controlType = this.props.controlType
-        console.log(controlType)
         const {getFieldDecorator} = this.props.form
         let {name,cardId,status,WorkPlace, enddate, begindate,cycle,wordType,showInput,wordName,OptionWords,showDel} = this.state;
         let beginDateValue = '';
@@ -753,6 +751,40 @@ const SearchArea = React.createClass({
                 <span onClick={(e)=>this.addNewsWord('update', record)} style={{cursor:'pointer'}}>{record.name}</span>
             ),
         }];
+        let btns = (
+            <div style={{marginTop:"15px"}}>
+                <Button style={{width:"110px", marginRight:"10px"}} onClick={this.getAddModal} className="btn_ok">添加到任务</Button>
+                <Button style={{width:"80px", marginRight:"10px"}} className="btn_ok">导入</Button>
+                <Button style={{width:"80px", marginRight:"10px"}} className="btn_ok">导出</Button>
+                <Button style={{width:"110px", marginRight:"10px"}} className="btn_ok">模板下载</Button>
+                <Button style={zdyStyle} className="btn_ok" onClick={this.getNewWords}>自定义字段</Button>
+            </div>
+        )
+        let controlType = this.props.controlType
+        console.log(controlType)
+        if(controlType === 'GZ_NLHRY' || controlType === 'GZ_ZALY'){
+            btns = ''
+        }else if(controlType === 'GK_YGK'){
+            btns = (
+                <div style={{marginTop:"15px"}}>
+                    <Button style={{width:"110px", marginRight:"10px"}} onClick={this.getAddModal} className="btn_ok">变更任务</Button>
+                    <Button style={{width:"80px", marginRight:"10px"}} className="btn_ok">导出</Button>
+                </div>
+            )
+        }else if(controlType === 'GK_LKZRQ' || controlType === 'GK_SK'){
+            btns = (
+                <div style={{marginTop:"15px"}}>
+                    <Button style={{width:"110px", marginRight:"10px"}} onClick={this.getAddModal} className="btn_ok">添加到任务</Button>
+                    <Button style={{width:"80px", marginRight:"10px"}} className="btn_ok">导出</Button>
+                </div>
+            )
+        }else if(controlType === 'LY_DR' || controlType === 'LY_XZ'){
+            btns = (
+                <div style={{marginTop:"15px"}}>
+                    <Button style={{width:"110px", marginRight:"10px"}} className="btn_ok">导出</Button>
+                </div>
+            )
+        }
         return (
             <div className="marLeft40 fl z_searchDiv">
                 <label htmlFor="" className="font14">身份证号：</label>
@@ -780,20 +812,8 @@ const SearchArea = React.createClass({
                 <DatePicker format={dateFormat} allowClear={false} style={{marginRight:"10px",width:'130px'}} placeholder="请选择日期"  value={endDateValue} onChange={this.handleEndDeteClick}/>
                 <ShallowBlueBtn width="80px" text="查询" margin="0 10px 0 0" onClick={this.handleClick} />
                 <ShallowBlueBtn width="80px" text="重置" margin="0 10px 0 0" onClick={this.init} />
-                <div style={{marginTop:"15px"}}>
-                    <Button style={{width:"110px", marginRight:"10px"}}
-                            onClick={this.getAddModal}
-                            className="btn_ok"
-                    >
-                        添加到任务
-                    </Button>
-                    {/*<Button style={{width:"110px", marginRight:"10px"}} className="btn_ok">*/}
-                        {/*选择隶属任务*/}
-                    {/*</Button>*/}
-                    <Button style={{width:"80px", marginRight:"10px"}} className="btn_ok">导入</Button>
-                    <Button style={{width:"80px", marginRight:"10px"}} className="btn_ok">导出</Button>
-                    <Button style={{width:"110px", marginRight:"10px"}} className="btn_ok">模板下载</Button>
-                    <Button style={zdyStyle} className="btn_ok" onClick={this.getNewWords}>自定义字段</Button>
+                <div>
+                    {btns}
                     <Modal style={{top:"38%"}}
                            title="任务列表"
                            visible={this.state.addModal}
