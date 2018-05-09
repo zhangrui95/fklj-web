@@ -1,3 +1,6 @@
+/**
+ * 盘查管理=>人员盘查右侧组件
+ */
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {mainReducer} from "../../reducers/reducers";

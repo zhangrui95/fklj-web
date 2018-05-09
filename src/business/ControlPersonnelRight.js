@@ -1,17 +1,10 @@
 /**
- * 设置管理右侧
+ * 呼市管控人员右侧
  */
 import React, { Component } from 'react';
 import {connect} from 'react-redux';
 import {mainReducer} from "../reducers/reducers";
-import {ComePerson}  from "./ControlPersonnel/ComePerson";
-import {PublicSecurity}  from "./ControlPersonnel/PublicSecurity";
-import {RunAway}  from "./ControlPersonnel/RunAway";
-import {NotControlled}  from "./ControlPersonnel/NotControlled";
-import {LeaveArea}  from "./ControlPersonnel/LeaveArea";
 import {Control}  from "./ControlPersonnel/Control";
-import {WithdrawPerson}  from "./ControlPersonnel/WithdrawPerson";
-import {AddPerson}  from "./ControlPersonnel/AddPerson";
 import {store} from '../index.js';
 import  * as constants from "../utils/Constants";
 
@@ -39,28 +32,35 @@ class ControlPersonnelRight extends Component{
         });
         switch(isSelectMenu.menuName){
             case constants.CONTROLPERSONNEL_MODULE_GZ_NLHRY:
-                content = <ComePerson/>
+                // content = <ComePerson/>
+                content = <Control controlType="GZ_NLHRY"/>
                 break
             case constants.CONTROLPERSONNEL_MODULE_GZ_ZALY:
-                content = <PublicSecurity/>
+                // content = <PublicSecurity/>
+                content = <Control controlType="GZ_ZALY"/>
                 break
             case constants.CONTROLPERSONNEL_MODULE_GK_WGK:
-                content = <NotControlled/>
+                // content = <NotControlled/>
+                content = <Control controlType="GK_WGK"/>
                 break
             case constants.CONTROLPERSONNEL_MODULE_GK_YGK:
-                content = <Control/>
+                content = <Control controlType="GK_YGK"/>
                 break
             case constants.CONTROLPERSONNEL_MODULE_GK_LKZRQ:
-                content = <LeaveArea/>
+                // content = <LeaveArea/>
+                content = <Control controlType="GK_LKZRQ"/>
                 break
             case constants.CONTROLPERSONNEL_MODULE_GK_SK:
-                content = <RunAway/>
+                // content = <RunAway/>
+                content = <Control controlType="GK_SK"/>
                 break
             case constants.CONTROLPERSONNEL_MODULE_DR:
-                content = <WithdrawPerson/>
+                // content = <WithdrawPerson/>
+                content = <Control controlType="LY_DR"/>
                 break
             case constants.CONTROLPERSONNEL_MODULE_XZ:
-                content = <AddPerson/>
+                // content = <AddPerson/>
+                content = <Control controlType="LY_XZ"/>
                 break
             default:
                 break

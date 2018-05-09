@@ -1,7 +1,6 @@
 /**
- * create by zy 2017-07-27
+ * 呼市盘查管理主页面
  */
-// 盘查管理主页面
 import React, {Component} from 'react'
 import {mainReducer} from "../reducers/reducers";
 import {connect} from "react-redux";

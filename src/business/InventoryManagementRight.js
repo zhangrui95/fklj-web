@@ -1,13 +1,11 @@
 /**
- * create by zy 2017-07-27
+ * 呼市盘查管理右侧页面
  */
-//盘查管理右侧页面
 import React, {Component} from 'react'
 import {mainReducer} from "../reducers/reducers";
 import {connect} from "react-redux";
 import {store} from '../index.js';
 import  {PersonnelInventory}  from "./InventoryManagement/PersonnelInventory";
-import  {CarInventory}  from "./InventoryManagement/CarInventory";
 import {fetchPersonnelInventoryData,fetchCarInventoryData,fetchBayonetInventoryData} from "../actions/InventoryManagement";
 import  * as constants from "../utils/Constants";
 

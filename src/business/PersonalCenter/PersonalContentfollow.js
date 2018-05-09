@@ -240,7 +240,7 @@ export class PersonalContentfollow extends Component {
                             <div className="z_slderRightBody">
                                 {userItems}
                                 <div className="clear"></div>
-                            </div>}
+                            </div>
                             {/*分页*/}
                             <Pag pageSize={constants.pageSize} nowPage={nowPage} totalRecord={totalRecord} pageChange={this.pageChange} />
                         </div>:

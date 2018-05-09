@@ -1,5 +1,5 @@
 /*
- 洛阳--任务管理
+ 呼市任务管理
  */
 import React, {Component} from 'react'
 import {mainReducer} from "../reducers/reducers";

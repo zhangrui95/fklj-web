@@ -47,9 +47,9 @@ export const CONTROLPERSONNEL_MODULE_GK_SK = '失控';
 export const CONTROLPERSONNEL_MODULE_DR = '导入';
 export const CONTROLPERSONNEL_MODULE_XZ = '新增';
 //系统设置模块（呼市）
-export const SYSREMSETUP_MODULE = '系统设置';
-export const SYSREMSETUP_MODULE_Add = '添加到任务';
-export const SYSREMSETUP_MODULE_Choice = '选择责任单位';
+export const SYSREMSETUP_MODULE_TIME = '失控时间设置';
+// export const SYSREMSETUP_MODULE_Add = '添加到任务';
+// export const SYSREMSETUP_MODULE_Choice = '选择责任单位';
 //智能检索模块
 export const INTELLIGENTRETRIEVAL_MODULE = 'intelligentretrieval_module';
 //设置管理模块

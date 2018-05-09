@@ -1,4 +1,6 @@
-//任务管理右侧页面
+/**
+ * 呼市任务管理右侧
+ */
 import React, {Component} from 'react'
 import {mainReducer} from "../reducers/reducers";
 import {connect} from "react-redux";

@@ -24,31 +24,31 @@ const initialState = {
         menus: [
             {
                 id: '101',
-                menuName: '管控人员',
-                haveSon: true,
+                menuName: '失控时间设置',
+                haveSon: false,
                 isOpen: true,
                 search: 'type=rwgl',
-                isSelect: false,
+                isSelect: true,
                 code: "",
                 isShow: true,
-                sonMenu: [
-                    {
-                        id: '1001',
-                        menuName: '添加到任务',
-                        search: 'type=gzry&state=1',
-                        isSelect: true,
-                        isShow: true,
-                        code: ""
-                    },
-                    {
-                        id: '1002',
-                        menuName: '选择责任单位',
-                        search: 'type=gzry&state=2',
-                        isSelect: false,
-                        isShow: true,
-                        code: ""
-                    }
-                ]
+                // sonMenu: [
+                //     {
+                //         id: '1001',
+                //         menuName: '添加到任务',
+                //         search: 'type=gzry&state=1',
+                //         isSelect: true,
+                //         isShow: true,
+                //         code: ""
+                //     },
+                //     {
+                //         id: '1002',
+                //         menuName: '选择责任单位',
+                //         search: 'type=gzry&state=2',
+                //         isSelect: false,
+                //         isShow: true,
+                //         code: ""
+                //     }
+                // ]
             }
         ]
     }
@@ -81,7 +81,7 @@ const SystemSetup =(state = initialState, action) =>{
                     newState.uiData.menus[x].sonMenu[i].isSelect = false;
                 }
             }
-            newState.uiData.menus[0].sonMenu[0].isSelect = true;
+            newState.uiData.menus[0].isSelect = true;
             return newState;
         case SYSTEMSETUP_ADD:
             if(newState.uiData.menus[0].isOpen===true){
@@ -105,7 +105,6 @@ const SystemSetup =(state = initialState, action) =>{
                     }else{
                         newState.uiData.menus[x].sonMenu[i].isSelect=false;
                     }
-
                 }
             }
             return newState;

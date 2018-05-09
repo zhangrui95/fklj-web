@@ -1,7 +1,6 @@
 /**
- * Created by iliulei on 2017/6/20.
+ * 原反恐利剑数据统计
  */
-//报表
 import React, {Component} from 'react'
 import {mainReducer} from "../reducers/reducers";
 import {connect} from "react-redux";

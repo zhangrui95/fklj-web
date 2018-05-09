@@ -1,3 +1,4 @@
+//卡点管理右侧组件
 import React, {
     Component
 } from 'react';

@@ -1,3 +1,6 @@
+/**
+ * 管控人员右侧组件
+ */
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {mainReducer} from "../../reducers/reducers";
@@ -242,6 +245,7 @@ export  class Control extends Component{
         })
     }
     render() {
+        console.log('controlType====>',this.props.controlType)
         const { getFieldDecorator } = this.props.form;
         let nowPage = this.state.nowPage;
         let isFetching = store.getState().ControlPersonnel.isFetching;
@@ -368,8 +372,8 @@ export  class Control extends Component{
                             handleDelete={this.handleDelete}
                             serchChange={this.serchChange}
                             form={this.props.form}
+                            controlType = {this.props.controlType}
                         />
-
                         <div className="clear"></div>
                     </div>
                 </div>
@@ -702,6 +706,8 @@ const SearchArea = React.createClass({
 
     },
     render() {
+        const controlType = this.props.controlType
+        console.log(controlType)
         const {getFieldDecorator} = this.props.form
         let {name,cardId,status,WorkPlace, enddate, begindate,cycle,wordType,showInput,wordName,OptionWords,showDel} = this.state;
         let beginDateValue = '';
@@ -782,11 +788,8 @@ const SearchArea = React.createClass({
                     >
                         添加到任务
                     </Button>
-                    <Button style={{width:"110px", marginRight:"10px"}} className="btn_ok">
-                        选择责任单位
-                    </Button>
-                    {/*<Button style={{margin:'0 10px 0 10px',width:"80px"}} onClick={this.showModal} className="btn_delete">*/}
-                    {/*<Icon type="delete" />  删除*/}
+                    {/*<Button style={{width:"110px", marginRight:"10px"}} className="btn_ok">*/}
+                        {/*选择责任单位*/}
                     {/*</Button>*/}
                     <Button style={{width:"80px", marginRight:"10px"}} className="btn_ok">导入</Button>
                     <Button style={{width:"80px", marginRight:"10px"}} className="btn_ok">导出</Button>
