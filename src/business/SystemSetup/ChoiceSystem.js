@@ -337,7 +337,7 @@ export  class ChoiceSystem extends Component{
         return(
             <div className="sliderWrap">
                 <div style={{color:'#fff',padding:'16px 16px 0',fontSize:'16px'}}>
-                    控制人员选择责任单位
+                    控制人员选择隶属任务
                 </div>
                 {/*表格*/}
                 <div className="z_slderRightBody sys_overflow">

@@ -42,7 +42,7 @@ const initialState = {
                     },
                     {
                         id: '1002',
-                        menuName: '选择责任单位',
+                        menuName: '选择隶属任务',
                         search: 'type=gzry&state=2',
                         isSelect: false,
                         isShow: true,

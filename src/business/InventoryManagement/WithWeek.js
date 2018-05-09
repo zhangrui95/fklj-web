@@ -823,7 +823,7 @@ const SearchArea = React.createClass({
                     >
                         <Option key="all" value="">全部</Option>
                     </Select>
-                    <label htmlFor="" className="font14">责任单位：</label>
+                    <label htmlFor="" className="font14">隶属任务：</label>
                     <Select key='select'
                         style={{ width: 175, marginRight: "10px" }}
                         placeholder="Select a person"

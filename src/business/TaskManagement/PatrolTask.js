@@ -593,7 +593,7 @@ export  class PatrolTask extends Component{
                                 </FormItem>
                                 <FormItem
                                     {...formItemLayouts}
-                                    label="责任单位"
+                                    label="隶属任务"
                                 >
                                     {getFieldDecorator('TaskCom', {
                                         initialValue:this.state.modalType === 'edit' ? this.state.personInfo.TaskCom : '',

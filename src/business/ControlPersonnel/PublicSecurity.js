@@ -265,7 +265,7 @@ export  class PublicSecurity extends Component{
             title: '联系电话',
             dataIndex: 'phone',
         },{
-            title: '责任单位',
+            title: '隶属任务',
             dataIndex: 'zrdw',
         },{
             title: '任务周期',
@@ -418,7 +418,7 @@ export  class PublicSecurity extends Component{
                                 </FormItem>
                                 <FormItem
                                     {...formItemLayout}
-                                    label="责任单位"
+                                    label="隶属任务"
                                 >
                                     {getFieldDecorator('value', {
                                         initialValue:this.state.personInfo.zrdw,
@@ -560,8 +560,8 @@ const SearchArea = React.createClass({
                     <Option value="暂住">暂住</Option>
                     <Option value="流动">流动</Option>
                 </Select>
-                <label htmlFor="" className="font14">责任单位：</label>
-                <Input style={{width:'130px',marginRight:"10px"}} type="text"  id='name' placeholder='请输入责任单位'  value={WorkPlace}  onChange={this.WorkPlaceChange}/>
+                <label htmlFor="" className="font14">隶属任务：</label>
+                <Input style={{width:'130px',marginRight:"10px"}} type="text"  id='name' placeholder='请输入隶属任务'  value={WorkPlace}  onChange={this.WorkPlaceChange}/>
                 <label htmlFor="" className="font14">任务周期：</label>
                 <Select value={cycle} style={{ width: 100 ,marginRight:"10px" }} onChange={this.cycleChange} notFoundContent='暂无'>
                     <Option value="">全部</Option>

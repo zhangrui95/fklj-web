@@ -222,7 +222,7 @@ export const INVENTORYMANAGEMENT_HUSHI_ZQRW = 'Inventorymanagement_hushi_zqrw';/
 export const INVENTORYMANAGEMENT_HUSHI_CURRENT = 'Inventorymanagement_hushi_current';//盘查管理-更选项-呼市
 
 export const SYSTEMSETUP_ADD = 'System_Setup_add';//更选项-呼市-系统设置-添加到任务
-// export const SYSTEMSETUP_CHOICE = 'System_Setup_choice';//更选项-呼市-系统设置-选择责任单位
+// export const SYSTEMSETUP_CHOICE = 'System_Setup_choice';//更选项-呼市-系统设置-选择隶属任务
 
 export const INVENTORY_MENU_LDPC_CHAGE = 'inventory-menu-change';//一级菜单流动盘查
 export const INVENTORY_MENU_KKPC_CHAGE = 'customsPass-data-flow';//一级菜单卡口盘查
