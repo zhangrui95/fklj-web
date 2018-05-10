@@ -1,3 +1,6 @@
+/**
+ * 管控人员=>拟来呼人员右侧组件
+ */
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {mainReducer} from "../../reducers/reducers";

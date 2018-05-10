@@ -1,5 +1,5 @@
 /**
- * 统计报表右侧
+ * 原反恐利剑数据统计右侧
  */
 import React, { Component } from 'react';
 import {connect} from 'react-redux';

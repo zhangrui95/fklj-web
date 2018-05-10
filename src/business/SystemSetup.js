@@ -1,5 +1,5 @@
 /**
- * 设置管理
+ * 呼市系统设置主页
  */
 import React, {Component} from 'react'
 import {mainReducer} from "../reducers/reducers";

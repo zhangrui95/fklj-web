@@ -1,11 +1,10 @@
 /**
- * 设置管理右侧
+ * 呼市系统设置右侧
  */
 import React, { Component } from 'react';
 import {connect} from 'react-redux';
 import {mainReducer} from "../reducers/reducers";
 import {AddSystem}  from "./SystemSetup/AddSystem";
-import {ChoiceSystem}  from "./SystemSetup/ChoiceSystem";
 import {store} from '../index.js';
 import  * as constants from "../utils/Constants";
 
@@ -30,11 +29,8 @@ class SystemSetupRight extends Component{
             }
         });
         switch(isSelectMenu.menuName){
-            case constants.SYSREMSETUP_MODULE_Add:
+            case constants.SYSREMSETUP_MODULE_TIME:
                 content = <AddSystem/>
-                break
-            case constants.SYSREMSETUP_MODULE_Choice:
-                content = <ChoiceSystem/>
                 break
             default:
                 break

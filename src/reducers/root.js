@@ -85,7 +85,7 @@ const initialState = {
                 navigationName: '卡点管理',
                 isSelect: false,
                 path: "/AreaManagement",
-                isShow: true,
+                isShow: false,
                 homeType: ''
             },
             // {

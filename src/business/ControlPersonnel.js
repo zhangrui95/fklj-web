@@ -1,3 +1,6 @@
+/**
+ * 呼市管控人员主页
+ */
 import React, {Component} from 'react'
 import {mainReducer} from "../reducers/reducers";
 import {connect} from "react-redux";

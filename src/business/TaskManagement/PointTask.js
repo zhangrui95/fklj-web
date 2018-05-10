@@ -328,7 +328,7 @@ export  class PointTask extends Component{
                             <Spin size="large" />
                         </div>:
                         <div style={{padding:"0 15px"}}>
-                            <Table locale={{emptyText:'暂无数据'}}  columns={columns} dataSource={data} bordered  pagination={false}/>
+                            <Table locale={{emptyText:'暂无数据'}} columns={columns} dataSource={data} bordered  pagination={false}/>
                         </div>}
                     <div className="clear"></div>
                 </div>
