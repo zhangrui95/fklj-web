@@ -248,9 +248,15 @@ export  class DoneTask extends Component{
             dataIndex: 'endTime',
             width:180,
         },{
-            title: '任务创造者',
+            title: '任务创建者',
             dataIndex: 'person',
             width:180,
+        },{
+            title: '任务状态',
+            dataIndex: 'taskStatus',
+        },{
+            title: '任务详情',
+            dataIndex: 'taskDetails',
         }, {
             title: '操作',
             key: 'action',
