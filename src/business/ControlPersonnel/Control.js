@@ -250,16 +250,6 @@ export  class Control extends Component{
         let isFetching = store.getState().ControlPersonnel.isFetching;
         let newWords = this.state.newWords;
         let controlType = this.props.controlType;
-        let actionBox
-        if(controlType === 'GZ_NLHRY' || controlType === 'GZ_ZALY'){
-
-        }else if(controlType === 'GK_YGK'){
-
-        }else if(controlType === 'GK_LKZRQ' || controlType === 'GK_SK'){
-
-        }else if(controlType === 'LY_DR' || controlType === 'LY_XZ'){
-
-        }
         const columns = [{
             title: '序号',
             dataIndex: 'serial',
@@ -401,7 +391,7 @@ export  class Control extends Component{
                             <Spin size="large" />
                         </div>:
                         <div style={{padding:"0 15px"}}>
-                            <Table locale={{emptyText:'暂无数据'}}  rowSelection={rowSelection} columns={columns} dataSource={this.state.data} bordered  pagination={false}/>
+                            <Table locale={{emptyText:'暂无数据'}}  rowSelection={controlType === 'GZ_NLHRY' || controlType === 'GZ_ZALY'||controlType === 'LY_DR' || controlType === 'LY_XZ' ? undefined : rowSelection} columns={columns} dataSource={this.state.data} bordered  pagination={false}/>
                         </div>}
                     <div className="clear"></div>
                 </div>
@@ -907,7 +897,7 @@ const SearchArea = React.createClass({
             <div style={{marginTop:"15px"}}>
                 <Button style={{width:"110px", marginRight:"10px",float:'left'}} onClick={this.getAddModal} className="btn_ok">添加到任务</Button>
                 <div  style={{float:'left'}}>
-                    <Upload onChange={this.importOnChange} beforeUpload={this.beforeUpload}>
+                    <Upload onChange={this.importOnChange} beforeUpload={this.beforeUpload} showUploadList={false}>
                         <Button style={{width:"80px", marginRight:"10px"}} className="btn_ok">导入</Button>
                     </Upload>
                 </div>
