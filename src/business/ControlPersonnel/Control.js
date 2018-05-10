@@ -698,8 +698,8 @@ const SearchArea = React.createClass({
     hideModalOk: function() {
         this.setState({
             visible: false,
+            zdyModal:true
         });
-        this.props.handleDelete();
     },
     handleBeginDeteClick: function(date, dateString) {
         this.setState({
@@ -717,6 +717,12 @@ const SearchArea = React.createClass({
             zdyModal: false,
             addModal:false,
             prompt: false
+        });
+    },
+    hideDel:function(){
+        this.setState({
+            zdyModals: true,
+            visible: false
         });
     },
     hideModals: function() {
@@ -789,7 +795,10 @@ const SearchArea = React.createClass({
         });
     },
     getDelete:function () {
-
+        this.setState({
+            visible:true,
+            zdyModals:false
+        })
     },
     importOnChange:function(info) {
         if(info.file.response.reason!==null){
@@ -1063,16 +1072,15 @@ const SearchArea = React.createClass({
                            maskClosable={false}
                            closable={false}
                     >
-                        <p style={{fontSize:"16px",}}>是否删除选中项？</p>
+                        <p style={{fontSize:"16px",}}>是否确定删除该自定义字段？</p>
                         <p style={{marginTop:"20px",textAlign:"center"}}>
                             <Button style={{margin:'0 20px 0 0 ',width:"80px"}} onClick={this.hideModalOk} className="btn_ok">
                                 确定
                             </Button>
-                            <Button style={{margin:'',width:"80px"}} onClick={this.hideModal} className="btn_delete">
+                            <Button style={{margin:'',width:"80px"}} onClick={this.hideDel} className="btn_delete">
                                 取消
                             </Button>
                         </p>
-
                     </Modal>
                     <div className="clear"></div>
                 </div>
