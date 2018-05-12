@@ -1217,11 +1217,6 @@ export class InterrogationDetailsItem extends Component {
                         </div>
                         {/*颜色框*/}
                         <div style={{ margin: "0px 0 0 0" }}>
-                            {/*<ColorBgTag width="88px" height="30px" lineHeight="30px" color="#C50C1E" float="left" margin="0 20px 0 0" background="url(/images/mark_r.png)" text="涉藏学生"/>
-                            <ColorBgTag width="88px" height="30px" lineHeight="30px" color="#E57314" float="left" margin="0 20px 0 0" background="url(/images/mark_o.png)" text="在逃人员"/> 
-                            <ColorBgTag width="88px" height="30px" lineHeight="30px" color="#F9E503" float="left" margin="0 20px 0 0" background="url(/images/mark_y.png)" text="重点关注"/>
-                            <ColorBgTag width="88px" height="30px" lineHeight="30px" color="#107DBE" float="left" background="url(/images/mark_b.png)" text="涉毒人员"/>*/}
-
                             {redTag}
                             {greenTag}
                             <div style={{ clear: "both" }}></div>
