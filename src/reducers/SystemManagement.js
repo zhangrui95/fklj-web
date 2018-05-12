@@ -286,6 +286,16 @@ const initialState = { //系统管理
                     code: 'xtgl_sjzd_page',
                     isShow: true
                   },
+                {
+                    id: '111',
+                    menuName: '失控时间设置',
+                    haveSon: false,
+                    isOpen: true,
+                    search: 'type=rwgl',
+                    isSelect: false,
+                    code: "",
+                    isShow: true,
+                }
                 
             ]
         }

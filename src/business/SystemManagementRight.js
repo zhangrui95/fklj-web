@@ -21,6 +21,7 @@ import  {PlaceOfInfluxPerson}  from "./SystemManagement/PlaceOfInfluxPerson";
 import  {HighRiskLine}  from "./SystemManagement/HighRiskLine";
 import  {RedList} from "./SystemManagement/RedList";
 import  {CodingTable} from "./SystemManagement/CodingTable";
+import {AddSystem}  from "../business/SystemSetup/AddSystem";
 
 
 import {store} from '../index.js';
@@ -126,6 +127,9 @@ class SystemManagementRight extends Component{
               case constants.SYSTEMMANAGEMENT_MENU_CODE:
               content =<CodingTable codeTable={codeTable}/>
               break
+            case constants.SYSREMSETUP_MODULE_TIME:
+                content = <AddSystem/>
+                break
             default:
                 break
         }

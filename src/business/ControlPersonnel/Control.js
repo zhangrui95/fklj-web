@@ -8,7 +8,7 @@ import {StylePage, ShallowBlueBtn, Pag,} from "../generalPurposeModule";
 import {store} from '../../index.js';
 import * as constants from "../../utils/Constants";
 import {monthFormat, dateFormat, serverUrl} from '../../utils/';
-import {Spin, Table, message, Input, Modal, Button, Form, Icon, Row, Col, Select, DatePicker, Divider, List} from 'antd';
+import {Spin, Table, message, Input, Modal, Button, Form, Icon, Row, Col, Select, DatePicker, Divider, List, Popconfirm,Upload} from 'antd';
 
 import moment from 'moment';
 import 'moment/locale/zh-cn';
@@ -66,9 +66,9 @@ export  class Control extends Component{
             enddate: '',
             key: '',
             data: [
-                {key: 1, serial: 1, cardId: '230106196201222121', label: '张三', sex:'男',age:'26', state:'暂住', phone:'13936003633',zrdw:'呼伦浩特市XX单位', updatetime: '2018-04-10',cycle:'按周',address:'玉泉区兴隆巷1106号'},
-                {key: 2, serial: 2, cardId: '230105199605262631', label: '李四', sex:'女',age:'18', state:'暂住', phone:'13936003633',zrdw:'呼伦浩特市XX单位', updatetime: '2018-04-09',cycle:'按天',address:'玉泉区兴隆巷1106号'},
-                {key: 3, serial: 3, cardId: '20610819740122292X', label: '王二', sex:'男',age:'39', state:'暂住', phone:'13936003633',zrdw:'呼伦浩特市XX单位', updatetime: '2018-04-08',cycle:'按周',address:'玉泉区兴隆巷1106号'},
+                {key: 1, serial: 1, cardId: '230106196201222121', label: '张三', sex:'男',age:'26', state:'暂住', phone:'13936003633',zrdw:'呼伦浩特市XX单位', updatetime: '2018-04-10',cycle:'按周',address:'玉泉区兴隆巷1106号',personFrom:'导入'},
+                {key: 2, serial: 2, cardId: '230105199605262631', label: '李四', sex:'女',age:'18', state:'暂住', phone:'13936003633',zrdw:'呼伦浩特市XX单位', updatetime: '2018-04-09',cycle:'按天',address:'玉泉区兴隆巷1106号',personFrom:'新增'},
+                {key: 3, serial: 3, cardId: '20610819740122292X', label: '王二', sex:'男',age:'39', state:'暂住', phone:'13936003633',zrdw:'呼伦浩特市XX单位', updatetime: '2018-04-08',cycle:'按周',address:'玉泉区兴隆巷1106号',personFrom:'导入'},
             ],
             record: null,
             pagination: pagination,
@@ -249,6 +249,7 @@ export  class Control extends Component{
         let nowPage = this.state.nowPage;
         let isFetching = store.getState().ControlPersonnel.isFetching;
         let newWords = this.state.newWords;
+        let controlType = this.props.controlType;
         const columns = [{
             title: '序号',
             dataIndex: 'serial',
@@ -280,6 +281,9 @@ export  class Control extends Component{
         },{
             title: '任务周期',
             dataIndex: 'cycle',
+        },{
+            title: '人员来源',
+            dataIndex: 'personFrom',
         }, {
             title: '更新时间',
             dataIndex: 'updatetime',
@@ -288,9 +292,13 @@ export  class Control extends Component{
             key: 'action',
             render: (text, record) => (
                 <span>
-                    <span onClick={(e)=>this.editShowModal(record)} style={{cursor:'pointer'}}>编辑</span>
-                    <Divider type="vertical" />
-                     <span style={{cursor:'pointer'}}>撤出</span>
+                    <span className={controlType === 'GZ_NLHRY' || controlType === 'GZ_ZALY' || controlType === 'LY_DR' || controlType === 'LY_XZ' ? '' : 'noneDiv'} onClick={(e)=>this.editShowModal(record)} style={{cursor:'pointer'}}>详情</span>
+                    {/*<Divider className={controlType === 'GZ_NLHRY' || controlType === 'GZ_ZALY' || controlType === 'LY_DR' || controlType === 'LY_XZ' || controlType === 'LY_XZ' ? '' : 'noneDiv'} type="vertical" />*/}
+                    <span className={controlType === 'GK_WGK' || controlType === 'GK_YGK' || controlType === 'GK_LKZRQ' || controlType === 'GK_SK' ? '' : 'noneDiv'} onClick={(e)=>this.editShowModal(record)} style={{cursor:'pointer'}}>编辑</span>
+                    <Divider className={controlType === 'GK_WGK' || controlType === 'GK_YGK' || controlType === 'GK_LKZRQ' || controlType === 'GK_SK' ? '' : 'noneDiv'} type="vertical" />
+                    <Popconfirm title="是否确定该人员离开责任区？" okText="确定" cancelText="取消">
+                              <span className={controlType === 'GK_WGK' || controlType === 'GK_YGK' || controlType === 'GK_LKZRQ' || controlType === 'GK_SK' ? '' : 'noneDiv'} style={{cursor:'pointer'}}>离开责任区</span>
+                    </Popconfirm>
                 </span>
             ),
         }];
@@ -383,7 +391,7 @@ export  class Control extends Component{
                             <Spin size="large" />
                         </div>:
                         <div style={{padding:"0 15px"}}>
-                            <Table locale={{emptyText:'暂无数据'}}  rowSelection={rowSelection} columns={columns} dataSource={this.state.data} bordered  pagination={false}/>
+                            <Table locale={{emptyText:'暂无数据'}}  rowSelection={controlType === 'GZ_NLHRY' || controlType === 'GZ_ZALY'||controlType === 'LY_DR' || controlType === 'LY_XZ' ? undefined : rowSelection} columns={columns} dataSource={this.state.data} bordered  pagination={false}/>
                         </div>}
                     <div className="clear"></div>
                 </div>
@@ -391,7 +399,7 @@ export  class Control extends Component{
                 <Pag pageSize={10} nowPage={nowPage} totalRecord={10} pageChange={this.pageChange} />
                 <Modal
                     width={700}
-                    title="任务"
+                    title="任务详情"
                     visible={this.state.visible}
                     onCancel={this.handleCancel}
                     footer={null}
@@ -399,12 +407,16 @@ export  class Control extends Component{
                 >
                     <Row>
                         <Form onSubmit={this.saveModel}>
+                            <Col span={12} style={{ padding: '0 38px' }}>
+                                <span style={{color:"#fff"}}>照片：</span>
+                                <img src="../../images/zanwu.png" style={{ width: '130px', height: '160px' }} />
+                            </Col>
                             <Col span={12}>
                                 <FormItem
                                     {...formItemLayout}
                                     label="身份证号"
                                 >
-                                    {getFieldDecorator('value', {
+                                    {getFieldDecorator('cardId ', {
                                         initialValue:this.state.modalType === 'edit' ?this.state.personInfo.cardId : '',
                                     })(
                                         <Input/>
@@ -416,7 +428,7 @@ export  class Control extends Component{
                                     {...formItemLayout}
                                     label="姓名"
                                 >
-                                    {getFieldDecorator('value', {
+                                    {getFieldDecorator('lable', {
                                         initialValue:this.state.modalType === 'edit' ? this.state.personInfo.label : '',
                                     })(
                                         <Input/>
@@ -428,7 +440,7 @@ export  class Control extends Component{
                                     {...formItemLayout}
                                     label="性别"
                                 >
-                                    {getFieldDecorator('value', {
+                                    {getFieldDecorator('sex', {
                                         initialValue:this.state.modalType === 'edit' ? this.state.personInfo.sex : '',
                                     })(
                                         <Input/>
@@ -440,8 +452,32 @@ export  class Control extends Component{
                                     {...formItemLayout}
                                     label="年龄"
                                 >
-                                    {getFieldDecorator('value', {
+                                    {getFieldDecorator('age', {
                                         initialValue:this.state.modalType === 'edit' ? this.state.personInfo.age : '',
+                                    })(
+                                        <Input/>
+                                    )}
+                                </FormItem>
+                            </Col>
+                            <Col span={12}>
+                                <FormItem
+                                    {...formItemLayout}
+                                    label="户籍地址"
+                                >
+                                    {getFieldDecorator('address', {
+                                        initialValue:this.state.modalType === 'edit' ? this.state.personInfo.address : '',
+                                    })(
+                                        <Input/>
+                                    )}
+                                </FormItem>
+                            </Col>
+                            <Col span={12}>
+                                <FormItem
+                                    {...formItemLayout}
+                                    label="民族"
+                                >
+                                    {getFieldDecorator('nation', {
+                                        initialValue:this.state.modalType === 'edit' ? this.state.personInfo.nation : '',
                                     })(
                                         <Input/>
                                     )}
@@ -479,9 +515,21 @@ export  class Control extends Component{
                             <Col span={12}>
                                 <FormItem
                                     {...formItemLayout}
+                                    label="工作地址"
+                                >
+                                    {getFieldDecorator('address', {
+                                        initialValue:this.state.modalType === 'edit' ? this.state.personInfo.address : '',
+                                    })(
+                                        <Input/>
+                                    )}
+                                </FormItem>
+                            </Col>
+                            <Col span={12}>
+                                <FormItem
+                                    {...formItemLayout}
                                     label="联系电话"
                                 >
-                                    {getFieldDecorator('value', {
+                                    {getFieldDecorator('phone', {
                                         initialValue:this.state.modalType === 'edit' ? this.state.personInfo.phone : '',
                                     })(
                                         <Input/>
@@ -493,7 +541,7 @@ export  class Control extends Component{
                                     {...formItemLayout}
                                     label="责任单位"
                                 >
-                                    {getFieldDecorator('value', {
+                                    {getFieldDecorator('zrdw', {
                                         initialValue: this.state.modalType === 'edit' ? this.state.personInfo.zrdw : '',
                                     })(
                                         <Input/>
@@ -513,6 +561,42 @@ export  class Control extends Component{
                                             <Option value="按周">按周</Option>
                                             <Option value="按天">按天</Option>
                                         </Select>
+                                    )}
+                                </FormItem>
+                            </Col>
+                            <Col span={12}>
+                                <FormItem
+                                    {...formItemLayout}
+                                    label="人员来源"
+                                >
+                                    {getFieldDecorator('personFrom', {
+                                        initialValue: this.state.modalType === 'edit' ? this.state.personInfo.personFrom : '',
+                                    })(
+                                        <Input/>
+                                    )}
+                                </FormItem>
+                            </Col>
+                            <Col span={12}>
+                                <FormItem
+                                    {...formItemLayout}
+                                    label="人员属性"
+                                >
+                                    {getFieldDecorator('personType', {
+                                        initialValue: this.state.modalType === 'edit' ? this.state.personInfo.personType : '',
+                                    })(
+                                        <Input/>
+                                    )}
+                                </FormItem>
+                            </Col>
+                            <Col span={12}>
+                                <FormItem
+                                    {...formItemLayout}
+                                    label="是否有车"
+                                >
+                                    {getFieldDecorator('car', {
+                                        initialValue: this.state.modalType === 'edit' ? this.state.personInfo.car : '',
+                                    })(
+                                        <Input/>
                                     )}
                                 </FormItem>
                             </Col>
@@ -563,6 +647,8 @@ const SearchArea = React.createClass({
             OptionWords:'',
             addModal: false,
             showDel:{display:'none'},
+            prompt: false,
+            promptText:''
         };
     },
     handleNameChange: function(e) {
@@ -612,8 +698,8 @@ const SearchArea = React.createClass({
     hideModalOk: function() {
         this.setState({
             visible: false,
+            zdyModal:true
         });
-        this.props.handleDelete();
     },
     handleBeginDeteClick: function(date, dateString) {
         this.setState({
@@ -629,7 +715,14 @@ const SearchArea = React.createClass({
         this.setState({
             visible: false,
             zdyModal: false,
-            addModal:false
+            addModal:false,
+            prompt: false
+        });
+    },
+    hideDel:function(){
+        this.setState({
+            zdyModals: true,
+            visible: false
         });
     },
     hideModals: function() {
@@ -702,7 +795,65 @@ const SearchArea = React.createClass({
         });
     },
     getDelete:function () {
+        this.setState({
+            visible:true,
+            zdyModals:false
+        })
+    },
+    importOnChange:function(info) {
+        if(info.file.response.reason!==null){
+            message.error(`提示：${info.file.response.reason.text}`,5);
+        }
+        if (info.file.status === 'uploading') {
+            this.importEnterLoading();
+        }
+        if (info.file.status !== 'uploading') {
+            //console.log(info.file, info.fileList);
+        }
+        if (info.file.status === 'done') {
+            message.success(`提示：${info.file.name} 上传成功!`);
+            this.props.initEntity();
+            let creds = {
+                currentPage:1,
+                entityOrField:true,
+                pd:{
+                },
+                showCount: constants.pageSize
+            }
+            // store.dispatch(fetchDefineWarehousePersonData(creds));
 
+            this.setState({
+                importLoading: false,
+            });
+
+
+        } else if (info.file.status === 'error') {
+            message.error(`提示：${info.file.name} 上传失败!`);
+            this.setState({
+                importLoading: false,
+            });
+        }
+    },
+    beforeUpload:function(file, fileList) {
+        const isExcel = file.type === 'application/vnd.ms-excel';
+        if (!isExcel) {
+            message.error('提示：请上传excel!');
+        }
+        return isExcel;
+    },
+    getPrompt:function (type) {
+        if(type === 'download'){
+            this.setState({
+                promptText:'是否确定下载导入模板？'
+            })
+        }else if(type === 'export'){
+            this.setState({
+                promptText:'是否确定导出数据？'
+            })
+        }
+        this.setState({
+            prompt:true,
+        })
     },
     render() {
         const {getFieldDecorator} = this.props.form
@@ -753,10 +904,14 @@ const SearchArea = React.createClass({
         }];
         let btns = (
             <div style={{marginTop:"15px"}}>
-                <Button style={{width:"110px", marginRight:"10px"}} onClick={this.getAddModal} className="btn_ok">添加到任务</Button>
-                <Button style={{width:"80px", marginRight:"10px"}} className="btn_ok">导入</Button>
-                <Button style={{width:"80px", marginRight:"10px"}} className="btn_ok">导出</Button>
-                <Button style={{width:"110px", marginRight:"10px"}} className="btn_ok">模板下载</Button>
+                <Button style={{width:"110px", marginRight:"10px",float:'left'}} onClick={this.getAddModal} className="btn_ok">添加到任务</Button>
+                <div  style={{float:'left'}}>
+                    <Upload onChange={this.importOnChange} beforeUpload={this.beforeUpload} showUploadList={false}>
+                        <Button style={{width:"80px", marginRight:"10px"}} className="btn_ok">导入</Button>
+                    </Upload>
+                </div>
+                <Button style={{width:"80px", marginRight:"10px"}} className="btn_ok" onClick={() => this.getPrompt('export')}>导出</Button>
+                <Button style={{width:"110px", marginRight:"10px"}} className="btn_ok" onClick={() => this.getPrompt('download')}>模板下载</Button>
                 <Button style={zdyStyle} className="btn_ok" onClick={this.getNewWords}>自定义字段</Button>
             </div>
         )
@@ -768,20 +923,20 @@ const SearchArea = React.createClass({
             btns = (
                 <div style={{marginTop:"15px"}}>
                     <Button style={{width:"110px", marginRight:"10px"}} onClick={this.getAddModal} className="btn_ok">变更任务</Button>
-                    <Button style={{width:"80px", marginRight:"10px"}} className="btn_ok">导出</Button>
+                    <Button style={{width:"80px", marginRight:"10px"}} className="btn_ok" onClick={() => this.getPrompt('export')}>导出</Button>
                 </div>
             )
         }else if(controlType === 'GK_LKZRQ' || controlType === 'GK_SK'){
             btns = (
                 <div style={{marginTop:"15px"}}>
                     <Button style={{width:"110px", marginRight:"10px"}} onClick={this.getAddModal} className="btn_ok">添加到任务</Button>
-                    <Button style={{width:"80px", marginRight:"10px"}} className="btn_ok">导出</Button>
+                    <Button style={{width:"80px", marginRight:"10px"}} className="btn_ok" onClick={() => this.getPrompt('export')}>导出</Button>
                 </div>
             )
         }else if(controlType === 'LY_DR' || controlType === 'LY_XZ'){
             btns = (
                 <div style={{marginTop:"15px"}}>
-                    <Button style={{width:"110px", marginRight:"10px"}} className="btn_ok">导出</Button>
+                    <Button style={{width:"110px", marginRight:"10px"}} className="btn_ok" onClick={() => this.getPrompt('export')}>导出</Button>
                 </div>
             )
         }
@@ -830,14 +985,14 @@ const SearchArea = React.createClass({
                     </Modal>
                     <Modal style={{top:"38%"}}
                            title="提示"
-                           visible={this.state.visible}
+                           visible={this.state.prompt}
                            footer={null}
                            maskClosable={false}
                            closable={false}
                     >
-                        <p style={{fontSize:"16px",}}>是否删除选中项？</p>
+                        <p style={{fontSize:"16px",}}>{this.state.promptText}</p>
                         <p style={{marginTop:"20px",textAlign:"center"}}>
-                            <Button style={{margin:'0 20px 0 0 ',width:"80px"}} onClick={this.hideModalOk} className="btn_ok">
+                            <Button style={{margin:'0 20px 0 0 ',width:"80px"}} onClick={this.hideModal} className="btn_ok">
                                 确定
                             </Button>
                             <Button style={{margin:'',width:"80px"}} onClick={this.hideModal} className="btn_delete">
@@ -909,7 +1064,23 @@ const SearchArea = React.createClass({
                                 删除
                             </Button>
                         </p>
-
+                    </Modal>
+                    <Modal style={{top:"38%"}}
+                           title="提示"
+                           visible={this.state.visible}
+                           footer={null}
+                           maskClosable={false}
+                           closable={false}
+                    >
+                        <p style={{fontSize:"16px",}}>是否确定删除该自定义字段？</p>
+                        <p style={{marginTop:"20px",textAlign:"center"}}>
+                            <Button style={{margin:'0 20px 0 0 ',width:"80px"}} onClick={this.hideModalOk} className="btn_ok">
+                                确定
+                            </Button>
+                            <Button style={{margin:'',width:"80px"}} onClick={this.hideDel} className="btn_delete">
+                                取消
+                            </Button>
+                        </p>
                     </Modal>
                     <div className="clear"></div>
                 </div>
