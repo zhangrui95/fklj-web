@@ -106,7 +106,7 @@ class SystemManagement extends Component {
         return (
             <div>
                 <Shade isBlock={isBlock}/>
-                <Header homeType="fklj_sys"/>
+                <Header homeType="hs_fklj_sys"/>
                 <div className="sileder_left">
                     <SliderMenuItem menus={menus}
                                     handleMenuClick={this.handleMenuClick}/>

@@ -18,6 +18,35 @@ const initialState = {
                 total: 0,
                 list: [],
             }
+        },
+        ControlPersonList: {
+            reason: 1,
+            result: {
+                list: [],
+                page: {}
+            }
+        },
+        FiledList: {
+            reason: 1,
+            result: {
+                list: [],
+            }
+        },
+        getControlPersonListById: {
+            reason: 1,
+            result: {
+                data: {}
+            }
+        },
+        getExport:{
+            result:{
+                path:""
+            }
+        },
+        Download:{
+            result:{
+                path:""
+            }
         }
     },
     uiData: {
@@ -106,7 +135,7 @@ const initialState = {
                 sonMenu: [
                     {
                         id: '1007',
-                        menuName: '导入',
+                        menuName: '后台导入',
                         search: 'type=gzry&state=1',
                         isSelect: false,
                         isShow: true,
@@ -114,7 +143,7 @@ const initialState = {
                     },
                     {
                         id: '1008',
-                        menuName: '新增',
+                        menuName: '前端新增',
                         search: 'type=gzry&state=2',
                         isSelect: false,
                         isShow: true,
@@ -197,6 +226,21 @@ const ControlPersonnel =(state = initialState, action) =>{
 
                 }
             }
+            return newState;
+        case 'Control_Person_List':
+            newState.data.ControlPersonList = action.data;
+            return newState;
+        case 'Control_PersonList_By_Id':
+            newState.data.getControlPersonListById = action.data;
+            return newState;
+        case 'Export_Succeed':
+            newState.data.getExport = action.data;
+            return newState;
+        case 'Download_Succeed':
+            newState.data.Download = action.data;
+            return newState;
+        case 'get_Custom_Filed_List':
+            newState.data.FiledList = action.data;
             return newState;
         default:
             if(store !== undefined ){

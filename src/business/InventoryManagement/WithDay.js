@@ -2,12 +2,15 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { mainReducer } from "../../reducers/reducers";
-import { StylePage, ShallowBlueBtn, Pag, } from "../generalPurposeModule";
+import { StylePage, ShallowBlueBtn, Pag, InterrogationDetailsItem ,Tabs} from "../generalPurposeModule";
 import { store } from '../../index.js';
 import * as constants from "../../utils/Constants";
 import { monthFormat, dateFormat, serverUrl } from '../../utils/';
 import { Spin, Table, message, Input, Modal, Button, Form, Icon, Row, Col, Select, DatePicker, Tag, Divider } from 'antd';
 import { BannerAnimImg } from '../../components/BannerAnim';
+import {postInterrogationDetailsUsersData} from "../../actions/InterrogationDetails";
+import {SwordData} from "../InterrogationDetails/SwordData";
+import {changeTab} from "../../actions/actions";
 
 import moment from 'moment';
 moment.locale('zh-cn');
@@ -88,11 +91,14 @@ export class WithDay extends Component {
             zoomvisible: false,
             imgtext: '',
             text: null,
-            visibles: false,
+            visibles: false,//呼市反恐详情展示
             arrayImg: [],
             currentImg: '',
             index: 0,
-            ModalKey: 0
+            ModalKey: 0,
+            oldVisibles: false,
+            oldpersonInfo: '',
+            testData: { "police_code": "080003", "police_idcard": "230382198011010010", "address": "", "police_unitcode": "410000000000", "nation": "", "checktime": "2018-03-22 10:53:19", "police_area": "", "sex": "男", "birth": "1980-01-01", "tagscode": "", "tags": "", "recordId": "23038219801101001020180322105307964", "police_unit": "河南省公安厅", "zpurl": "", "idcard": "350125198001010075", "name": "", "check_exception": 0, "imei": "", "personId": "b829a02b16c84f0ebddbb6cb935516d2", "collectNumber": 0, "police_name": "测试用户一", "cid": "HYX315000136" },
         };
         this.pageChange = this.pageChange.bind(this);
     }
@@ -112,6 +118,31 @@ export class WithDay extends Component {
     handleCancel = () => {
         this.setState({
             visible: false,
+            modalKey: this.state.modalKey + 1
+        });
+    }
+    // 原反恐利剑 点击详情函数
+    oldDetailsShowModal = (record) => {
+        this.setState({
+            oldVisibles: true,
+            oldpersonInfo: record,
+            modalType: 'edit'
+        });
+        let creds = {
+            currentPage:1,
+            entityOrField:true,
+            pd:{
+               recordId: 'b829a02b16c84f0ebddbb6cb935516d2',
+               personId:'23038219801101001020180322105307964',
+            },
+            showCount: constants.pageSize
+        }
+       this.props.dispatch(postInterrogationDetailsUsersData(creds));
+    }
+    // 原反恐利剑 取消
+    handleOldCancel = () => {
+        this.setState({
+            oldVisibles: false,
             modalKey: this.state.modalKey + 1
         });
     }
@@ -271,6 +302,20 @@ export class WithDay extends Component {
             ModalKey: this.state.ModalKey + 1
         });
     }
+    // 原反恐 
+    //设置管理菜单点击-获取数据-开关事件
+    handleTabClick = (tab, type) => {
+        store.dispatch(changeTab(tab, type, constants.INTERROGATIONDETAILS_MODULE));
+
+        switch (tab.tabName) {
+
+            case constants.INTERROGATIONDETAILS_TAB_LJ_DATA:
+                //   this.props.dispatch(fetchInterrogationInformationData('/getInterrogationInformation'));
+                break;
+            default:
+                break
+        }
+    }
     render() {
         const { getFieldDecorator } = this.props.form;
         let nowPage = this.state.nowPage;
@@ -314,7 +359,7 @@ export class WithDay extends Component {
             key: 'action',
             render: (text, record) => (
                 <span>
-                    <span onClick={(e) => this.editShowModal(record)} style={{ cursor: 'pointer' }}>详情</span>
+                    <span onClick={(e) => this.oldDetailsShowModal(record)} style={{ cursor: 'pointer' }}>详情</span>
                 </span>
             ),
         }];
@@ -352,6 +397,24 @@ export class WithDay extends Component {
             );
         }
         // }
+        let tabs = store.getState().InterrogationDetailsUsers.uiData.tabs;
+        let isSelectTab, content;
+        //查找被选中的标签
+        tabs.forEach(function (tab) {
+            if (tab.isSelect === true) {
+                isSelectTab = tab;
+            }
+        });
+        let recordId = 'b829a02b16c84f0ebddbb6cb935516d2';
+        let personId = '23038219801101001020180322105307964';
+
+        switch (isSelectTab.tabName) {
+            case constants.INTERROGATIONDETAILS_TAB_LJ_DATA:
+                content = <SwordData recordId={recordId} personId={personId} />
+                break
+            default:
+                break
+        }
 
         return (
             <div className="sliderWrap">
@@ -385,248 +448,275 @@ export class WithDay extends Component {
                 </div>
                 {/*分页*/}
                 <Pag pageSize={10} nowPage={nowPage} totalRecord={10} pageChange={this.pageChange} />
-                <Modal
-                    width={900}
-                    style={{ top: '20px' }}
-                    title="详情"
-                    visible={this.state.visible}
-                    onCancel={this.handleCancel}
-                    footer={null}
-                    key={this.state.modalKey}
-                >
-                    <Form onSubmit={this.saveModel}>
-                        <Row>
-                            <Col span={24} style={{ fontSize: '16px' ,color:"#fff"}}>人员信息</Col>
-                            <Col span={12}>
-                                <Row style={{ padding: '32px' }}>
-                                    <Col span={4} style={{color:"#fff"}}>照片：</Col>
-                                    <Col span={20}><img src="../../images/zanwu.png" style={{ width: '130px', height: '160px' }} /></Col>
+                {
+                    this.state.visible ?
+                        <Modal
+                            width={900}
+                            style={{ top: '20px' }}
+                            title="详情"
+                            visible={this.state.visible}
+                            onCancel={this.handleCancel}
+                            footer={null}
+                            key={this.state.modalKey}
+                        >
+                            <Form onSubmit={this.saveModel}>
+                                <Row>
+                                    <Col span={24} style={{ fontSize: '16px', color: "#fff" }}>人员信息</Col>
+                                    <Col span={12}>
+                                        <Row style={{ padding: '32px' }}>
+                                            <Col span={4} style={{ color: "#fff" }}>照片：</Col>
+                                            <Col span={20}><img src="../../images/zanwu.png" style={{ width: '130px', height: '160px' }} /></Col>
+                                        </Row>
+                                        <FormItem
+                                            {...formItemLayout}
+                                            label="身份证号"
+                                            style={{ marginBottom: '5px' }}
+                                        >
+                                            {getFieldDecorator('value', {
+                                                initialValue: this.state.personInfo.cardId,
+                                            })(
+                                                <Input disabled />
+                                            )}
+                                        </FormItem>
+                                        <FormItem
+                                            {...formItemLayout}
+                                            label="姓名"
+                                            style={{ marginBottom: '5px' }}
+                                        >
+                                            {getFieldDecorator('value', {
+                                                initialValue: this.state.personInfo.label,
+                                            })(
+                                                <Input disabled />
+                                            )}
+                                        </FormItem>
+                                        <FormItem
+                                            {...formItemLayout}
+                                            label="性别"
+                                            style={{ marginBottom: '5px' }}
+                                        >
+                                            {getFieldDecorator('value', {
+                                                initialValue: this.state.personInfo.sex,
+                                            })(
+                                                <Input disabled />
+                                            )}
+                                        </FormItem>
+                                        <FormItem
+                                            {...formItemLayout}
+                                            label="年龄"
+                                            style={{ marginBottom: '5px' }}
+                                        >
+                                            {getFieldDecorator('age', {
+                                                initialValue: this.state.personInfo.age,
+                                            })(
+                                                <Input disabled />
+                                            )}
+                                        </FormItem>
+                                        <FormItem
+                                            {...formItemLayout}
+                                            label="民族"
+                                            style={{ marginBottom: '5px' }}
+                                        >
+                                            {getFieldDecorator('value', {
+                                                initialValue: this.state.personInfo.sex,
+                                            })(
+                                                <Input disabled />
+                                            )}
+                                        </FormItem>
+
+                                        <FormItem
+                                            {...formItemLayout}
+                                            label="户籍地址"
+                                            style={{ marginBottom: '5px' }}
+                                        >
+                                            {getFieldDecorator('permanentAddress', {
+                                                initialValue: this.state.personInfo.permanentAddress,
+                                            })(
+                                                <Input disabled />
+                                            )}
+                                        </FormItem>
+                                    </Col>
+                                    <Col span={12}>
+                                        <FormItem
+                                            {...formItemLayout}
+                                            label="居住类型"
+                                            style={{ marginBottom: '5px' }}
+                                        >
+                                            {getFieldDecorator('liveType', {
+                                                initialValue: this.state.personInfo.permanentAddress,
+                                            })(
+                                                <Input disabled />
+                                            )}
+                                        </FormItem>
+                                        <FormItem
+                                            {...formItemLayout}
+                                            label="现居住地址"
+                                            style={{ marginBottom: '5px' }}
+                                        >
+                                            {getFieldDecorator('presentAddress', {
+                                                initialValue: this.state.personInfo.presentAddress,
+                                            })(
+                                                <Input disabled />
+                                            )}
+                                        </FormItem>
+                                        <FormItem
+                                            {...formItemLayout}
+                                            label="工作地址"
+                                            style={{ marginBottom: '5px' }}
+                                        >
+                                            {getFieldDecorator('workAddress', {
+                                                initialValue: this.state.personInfo.workAddress,
+                                            })(
+                                                <Input disabled />
+                                            )}
+                                        </FormItem>
+                                        <FormItem
+                                            {...formItemLayout}
+                                            label="联系电话"
+                                            style={{ marginBottom: '5px' }}
+                                        >
+                                            {getFieldDecorator('phone', {
+                                                initialValue: this.state.personInfo.phone,
+                                            })(
+                                                <Input disabled />
+                                            )}
+                                        </FormItem>
+                                        <FormItem
+                                            {...formItemLayout}
+                                            label="隶属任务"
+                                            style={{ marginBottom: '5px' }}
+                                        >
+                                            {getFieldDecorator('subordinationTask', {
+                                                initialValue: this.state.personInfo.subordinationTask,
+                                            })(
+                                                <Input disabled />
+                                            )}
+                                        </FormItem>
+                                        <FormItem
+                                            {...formItemLayout}
+                                            label="盘查警员"
+                                            style={{ marginBottom: '5px' }}
+                                        >
+                                            {getFieldDecorator('police', {
+                                                initialValue: this.state.personInfo.police,
+                                            })(
+                                                <Input disabled />
+                                            )}
+                                        </FormItem>
+                                        <FormItem
+                                            {...formItemLayout}
+                                            label="任务周期"
+                                            style={{ marginBottom: '5px' }}
+                                        >
+                                            {getFieldDecorator('taskCycle', {
+                                                initialValue: this.state.personInfo.checkCycle,
+                                            })(
+                                                <Input disabled />
+                                            )}
+                                        </FormItem>
+                                        <FormItem
+                                            {...formItemLayout}
+                                            label="人员来源"
+                                            style={{ marginBottom: '5px' }}
+                                        >
+                                            {getFieldDecorator('personnelSource', {
+                                                initialValue: this.state.personInfo.personnelSource,
+                                            })(
+                                                <Input disabled />
+                                            )}
+                                        </FormItem>
+                                        <FormItem
+                                            {...formItemLayout}
+                                            label="人员属性"
+                                            style={{ marginBottom: '5px' }}
+                                        >
+                                            {getFieldDecorator('personnelAttribute', {
+                                                initialValue: this.state.personInfo.personnelAttribute,
+                                            })(
+                                                <Input disabled />
+                                            )}
+                                        </FormItem>
+                                        <FormItem
+                                            {...formItemLayout}
+                                            label="是否有车"
+                                            style={{ marginBottom: '5px' }}
+                                        >
+                                            {getFieldDecorator('isCar', {
+                                                initialValue: this.state.personInfo.isCar,
+                                            })(
+                                                <Input disabled />
+                                            )}
+                                        </FormItem>
+                                        <FormItem
+                                            {...formItemLayout}
+                                            label="盘查时间"
+                                            style={{ marginBottom: '5px' }}
+                                        >
+                                            {getFieldDecorator('value', {
+                                                initialValue: this.state.personInfo.time,
+                                            })(
+                                                <Input disabled />
+                                            )}
+                                        </FormItem>
+
+                                    </Col>
                                 </Row>
-                                <FormItem
-                                    {...formItemLayout}
-                                    label="身份证号"
-                                    style={{ marginBottom: '5px' }}
-                                >
-                                    {getFieldDecorator('value', {
-                                        initialValue: this.state.personInfo.cardId,
-                                    })(
-                                        <Input disabled />
-                                    )}
-                                </FormItem>
-                                <FormItem
-                                    {...formItemLayout}
-                                    label="姓名"
-                                    style={{ marginBottom: '5px' }}
-                                >
-                                    {getFieldDecorator('value', {
-                                        initialValue: this.state.personInfo.label,
-                                    })(
-                                        <Input disabled />
-                                    )}
-                                </FormItem>
-                                <FormItem
-                                    {...formItemLayout}
-                                    label="性别"
-                                    style={{ marginBottom: '5px' }}
-                                >
-                                    {getFieldDecorator('value', {
-                                        initialValue: this.state.personInfo.sex,
-                                    })(
-                                        <Input disabled />
-                                    )}
-                                </FormItem>
-                                <FormItem
-                                    {...formItemLayout}
-                                    label="年龄"
-                                    style={{ marginBottom: '5px' }}
-                                >
-                                    {getFieldDecorator('age', {
-                                        initialValue: this.state.personInfo.age,
-                                    })(
-                                        <Input disabled />
-                                    )}
-                                </FormItem>
-                                <FormItem
-                                    {...formItemLayout}
-                                    label="民族"
-                                    style={{ marginBottom: '5px' }}
-                                >
-                                    {getFieldDecorator('value', {
-                                        initialValue: this.state.personInfo.sex,
-                                    })(
-                                        <Input disabled />
-                                    )}
-                                </FormItem>
+                                <Divider style={{ background: 'rgb(29, 40, 81)', height: '2px', margin: '18px 0' }} />
+                                <Row>
+                                    <Col span={24} style={{ fontSize: '16px', color: "#fff" }}>写实详情</Col>
+                                    <Row style={{ padding: '32px' }}>
+                                        <Col span={24}>
+                                            {imgArray}
+                                            <Modal
+                                                key={this.state.ModalKey}
+                                                visible={this.state.visibles}
+                                                onCancel={this.handleCancels}
+                                                footer={false}
+                                                wrapClassName='zoomImg'
+                                            >
+                                                <BannerAnimImg arrayImg={this.state.arrayImg} currentImg={this.state.currentImg} index={this.state.index} />
+                                            </Modal>
+                                        </Col>
+                                        <Col span={24}>
+                                            <FormItem
+                                                {...formText}
+                                                label="详情"
+                                            >
+                                                {getFieldDecorator('value', {
+                                                    initialValue: this.state.personInfo.content
+                                                })(
+                                                    <TextArea rows={2} disabled />
+                                                )}
+                                            </FormItem>
+                                        </Col>
+                                    </Row>
+                                </Row>
+                            </Form>
+                        </Modal> : ''
+                }
+                {
+                    this.state.oldVisibles ?
+                        <Modal
+                            width="60%"
+                            style={{ top: '20px' }}
+                            title="详情"
+                            visible={this.state.oldVisibles}
+                            onCancel={this.handleOldCancel}
+                            footer={null}
+                            key={this.state.modalKey}
+                        >
+                            <div>
+                                <InterrogationDetailsItem interrogationDetailsUser={this.state.testData} />
+                                <div>
+                                    <div style={{ marginTop: "20px" }}>
+                                        <Tabs tabs={tabs} handleTabClick={this.handleTabClick} />
+                                        <div style={{ clear: "both" }}></div>
+                                    </div>
+                                    {content}
+                                </div>
+                            </div>
+                        </Modal> : ''
+                }
 
-                                <FormItem
-                                    {...formItemLayout}
-                                    label="户籍地址"
-                                    style={{ marginBottom: '5px' }}
-                                >
-                                    {getFieldDecorator('permanentAddress', {
-                                        initialValue: this.state.personInfo.permanentAddress,
-                                    })(
-                                        <Input disabled />
-                                    )}
-                                </FormItem>
-                            </Col>
-                            <Col span={12}>
-                                <FormItem
-                                    {...formItemLayout}
-                                    label="居住类型"
-                                    style={{ marginBottom: '5px' }}
-                                >
-                                    {getFieldDecorator('liveType', {
-                                        initialValue: this.state.personInfo.permanentAddress,
-                                    })(
-                                        <Input disabled />
-                                    )}
-                                </FormItem>
-                                <FormItem
-                                    {...formItemLayout}
-                                    label="现居住地址"
-                                    style={{ marginBottom: '5px' }}
-                                >
-                                    {getFieldDecorator('presentAddress', {
-                                        initialValue: this.state.personInfo.presentAddress,
-                                    })(
-                                        <Input disabled />
-                                    )}
-                                </FormItem>
-                                <FormItem
-                                    {...formItemLayout}
-                                    label="工作地址"
-                                    style={{ marginBottom: '5px' }}
-                                >
-                                    {getFieldDecorator('workAddress', {
-                                        initialValue: this.state.personInfo.workAddress,
-                                    })(
-                                        <Input disabled />
-                                    )}
-                                </FormItem>
-                                <FormItem
-                                    {...formItemLayout}
-                                    label="联系电话"
-                                    style={{ marginBottom: '5px' }}
-                                >
-                                    {getFieldDecorator('phone', {
-                                        initialValue: this.state.personInfo.phone,
-                                    })(
-                                        <Input disabled />
-                                    )}
-                                </FormItem>
-                                <FormItem
-                                    {...formItemLayout}
-                                    label="隶属任务"
-                                    style={{ marginBottom: '5px' }}
-                                >
-                                    {getFieldDecorator('subordinationTask', {
-                                        initialValue: this.state.personInfo.subordinationTask,
-                                    })(
-                                        <Input disabled />
-                                    )}
-                                </FormItem>
-                                <FormItem
-                                    {...formItemLayout}
-                                    label="盘查警员"
-                                    style={{ marginBottom: '5px' }}
-                                >
-                                    {getFieldDecorator('police', {
-                                        initialValue: this.state.personInfo.police,
-                                    })(
-                                        <Input disabled />
-                                    )}
-                                </FormItem>
-                                <FormItem
-                                    {...formItemLayout}
-                                    label="任务周期"
-                                    style={{ marginBottom: '5px' }}
-                                >
-                                    {getFieldDecorator('taskCycle', {
-                                        initialValue: this.state.personInfo.checkCycle,
-                                    })(
-                                        <Input disabled />
-                                    )}
-                                </FormItem>
-                                <FormItem
-                                    {...formItemLayout}
-                                    label="人员来源"
-                                    style={{ marginBottom: '5px' }}
-                                >
-                                    {getFieldDecorator('personnelSource', {
-                                        initialValue: this.state.personInfo.personnelSource,
-                                    })(
-                                        <Input disabled />
-                                    )}
-                                </FormItem>
-                                <FormItem
-                                    {...formItemLayout}
-                                    label="人员属性"
-                                    style={{ marginBottom: '5px' }}
-                                >
-                                    {getFieldDecorator('personnelAttribute', {
-                                        initialValue: this.state.personInfo.personnelAttribute,
-                                    })(
-                                        <Input disabled />
-                                    )}
-                                </FormItem>
-                                <FormItem
-                                    {...formItemLayout}
-                                    label="是否有车"
-                                    style={{ marginBottom: '5px' }}
-                                >
-                                    {getFieldDecorator('isCar', {
-                                        initialValue: this.state.personInfo.isCar,
-                                    })(
-                                        <Input disabled />
-                                    )}
-                                </FormItem>
-                                <FormItem
-                                    {...formItemLayout}
-                                    label="盘查时间"
-                                    style={{ marginBottom: '5px' }}
-                                >
-                                    {getFieldDecorator('value', {
-                                        initialValue: this.state.personInfo.time,
-                                    })(
-                                        <Input disabled />
-                                    )}
-                                </FormItem>
-
-                            </Col>
-                        </Row>
-                        <Divider style={{ background: 'rgb(29, 40, 81)', height: '2px',margin:'18px 0' }} />
-                        <Row>
-                            <Col span={24} style={{ fontSize: '16px',color:"#fff" }}>写实详情</Col>
-                            <Row style={{ padding: '32px' }}>
-                                <Col span={24}>
-                                    {imgArray}
-                                    <Modal
-                                        key={this.state.ModalKey}
-                                        visible={this.state.visibles}
-                                        onCancel={this.handleCancels}
-                                        footer={false}
-                                        wrapClassName='zoomImg'
-                                    >
-                                        <BannerAnimImg arrayImg={this.state.arrayImg} currentImg={this.state.currentImg} index={this.state.index} />
-                                    </Modal>
-                                </Col>
-                                <Col span={24}>
-                                    <FormItem
-                                        {...formText}
-                                        label="详情"
-                                    >
-                                        {getFieldDecorator('value', {
-                                            initialValue: this.state.personInfo.content
-                                        })(
-                                            <TextArea rows={2} disabled />
-                                        )}
-                                    </FormItem>
-                                </Col>
-                            </Row>
-                        </Row>
-                    </Form>
-                </Modal>
             </div>
         )
     }
