@@ -43,6 +43,7 @@ import {
     Radio,
     Tag
 } from 'antd';
+// import {postTaskListHushiData} from '../../actions/TaskManagement';
 
 import moment from 'moment';
 moment.locale('zh-cn');
@@ -135,6 +136,19 @@ export  class PatrolTask extends Component{
             expandKeys: []
         };
         this.pageChange = this.pageChange.bind(this);
+    }
+    componentDidMount(){
+        // let params = {
+        //     currentPage: this.state.nowPage,
+        //     pd: {
+        //         beginTime: this.state.begindate,
+        //         endTime: this.state.enddate,
+        //         name: this.state.name,
+        //         pid:"199"
+        //     },
+        //     showCount: 10
+        // }
+        // store.getState(postTaskListHushiData(params));
     }
     editShowModal = (record) => {
         this.setState({
@@ -348,22 +362,23 @@ export  class PatrolTask extends Component{
         let isFetching = store.getState().TaskManagement.isFetching;
         let data = this.state.date
         let look = this.state.look
+        // 子任务列表
         const colu = [{
             title: '序号',
             dataIndex: 'serial',
             width:80,
         }, {
             title: '任务名称',
-            dataIndex: 'label',
+            dataIndex: 'name',
         }, {
             title: '任务开始时间',
-            dataIndex: 'startTime',
+            dataIndex: 'createtime',
             width:180,
         }, {
             title: '任务状态',
-            key: 'state',
+            key: 'type',
             render: (text, record) => (
-                <span>{record.state === '0' ? '完成':'超期'}</span>
+                <span>{record.type === '0' ? '待办任务':record.type==='1'?'已完成任务':'超期任务'}</span>
             ),
         }, {
             title: '查看对象',
@@ -378,38 +393,41 @@ export  class PatrolTask extends Component{
             width:80,
         }, {
             title: '任务名称',
-            dataIndex: 'label',
+            dataIndex: 'name',
         }, {
             title: '任务类别',
-            dataIndex: 'status',
+            dataIndex: 'category',
         },{
             title: '任务周期',
             dataIndex: 'cycle',
         }, {
             title: '任务开始时间',
-            dataIndex: 'startTime',
+            dataIndex: 'starttime',
             width:180,
         },{
             title: '任务结束时间',
-            dataIndex: 'endTime',
+            dataIndex: 'endtime',
             width:180,
         },{
             title: '任务创建者',
-            dataIndex: 'person',
+            dataIndex: 'createuser',
             width:180,
         },{
             title: '任务状态',
-            dataIndex: 'taskStatus',
+            dataIndex: 'switch',
+            render: (text, record) => (
+                <span>{record.switch === '0' ? '关闭':'启动'}</span>
+            ),
         },{
             title: '盘查数量',
-            dataIndex: 'inventoryNumber',
+            dataIndex: 'count',
         }, {
             title: '操作',
             key: 'action',
             render: (text, record) => (
                 <span>
-                        <Popconfirm title={record.state === '0' ? '确定启动该任务？':'确定关闭该任务？'} okText="确定" cancelText="取消">
-                             <span style={{cursor:'pointer'}}>{record.state === '0' ? '启动':'关闭'}</span>
+                        <Popconfirm title={record.switch === '0' ? '确定关闭该任务？':'确定启动该任务？'} okText="确定" cancelText="取消">
+                             <span style={{cursor:'pointer'}}>{record.switch === '0' ? '关闭':'启动'}</span>
                         </Popconfirm>
                          <Divider type="vertical" />
                         <span onClick={(e)=>this.editShowModal(record)} style={{cursor:'pointer'}}>编辑</span>

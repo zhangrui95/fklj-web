@@ -104,6 +104,17 @@ const initialState = { //盘查管理
                 total: 0,
                 list: [],
             }
+        },
+        // 呼市反恐
+        invenListHushi: {//盘查列表展示
+            reason: {
+                "code": "",
+                "text": ""
+            },
+            result: {
+                total: 0,
+                list: [],
+            }
         }
     },
     uiData: {
@@ -232,6 +243,19 @@ const InventoryManagement = (state = initialState, action) => {
                     }
                 }
             }
+            return newState;
+
+        // 呼市反恐利剑
+        case 'REQUEST_INVENTORY_LIST_HUSHI_DATA':
+            return {
+                ...state,//原状态
+                isFetching: true,
+                didInvalidate: false
+            }
+        case 'InventoryListHushi-data': //列表
+            newState.data.invenListHushi.result.list = action.data.result.list;
+            newState.data.invenListHushi.result.total = action.data.result.page.totalResult;//page?reason
+            newState.isFetching = false;
             return newState;
 
         default:
