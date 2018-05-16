@@ -4,13 +4,13 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {mainReducer} from "../../reducers/reducers";
-import {StylePage, ShallowBlueBtn, Pag,} from "../generalPurposeModule";
+import {StylePage, ShallowBlueBtn} from "../generalPurposeModule";
 import {store} from '../../index.js';
 import * as constants from "../../utils/Constants";
 import {serverUrls, getLocalTime} from '../../utils/index';
 import {monthFormat, dateFormat, serverUrl} from '../../utils/';
 import {Spin, Table, message, Input, Modal, Button, Form, Icon, Row, Col, Select, DatePicker, Divider, List, Popconfirm,Upload} from 'antd';
-import {getControlPersonList, getControlDetail,getControlExport,getControlDownload,getCustomFiledList} from "../../actions/ControlPersonnel";
+import {getControlPersonList, getControlDetail,getControlExport,getControlDownload,getCustomFiledList,insertOrUpdateCustomFiled,delCustomFiled} from "../../actions/ControlPersonnel";
 import moment from 'moment';
 import 'moment/locale/zh-cn';
 moment.locale('zh-cn');
@@ -79,43 +79,20 @@ export  class Control extends Component{
             text:null,
             newWords:[]
         };
-        this.pageChange = this.pageChange.bind(this);
         let controlType = this.props.controlType;
         console.log(controlType)
     }
 
     componentDidMount() {
-        let creds = {}
-        store.dispatch(getControlPersonList(creds))
+        this.getList(this.props.controlType)
     }
 
     componentWillReceiveProps(nextProps) {
         if(this.props.controlType!==nextProps.controlType){
-            let creds = '';
-            if(nextProps.controlType==='GK_WGK'){
-                creds = {pd:{control_type:0}}
-                this.getList(creds)
-            }else if(nextProps.controlType==='GK_YGK'){
-                creds = {pd:{control_type:1}}
-                this.getList(creds)
-            }else if(nextProps.controlType==='GK_LKZRQ') {
-                creds = {pd:{control_type:2}}
-                this.getList(creds)
-            }else if(nextProps.controlType==='GK_SK'){
-                creds = {pd:{control_type:3}}
-                this.getList(creds)
-            }else if(nextProps.controlType==='LY_DR'){
-                creds = {pd:{source:'901006'}}
-                this.getList(creds)
-            }else if(nextProps.controlType==='LY_XZ'){
-                creds = {pd:{source:'901008'}}
-                this.getList(creds)
-            }else{
-                creds = {}
-                this.getList(creds)
-            }
+            this.getList(nextProps.controlType)
         }
     }
+
 
     editShowModal = (record) => {
         console.log(record)
@@ -144,113 +121,34 @@ export  class Control extends Component{
         let path = serverUrls + store.getState().ControlPersonnel.data.getExport.result.path;
         window.open(path);
     }
-    saveModel=(e)=>{
-        // this.handleCancel();
-        e.preventDefault();
-        this.props.form.validateFields((err, values) => {
-            let userItem = JSON.parse(sessionStorage.getItem('user'));
-            if(!err){
-                if(this.state.modalType === "edit"){
-                    // values.id = this.state.personInfo.key;//让表单数据带上id  后台好进行操作
-                    // console.log('this.state.personInfo',this.state.personInfo);
-                    // console.log('values.id',values.id);
-                    // let creds = {
-                    //     pd:{
-                    //         name:values.label,
-                    //         iconUrl:values.iconUrl?values.iconUrl:this.state.avatarSrc,
-                    //         id:values.id.toString(),
-                    //         optuser:userItem.user.idcard,
-                    //         createuser:userItem.user.idcard,
-                    //         remark:values.remark?values.remark:'',
-                    //         status:values.status?values.status:'1',
-                    //         code:values.value?values.value:'',
-                    //         level:'2',
-                    //         pid:'199'
-                    //     },//传参 把后台需要的参数传过去
-                    // }
-                    // let params = {
-                    //     currentPage: 1,
-                    //     pd: {
-                    //         beginTime: this.state.begindate,
-                    //         endTime: this.state.enddate,
-                    //         name: this.state.name,
-                    //         pid:"199"
-                    //     },
-                    //     showCount: 10
-                    // }
-                    // store.dispatch(updateHorrorSoftwareData(creds,params));
-                }else if(this.state.modalType === "add"){
-                    let data = this.state.data;
-                    let len = this.state.data.length - 1;
-                    let key = data[len].key + 1
-                    let value = {key: key, serial: key, value: values.value, label: values.label, updatetime: "2018-04-10"}
-                    data.push(value)
-                    this.setState({
-                        data: data,
-                    });
-                    // let creds = {//表单域不一定写了所有的字段 所以要把空值通过赋值显示
-                    //     pd:{
-                    //         name:values.label?values.label:'',
-                    //         iconUrl:values.iconUrl?values.iconUrl:'',
-                    //         menuname:"304",
-                    //         optuser:userItem.user.idcard,
-                    //         createuser:userItem.user.idcard,
-                    //         remark:values.remark?values.remark:'',
-                    //         status:values.status?values.status:'1',
-                    //         code:values.value?values.value:'',
-                    //         level:'2',
-                    //         pid:'199'
-                    //     },
-                    // }
-                    // let params = {
-                    //     currentPage: 1,
-                    //     pd: {
-                    //         beginTime: this.state.begindate,
-                    //         endTime: this.state.enddate,
-                    //         name: this.state.name,
-                    //         pid:"199"
-                    //     },
-                    //     showCount: 10
-                    // }
-                    // store.dispatch(addHorrorSoftwareData(creds,params))
-
-                }
-                this.handleCancel();
-                this.setState({
-                    nowPage: 1
-                });
-            }
-
-
-        })
-    }
-    pageChange(nowPage) {
-        this.state = Object.assign({}, this.state, {nowPage:nowPage});
-        // let creds = {
-        //     currentPage:nowPage,
-        //     entityOrField:true,
-        //     pd:{
-        //         beginTime:this.state.beginDate ,
-        //         endTime:this.state.endDate,
-        //         name:this.state.name,
-        //         unit:this.state.unit,
-        //         task_stauts:this.state.status,
-        //         task_type:'113003',
-        //     },
-        //     showCount: constants.pageSize
-        // }
-        // store.dispatch(fetchPatrolTaskData(creds));
-        this.setState({
-            selectedRowsId:[],
-            selectedRowKeys:[],
-        });
-    }
     initEntity = () =>{
         this.setState({
             nowPage: 1,
         })
     }
-    getList(creds){
+
+    onRef = (ref) => {
+        this.child = ref
+    }
+
+    getList(controlType){
+        let creds = '';
+        if(controlType==='GK_WGK'){
+            creds = {pd:{control_type:0}}
+        }else if(controlType==='GK_YGK'){
+            creds = {pd:{control_type:1}}
+        }else if(controlType==='GK_LKZRQ') {
+            creds = {pd:{control_type:2}}
+        }else if(controlType==='GK_SK'){
+            creds = {pd:{control_type:3}}
+        }else if(controlType==='LY_DR'){
+            creds = {pd:{source:'901006'}}
+        }else if(controlType==='LY_XZ'){
+            creds = {pd:{source:'901008'}}
+        }else{
+            creds = {}
+        }
+        this.refs.SearchArea.init();
         store.dispatch(getControlPersonList(creds))
     }
     render() {
@@ -399,6 +297,7 @@ export  class Control extends Component{
                             form={this.props.form}
                             controlType = {this.props.controlType}
                             selectedRowsId = {this.state.selectedRowsId}
+                            ref="SearchArea"
                         />
                         <div className="clear"></div>
                     </div>
@@ -410,12 +309,10 @@ export  class Control extends Component{
                             <Spin size="large" />
                         </div>:
                         <div style={{padding:"0 15px"}}>
-                            <Table locale={{emptyText:'暂无数据'}}  rowSelection={controlType === 'GZ_NLHRY' || controlType === 'GZ_ZALY' ? undefined : rowSelection} columns={columns} dataSource={dataList} bordered  pagination={false}/>
+                            <Table locale={{emptyText:'暂无数据'}}  rowSelection={controlType === 'GZ_NLHRY' || controlType === 'GZ_ZALY' ? undefined : rowSelection} columns={columns} dataSource={dataList} bordered />
                         </div>}
                     <div className="clear"></div>
                 </div>
-                {/*分页*/}
-                <Pag pageSize={10} nowPage={nowPage} totalRecord={10} pageChange={this.pageChange} />
                 <Modal
                     width={700}
                     title="任务详情"
@@ -425,7 +322,7 @@ export  class Control extends Component{
                     key={this.state.modalKey}
                 >
                     <Row>
-                        <Form onSubmit={this.saveModel}>
+                        <Form>
                             <Col span={12} style={{ padding: '0 38px' }}>
                                 <span style={{color:"#fff"}}>照片：</span>
                                 {detail.zpurl!=='' ? <img src={detail.zpurl} style={{ width: '130px', height: '160px' }} /> : <img src="../../images/zanwu.png" style={{ width: '130px', height: '160px' }} />}
@@ -669,7 +566,8 @@ const SearchArea = React.createClass({
             showDel:{display:'none'},
             prompt: false,
             promptText:'',
-            prompType:''
+            prompType:'',
+            wordId:''
         };
     },
     handleNameChange: function(e) {
@@ -699,7 +597,6 @@ const SearchArea = React.createClass({
     },
     handleClick: function() { //点击查询
         let {name,cardId,status,WorkPlace,begindate,enddate} = this.state;
-        console.log(name, cardId, status, WorkPlace, begindate, enddate)
         let controlType = this.props.controlType
         let creds = ''
         if(controlType === 'GK_WGK'){
@@ -736,6 +633,17 @@ const SearchArea = React.createClass({
         });
     },
     hideModalOk: function() {
+        let id = this.state.wordId;
+        store.dispatch(delCustomFiled({id:id}))
+        setTimeout(()=>{
+            let delCode = store.getState().ControlPersonnel.data.delCustomFiled.reason.code;
+            if(delCode === '200'){
+                message.success(`提示：${store.getState().ControlPersonnel.data.delCustomFiled.reason.text}`);
+                this.getNewWords();
+            }else{
+                message.error(`提示：${store.getState().ControlPersonnel.data.delCustomFiled.reason.text}`);
+            }
+        },100)
         this.setState({
             visible: false,
             zdyModal:true
@@ -766,6 +674,7 @@ const SearchArea = React.createClass({
         });
     },
     hideModals: function() {
+        this.getNewWords();
         this.setState({
             zdyModals: false,
             zdyModal: true,
@@ -805,9 +714,35 @@ const SearchArea = React.createClass({
         });
     },
     saveNewWord:function () {
-        if(this.state.wordName !== ''){
-            newWord.push({name:this.state.wordName,type:this.state.wordType,option:this.state.OptionWords})
+        let creds = {}
+        const user = JSON.parse(sessionStorage.getItem('user'));
+        if(this.state.wordId === ''){
+            if(this.state.wordType === '文本'){
+                creds = {createuser:user.user.name,name:this.state.wordName,type:"0",updateuser:'',value:''}
+            }else{
+                creds = {createuser:user.user.name,name:this.state.wordName,type:"1",updateuser:'',value:this.state.OptionWords}
+            }
+        }else{
+            if(this.state.wordType === '文本'){
+                creds = {createuser:user.user.name,name:this.state.wordName,type:"0",value:'',id:this.state.wordId}
+            }else{
+                creds = {createuser:user.user.name,name:this.state.wordName,type:"1",value:this.state.OptionWords,id:this.state.wordId}
+            }
+        }
+        if(this.state.wordName!==""){
+            store.dispatch(insertOrUpdateCustomFiled(creds));
+            setTimeout(()=>{
+                let delCode = store.getState().ControlPersonnel.data.CustomFiled.reason.code;
+                if(delCode === '200'){
+                    message.success(`提示：${store.getState().ControlPersonnel.data.CustomFiled.reason.text}`);
+                    this.getNewWords();
+                }else{
+                    message.error(`提示：${store.getState().ControlPersonnel.data.CustomFiled.reason.text}`);
+                }
+            },100)
             this.hideModals();
+        }else{
+            message.error(`提示：字段名称不能为空!`,5);
         }
     },
     getAddModal:function(){
@@ -816,18 +751,22 @@ const SearchArea = React.createClass({
         });
     },
     addNewsWord:function (type, record) {
+        // record.id
         if(type === 'update'){
             this.setState({
                 showDel:{margin:'0 0 0 30px'},
                 wordName:record.name,
-                wordType:record.type
+                wordType:record.type,
+                OptionWords:record.value,
+                wordId:record.id
             })
             this.getSelects(record.type)
         }else if(type === 'add'){
             this.setState({
                 showDel:{display:'none'},
                 wordName:'',
-                wordType:''
+                wordType:'',
+                wordId:''
             })
             this.getSelects('0')
         }
@@ -958,7 +897,13 @@ const SearchArea = React.createClass({
             {serial:'1',name:'玉泉区兴隆派出所按天盘查',type:'周期任务',cycle:'按天'},
             {serial:'2',name:'玉泉区兴隆派出所按周盘查',type:'周期任务',cycle:'按周'}
         ]
-        const newWord = store.getState().ControlPersonnel.data.Download.result.list
+        let newWord = []
+        for(let i in store.getState().ControlPersonnel.data.FiledList.result.list){
+            if(i !== 'remove'){
+                let list= store.getState().ControlPersonnel.data.FiledList.result.list
+                newWord.push({name:list[i].name,key:i,id:list[i].id,type:list[i].type,value:list[i].value})
+            }
+        }
         const list = [{
             key: 'name',
             render: (text, record) => (
@@ -1029,12 +974,6 @@ const SearchArea = React.createClass({
                 </Select>
                 <label htmlFor="" className="font14">隶属任务：</label>
                 <Input style={{width:'130px',marginRight:"10px"}} type="text"  id='name' placeholder='请输入隶属任务'  value={WorkPlace}  onChange={this.WorkPlaceChange}/>
-                {/*<label htmlFor="" className="font14">任务周期：</label>*/}
-                {/*<Select value={cycle} style={{ width: 100 ,marginRight:"10px" }} onChange={this.cycleChange} notFoundContent='暂无'>*/}
-                {/*<Option value="">全部</Option>*/}
-                {/*<Option value="按周">按周</Option>*/}
-                {/*<Option value="按天">按天</Option>*/}
-                {/*</Select>*/}
                 <label htmlFor="" className="font14">更新时间：</label>
                 <DatePicker format={dateFormat} allowClear={false} style={{marginRight:"10px",width:'130px'}} value={beginDateValue} placeholder="请选择日期" onChange={this.handleBeginDeteClick}/>
                 <span className="font14" style={{margin:"0 10px 0 0"}}>至</span>
@@ -1043,7 +982,7 @@ const SearchArea = React.createClass({
                 <ShallowBlueBtn width="80px" text="重置" margin="0 10px 0 0" onClick={this.init} />
                 <div>
                     {btns}
-                    <Modal style={{top:"38%"}}
+                    <Modal style={{top:"20%"}}
                            title="任务列表"
                            visible={this.state.addModal}
                            footer={null}
@@ -1082,7 +1021,7 @@ const SearchArea = React.createClass({
                            className="ModalList"
                            onCancel={this.hideModal}
                     >
-                        <Table locale={{emptyText:'暂无字段'}} columns={list} dataSource={newWord} bordered  pagination={false} showHeader={false}/>
+                        <Table className={newWord.length < 1 ? 'noneDiv': 'activeDiv'} columns={list} dataSource={newWord} bordered  pagination={false} showHeader={false}/>
                         <p style={{marginTop:"20px",textAlign:"center"}}>
                             <Button style={{margin:'0 15px 0 0 ',width:'100%',fontSize:'30px',lineHeight:'0'}} onClick={() => this.addNewsWord('add')} className="btn_ok">
                                 +
@@ -1095,23 +1034,12 @@ const SearchArea = React.createClass({
                            footer={null}
                            onCancel={this.hideModals}
                     >
-                        <Form onSubmit={this.saveModel}>
+                        <Form>
                             <FormItem
                                 {...formItemLayout}
                                 label="字段名称"
                             >
-                                {getFieldDecorator('name', {
-                                    rules: [{
-                                        required: true, message: '请输入字段名称!',
-
-                                    },{
-                                        max:20,message:'最多输入二十个字符!',
-                                    }],
-                                    initialValue: wordName,
-                                    validateFirst:true
-                                })(
-                                    <Input onChange={this.changeWordName}/>
-                                )}
+                                <Input value={wordName} onChange={this.changeWordName}/>
                             </FormItem>
                             <FormItem
                                 {...formItemLayout}

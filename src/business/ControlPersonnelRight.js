@@ -5,6 +5,7 @@ import React, { Component } from 'react';
 import {connect} from 'react-redux';
 import {mainReducer} from "../reducers/reducers";
 import {Control}  from "./ControlPersonnel/Control";
+import {ComePerson}  from "./ControlPersonnel/ComePerson";
 import {store} from '../index.js';
 import  * as constants from "../utils/Constants";
 class ControlPersonnelRight extends Component{
@@ -31,12 +32,12 @@ class ControlPersonnelRight extends Component{
         });
         switch(isSelectMenu.menuName){
             case constants.CONTROLPERSONNEL_MODULE_GZ_NLHRY:
-                // content = <ComePerson/>
-                content = <Control controlType="GZ_NLHRY"/>
+                content = <ComePerson/>
+                // content = <Control controlType="GZ_NLHRY"/>
                 break
             case constants.CONTROLPERSONNEL_MODULE_GZ_ZALY:
-                // content = <PublicSecurity/>
-                content = <Control controlType="GZ_ZALY"/>
+                content = <ComePerson/>
+                // content = <Control controlType="GZ_ZALY"/>
                 break
             case constants.CONTROLPERSONNEL_MODULE_GK_WGK:
                 // content = <NotControlled/>

@@ -57,3 +57,25 @@ export function getCustomFiledList(creds) {
         });
     }
 }
+//自定义字段新增（修改）
+export function insertOrUpdateCustomFiled(creds) {
+    let path  = serverUrls + '/data/insertOrUpdateCustomFiled';
+    return dispatch => {
+        post(path,creds).then((json) => {
+            dispatch( {type: 'insertOrUpdateCustomFiled_succeed',data: json} );
+        }).catch((e)=>{
+            dispatch({type: 'insertOrUpdateCustomFiled_error',message: e.toString()} )
+        });
+    }
+}
+//删除自定义字段
+export function delCustomFiled(creds) {
+    let path  = serverUrls + '/data/delCustomFiled';
+    return dispatch => {
+        post(path,creds).then((json) => {
+            dispatch( {type: 'delCustomFiled_succeed',data: json} );
+        }).catch((e)=>{
+            dispatch({type: 'delCustomFiled_error',message: e.toString()} )
+        });
+    }
+}

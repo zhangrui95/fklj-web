@@ -32,6 +32,20 @@ const initialState = {
                 list: [],
             }
         },
+        CustomFiled:{
+            reason: {
+                code:'',
+                text:''
+            },
+            result: {}
+        },
+        delCustomFiled:{
+            reason: {
+                code:'',
+                text:''
+            },
+            result: {}
+        },
         getControlPersonListById: {
             reason: 1,
             result: {
@@ -39,11 +53,13 @@ const initialState = {
             }
         },
         getExport:{
+            reason:"",
             result:{
                 path:""
             }
         },
         Download:{
+            reason:"",
             result:{
                 path:""
             }
@@ -241,6 +257,12 @@ const ControlPersonnel =(state = initialState, action) =>{
             return newState;
         case 'get_Custom_Filed_List':
             newState.data.FiledList = action.data;
+            return newState;
+        case 'insertOrUpdateCustomFiled_succeed':
+            newState.data.CustomFiled = action.data;
+            return newState;
+        case 'delCustomFiled_succeed':
+            newState.data.delCustomFiled = action.data;
             return newState;
         default:
             if(store !== undefined ){
