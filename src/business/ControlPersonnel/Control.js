@@ -77,7 +77,8 @@ export  class Control extends Component{
             zoomvisible:false,
             imgtext:'',
             text:null,
-            newWords:[]
+            newWords:[],
+            selectedRowKeys: []
         };
         let controlType = this.props.controlType;
         console.log(controlType)
@@ -90,12 +91,15 @@ export  class Control extends Component{
     componentWillReceiveProps(nextProps) {
         if(this.props.controlType!==nextProps.controlType){
             this.getList(nextProps.controlType)
+            this.setState({
+                selectedRowKeys:[],
+                selectedRowsId:[]
+            })
         }
     }
 
 
     editShowModal = (record) => {
-        console.log(record)
         let cerds = {id:record.id}
         store.dispatch(getControlDetail(cerds))
         let cred = {}
@@ -218,9 +222,18 @@ export  class Control extends Component{
                 </span>
             ),
         }];
+        const {selectedRowKeys} = this.state
         const rowSelection = {
-            onChange: (selectedRowKeys, selectedRows) => {
-                console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+            selectedRowKeys,
+            onChange: (selectedRowKey, selectedRows) => {
+                console.log(`selectedRowKey: ${selectedRowKey}`, 'selectedRows: ', selectedRows);
+                let keys = this.state.selectedRowKeys;
+                for(let i in selectedRowKey){
+                    keys.push(selectedRowKey[i])
+                }
+                this.setState({
+                    selectedRowKeys:keys
+                })
                 const ids = [];
                 for(var i=0;i<selectedRows.length;i++){
                     var selectedRow = selectedRows[i];
@@ -313,7 +326,7 @@ export  class Control extends Component{
                             <Spin size="large" />
                         </div>:
                         <div style={{padding:"0 15px"}}>
-                            <Table locale={{emptyText:'暂无数据'}}  rowSelection={controlType === 'GZ_NLHRY' || controlType === 'GZ_ZALY' ? undefined : rowSelection} columns={columns} dataSource={dataList} bordered />
+                            <Table locale={{emptyText:'暂无数据'}} rowSelection={controlType === 'GZ_NLHRY' || controlType === 'GZ_ZALY' ? undefined : rowSelection} columns={columns} dataSource={dataList} bordered />
                         </div>}
                     <div className="clear"></div>
                 </div>
@@ -573,6 +586,7 @@ const SearchArea = React.createClass({
             prompType:'',
             wordId:'',
             ToskId:'',
+            ModalTitle:''
         };
     },
     handleNameChange: function(e) {
@@ -755,7 +769,16 @@ const SearchArea = React.createClass({
             message.error(`提示：字段名称不能为空!`,5);
         }
     },
-    getAddModal:function(){
+    getAddModal:function(type){
+        if(type === 'add'){
+            this.setState({
+                ModalTitle:'添加到任务'
+            })
+        }else{
+            this.setState({
+                ModalTitle:'变更任务'
+            })
+        }
         if(this.props.selectedRowsId.length > 0){
             let creds = {switch:'1'}
             store.dispatch(getTaskModelList(creds));
@@ -950,7 +973,7 @@ const SearchArea = React.createClass({
         };
         let btns = (
             <div style={{marginTop:"15px"}}>
-                <Button style={{width:"110px", marginRight:"10px",float:'left'}} onClick={this.getAddModal} className="btn_ok">添加到任务</Button>
+                <Button style={{width:"110px", marginRight:"10px",float:'left'}} onClick={() => this.getAddModal('add')} className="btn_ok">添加到任务</Button>
                 <div  style={{float:'left'}}>
                     <Upload {...upLoad} onChange={this.importOnChange} beforeUpload={this.beforeUpload} showUploadList={false}>
                         <Button style={{width:"80px", marginRight:"10px"}} className="btn_ok">导入</Button>
@@ -967,14 +990,14 @@ const SearchArea = React.createClass({
         }else if(controlType === 'GK_YGK'){
             btns = (
                 <div style={{marginTop:"15px"}}>
-                    <Button style={{width:"110px", marginRight:"10px"}} onClick={this.getAddModal} className="btn_ok">变更任务</Button>
+                    <Button style={{width:"110px", marginRight:"10px"}} onClick={() => this.getAddModal('update')} className="btn_ok">变更任务</Button>
                     <Button style={{width:"80px", marginRight:"10px"}} className="btn_ok" onClick={() => this.getPrompt('export')}>导出</Button>
                 </div>
             )
         }else if(controlType === 'GK_LKZRQ' || controlType === 'GK_SK'){
             btns = (
                 <div style={{marginTop:"15px"}}>
-                    <Button style={{width:"110px", marginRight:"10px"}} onClick={this.getAddModal} className="btn_ok">添加到任务</Button>
+                    <Button style={{width:"110px", marginRight:"10px"}} onClick={() => this.getAddModal('add')} className="btn_ok">添加到任务</Button>
                     <Button style={{width:"80px", marginRight:"10px"}} className="btn_ok" onClick={() => this.getPrompt('export')}>导出</Button>
                 </div>
             )
@@ -1016,7 +1039,7 @@ const SearchArea = React.createClass({
                 <div>
                     {btns}
                     <Modal style={{top:"20%"}}
-                           title="添加到任务"
+                           title={this.state.ModalTitle}
                            visible={this.state.addModal}
                            footer={null}
                            onCancel={this.hideModal}
