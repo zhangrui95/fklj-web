@@ -10,7 +10,7 @@ import * as constants from "../../utils/Constants";
 import {serverUrls, getLocalTime} from '../../utils/index';
 import {monthFormat, dateFormat, serverUrl} from '../../utils/';
 import {Spin, Table, message, Input, Modal, Button, Form, Icon, Row, Col, Select, DatePicker, Divider, List, Popconfirm,Upload} from 'antd';
-import {getControlPersonList, getControlDetail,getControlExport,getControlDownload,getCustomFiledList,insertOrUpdateCustomFiled,delCustomFiled} from "../../actions/ControlPersonnel";
+import {getControlPersonList, getControlDetail,getControlExport,getControlDownload,getCustomFiledList,insertOrUpdateCustomFiled,delCustomFiled,updateTaskModelControlPerson,getTaskModelList} from "../../actions/ControlPersonnel";
 import moment from 'moment';
 import 'moment/locale/zh-cn';
 moment.locale('zh-cn');
@@ -329,7 +329,7 @@ export  class Control extends Component{
                         <Form>
                             <Col span={12} style={{ padding: '0 38px' }}>
                                 <span style={{color:"#fff"}}>照片：</span>
-                                {detail.zpurl!=='' ? <img src={detail.zpurl} style={{ width: '130px', height: '160px' }} /> : <img src="../../images/zanwu.png" style={{ width: '130px', height: '160px' }} />}
+                                {detail.zpurl!==''||detail.zpurl !== undefined ? <img src={detail.zpurl} style={{ width: '130px', height: '160px' }} /> : <img src="../../images/zanwu.png" style={{ width: '130px', height: '160px' }} />}
                             </Col>
                             <Col span={12}>
                                 <FormItem
@@ -571,7 +571,8 @@ const SearchArea = React.createClass({
             prompt: false,
             promptText:'',
             prompType:'',
-            wordId:''
+            wordId:'',
+            ToskId:'',
         };
     },
     handleNameChange: function(e) {
@@ -601,24 +602,29 @@ const SearchArea = React.createClass({
     },
     handleClick: function() { //点击查询
         let {name,cardId,status,WorkPlace,begindate,enddate} = this.state;
-        let controlType = this.props.controlType
-        let creds = ''
-        if(controlType === 'GK_WGK'){
-            creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),subordination_task:WorkPlace, beginTime:begindate,endTime:enddate,control_type:0}}
-        }else if(controlType === 'GK_YGK'){
-            creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),subordination_task:WorkPlace, beginTime:begindate,endTime:enddate,control_type:1}}
-        }else if(controlType === 'GK_LKZRQ'){
-            creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),subordination_task:WorkPlace, beginTime:begindate,endTime:enddate,control_type:2}}
-        }else if(controlType === 'GK_SK'){
-            creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),subordination_task:WorkPlace, beginTime:begindate,endTime:enddate,control_type:3}}
-        } else if(controlType === 'LY_DR'){
-            creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),subordination_task:WorkPlace, beginTime:begindate,endTime:enddate,source:"901006"}}
-        } else if(controlType === 'LY_XZ'){
-            creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),subordination_task:WorkPlace, beginTime:begindate,endTime:enddate,source:"901008"}}
-        } else {
-            creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),subordination_task:WorkPlace, beginTime:begindate,endTime:enddate}}
+        if (begindate != "" && enddate != "" && begindate > enddate) {
+            message.error('提示：开始时间不能大于结束时间！');
+            return;
+        }else{
+            let controlType = this.props.controlType
+            let creds = ''
+            if(controlType === 'GK_WGK'){
+                creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),subordination_task:WorkPlace, beginTime:begindate,endTime:enddate,control_type:0}}
+            }else if(controlType === 'GK_YGK'){
+                creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),subordination_task:WorkPlace, beginTime:begindate,endTime:enddate,control_type:1}}
+            }else if(controlType === 'GK_LKZRQ'){
+                creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),subordination_task:WorkPlace, beginTime:begindate,endTime:enddate,control_type:2}}
+            }else if(controlType === 'GK_SK'){
+                creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),subordination_task:WorkPlace, beginTime:begindate,endTime:enddate,control_type:3}}
+            } else if(controlType === 'LY_DR'){
+                creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),subordination_task:WorkPlace, beginTime:begindate,endTime:enddate,source:"901006"}}
+            } else if(controlType === 'LY_XZ'){
+                creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),subordination_task:WorkPlace, beginTime:begindate,endTime:enddate,source:"901008"}}
+            } else {
+                creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),subordination_task:WorkPlace, beginTime:begindate,endTime:enddate}}
+            }
+            store.dispatch(getControlPersonList(creds))
         }
-        store.dispatch(getControlPersonList(creds))
     },
     init:function () {
         this.setState({
@@ -750,9 +756,15 @@ const SearchArea = React.createClass({
         }
     },
     getAddModal:function(){
-        this.setState({
-            addModal:true
-        });
+        if(this.props.selectedRowsId.length > 0){
+            let creds = {switch:'1'}
+            store.dispatch(getTaskModelList(creds));
+            this.setState({
+                addModal:true
+            });
+        }else{
+            message.warning(`提示：请选择人员!`);
+        }
     },
     addNewsWord:function (type, record) {
         // record.id
@@ -864,6 +876,16 @@ const SearchArea = React.createClass({
         let path = serverUrls + store.getState().ControlPersonnel.data.Download.result.path;
         window.open(path);
     },
+    choiceTask:function () {
+        const user = JSON.parse(sessionStorage.getItem('user'));
+        let creds = {id:this.state.ToskId,personalid:this.props.selectedRowsId,updateuser:user.user.name}
+        store.dispatch(updateTaskModelControlPerson(creds))
+    },
+    getSelectTosk:function(e){
+        this.setState({
+            ToskId: e
+        })
+    },
     render() {
         const {getFieldDecorator} = this.props.form
         let {name,cardId,status,WorkPlace, enddate, begindate,cycle,wordType,showInput,wordName,OptionWords,showDel} = this.state;
@@ -963,6 +985,13 @@ const SearchArea = React.createClass({
                 </div>
             )
         }
+        const children = [];
+        let toskList = store.getState().ControlPersonnel.data.getTaskModelList.result.list
+        for(let j in toskList){
+            if(j!='remove'){
+                children.push(<Option key={j} value={toskList[j].id}>{toskList[j].name}</Option>);
+            }
+        }
         return (
             <div className="marLeft40 fl z_searchDiv">
                 <label htmlFor="" className="font14">身份证号：</label>
@@ -987,18 +1016,19 @@ const SearchArea = React.createClass({
                 <div>
                     {btns}
                     <Modal style={{top:"20%"}}
-                           title="任务列表"
+                           title="添加到任务"
                            visible={this.state.addModal}
                            footer={null}
                            onCancel={this.hideModal}
-                           width={750}
+                           width={600}
                     >
                         <div style={{margin:'0 0 16px 0'}}>
-                            <Input style={{width:'520px',marginRight:"10px"}} type="text"  id='name' placeholder='请输入任务名称' onChange={this.handleCardChange}/>
-                            <ShallowBlueBtn width="80px" text="查询" margin="0 10px 0 0" onClick={this.handleClick} />
-                            <ShallowBlueBtn width="80px" text="重置" onClick={this.init} />
+                            <Select style={{width:'450px',marginRight:"10px"}} placeholder='请选择任务' onChange={this.getSelectTosk}>
+                                {children}
+                            </Select>
+                            <ShallowBlueBtn width="80px" text="确定" margin="0 0 0 10px" onClick={this.choiceTask} />
+                            {/*<ShallowBlueBtn width="80px" text="取消" onClick={this.hideModal} />*/}
                         </div>
-                        <Table locale={{emptyText:'暂无数据'}} columns={columns} dataSource={data} bordered/>
                     </Modal>
                     <Modal style={{top:"38%"}}
                            title="提示"
@@ -1025,7 +1055,7 @@ const SearchArea = React.createClass({
                            className="ModalList"
                            onCancel={this.hideModal}
                     >
-                        <Table className={newWord.length < 1 ? 'noneDiv': 'activeDiv'} columns={list} dataSource={newWord} bordered  pagination={false} showHeader={false}/>
+                        <Table className={newWord.length < 1 ? 'noneDiv': 'activeDiv'} columns={list} dataSource={newWord} bordered  pagination={false} showHeader={false} />
                         <p style={{marginTop:"20px",textAlign:"center"}}>
                             <Button style={{margin:'0 15px 0 0 ',width:'100%',fontSize:'30px',lineHeight:'0'}} onClick={() => this.addNewsWord('add')} className="btn_ok">
                                 +

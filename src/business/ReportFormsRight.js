@@ -29,9 +29,9 @@ class ReportFormsRight extends Component{
             case constants.REPORTFORMS_MENU_TASKS:
                 content =<TaskStatistics />
                 break
-            case constants.REPORTFORMS_MENU_ACTIVITYS:
-                content =<ActivityStatistics />
-                break
+            // case constants.REPORTFORMS_MENU_ACTIVITYS:
+            //     content =<ActivityStatistics />
+            //     break
 
             default:
                 break

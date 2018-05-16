@@ -65,6 +65,21 @@ const initialState = {
             result:{
                 path:""
             }
+        },
+        TaskModelControlPerson:{
+            reason: {
+                "code": "",
+                "text": ""
+            },
+            result: {
+
+            }
+        },
+        getTaskModelList:{
+            reason: {},
+            result: {
+                list: [],
+            }
         }
     },
     uiData: {
@@ -266,6 +281,13 @@ const ControlPersonnel =(state = initialState, action) =>{
         case 'delCustomFiled_succeed':
             newState.data.delCustomFiled = action.data;
             return newState;
+        case 'updateTaskModelControlPerson_succeed':
+            newState.data.TaskModelControlPerson = action.data;
+            return newState;
+        case 'getTaskModelList_succeed':
+            newState.data.getTaskModelList = action.data;
+            return newState;
+
         default:
             if(store !== undefined ){
                 return store.getState().ControlPersonnel;

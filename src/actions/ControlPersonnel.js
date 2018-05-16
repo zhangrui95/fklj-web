@@ -79,3 +79,25 @@ export function delCustomFiled(creds) {
         });
     }
 }
+//添加到任务
+export function updateTaskModelControlPerson(creds) {
+    let path  = serverUrls + '/data/updateTaskModelControlPerson';
+    return dispatch => {
+        post(path,creds).then((json) => {
+            dispatch( {type: 'updateTaskModelControlPerson_succeed',data: json} );
+        }).catch((e)=>{
+            dispatch({type: 'updateTaskModelControlPerson_error',message: e.toString()} )
+        });
+    }
+}
+//任务列表
+export function getTaskModelList(creds) {
+    let path  = serverUrls + '/data/getTaskModelList';
+    return dispatch => {
+        post(path,creds).then((json) => {
+            dispatch( {type: 'getTaskModelList_succeed',data: json} );
+        }).catch((e)=>{
+            dispatch({type: 'getTaskModelList_error',message: e.toString()} )
+        });
+    }
+}
