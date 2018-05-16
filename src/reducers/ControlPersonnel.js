@@ -49,7 +49,9 @@ const initialState = {
         getControlPersonListById: {
             reason: 1,
             result: {
-                data: {}
+                data: {
+                    custom_filed_value:{value:[]}
+                }
             }
         },
         getExport:{

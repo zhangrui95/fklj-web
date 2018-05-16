@@ -98,6 +98,8 @@ export  class Control extends Component{
         console.log(record)
         let cerds = {id:record.id}
         store.dispatch(getControlDetail(cerds))
+        let cred = {}
+        store.dispatch(getCustomFiledList(cred))
         this.setState({
             visible: true,
             modalType: 'edit',
@@ -234,26 +236,29 @@ export  class Control extends Component{
             }),
         };
         const newFormList = [];
-        if(newWords.length > 0){
-            for(let i in newWords){
-                if(newWords[i].type === '文本'){
+        let detail = store.getState().ControlPersonnel.data.getControlPersonListById.result.data;
+        let newValue = store.getState().ControlPersonnel.data.FiledList.result.list;
+        // let value = detail.custom_filed_value.value[i].value
+        if(newValue.length > 0){
+            for(let i in newValue){
+                if(newValue[i].type == '0'){
                     newFormList.push(
                         <Col span={12}>
                             <FormItem
                                 {...formItemLayout}
-                                label={newWords[i].name}
+                                label={newValue[i].name}
                             >
                                 {getFieldDecorator('wordText' + i, {
                                     initialValue:this.state.modalType === 'edit' ? '' : '',
                                 })(
-                                    <Input/>
+                                    <Input disabled/>
                                 )}
                             </FormItem>
                         </Col>
                     )
-                }else if(newWords[i].type === '下拉框'){
+                }else if(newValue[i].type == '1'){
                     let strs = []
-                    strs=newWords[i].option.split("，");
+                    strs=newValue[i].value.split("，");
                     const children = [];
                     for(let j in strs){
                         if(j!='remove'){
@@ -264,12 +269,12 @@ export  class Control extends Component{
                         <Col span={12}>
                             <FormItem
                                 {...formItemLayout}
-                                label={newWords[i].name}
+                                label={newValue[i].name}
                             >
                                 {getFieldDecorator('wordName', {
                                     initialValue:this.state.modalType === 'edit' ? '' : '',
                                 })(
-                                    <Select>
+                                    <Select disabled>
                                         {children}
                                     </Select>
                                 )}
@@ -279,7 +284,6 @@ export  class Control extends Component{
                 }
             }
         }
-        let detail = store.getState().ControlPersonnel.data.getControlPersonListById.result.data;
         return(
             <div className="sliderWrap">
                 <div className="sliderItemDiv">
