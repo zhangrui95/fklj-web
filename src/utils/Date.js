@@ -146,3 +146,24 @@ function testid (rule, value, callback){
        return;
     }
 }
+// 时间戳转换
+export function getMyDate(str) {
+	var time = str * 1000
+	var oDate = new Date(time),
+		oYear = oDate.getFullYear(),
+		oMonth = oDate.getMonth() + 1,
+		oDay = oDate.getDate(),
+		oHour = oDate.getHours(),
+		oMin = oDate.getMinutes(),
+		oSen = oDate.getSeconds(),
+		oTime = oYear + '-' + getzf(oMonth) + '-' + getzf(oDay) + ' ' + getzf(oHour) + ':' + getzf(oMin) + ':' + getzf(oSen);//���ƴ��ʱ��  
+	return oTime;
+};
+function getzf(num) {
+	if (parseInt(num) < 10) {
+		num = '0' + num;
+	}
+	return num;
+}
+
+

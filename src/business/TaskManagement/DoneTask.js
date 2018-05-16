@@ -224,47 +224,54 @@ export  class DoneTask extends Component{
         const columns = [{
             title: '序号',
             dataIndex: 'serial',
-            width:80,
+            width: 80,
         }, {
             title: '任务名称',
-            dataIndex: 'label',
+            dataIndex: 'name',
         }, {
             title: '任务类别',
-            dataIndex: 'status',
-        },{
+            dataIndex: 'category',
+            render: (text, record) => (
+                <span>{record.category === '0' ? '周期' : '一次性'}</span>
+            ),
+        }, {
+            title: '盘查对象',
+            dataIndex: 'checkObject',
+            width: 180,
+            render: (text, record) => (
+                <span>{record.count2 +'/'+ record.count1}</span>
+            ),
+        }, {
             title: '任务周期',
             dataIndex: 'cycle',
-        },{
-            title: '盘查对象',
             render: (text, record) => (
-                <span>
-                    2/5
-                </span>
+                <span>{record.cycle === '0' ? '每天' : record.cycle === '1' ? '每周' : '每月'}</span>
             ),
         }, {
             title: '任务开始时间',
-            dataIndex: 'startTime',
-            width:180,
-        },{
+            dataIndex: 'createtime',
+            width: 180,
+        }, {
             title: '任务结束时间',
-            dataIndex: 'endTime',
-            width:180,
-        },{
+            dataIndex: 'endtime',
+            width: 180,
+        }, {
             title: '任务创建者',
-            dataIndex: 'person',
-            width:180,
-        },{
+            dataIndex: 'createuser',
+            width: 180,
+        }, {
             title: '任务状态',
-            dataIndex: 'taskStatus',
-        },{
-            title: '任务详情',
-            dataIndex: 'taskDetails',
+            dataIndex: 'type',
+            
+            render: (text, record) => (
+                <span>{record.type === '0' ? '待办任务' : record.type === '1' ? '已完成任务' : '超期任务'}</span>
+            ),
         }, {
             title: '操作',
             key: 'action',
             render: (text, record) => (
                 <span>
-                    <span onClick={(e)=>this.editShowModal(record)} style={{cursor:'pointer'}}>查看</span>
+                    <span onClick={(e) => this.editShowModal(record)} style={{ cursor: 'pointer' }}>查看</span>
                 </span>
             ),
         }];
@@ -306,6 +313,7 @@ export  class DoneTask extends Component{
         }
         const treeList=[{"children":[{"children":[{"label":"(卡点)测试","value":"ec02ed04ad6147b7a421ab912a7cf6b6","key":"ec02ed04ad6147b7a421ab912a7cf6b6"}],"label":"洛阳市公安局","value":"410300000000","key":"410300000000"},{"label":"(卡点)01018","value":"9ec30a5f4e554bc78f13fea61a61452c","key":"9ec30a5f4e554bc78f13fea61a61452c"},{"label":"(卡点)1221卡点","value":"713141c655624b86acae70b4a674d8a7","key":"713141c655624b86acae70b4a674d8a7"},{"label":"(卡点)001","value":"8cd3a75ab7fa49979f67eef4d59a9cad","key":"8cd3a75ab7fa49979f67eef4d59a9cad"},{"label":"(卡点)M78卡点","value":"f24c58a0aadb42ca826c02c26f74a461","key":"f24c58a0aadb42ca826c02c26f74a461"},{"label":"(卡点)002","value":"aad06faa7acf49df9504a6e97ae7946f","key":"aad06faa7acf49df9504a6e97ae7946f"}],"label":"河南省公安厅","value":"410000000000","key":"410000000000"}]
         const plainOptions = ['一级', '二级', '三级'];
+        const checkObjOption = [];
         return(
             <div className="sliderWrap">
                 <div className="sliderItemDiv">
@@ -349,11 +357,11 @@ export  class DoneTask extends Component{
                                     {...formItemLayouts}
                                     label="任务名称"
                                 >
-                                    {getFieldDecorator('label', {
-                                        initialValue:this.state.modalType === 'edit' ? this.state.personInfo.label : '',
-                                        validateFirst:true
+                                    {getFieldDecorator('name', {
+                                        initialValue: this.state.modalType === 'edit' ? this.state.personInfo.name : '',
+                                        validateFirst: true
                                     })(
-                                        <Input disabled/>
+                                        <Input disabled />
                                     )}
                                 </FormItem>
                             </Col>
@@ -362,10 +370,10 @@ export  class DoneTask extends Component{
                                     {...formItemLayout}
                                     label="任务开始时间"
                                 >
-                                    {getFieldDecorator('startTime', {
-                                        initialValue:this.state.modalType === 'edit' ? moment(this.state.personInfo.startTime, 'YYYY-MM-DD HH:mm:ss') : '',
+                                    {getFieldDecorator('createtime', {
+                                        initialValue: this.state.modalType === 'edit' ? moment(this.state.personInfo.createtime, 'YYYY-MM-DD HH:mm:ss') : '',
                                     })(
-                                        <DatePicker showTime placeholder="" format="YYYY-MM-DD HH:mm:ss" allowClear={false} style={{width:'220px'}} disabled/>
+                                        <DatePicker showTime placeholder="" format="YYYY-MM-DD HH:mm:ss" allowClear={false} style={{ width: '220px' }} disabled />
                                     )}
                                 </FormItem>
                             </Col>
@@ -374,10 +382,10 @@ export  class DoneTask extends Component{
                                     {...formItemLayout}
                                     label="任务结束时间"
                                 >
-                                    {getFieldDecorator('endTime', {
-                                        initialValue:this.state.modalType === 'edit' ? moment(this.state.personInfo.endTime, 'YYYY-MM-DD HH:mm:ss') : '',
+                                    {getFieldDecorator('endtime', {
+                                        initialValue: this.state.modalType === 'edit' ? moment(this.state.personInfo.endtime, 'YYYY-MM-DD HH:mm:ss') : '',
                                     })(
-                                        <DatePicker showTime placeholder="" format="YYYY-MM-DD HH:mm:ss" allowClear={false} style={{width:'220px'}} disabled/>
+                                        <DatePicker showTime placeholder="" format="YYYY-MM-DD HH:mm:ss" allowClear={false} style={{ width: '220px' }} disabled />
                                     )}
                                 </FormItem>
                             </Col>
@@ -386,9 +394,9 @@ export  class DoneTask extends Component{
                                     {...formItemLayout}
                                     label="任务类别"
                                 >
-                                    {getFieldDecorator('status', {
-                                        initialValue:this.state.modalType === 'edit' ? this.state.personInfo.status : '',
-                                        validateFirst:true
+                                    {getFieldDecorator('category', {
+                                        initialValue: this.state.modalType === 'edit' ? this.state.personInfo.category : '',
+                                        validateFirst: true
                                     })(
                                         <Select onChange={this.onChange} disabled>
                                             <Option value="循环任务">循环任务</Option>
@@ -402,8 +410,8 @@ export  class DoneTask extends Component{
                                     label="任务周期"
                                 >
                                     {getFieldDecorator('cycle', {
-                                        initialValue:this.state.modalType === 'edit' ? this.state.personInfo.cycle : '',
-                                        validateFirst:true
+                                        initialValue: this.state.modalType === 'edit' ? this.state.personInfo.cycle : '',
+                                        validateFirst: true
                                     })(
                                         <Select onChange={this.onChange} disabled>
                                             <Option value="按周">按周</Option>
@@ -417,9 +425,9 @@ export  class DoneTask extends Component{
                                     {...formItemLayout}
                                     label="任务创建者"
                                 >
-                                    {getFieldDecorator('person', {
-                                        initialValue:this.state.modalType === 'edit' ? this.state.personInfo.person : '',
-                                        validateFirst:true
+                                    {getFieldDecorator('createuser', {
+                                        initialValue: this.state.modalType === 'edit' ? this.state.personInfo.createuser : '',
+                                        validateFirst: true
                                     })(
                                         <Select onChange={this.onChange} disabled>
                                             <Option value="循环任务">系统默认</Option>
@@ -432,13 +440,14 @@ export  class DoneTask extends Component{
                                     {...formItemLayout}
                                     label="任务状态"
                                 >
-                                    {getFieldDecorator('state', {
-                                        initialValue:this.state.modalType === 'edit' ? this.state.personInfo.state : '',
-                                        validateFirst:true
+                                    {getFieldDecorator('type', {
+                                        initialValue: this.state.modalType === 'edit' ? this.state.personInfo.type : '',
+                                        validateFirst: true
                                     })(
                                         <Select onChange={this.onChange} disabled>
-                                            <Option value="0">启动</Option>
-                                            <Option value="1">关闭</Option>
+                                            <Option value="0">待办任务</Option>
+                                            <Option value="1">已完成任务</Option>
+                                            <Option value="2">超期任务</Option>
                                         </Select>
                                     )}
                                 </FormItem>
@@ -449,31 +458,41 @@ export  class DoneTask extends Component{
                                     label="盘查对象"
                                 >
                                     {getFieldDecorator('TaskPerson', {
-                                        initialValue:this.state.modalType === 'edit' ? this.state.personInfo.TaskPerson : '',
-                                        validateFirst:true
+                                        initialValue: this.state.modalType === 'edit' ? this.state.personInfo.TaskPerson : '',
+                                        validateFirst: true
                                     })(
-                                        <TreeSelect
-                                            style={{ marginRight: '10px' }}
-                                            value={unit}
-                                            dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-                                            treeData={treeList}
-                                            placeholder="请选择派发单位"
-                                            onChange={this.unitChange}
-                                            showSearch={false}
-                                            treeCheckable={true}
-                                            dropdownMatchSelectWidth={false}
-                                            showCheckedStrategy="SHOW_PARENT"
-                                            notFoundContent='暂无'
-                                            disabled
-                                        />
+                                        // <TreeSelect
+                                        //     style={{ marginRight: '10px' }}
+                                        //     value={unit}
+                                        //     dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                                        //     treeData={treeList}
+                                        //     placeholder="盘查对象"
+                                        //     onChange={this.unitChange}
+                                        //     showSearch={false}
+                                        //     treeCheckable={true}
+                                        //     dropdownMatchSelectWidth={false}
+                                        //     showCheckedStrategy="SHOW_PARENT"
+                                        //     notFoundContent='暂无'
+                                        //     disabled
+                                        // />
+                                        <Select
+                                            mode="multiple"
+                                            size='default'
+                                            placeholder="Please select"
+                                            defaultValue={['a10', 'c12']}
+                                            onChange={this.handleChange}
+                                            style={{ width: '100%' }}
+                                        >
+                                            {checkObjOption}
+                                        </Select>
                                     )}
                                 </FormItem>
                             </Col>
                         </Row>
                         <Row>
-                            <Col span={15} style={{textAlign: 'right'}}>
-                                <Button htmlType="submit"  className="btn_ok">保存</Button>
-                                <Button style={{marginLeft: 30}} onClick={this.handleCancel} className="btn_delete">取消</Button>
+                            <Col span={15} style={{ textAlign: 'right' }}>
+                                <Button htmlType="submit" className="btn_ok">保存</Button>
+                                <Button style={{ marginLeft: 30 }} onClick={this.handleCancel} className="btn_delete">取消</Button>
                             </Col>
                         </Row>
                     </Form>

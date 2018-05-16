@@ -1,6 +1,6 @@
 // 任务管理模块-action-洛阳
-import { api, fetchRankUnitTreeData } from "../actions";
-import { post, get, put } from "../request";
+import { api, fetchRankUnitTreeData } from "./actions";
+import { post, get, put } from "./request";
 import * as constants from "../utils/Constants";
 import { store } from '../index.js';
 import { message } from 'antd';
@@ -216,6 +216,18 @@ export function postTaskListHushiData(creds) {
         });
     }
 }
+// 根据id查询任务模板信息
+export function postTaskListHushiByIdData(creds) {
+    let path = '/data/getTaskModelById';
+    return dispatch => {
+        // dispatch({ type: "REQUEST_TASK_LIST_HUSHI_BYID_DATA" });
+        post(api + path, creds).then((json) => {
+            dispatch({ type: 'TaskListHushi-data-byid', data: json });
+        }).catch((e) => {
+            dispatch({ type: 'TaskListHushi-error-byid', message: e.toString() })
+        });
+    }
+}
 // 增加任务
 export function addTaskHushiData(creds, params) {
     let path = "/data/savecodeall"
@@ -254,13 +266,37 @@ export function editTaskHushiData(creds, params) {
 }
 // 子任务列表
 export function postChildrenTaskListHushiData(creds) {
-    let path = '/data/getExaminePatrolTasklistPage';
+    let path = '/data/getSubtaskByTakModelId';
     return dispatch => {
         dispatch({ type: "REQUEST_CHILDREN_TASK_LIST_HUSHI_DATA" });
         post(api + path, creds).then((json) => {
             dispatch({ type: 'Children_TaskListHushi-data', data: json });
         }).catch((e) => {
             dispatch({ type: 'Children_TaskListHushi-error', message: e.toString() })
+        });
+    }
+}
+//待办 超期 已完成的列表
+export function postThreeTaskListHushiData(creds) {
+    let path = '/data/getSubtaskList';
+    return dispatch => {
+        dispatch({ type: "REQUEST_THREE_TASK_LIST_HUSHI_DATA" });
+        post(api + path, creds).then((json) => {
+            dispatch({ type: 'Three_TaskListHushi-data', data: json });
+        }).catch((e) => {
+            dispatch({ type: 'Three_TaskListHushi-error', message: e.toString() })
+        });
+    }
+}
+// 根据待办 超期 已完成的id 获取信息
+export function postThreeTaskListHushiByIdData(creds) {
+    let path = '/data/getSubtaskById';
+    return dispatch => {
+        dispatch({ type: "REQUEST_THREE_TASK_LIST_HUSHI_BYID_DATA" });
+        post(api + path, creds).then((json) => {
+            dispatch({ type: 'Three_TaskListHushi-data-byid', data: json });
+        }).catch((e) => {
+            dispatch({ type: 'Three_TaskListHushi-error-byid', message: e.toString() })
         });
     }
 }

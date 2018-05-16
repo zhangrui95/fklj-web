@@ -39,7 +39,35 @@ const initialState = {
                 total: 0,
                 list: [],
             }
-        }
+        },
+        threetaskListHushi: {//待办 超期 已完成 列表
+            reason: {
+                "code": "",
+                "text": ""
+            },
+            result: {
+                total: 0,
+                list: [],
+            }
+        },
+        taskListHushiById: {//根据id获取任务模板信息
+            reason: {
+                "code": "",
+                "text": ""
+            },
+            result: {
+
+            }
+        },
+        threetaskListHushiById: {//根据待办 超期 已完成id获取 信息
+            reason: {
+                "code": "",
+                "text": ""
+            },
+            result: {
+
+            }
+        },
     },
     uiData: {
         menus: [
@@ -132,18 +160,48 @@ const TaskManagement = (state = initialState, action) => {
             newState.data.taskListHushi.result.total = action.data.result.page.totalResult;//page?reason
             newState.isFetching = false;
             return newState;
-        case 'REQUEST_CHILDREN_TASK_LIST_HUSHI_DATA'://子任务列表
+        // case 'REQUEST_CHILDREN_TASK_LIST_HUSHI_DATA'://子任务列表
+        //     return {
+        //         ...state,//原状态
+        //         isFetching: true,
+        //         didInvalidate: false
+        //     }
+        case 'Children_TaskListHushi-data': //子任务列表
+            newState.data.childrentaskListHushi.result.list = action.data.result.pdList;
+            //newState.data.childrentaskListHushi.result.total = action.data.result.page.totalResult;//page?reason
+            // newState.isFetching = false;
+            return newState;
+        case 'REQUEST_THREE_TASK_LIST_HUSHI_DATA'://待办 超期 已完成
             return {
                 ...state,//原状态
                 isFetching: true,
                 didInvalidate: false
             }
-        case 'Children_TaskListHushi-data': //子任务列表
-            newState.data.childrentaskListHushi.result.list = action.data.result.list;
-            newState.data.childrentaskListHushi.result.total = action.data.result.page.totalResult;//page?reason
+        case 'Three_TaskListHushi-data':
+            newState.data.threetaskListHushi.result.list = action.data.result.list;
+            newState.data.threetaskListHushi.result.total = action.data.result.page.totalResult;//page?reason
             newState.isFetching = false;
             return newState;
-
+        // case 'REQUEST_TASK_LIST_HUSHI_BYID_DATA'://根据id获取任务模板信息
+        //     return {
+        //         ...state,//原状态
+        //         isFetching: true,
+        //         didInvalidate: false
+        //     }
+        case 'TaskListHushi-data-byid':
+            newState.data.taskListHushiById.result = action.data.result.data;
+            // newState.isFetching = false;
+            return newState;
+        // case 'REQUEST_THREE_TASK_LIST_HUSHI_BYID_DATA'://根据待办 超期 已完成id获取信息
+        //     return {
+        //         ...state,//原状态
+        //         isFetching: true,
+        //         didInvalidate: false
+        //     }
+        case 'Three_TaskListHushi-data-byid':
+            newState.data.threetaskListHushiById.result = action.data.result.data;
+            // newState.isFetching = false;
+            return newState;
 
         default:
             if (store !== undefined) {
