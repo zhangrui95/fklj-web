@@ -30,7 +30,6 @@ class ControlPersonnel extends Component{
     }
 
     render() {
-        console.log('this.props.ControlPersonnel.uiData.menus',this.props.ControlPersonnel.uiData.menus);
         //遮罩状态
         let isBlock = store.getState().root.uiData.ModalDialogueBg;
         let menusList = [];

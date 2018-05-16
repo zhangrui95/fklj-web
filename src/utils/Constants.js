@@ -44,8 +44,8 @@ export const CONTROLPERSONNEL_MODULE_GK_WGK = '未管控';
 export const CONTROLPERSONNEL_MODULE_GK_YGK = '已管控';
 export const CONTROLPERSONNEL_MODULE_GK_LKZRQ = '离开责任区';
 export const CONTROLPERSONNEL_MODULE_GK_SK = '失控';
-export const CONTROLPERSONNEL_MODULE_DR = '导入';
-export const CONTROLPERSONNEL_MODULE_XZ = '新增';
+export const CONTROLPERSONNEL_MODULE_DR = '后台导入';
+export const CONTROLPERSONNEL_MODULE_XZ = '前端新增';
 //系统设置模块（呼市）
 export const SYSREMSETUP_MODULE_TIME = '失控时间设置';
 // export const SYSREMSETUP_MODULE_Add = '添加到任务';

@@ -4,12 +4,13 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {mainReducer} from "../../reducers/reducers";
-import {StylePage, ShallowBlueBtn, Pag,} from "../generalPurposeModule";
+import {StylePage, ShallowBlueBtn} from "../generalPurposeModule";
 import {store} from '../../index.js';
 import * as constants from "../../utils/Constants";
+import {serverUrls, getLocalTime} from '../../utils/index';
 import {monthFormat, dateFormat, serverUrl} from '../../utils/';
 import {Spin, Table, message, Input, Modal, Button, Form, Icon, Row, Col, Select, DatePicker, Divider, List, Popconfirm,Upload} from 'antd';
-
+import {getControlPersonList, getControlDetail,getControlExport,getControlDownload,getCustomFiledList,insertOrUpdateCustomFiled,delCustomFiled} from "../../actions/ControlPersonnel";
 import moment from 'moment';
 import 'moment/locale/zh-cn';
 moment.locale('zh-cn');
@@ -50,6 +51,7 @@ const formItemLayout = {
     },
 };
 const newWord = []
+let controlType = ''
 
 export  class Control extends Component{
     constructor(props) { //初始化nowPage为1
@@ -65,11 +67,6 @@ export  class Control extends Component{
             begindate: '',
             enddate: '',
             key: '',
-            data: [
-                {key: 1, serial: 1, cardId: '230106196201222121', label: '张三', sex:'男',age:'26', state:'暂住', phone:'13936003633',zrdw:'呼伦浩特市XX单位', updatetime: '2018-04-10',cycle:'按周',address:'玉泉区兴隆巷1106号',personFrom:'导入'},
-                {key: 2, serial: 2, cardId: '230105199605262631', label: '李四', sex:'女',age:'18', state:'暂住', phone:'13936003633',zrdw:'呼伦浩特市XX单位', updatetime: '2018-04-09',cycle:'按天',address:'玉泉区兴隆巷1106号',personFrom:'新增'},
-                {key: 3, serial: 3, cardId: '20610819740122292X', label: '王二', sex:'男',age:'39', state:'暂住', phone:'13936003633',zrdw:'呼伦浩特市XX单位', updatetime: '2018-04-08',cycle:'按周',address:'玉泉区兴隆巷1106号',personFrom:'导入'},
-            ],
             record: null,
             pagination: pagination,
             loading: false,
@@ -82,12 +79,29 @@ export  class Control extends Component{
             text:null,
             newWords:[]
         };
-        this.pageChange = this.pageChange.bind(this);
+        let controlType = this.props.controlType;
+        console.log(controlType)
     }
+
+    componentDidMount() {
+        this.getList(this.props.controlType)
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if(this.props.controlType!==nextProps.controlType){
+            this.getList(nextProps.controlType)
+        }
+    }
+
+
     editShowModal = (record) => {
+        console.log(record)
+        let cerds = {id:record.id}
+        store.dispatch(getControlDetail(cerds))
+        let cred = {}
+        store.dispatch(getCustomFiledList(cred))
         this.setState({
             visible: true,
-            personInfo: record,
             modalType: 'edit',
             newWords:newWord
         });
@@ -105,151 +119,53 @@ export  class Control extends Component{
             modalKey: this.state.modalKey + 1
         });
     }
-    handleDelete = () => {
-        if (this.state.selectedRowsId.length === 0) {
-            message.error('请选择要删除的项！');
-            return;
-        }
-
-        let crads = {
-            // id: this.state.selectedRowsId,
-            // userName: sessionStorage.getItem('userName') || ''
-
-            pd: {
-                id: this.state.selectedRowsId,
-            },
-
-        };
-        let params = {
-            currentPage: this.state.nowPage,
-            pd: {
-                beginTime: this.state.begindate,
-                endTime: this.state.enddate,
-                name: this.state.name,
-                pid:"199"
-            },
-            showCount: 10
-        }
-        // store.dispatch(DeleteHorrorSoftwareData(crads,params));
-
-        this.setState({
-            selectedRowsId: [],
-            // nowPage: 1
-        });
-
-    }
-    saveModel=(e)=>{
-        // this.handleCancel();
-        e.preventDefault();
-        this.props.form.validateFields((err, values) => {
-            let userItem = JSON.parse(sessionStorage.getItem('user'));
-            if(!err){
-                if(this.state.modalType === "edit"){
-                    // values.id = this.state.personInfo.key;//让表单数据带上id  后台好进行操作
-                    // console.log('this.state.personInfo',this.state.personInfo);
-                    // console.log('values.id',values.id);
-                    // let creds = {
-                    //     pd:{
-                    //         name:values.label,
-                    //         iconUrl:values.iconUrl?values.iconUrl:this.state.avatarSrc,
-                    //         id:values.id.toString(),
-                    //         optuser:userItem.user.idcard,
-                    //         createuser:userItem.user.idcard,
-                    //         remark:values.remark?values.remark:'',
-                    //         status:values.status?values.status:'1',
-                    //         code:values.value?values.value:'',
-                    //         level:'2',
-                    //         pid:'199'
-                    //     },//传参 把后台需要的参数传过去
-                    // }
-                    // let params = {
-                    //     currentPage: 1,
-                    //     pd: {
-                    //         beginTime: this.state.begindate,
-                    //         endTime: this.state.enddate,
-                    //         name: this.state.name,
-                    //         pid:"199"
-                    //     },
-                    //     showCount: 10
-                    // }
-                    // store.dispatch(updateHorrorSoftwareData(creds,params));
-                }else if(this.state.modalType === "add"){
-                    let data = this.state.data;
-                    let len = this.state.data.length - 1;
-                    let key = data[len].key + 1
-                    let value = {key: key, serial: key, value: values.value, label: values.label, updatetime: "2018-04-10"}
-                    data.push(value)
-                    this.setState({
-                        data: data,
-                    });
-                    // let creds = {//表单域不一定写了所有的字段 所以要把空值通过赋值显示
-                    //     pd:{
-                    //         name:values.label?values.label:'',
-                    //         iconUrl:values.iconUrl?values.iconUrl:'',
-                    //         menuname:"304",
-                    //         optuser:userItem.user.idcard,
-                    //         createuser:userItem.user.idcard,
-                    //         remark:values.remark?values.remark:'',
-                    //         status:values.status?values.status:'1',
-                    //         code:values.value?values.value:'',
-                    //         level:'2',
-                    //         pid:'199'
-                    //     },
-                    // }
-                    // let params = {
-                    //     currentPage: 1,
-                    //     pd: {
-                    //         beginTime: this.state.begindate,
-                    //         endTime: this.state.enddate,
-                    //         name: this.state.name,
-                    //         pid:"199"
-                    //     },
-                    //     showCount: 10
-                    // }
-                    // store.dispatch(addHorrorSoftwareData(creds,params))
-
-                }
-                this.handleCancel();
-                this.setState({
-                    nowPage: 1
-                });
-            }
-
-
-        })
-    }
-    pageChange(nowPage) {
-        this.state = Object.assign({}, this.state, {nowPage:nowPage});
-        // let creds = {
-        //     currentPage:nowPage,
-        //     entityOrField:true,
-        //     pd:{
-        //         beginTime:this.state.beginDate ,
-        //         endTime:this.state.endDate,
-        //         name:this.state.name,
-        //         unit:this.state.unit,
-        //         task_stauts:this.state.status,
-        //         task_type:'113003',
-        //     },
-        //     showCount: constants.pageSize
-        // }
-        // store.dispatch(fetchPatrolTaskData(creds));
-        this.setState({
-            selectedRowsId:[],
-            selectedRowKeys:[],
-        });
+    handleExport = () => {
+        let path = serverUrls + store.getState().ControlPersonnel.data.getExport.result.path;
+        window.open(path);
     }
     initEntity = () =>{
         this.setState({
             nowPage: 1,
         })
     }
+
+    onRef = (ref) => {
+        this.child = ref
+    }
+
+    getList(controlType){
+        let creds = '';
+        if(controlType==='GK_WGK'){
+            creds = {pd:{control_type:0}}
+        }else if(controlType==='GK_YGK'){
+            creds = {pd:{control_type:1}}
+        }else if(controlType==='GK_LKZRQ') {
+            creds = {pd:{control_type:2}}
+        }else if(controlType==='GK_SK'){
+            creds = {pd:{control_type:3}}
+        }else if(controlType==='LY_DR'){
+            creds = {pd:{source:'901006'}}
+        }else if(controlType==='LY_XZ'){
+            creds = {pd:{source:'901008'}}
+        }else{
+            creds = {}
+        }
+        this.refs.SearchArea.init();
+        store.dispatch(getControlPersonList(creds))
+    }
     render() {
         const { getFieldDecorator } = this.props.form;
         let nowPage = this.state.nowPage;
         let isFetching = store.getState().ControlPersonnel.isFetching;
         let newWords = this.state.newWords;
-        let controlType = this.props.controlType;
+        let dataList = [];
+        controlType = this.props.controlType;
+        let list = store.getState().ControlPersonnel.data.ControlPersonList.result.list;
+        for(let i in list){
+            if(i !== 'remove'){
+                dataList.push({id:list[i].id,key: parseInt(i) + 1, serial: parseInt(i) + 1, cardId: list[i].idcard, label: list[i].name, sex: list[i].sex == '0' ? '男': '女' ,age:list[i].age, state:(list[i].address_type == '0' ? '常住' : (list[i].address_type == '1' ? '暂住' : '流动')), phone:list[i].phone,zrdw:list[i].subordination_task, updatetime: getLocalTime(list[i].updatetime),cycle:list[i].cycle == '0' ? '按天' : '按周',address:list[i].address,personFrom:list[i].source === '901006' ? '后台导入':'前端新增'})
+            }
+        }
         const columns = [{
             title: '序号',
             dataIndex: 'serial',
@@ -276,7 +192,7 @@ export  class Control extends Component{
             title: '联系电话',
             dataIndex: 'phone',
         },{
-            title: '责任单位',
+            title: '隶属任务',
             dataIndex: 'zrdw',
         },{
             title: '任务周期',
@@ -292,13 +208,13 @@ export  class Control extends Component{
             key: 'action',
             render: (text, record) => (
                 <span>
-                    <span className={controlType === 'GZ_NLHRY' || controlType === 'GZ_ZALY' || controlType === 'LY_DR' || controlType === 'LY_XZ' ? '' : 'noneDiv'} onClick={(e)=>this.editShowModal(record)} style={{cursor:'pointer'}}>详情</span>
+                    <span onClick={(e)=>this.editShowModal(record)} style={{cursor:'pointer'}}>详情</span>
                     {/*<Divider className={controlType === 'GZ_NLHRY' || controlType === 'GZ_ZALY' || controlType === 'LY_DR' || controlType === 'LY_XZ' || controlType === 'LY_XZ' ? '' : 'noneDiv'} type="vertical" />*/}
-                    <span className={controlType === 'GK_WGK' || controlType === 'GK_YGK' || controlType === 'GK_LKZRQ' || controlType === 'GK_SK' ? '' : 'noneDiv'} onClick={(e)=>this.editShowModal(record)} style={{cursor:'pointer'}}>编辑</span>
-                    <Divider className={controlType === 'GK_WGK' || controlType === 'GK_YGK' || controlType === 'GK_LKZRQ' || controlType === 'GK_SK' ? '' : 'noneDiv'} type="vertical" />
-                    <Popconfirm title="是否确定该人员离开责任区？" okText="确定" cancelText="取消">
-                              <span className={controlType === 'GK_WGK' || controlType === 'GK_YGK' || controlType === 'GK_LKZRQ' || controlType === 'GK_SK' ? '' : 'noneDiv'} style={{cursor:'pointer'}}>离开责任区</span>
-                    </Popconfirm>
+                    {/*<span className={controlType === 'GK_WGK' || controlType === 'GK_YGK' || controlType === 'GK_LKZRQ' || controlType === 'GK_SK' ? '' : 'noneDiv'} onClick={(e)=>this.editShowModal(record)} style={{cursor:'pointer'}}>详情</span>*/}
+                    {/*<Divider className={controlType === 'GK_WGK' || controlType === 'GK_YGK' || controlType === 'GK_LKZRQ' || controlType === 'GK_SK' ? '' : 'noneDiv'} type="vertical" />*/}
+                    {/*<Popconfirm title="是否确定该人员离开责任区？" okText="确定" cancelText="取消">*/}
+                    {/*<span className={controlType === 'GK_WGK' || controlType === 'GK_YGK' || controlType === 'GK_LKZRQ' || controlType === 'GK_SK' ? '' : 'noneDiv'} style={{cursor:'pointer'}}>离开责任区</span>*/}
+                    {/*</Popconfirm>*/}
                 </span>
             ),
         }];
@@ -310,6 +226,7 @@ export  class Control extends Component{
                     var selectedRow = selectedRows[i];
                     ids.push(selectedRow.id);
                 }
+                console.log('ids',ids)
                 this.setState({
                     selectedRowsId:ids
                 });
@@ -319,26 +236,29 @@ export  class Control extends Component{
             }),
         };
         const newFormList = [];
-        if(newWords.length > 0){
-            for(let i in newWords){
-                if(newWords[i].type === '文本'){
+        let detail = store.getState().ControlPersonnel.data.getControlPersonListById.result.data;
+        let newValue = store.getState().ControlPersonnel.data.FiledList.result.list;
+        // let value = detail.custom_filed_value.value[i].value
+        if(newValue.length > 0){
+            for(let i in newValue){
+                if(newValue[i].type == '0'){
                     newFormList.push(
                         <Col span={12}>
                             <FormItem
                                 {...formItemLayout}
-                                label={newWords[i].name}
+                                label={newValue[i].name}
                             >
                                 {getFieldDecorator('wordText' + i, {
                                     initialValue:this.state.modalType === 'edit' ? '' : '',
                                 })(
-                                    <Input/>
+                                    <Input disabled/>
                                 )}
                             </FormItem>
                         </Col>
                     )
-                }else if(newWords[i].type === '下拉框'){
+                }else if(newValue[i].type == '1'){
                     let strs = []
-                    strs=newWords[i].option.split("，");
+                    strs=newValue[i].value.split("，");
                     const children = [];
                     for(let j in strs){
                         if(j!='remove'){
@@ -349,12 +269,12 @@ export  class Control extends Component{
                         <Col span={12}>
                             <FormItem
                                 {...formItemLayout}
-                                label={newWords[i].name}
+                                label={newValue[i].name}
                             >
                                 {getFieldDecorator('wordName', {
                                     initialValue:this.state.modalType === 'edit' ? '' : '',
                                 })(
-                                    <Select>
+                                    <Select disabled>
                                         {children}
                                     </Select>
                                 )}
@@ -376,10 +296,12 @@ export  class Control extends Component{
                             lineIdChange={this.handleLineIdChange}
                             createClick={this.handChangeModalDialogueShow}
                             addShowModal={this.addShowModal}
-                            handleDelete={this.handleDelete}
+                            handleExport={this.handleExport}
                             serchChange={this.serchChange}
                             form={this.props.form}
                             controlType = {this.props.controlType}
+                            selectedRowsId = {this.state.selectedRowsId}
+                            ref="SearchArea"
                         />
                         <div className="clear"></div>
                     </div>
@@ -391,12 +313,10 @@ export  class Control extends Component{
                             <Spin size="large" />
                         </div>:
                         <div style={{padding:"0 15px"}}>
-                            <Table locale={{emptyText:'暂无数据'}}  rowSelection={controlType === 'GZ_NLHRY' || controlType === 'GZ_ZALY'||controlType === 'LY_DR' || controlType === 'LY_XZ' ? undefined : rowSelection} columns={columns} dataSource={this.state.data} bordered  pagination={false}/>
+                            <Table locale={{emptyText:'暂无数据'}}  rowSelection={controlType === 'GZ_NLHRY' || controlType === 'GZ_ZALY' ? undefined : rowSelection} columns={columns} dataSource={dataList} bordered />
                         </div>}
                     <div className="clear"></div>
                 </div>
-                {/*分页*/}
-                <Pag pageSize={10} nowPage={nowPage} totalRecord={10} pageChange={this.pageChange} />
                 <Modal
                     width={700}
                     title="任务详情"
@@ -406,10 +326,10 @@ export  class Control extends Component{
                     key={this.state.modalKey}
                 >
                     <Row>
-                        <Form onSubmit={this.saveModel}>
+                        <Form>
                             <Col span={12} style={{ padding: '0 38px' }}>
                                 <span style={{color:"#fff"}}>照片：</span>
-                                <img src="../../images/zanwu.png" style={{ width: '130px', height: '160px' }} />
+                                {detail.zpurl!=='' ? <img src={detail.zpurl} style={{ width: '130px', height: '160px' }} /> : <img src="../../images/zanwu.png" style={{ width: '130px', height: '160px' }} />}
                             </Col>
                             <Col span={12}>
                                 <FormItem
@@ -417,9 +337,9 @@ export  class Control extends Component{
                                     label="身份证号"
                                 >
                                     {getFieldDecorator('cardId ', {
-                                        initialValue:this.state.modalType === 'edit' ?this.state.personInfo.cardId : '',
+                                        initialValue:this.state.modalType === 'edit' ? detail.idcard : '',
                                     })(
-                                        <Input/>
+                                        <Input disabled/>
                                     )}
                                 </FormItem>
                             </Col>
@@ -429,9 +349,9 @@ export  class Control extends Component{
                                     label="姓名"
                                 >
                                     {getFieldDecorator('lable', {
-                                        initialValue:this.state.modalType === 'edit' ? this.state.personInfo.label : '',
+                                        initialValue:this.state.modalType === 'edit' ? detail.name : '',
                                     })(
-                                        <Input/>
+                                        <Input disabled/>
                                     )}
                                 </FormItem>
                             </Col>
@@ -441,9 +361,9 @@ export  class Control extends Component{
                                     label="性别"
                                 >
                                     {getFieldDecorator('sex', {
-                                        initialValue:this.state.modalType === 'edit' ? this.state.personInfo.sex : '',
+                                        initialValue:this.state.modalType === 'edit' ? (detail.sex == '0' ? '男' : '女') : '',
                                     })(
-                                        <Input/>
+                                        <Input disabled/>
                                     )}
                                 </FormItem>
                             </Col>
@@ -453,9 +373,9 @@ export  class Control extends Component{
                                     label="年龄"
                                 >
                                     {getFieldDecorator('age', {
-                                        initialValue:this.state.modalType === 'edit' ? this.state.personInfo.age : '',
+                                        initialValue:this.state.modalType === 'edit' ? detail.age : '',
                                     })(
-                                        <Input/>
+                                        <Input disabled/>
                                     )}
                                 </FormItem>
                             </Col>
@@ -465,9 +385,9 @@ export  class Control extends Component{
                                     label="户籍地址"
                                 >
                                     {getFieldDecorator('address', {
-                                        initialValue:this.state.modalType === 'edit' ? this.state.personInfo.address : '',
+                                        initialValue:this.state.modalType === 'edit' ? detail.address : '',
                                     })(
-                                        <Input/>
+                                        <Input disabled/>
                                     )}
                                 </FormItem>
                             </Col>
@@ -477,9 +397,9 @@ export  class Control extends Component{
                                     label="民族"
                                 >
                                     {getFieldDecorator('nation', {
-                                        initialValue:this.state.modalType === 'edit' ? this.state.personInfo.nation : '',
+                                        initialValue:this.state.modalType === 'edit' ? detail.nation : '',
                                     })(
-                                        <Input/>
+                                        <Input disabled/>
                                     )}
                                 </FormItem>
                             </Col>
@@ -489,9 +409,9 @@ export  class Control extends Component{
                                     label="居住类型"
                                 >
                                     {getFieldDecorator('state', {
-                                        initialValue:this.state.modalType === 'edit' ? this.state.personInfo.state : '',
+                                        initialValue:this.state.modalType === 'edit' ? (detail.address_type=='0'?'常住':(detail.address_type=='1'?'暂住':'流动')) : '',
                                     })(
-                                        <Select notFoundContent='暂无'>
+                                        <Select notFoundContent='暂无' disabled>
                                             <Option value="">全部</Option>
                                             <Option value="常住">常住</Option>
                                             <Option value="暂住">暂住</Option>
@@ -506,9 +426,9 @@ export  class Control extends Component{
                                     label="现居住地址"
                                 >
                                     {getFieldDecorator('address', {
-                                        initialValue:this.state.modalType === 'edit' ? this.state.personInfo.address : '',
+                                        initialValue:this.state.modalType === 'edit' ? detail.now_address : '',
                                     })(
-                                        <Input/>
+                                        <Input disabled/>
                                     )}
                                 </FormItem>
                             </Col>
@@ -518,9 +438,9 @@ export  class Control extends Component{
                                     label="工作地址"
                                 >
                                     {getFieldDecorator('address', {
-                                        initialValue:this.state.modalType === 'edit' ? this.state.personInfo.address : '',
+                                        initialValue:this.state.modalType === 'edit' ? '' : '',
                                     })(
-                                        <Input/>
+                                        <Input disabled/>
                                     )}
                                 </FormItem>
                             </Col>
@@ -530,21 +450,21 @@ export  class Control extends Component{
                                     label="联系电话"
                                 >
                                     {getFieldDecorator('phone', {
-                                        initialValue:this.state.modalType === 'edit' ? this.state.personInfo.phone : '',
+                                        initialValue:this.state.modalType === 'edit' ? detail.phone : '',
                                     })(
-                                        <Input/>
+                                        <Input disabled/>
                                     )}
                                 </FormItem>
                             </Col>
                             <Col span={12}>
                                 <FormItem
                                     {...formItemLayout}
-                                    label="责任单位"
+                                    label="隶属任务"
                                 >
                                     {getFieldDecorator('zrdw', {
-                                        initialValue: this.state.modalType === 'edit' ? this.state.personInfo.zrdw : '',
+                                        initialValue: this.state.modalType === 'edit' ? detail.subordination_task : '',
                                     })(
-                                        <Input/>
+                                        <Input disabled/>
                                     )}
                                 </FormItem>
                             </Col>
@@ -554,9 +474,9 @@ export  class Control extends Component{
                                     label="任务周期"
                                 >
                                     {getFieldDecorator('cycle', {
-                                        initialValue:this.state.modalType === 'edit' ? this.state.personInfo.cycle : '',
+                                        initialValue:this.state.modalType === 'edit' ? (detail.cycle=='0'?'每天':'每周') : '',
                                     })(
-                                        <Select notFoundContent='暂无'>
+                                        <Select notFoundContent='暂无' disabled>
                                             <Option value="">全部</Option>
                                             <Option value="按周">按周</Option>
                                             <Option value="按天">按天</Option>
@@ -570,9 +490,9 @@ export  class Control extends Component{
                                     label="人员来源"
                                 >
                                     {getFieldDecorator('personFrom', {
-                                        initialValue: this.state.modalType === 'edit' ? this.state.personInfo.personFrom : '',
+                                        initialValue: this.state.modalType === 'edit' ? (detail.source === '901006'?'后台导入':'前端新增') : '',
                                     })(
-                                        <Input/>
+                                        <Input disabled/>
                                     )}
                                 </FormItem>
                             </Col>
@@ -584,7 +504,7 @@ export  class Control extends Component{
                                     {getFieldDecorator('personType', {
                                         initialValue: this.state.modalType === 'edit' ? this.state.personInfo.personType : '',
                                     })(
-                                        <Input/>
+                                        <Input disabled/>
                                     )}
                                 </FormItem>
                             </Col>
@@ -596,7 +516,7 @@ export  class Control extends Component{
                                     {getFieldDecorator('car', {
                                         initialValue: this.state.modalType === 'edit' ? this.state.personInfo.car : '',
                                     })(
-                                        <Input/>
+                                        <Input disabled/>
                                     )}
                                 </FormItem>
                             </Col>
@@ -606,21 +526,22 @@ export  class Control extends Component{
                                     label="更新时间"
                                 >
                                     {getFieldDecorator('time', {
-                                        initialValue:this.state.modalType === 'edit' ? moment(this.state.personInfo.updatetime, 'YYYY-MM-DD HH:mm:ss') : '',
+                                        initialValue:this.state.modalType === 'edit' ? getLocalTime(detail.updatetime) : '',
                                     })(
-                                        <DatePicker placeholder="" allowClear={false} style={{width:"190px"}}/>
+                                        //<DatePicker placeholder="" allowClear={false} style={{width:"190px"}} disabled/>
+                                        <Input disabled/>
                                     )}
                                 </FormItem>
                             </Col>
                             {newFormList}
                         </Form>
                     </Row>
-                    <Row>
-                        <Col span={15} style={{textAlign: 'right'}}>
-                            <Button htmlType="submit"  className="btn_ok">保存</Button>
-                            <Button style={{marginLeft: 30}} onClick={this.handleCancel} className="btn_delete">取消</Button>
-                        </Col>
-                    </Row>
+                    {/*<Row>*/}
+                    {/*<Col span={15} style={{textAlign: 'right'}}>*/}
+                    {/*<Button htmlType="submit"  className="btn_ok">保存</Button>*/}
+                    {/*<Button style={{marginLeft: 30}} onClick={this.handleCancel} className="btn_delete">取消</Button>*/}
+                    {/*</Col>*/}
+                    {/*</Row>*/}
                 </Modal>
             </div>
         )
@@ -648,7 +569,9 @@ const SearchArea = React.createClass({
             addModal: false,
             showDel:{display:'none'},
             prompt: false,
-            promptText:''
+            promptText:'',
+            prompType:'',
+            wordId:''
         };
     },
     handleNameChange: function(e) {
@@ -677,7 +600,25 @@ const SearchArea = React.createClass({
         });
     },
     handleClick: function() { //点击查询
-        let {name} = this.state;
+        let {name,cardId,status,WorkPlace,begindate,enddate} = this.state;
+        let controlType = this.props.controlType
+        let creds = ''
+        if(controlType === 'GK_WGK'){
+            creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),subordination_task:WorkPlace, beginTime:begindate,endTime:enddate,control_type:0}}
+        }else if(controlType === 'GK_YGK'){
+            creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),subordination_task:WorkPlace, beginTime:begindate,endTime:enddate,control_type:1}}
+        }else if(controlType === 'GK_LKZRQ'){
+            creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),subordination_task:WorkPlace, beginTime:begindate,endTime:enddate,control_type:2}}
+        }else if(controlType === 'GK_SK'){
+            creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),subordination_task:WorkPlace, beginTime:begindate,endTime:enddate,control_type:3}}
+        } else if(controlType === 'LY_DR'){
+            creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),subordination_task:WorkPlace, beginTime:begindate,endTime:enddate,source:"901006"}}
+        } else if(controlType === 'LY_XZ'){
+            creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),subordination_task:WorkPlace, beginTime:begindate,endTime:enddate,source:"901008"}}
+        } else {
+            creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),subordination_task:WorkPlace, beginTime:begindate,endTime:enddate}}
+        }
+        store.dispatch(getControlPersonList(creds))
     },
     init:function () {
         this.setState({
@@ -696,6 +637,17 @@ const SearchArea = React.createClass({
         });
     },
     hideModalOk: function() {
+        let id = this.state.wordId;
+        store.dispatch(delCustomFiled({id:id}))
+        setTimeout(()=>{
+            let delCode = store.getState().ControlPersonnel.data.delCustomFiled.reason.code;
+            if(delCode === '200'){
+                message.success(`提示：${store.getState().ControlPersonnel.data.delCustomFiled.reason.text}`);
+                this.getNewWords();
+            }else{
+                message.error(`提示：${store.getState().ControlPersonnel.data.delCustomFiled.reason.text}`);
+            }
+        },100)
         this.setState({
             visible: false,
             zdyModal:true
@@ -726,12 +678,15 @@ const SearchArea = React.createClass({
         });
     },
     hideModals: function() {
+        this.getNewWords();
         this.setState({
             zdyModals: false,
             zdyModal: true,
         });
     },
     getNewWords: function(){
+        let creds = {}
+        store.dispatch(getCustomFiledList(creds))
         this.setState({
             zdyModal: true,
             wordType: '',
@@ -763,9 +718,35 @@ const SearchArea = React.createClass({
         });
     },
     saveNewWord:function () {
-        if(this.state.wordName !== ''){
-            newWord.push({name:this.state.wordName,type:this.state.wordType,option:this.state.OptionWords})
+        let creds = {}
+        const user = JSON.parse(sessionStorage.getItem('user'));
+        if(this.state.wordId === ''){
+            if(this.state.wordType === '文本'){
+                creds = {createuser:user.user.name,name:this.state.wordName,type:"0",updateuser:'',value:''}
+            }else{
+                creds = {createuser:user.user.name,name:this.state.wordName,type:"1",updateuser:'',value:this.state.OptionWords}
+            }
+        }else{
+            if(this.state.wordType === '文本'){
+                creds = {createuser:user.user.name,name:this.state.wordName,type:"0",value:'',id:this.state.wordId}
+            }else{
+                creds = {createuser:user.user.name,name:this.state.wordName,type:"1",value:this.state.OptionWords,id:this.state.wordId}
+            }
+        }
+        if(this.state.wordName!==""){
+            store.dispatch(insertOrUpdateCustomFiled(creds));
+            setTimeout(()=>{
+                let delCode = store.getState().ControlPersonnel.data.CustomFiled.reason.code;
+                if(delCode === '200'){
+                    message.success(`提示：${store.getState().ControlPersonnel.data.CustomFiled.reason.text}`);
+                    this.getNewWords();
+                }else{
+                    message.error(`提示：${store.getState().ControlPersonnel.data.CustomFiled.reason.text}`);
+                }
+            },100)
             this.hideModals();
+        }else{
+            message.error(`提示：字段名称不能为空!`,5);
         }
     },
     getAddModal:function(){
@@ -774,18 +755,22 @@ const SearchArea = React.createClass({
         });
     },
     addNewsWord:function (type, record) {
+        // record.id
         if(type === 'update'){
             this.setState({
                 showDel:{margin:'0 0 0 30px'},
                 wordName:record.name,
-                wordType:record.type
+                wordType:record.type,
+                OptionWords:record.value,
+                wordId:record.id
             })
             this.getSelects(record.type)
         }else if(type === 'add'){
             this.setState({
                 showDel:{display:'none'},
                 wordName:'',
-                wordType:''
+                wordType:'',
+                wordId:''
             })
             this.getSelects('0')
         }
@@ -802,7 +787,11 @@ const SearchArea = React.createClass({
     },
     importOnChange:function(info) {
         if(info.file.response.reason!==null){
-            message.error(`提示：${info.file.response.reason.text}`,5);
+            if(info.file.response.reason.code === '400'){
+                message.error(`提示：${info.file.response.reason.text}`,5);
+            }else{
+                message.success(`提示：${info.file.response.reason.text}`);
+            }
         }
         if (info.file.status === 'uploading') {
             this.importEnterLoading();
@@ -811,16 +800,24 @@ const SearchArea = React.createClass({
             //console.log(info.file, info.fileList);
         }
         if (info.file.status === 'done') {
-            message.success(`提示：${info.file.name} 上传成功!`);
-            this.props.initEntity();
-            let creds = {
-                currentPage:1,
-                entityOrField:true,
-                pd:{
-                },
-                showCount: constants.pageSize
+            let creds = '';
+            let controlType = this.props.controlType
+            if(controlType==='GK_WGK'){
+                creds = {pd:{control_type:0}}
+            }else if(controlType==='GK_YGK'){
+                creds = {pd:{control_type:1}}
+            }else if(controlType==='GK_LKZRQ') {
+                creds = {pd:{control_type:2}}
+            }else if(controlType==='GK_SK'){
+                creds = {pd:{control_type:3}}
+            }else if(controlType==='LY_DR'){
+                creds = {pd:{source:'901006'}}
+            }else if(controlType==='LY_XZ'){
+                creds = {pd:{source:'901008'}}
+            }else{
+                creds = {}
             }
-            // store.dispatch(fetchDefineWarehousePersonData(creds));
+            store.dispatch(getControlPersonList(creds))
 
             this.setState({
                 importLoading: false,
@@ -835,25 +832,37 @@ const SearchArea = React.createClass({
         }
     },
     beforeUpload:function(file, fileList) {
-        const isExcel = file.type === 'application/vnd.ms-excel';
-        if (!isExcel) {
+        var rag = /\.(xls|xlsx|XLS|XLSX)$/;
+        if(!rag.test(file.name)){
             message.error('提示：请上传excel!');
         }
-        return isExcel;
+        return;
     },
     getPrompt:function (type) {
         if(type === 'download'){
             this.setState({
-                promptText:'是否确定下载导入模板？'
+                promptText:'是否确定下载导入模板？',
+                prompType:'download'
             })
+            store.dispatch(getControlDownload())
         }else if(type === 'export'){
             this.setState({
-                promptText:'是否确定导出数据？'
+                promptText:'是否确定导出数据？',
+                prompType:'export'
             })
+            let creds = {ids:this.props.selectedRowsId.toString()}
+            store.dispatch(getControlExport(creds))
         }
         this.setState({
             prompt:true,
         })
+    },
+    exportModal:function(){
+        this.props.handleExport();
+    },
+    downloadModal:function () {
+        let path = serverUrls + store.getState().ControlPersonnel.data.Download.result.path;
+        window.open(path);
     },
     render() {
         const {getFieldDecorator} = this.props.form
@@ -892,21 +901,36 @@ const SearchArea = React.createClass({
             {serial:'1',name:'玉泉区兴隆派出所按天盘查',type:'周期任务',cycle:'按天'},
             {serial:'2',name:'玉泉区兴隆派出所按周盘查',type:'周期任务',cycle:'按周'}
         ]
-        const newWord = [
-            {name:'类型',type:'0'},
-            {name:'任务描述',type:'1'},
-        ]
+        let newWord = []
+        for(let i in store.getState().ControlPersonnel.data.FiledList.result.list){
+            if(i !== 'remove'){
+                let list= store.getState().ControlPersonnel.data.FiledList.result.list
+                newWord.push({name:list[i].name,key:i,id:list[i].id,type:list[i].type,value:list[i].value})
+            }
+        }
         const list = [{
             key: 'name',
             render: (text, record) => (
                 <span onClick={(e)=>this.addNewsWord('update', record)} style={{cursor:'pointer'}}>{record.name}</span>
             ),
         }];
+        //上传
+        const upLoad = {
+            name: 'file',
+            action: serverUrls + '/data/importControlPersonExcel',
+            headers: {
+                Authorization: sessionStorage.getItem('id_token') || '',
+            },
+            data: {
+                userName: sessionStorage.getItem('userName') || '',
+            },
+            showUploadList: false,
+        };
         let btns = (
             <div style={{marginTop:"15px"}}>
                 <Button style={{width:"110px", marginRight:"10px",float:'left'}} onClick={this.getAddModal} className="btn_ok">添加到任务</Button>
                 <div  style={{float:'left'}}>
-                    <Upload onChange={this.importOnChange} beforeUpload={this.beforeUpload} showUploadList={false}>
+                    <Upload {...upLoad} onChange={this.importOnChange} beforeUpload={this.beforeUpload} showUploadList={false}>
                         <Button style={{width:"80px", marginRight:"10px"}} className="btn_ok">导入</Button>
                     </Upload>
                 </div>
@@ -916,7 +940,6 @@ const SearchArea = React.createClass({
             </div>
         )
         let controlType = this.props.controlType
-        console.log(controlType)
         if(controlType === 'GZ_NLHRY' || controlType === 'GZ_ZALY'){
             btns = ''
         }else if(controlType === 'GK_YGK'){
@@ -949,18 +972,12 @@ const SearchArea = React.createClass({
                 <label htmlFor="" className="font14">居住类型：</label>
                 <Select value={status} style={{ width: 100 ,marginRight:"10px" }} onChange={this.statusChange} notFoundContent='暂无'>
                     <Option value="">全部</Option>
-                    <Option value="常住">常住</Option>
-                    <Option value="暂住">暂住</Option>
-                    <Option value="流动">流动</Option>
+                    <Option value="0">常住</Option>
+                    <Option value="1">暂住</Option>
+                    <Option value="2">流动</Option>
                 </Select>
-                <label htmlFor="" className="font14">责任单位：</label>
-                <Input style={{width:'130px',marginRight:"10px"}} type="text"  id='name' placeholder='请输入责任单位'  value={WorkPlace}  onChange={this.WorkPlaceChange}/>
-                <label htmlFor="" className="font14">任务周期：</label>
-                <Select value={cycle} style={{ width: 100 ,marginRight:"10px" }} onChange={this.cycleChange} notFoundContent='暂无'>
-                    <Option value="">全部</Option>
-                    <Option value="按周">按周</Option>
-                    <Option value="按天">按天</Option>
-                </Select>
+                <label htmlFor="" className="font14">隶属任务：</label>
+                <Input style={{width:'130px',marginRight:"10px"}} type="text"  id='name' placeholder='请输入隶属任务'  value={WorkPlace}  onChange={this.WorkPlaceChange}/>
                 <label htmlFor="" className="font14">更新时间：</label>
                 <DatePicker format={dateFormat} allowClear={false} style={{marginRight:"10px",width:'130px'}} value={beginDateValue} placeholder="请选择日期" onChange={this.handleBeginDeteClick}/>
                 <span className="font14" style={{margin:"0 10px 0 0"}}>至</span>
@@ -969,7 +986,7 @@ const SearchArea = React.createClass({
                 <ShallowBlueBtn width="80px" text="重置" margin="0 10px 0 0" onClick={this.init} />
                 <div>
                     {btns}
-                    <Modal style={{top:"38%"}}
+                    <Modal style={{top:"20%"}}
                            title="任务列表"
                            visible={this.state.addModal}
                            footer={null}
@@ -992,7 +1009,7 @@ const SearchArea = React.createClass({
                     >
                         <p style={{fontSize:"16px",}}>{this.state.promptText}</p>
                         <p style={{marginTop:"20px",textAlign:"center"}}>
-                            <Button style={{margin:'0 20px 0 0 ',width:"80px"}} onClick={this.hideModal} className="btn_ok">
+                            <Button style={{margin:'0 20px 0 0 ',width:"80px"}} onClick={this.state.prompType==='export'? this.exportModal:this.downloadModal} className="btn_ok">
                                 确定
                             </Button>
                             <Button style={{margin:'',width:"80px"}} onClick={this.hideModal} className="btn_delete">
@@ -1008,7 +1025,7 @@ const SearchArea = React.createClass({
                            className="ModalList"
                            onCancel={this.hideModal}
                     >
-                        <Table locale={{emptyText:'暂无数据'}} columns={list} dataSource={newWord} bordered  pagination={false} showHeader={false}/>
+                        <Table className={newWord.length < 1 ? 'noneDiv': 'activeDiv'} columns={list} dataSource={newWord} bordered  pagination={false} showHeader={false}/>
                         <p style={{marginTop:"20px",textAlign:"center"}}>
                             <Button style={{margin:'0 15px 0 0 ',width:'100%',fontSize:'30px',lineHeight:'0'}} onClick={() => this.addNewsWord('add')} className="btn_ok">
                                 +
@@ -1021,23 +1038,12 @@ const SearchArea = React.createClass({
                            footer={null}
                            onCancel={this.hideModals}
                     >
-                        <Form onSubmit={this.saveModel}>
+                        <Form>
                             <FormItem
                                 {...formItemLayout}
                                 label="字段名称"
                             >
-                                {getFieldDecorator('name', {
-                                    rules: [{
-                                        required: true, message: '请输入字段名称!',
-
-                                    },{
-                                        max:20,message:'最多输入二十个字符!',
-                                    }],
-                                    initialValue: wordName,
-                                    validateFirst:true
-                                })(
-                                    <Input onChange={this.changeWordName}/>
-                                )}
+                                <Input value={wordName} onChange={this.changeWordName}/>
                             </FormItem>
                             <FormItem
                                 {...formItemLayout}
