@@ -189,17 +189,8 @@ class PopulationStatistics extends Component {
                             </div>
                         </div>
                         <div style={{float: "left", borderBottom: '1px solid #0C5F93', width: "50%", height: "43%"}}>
-                            <p style = {
-                                {
-                                    fontSize: "16px",
-                                    color: "#fff",
-                                    fontWeight: "bold",
-                                    paddingLeft: "20px",
-                                    margin: "20px 0"
-                                }
-                            } > 拟来呼人员</p> { /*添加图表*/ }
-                            <div>
-                                <ComeInCharts  dateSet={dateSet}/>
+                            <div style={{color:"#FFF"}}>
+                                <p style={{fontSize: 30, color:"rgb(231, 231, 231)" , textAlign: 'center',marginTop:'25%'}}>{this.props.context !== undefined ? this.props.context: '功能开发中...'}</p>
                             </div>
                         </div>
                         <div style={clear}></div>

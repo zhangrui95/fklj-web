@@ -167,7 +167,7 @@ export  class Control extends Component{
         let list = store.getState().ControlPersonnel.data.ControlPersonList.result.list;
         for(let i in list){
             if(i !== 'remove'){
-                dataList.push({id:list[i].id,key: parseInt(i) + 1, serial: parseInt(i) + 1, cardId: list[i].idcard, label: list[i].name, sex: list[i].sex == '0' ? '男': '女' ,age:list[i].age, state:(list[i].address_type == '0' ? '常住' : (list[i].address_type == '1' ? '暂住' : '流动')), phone:list[i].phone,zrdw:list[i].subordination_task, updatetime: getLocalTime(list[i].updatetime),cycle:list[i].cycle == '0' ? '按天' : '按周',address:list[i].address,personFrom:list[i].source === '901006' ? '后台导入':'前端新增'})
+                dataList.push({id:list[i].id,key: parseInt(i) + 1, serial: parseInt(i) + 1, cardId: list[i].idcard, label: list[i].name, sex: list[i].sex == '0' ? '男': '女' ,age:list[i].age, state:(list[i].address_type == '0' ? '常住' : (list[i].address_type == '1' ? '暂住' : '流动')), phone:list[i].phone,zrdw:list[i].taskname, updatetime: getLocalTime(list[i].updatetime),cycle:list[i].cycle == '0' ? '按天' : '按周',address:list[i].address,personFrom:list[i].source === '901006' ? '后台导入':'前端新增'})
             }
         }
         const columns = [{
@@ -227,12 +227,8 @@ export  class Control extends Component{
             selectedRowKeys,
             onChange: (selectedRowKey, selectedRows) => {
                 console.log(`selectedRowKey: ${selectedRowKey}`, 'selectedRows: ', selectedRows);
-                let keys = this.state.selectedRowKeys;
-                for(let i in selectedRowKey){
-                    keys.push(selectedRowKey[i])
-                }
                 this.setState({
-                    selectedRowKeys:keys
+                    selectedRowKeys:selectedRowKey
                 })
                 const ids = [];
                 for(var i=0;i<selectedRows.length;i++){
@@ -251,7 +247,6 @@ export  class Control extends Component{
         const newFormList = [];
         let detail = store.getState().ControlPersonnel.data.getControlPersonListById.result.data;
         let newValue = store.getState().ControlPersonnel.data.FiledList.result.list;
-        // let value = detail.custom_filed_value.value[i].value
         if(newValue.length > 0){
             for(let i in newValue){
                 if(newValue[i].type == '0'){
@@ -262,7 +257,7 @@ export  class Control extends Component{
                                 label={newValue[i].name}
                             >
                                 {getFieldDecorator('wordText' + i, {
-                                    initialValue:this.state.modalType === 'edit' ? '' : '',
+                                    initialValue:this.state.modalType === 'edit' ? detail.custom_filed_value[i].value : '',
                                 })(
                                     <Input disabled/>
                                 )}
@@ -285,7 +280,7 @@ export  class Control extends Component{
                                 label={newValue[i].name}
                             >
                                 {getFieldDecorator('wordName', {
-                                    initialValue:this.state.modalType === 'edit' ? '' : '',
+                                    initialValue:this.state.modalType === 'edit' ? detail.custom_filed_value[i].value : '',
                                 })(
                                     <Select disabled>
                                         {children}
@@ -475,7 +470,7 @@ export  class Control extends Component{
                                     label="隶属任务"
                                 >
                                     {getFieldDecorator('zrdw', {
-                                        initialValue: this.state.modalType === 'edit' ? detail.subordination_task : '',
+                                        initialValue: this.state.modalType === 'edit' ? detail.taskname : '',
                                     })(
                                         <Input disabled/>
                                     )}
@@ -621,24 +616,28 @@ const SearchArea = React.createClass({
             return;
         }else{
             let controlType = this.props.controlType
-            let creds = ''
-            if(controlType === 'GK_WGK'){
-                creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),subordination_task:WorkPlace, beginTime:begindate,endTime:enddate,control_type:0}}
-            }else if(controlType === 'GK_YGK'){
-                creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),subordination_task:WorkPlace, beginTime:begindate,endTime:enddate,control_type:1}}
-            }else if(controlType === 'GK_LKZRQ'){
-                creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),subordination_task:WorkPlace, beginTime:begindate,endTime:enddate,control_type:2}}
-            }else if(controlType === 'GK_SK'){
-                creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),subordination_task:WorkPlace, beginTime:begindate,endTime:enddate,control_type:3}}
-            } else if(controlType === 'LY_DR'){
-                creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),subordination_task:WorkPlace, beginTime:begindate,endTime:enddate,source:"901006"}}
-            } else if(controlType === 'LY_XZ'){
-                creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),subordination_task:WorkPlace, beginTime:begindate,endTime:enddate,source:"901008"}}
-            } else {
-                creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),subordination_task:WorkPlace, beginTime:begindate,endTime:enddate}}
-            }
-            store.dispatch(getControlPersonList(creds))
+            this.getList(controlType)
         }
+    },
+    getList:function(controlType){
+        let {name,cardId,status,WorkPlace,begindate,enddate} = this.state;
+        let creds = ''
+        if(controlType === 'GK_WGK'){
+            creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),taskname:WorkPlace, beginTime:begindate,endTime:enddate,control_type:0}}
+        }else if(controlType === 'GK_YGK'){
+            creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),taskname:WorkPlace, beginTime:begindate,endTime:enddate,control_type:1}}
+        }else if(controlType === 'GK_LKZRQ'){
+            creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),taskname:WorkPlace, beginTime:begindate,endTime:enddate,control_type:2}}
+        }else if(controlType === 'GK_SK'){
+            creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),taskname:WorkPlace, beginTime:begindate,endTime:enddate,control_type:3}}
+        } else if(controlType === 'LY_DR'){
+            creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),taskname:WorkPlace, beginTime:begindate,endTime:enddate,source:"901006"}}
+        } else if(controlType === 'LY_XZ'){
+            creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),taskname:WorkPlace, beginTime:begindate,endTime:enddate,source:"901008"}}
+        } else {
+            creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),taskname:WorkPlace, beginTime:begindate,endTime:enddate}}
+        }
+        store.dispatch(getControlPersonList(creds))
     },
     init:function () {
         this.setState({
@@ -822,10 +821,10 @@ const SearchArea = React.createClass({
     },
     importOnChange:function(info) {
         if(info.file.response.reason!==null){
-            if(info.file.response.reason.code === '400'){
-                message.error(`提示：${info.file.response.reason.text}`,5);
-            }else{
+            if(info.file.response.reason.code === '200'){
                 message.success(`提示：${info.file.response.reason.text}`);
+            }else{
+                message.error(`提示：${info.file.response.reason.text}`,5);
             }
         }
         if (info.file.status === 'uploading') {
@@ -894,15 +893,33 @@ const SearchArea = React.createClass({
     },
     exportModal:function(){
         this.props.handleExport();
+        setTimeout(()=>{
+            this.hideModal();
+        },100)
     },
     downloadModal:function () {
         let path = serverUrls + store.getState().ControlPersonnel.data.Download.result.path;
         window.open(path);
+        setTimeout(()=>{
+            this.hideModal();
+        },100)
     },
     choiceTask:function () {
         const user = JSON.parse(sessionStorage.getItem('user'));
         let creds = {id:this.state.ToskId,personalid:this.props.selectedRowsId,updateuser:user.user.name}
         store.dispatch(updateTaskModelControlPerson(creds))
+        setTimeout(()=>{
+            let delCode = store.getState().ControlPersonnel.data.TaskModelControlPerson.reason.code;
+            if(delCode === '200'){
+                message.success(`提示：${store.getState().ControlPersonnel.data.TaskModelControlPerson.reason.text}`);
+                this.setState({
+                    addModal:false
+                });
+                this.getList(controlType)
+            }else{
+                message.error(`提示：${store.getState().ControlPersonnel.data.TaskModelControlPerson.reason.text}`);
+            }
+        },200)
     },
     getSelectTosk:function(e){
         this.setState({
