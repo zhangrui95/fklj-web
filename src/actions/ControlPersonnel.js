@@ -6,6 +6,7 @@ import {serverUrls} from '../utils/index';
 export function getControlPersonList(creds) {
     let path  = serverUrls + '/data/getControlPersonList';
     return dispatch => {
+        dispatch({type:"List_Loading"});
         post(path,creds).then((json) => {
             dispatch( {type: 'Control_Person_List',data: json} );
         }).catch((e)=>{

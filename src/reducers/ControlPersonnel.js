@@ -49,8 +49,9 @@ const initialState = {
         getControlPersonListById: {
             reason: 1,
             result: {
+                list:[],
                 data: {
-                    custom_filed_value:{value:[]}
+                    custom_filed_value:[]
                 }
             }
         },
@@ -185,8 +186,8 @@ const initialState = {
                 ]
             }
         ]
-    }
-
+    },
+    isFetching:false
 }
 
 
@@ -260,8 +261,12 @@ const ControlPersonnel =(state = initialState, action) =>{
                 }
             }
             return newState;
+        case 'List_Loading':
+            newState.isFetching = true;
+            return newState;
         case 'Control_Person_List':
             newState.data.ControlPersonList = action.data;
+            newState.isFetching = false;
             return newState;
         case 'Control_PersonList_By_Id':
             newState.data.getControlPersonListById = action.data;

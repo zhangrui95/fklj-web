@@ -24,22 +24,6 @@ const sliderdyHeader = {
 const FormItem = Form.Item;
 const Option = Select.Option;
 
-//分页配置文件
-const pagination = {
-    size: 'small',
-    pageSize: constants.recordPageSize,
-    showTotal(total) {
-        return `合计 ${total} 条记录`;
-    },
-    itemRender(current, type, originalElement) {
-        if (type === 'prev') {
-            return <a>上一页</a>;
-        } else if (type === 'next') {
-            return <a>下一页</a>;
-        }
-        return originalElement;
-    }
-};
 const formItemLayout = {
     labelCol: {
         xs: { span: 24 },
@@ -47,7 +31,7 @@ const formItemLayout = {
     },
     wrapperCol: {
         xs: { span: 24 },
-        sm: { span: 14 },
+        sm: { span: 16 },
     },
 };
 const newWord = []
@@ -68,7 +52,6 @@ export  class Control extends Component{
             enddate: '',
             key: '',
             record: null,
-            pagination: pagination,
             loading: false,
             personInfo:'',
             modalKey: 0,
@@ -78,10 +61,10 @@ export  class Control extends Component{
             imgtext:'',
             text:null,
             newWords:[],
-            selectedRowKeys: []
+            selectedRowKeys: [],
+            current: 1,
         };
         let controlType = this.props.controlType;
-        console.log(controlType)
     }
 
     componentDidMount() {
@@ -235,7 +218,6 @@ export  class Control extends Component{
                     var selectedRow = selectedRows[i];
                     ids.push(selectedRow.id);
                 }
-                console.log('ids',ids)
                 this.setState({
                     selectedRowsId:ids
                 });
@@ -292,6 +274,13 @@ export  class Control extends Component{
                 }
             }
         }
+        const pagination = {
+            onChange: (page) =>{
+                this.setState({
+                    current: page,
+                });
+            }
+        }
         return(
             <div className="sliderWrap">
                 <div className="sliderItemDiv">
@@ -321,21 +310,22 @@ export  class Control extends Component{
                             <Spin size="large" />
                         </div>:
                         <div style={{padding:"0 15px"}}>
-                            <Table locale={{emptyText:'暂无数据'}} rowSelection={controlType === 'GZ_NLHRY' || controlType === 'GZ_ZALY' ? undefined : rowSelection} columns={columns} dataSource={dataList} bordered />
+                            <Table locale={{emptyText:'暂无数据'}} rowSelection={rowSelection} columns={columns} dataSource={dataList} bordered pagination={pagination}/>
                         </div>}
                     <div className="clear"></div>
                 </div>
                 <Modal
-                    width={700}
+                    width={900}
                     title="任务详情"
                     visible={this.state.visible}
                     onCancel={this.handleCancel}
                     footer={null}
                     key={this.state.modalKey}
+                    maskClosable={false}
                 >
                     <Row>
                         <Form>
-                            <Col span={12} style={{ padding: '0 38px' }}>
+                            <Col span={12} style={{ padding: '0 65px' }}>
                                 <span style={{color:"#fff"}}>照片：</span>
                                 {detail.zpurl!==''||detail.zpurl !== undefined ? <img src={detail.zpurl} style={{ width: '130px', height: '160px' }} /> : <img src="../../images/zanwu.png" style={{ width: '130px', height: '160px' }} />}
                             </Col>
@@ -436,7 +426,7 @@ export  class Control extends Component{
                                     {getFieldDecorator('address', {
                                         initialValue:this.state.modalType === 'edit' ? detail.now_address : '',
                                     })(
-                                        <Input disabled/>
+                                        <Input title={detail.now_address} disabled/>
                                     )}
                                 </FormItem>
                             </Col>
@@ -472,7 +462,7 @@ export  class Control extends Component{
                                     {getFieldDecorator('zrdw', {
                                         initialValue: this.state.modalType === 'edit' ? detail.taskname : '',
                                     })(
-                                        <Input disabled/>
+                                        <Input title={detail.taskname} disabled/>
                                     )}
                                 </FormItem>
                             </Col>
@@ -482,7 +472,7 @@ export  class Control extends Component{
                                     label="任务周期"
                                 >
                                     {getFieldDecorator('cycle', {
-                                        initialValue:this.state.modalType === 'edit' ? (detail.cycle=='0'?'每天':'每周') : '',
+                                        initialValue:this.state.modalType === 'edit' ? (detail.cycle=='0'?'按天':'按周') : '',
                                     })(
                                         <Select notFoundContent='暂无' disabled>
                                             <Option value="">全部</Option>
@@ -564,7 +554,7 @@ const SearchArea = React.createClass({
             cardId:'',
             nameClear:'',
             status:'',
-            WorkPlace:'',
+            Tosk:'',
             begindate: '',
             enddate: '',
             cycle: '',
@@ -604,48 +594,41 @@ const SearchArea = React.createClass({
             cycle: value
         });
     },
-    WorkPlaceChange:function (e) {
+    ToskChange:function (e) {
         this.setState({
-            WorkPlace: e.target.value
+            Tosk: e.target.value
         });
     },
     handleClick: function() { //点击查询
-        let {name,cardId,status,WorkPlace,begindate,enddate} = this.state;
-        if (begindate != "" && enddate != "" && begindate > enddate) {
-            message.error('提示：开始时间不能大于结束时间！');
-            return;
-        }else{
-            let controlType = this.props.controlType
-            this.getList(controlType)
-        }
-    },
-    getList:function(controlType){
-        let {name,cardId,status,WorkPlace,begindate,enddate} = this.state;
+        let controlType = this.props.controlType;
+        let {name,cardId,status,Tosk,begindate,enddate} = this.state;
         let creds = ''
         if(controlType === 'GK_WGK'){
-            creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),taskname:WorkPlace, beginTime:begindate,endTime:enddate,control_type:0}}
+            creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),taskname:Tosk, beginTime:begindate,endTime:enddate,control_type:0}}
         }else if(controlType === 'GK_YGK'){
-            creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),taskname:WorkPlace, beginTime:begindate,endTime:enddate,control_type:1}}
+            creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),taskname:Tosk, beginTime:begindate,endTime:enddate,control_type:1}}
         }else if(controlType === 'GK_LKZRQ'){
-            creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),taskname:WorkPlace, beginTime:begindate,endTime:enddate,control_type:2}}
+            creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),taskname:Tosk, beginTime:begindate,endTime:enddate,control_type:2}}
         }else if(controlType === 'GK_SK'){
-            creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),taskname:WorkPlace, beginTime:begindate,endTime:enddate,control_type:3}}
+            creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),taskname:Tosk, beginTime:begindate,endTime:enddate,control_type:3}}
         } else if(controlType === 'LY_DR'){
-            creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),taskname:WorkPlace, beginTime:begindate,endTime:enddate,source:"901006"}}
+            creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),taskname:Tosk, beginTime:begindate,endTime:enddate,source:"901006"}}
         } else if(controlType === 'LY_XZ'){
-            creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),taskname:WorkPlace, beginTime:begindate,endTime:enddate,source:"901008"}}
+            creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),taskname:Tosk, beginTime:begindate,endTime:enddate,source:"901008"}}
         } else {
-            creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),taskname:WorkPlace, beginTime:begindate,endTime:enddate}}
+            creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),taskname:Tosk, beginTime:begindate,endTime:enddate}}
         }
         store.dispatch(getControlPersonList(creds))
     },
+    // getList:function(controlType){
+    // },
     init:function () {
         this.setState({
             name: '',
             cardId:'',
             nameClear:'',
             status:'',
-            WorkPlace:'',
+            Tosk:'',
             begindate: '',
             enddate: '',
         });
@@ -852,7 +835,6 @@ const SearchArea = React.createClass({
                 creds = {}
             }
             store.dispatch(getControlPersonList(creds))
-
             this.setState({
                 importLoading: false,
             });
@@ -904,6 +886,26 @@ const SearchArea = React.createClass({
             this.hideModal();
         },100)
     },
+    getNewsList:function(){
+        let controlType = this.props.controlType;
+        let cred = '';
+        if(controlType==='GK_WGK'){
+            cred = {pd:{control_type:0}}
+        }else if(controlType==='GK_YGK'){
+            cred = {pd:{control_type:1}}
+        }else if(controlType==='GK_LKZRQ') {
+            cred = {pd:{control_type:2}}
+        }else if(controlType==='GK_SK'){
+            cred = {pd:{control_type:3}}
+        }else if(controlType==='LY_DR'){
+            cred = {pd:{source:'901006'}}
+        }else if(controlType==='LY_XZ'){
+            cred = {pd:{source:'901008'}}
+        }else{
+            cred = {}
+        }
+        store.dispatch(getControlPersonList(cred))
+    },
     choiceTask:function () {
         const user = JSON.parse(sessionStorage.getItem('user'));
         let creds = {id:this.state.ToskId,personalid:this.props.selectedRowsId,updateuser:user.user.name}
@@ -912,14 +914,16 @@ const SearchArea = React.createClass({
             let delCode = store.getState().ControlPersonnel.data.TaskModelControlPerson.reason.code;
             if(delCode === '200'){
                 message.success(`提示：${store.getState().ControlPersonnel.data.TaskModelControlPerson.reason.text}`);
-                this.setState({
-                    addModal:false
-                });
-                this.getList(controlType)
             }else{
                 message.error(`提示：${store.getState().ControlPersonnel.data.TaskModelControlPerson.reason.text}`);
             }
         },200)
+        setTimeout(()=>{
+            this.getNewsList()
+        },200)
+        this.setState({
+            addModal:false
+        });
     },
     getSelectTosk:function(e){
         this.setState({
@@ -928,7 +932,7 @@ const SearchArea = React.createClass({
     },
     render() {
         const {getFieldDecorator} = this.props.form
-        let {name,cardId,status,WorkPlace, enddate, begindate,cycle,wordType,showInput,wordName,OptionWords,showDel} = this.state;
+        let {name,cardId,status,Tosk, enddate, begindate,cycle,wordType,showInput,wordName,OptionWords,showDel} = this.state;
         let beginDateValue = '';
         if (begindate === '') {} else {
             beginDateValue = moment(begindate, dateFormat);
@@ -1046,7 +1050,7 @@ const SearchArea = React.createClass({
                     <Option value="2">流动</Option>
                 </Select>
                 <label htmlFor="" className="font14">隶属任务：</label>
-                <Input style={{width:'130px',marginRight:"10px"}} type="text"  id='name' placeholder='请输入隶属任务'  value={WorkPlace}  onChange={this.WorkPlaceChange}/>
+                <Input style={{width:'130px',marginRight:"10px"}} type="text"  id='name' placeholder='请输入隶属任务'  value={Tosk}  onChange={this.ToskChange}/>
                 <label htmlFor="" className="font14">更新时间：</label>
                 <DatePicker format={dateFormat} allowClear={false} style={{marginRight:"10px",width:'130px'}} value={beginDateValue} placeholder="请选择日期" onChange={this.handleBeginDeteClick}/>
                 <span className="font14" style={{margin:"0 10px 0 0"}}>至</span>
@@ -1061,6 +1065,7 @@ const SearchArea = React.createClass({
                            footer={null}
                            onCancel={this.hideModal}
                            width={600}
+                           maskClosable={false}
                     >
                         <div style={{margin:'0 0 16px 0'}}>
                             <Select style={{width:'450px',marginRight:"10px"}} placeholder='请选择任务' onChange={this.getSelectTosk}>
@@ -1094,6 +1099,7 @@ const SearchArea = React.createClass({
                            footer={null}
                            className="ModalList"
                            onCancel={this.hideModal}
+                           maskClosable={false}
                     >
                         <Table className={newWord.length < 1 ? 'noneDiv': 'activeDiv'} columns={list} dataSource={newWord} bordered  pagination={false} showHeader={false} />
                         <p style={{marginTop:"20px",textAlign:"center"}}>
@@ -1107,6 +1113,7 @@ const SearchArea = React.createClass({
                            visible={this.state.zdyModals}
                            footer={null}
                            onCancel={this.hideModals}
+                           maskClosable={false}
                     >
                         <Form>
                             <FormItem
