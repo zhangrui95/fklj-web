@@ -356,6 +356,7 @@ export  class Control extends Component{
                 });
                 this.getList(this.props.controlType, page)
             },
+            showQuickJumper:'true',
             total: store.getState().ControlPersonnel.data.ControlPersonList.result.page.totalResult,
             current: this.state.current,
         }
