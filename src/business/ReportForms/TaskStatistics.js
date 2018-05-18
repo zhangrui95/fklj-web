@@ -33,7 +33,8 @@ import {
 import EchartsReact from 'echarts-for-react';
 import {
     getSubtaskListGroupByType,
-    getSubtaskListGroupByCycle
+    getSubtaskListGroupByCycle,
+    getSubtaskCount
 } from "../../actions/ReportForms"
 import {
     DatePicker,
@@ -93,18 +94,19 @@ class TaskStatistics extends Component {
             let creds = {startTime: this.state.beginDate, endTime: this.state.endDate,}
             store.dispatch(getSubtaskListGroupByType(creds));
             store.dispatch(getSubtaskListGroupByCycle(creds));
+            store.dispatch(getSubtaskCount(creds));
         }
     }
 
     componentDidMount() {
         //当前传过来的类型
-        var myDate = new Date();
+        let myDate = new Date();
         let NowYEAR = myDate.getFullYear();
         let creds = {
                 startTime: NowYEAR + '-01' + '-01',
                 endTime: NowYEAR + '-12' + '-31',
         }
-        // store.dispatch(postTaskTotalAttentionData(creds));
+        store.dispatch(getSubtaskCount(creds));
     }
 
     //接收到新的propos state 后进行渲染之前调用
@@ -124,7 +126,7 @@ class TaskStatistics extends Component {
             startTimeSet: this.state.startTimeSet,
             endTimeSet: this.state.endTimeSet
         };
-        let taskTotalAttention = 0;
+        let taskTotalAttention = store.getState().ReportForms.data.ToskCount.result.count;
         let queryType = this.state.queryType;
         let begin = this.state.beginDate;
         let end = this.state.endDate;
@@ -141,7 +143,7 @@ class TaskStatistics extends Component {
                 <div className="sliderItemDiv">
                     {/*查询条件*/}
                     <div style={sliderdyHeader}>
-                        <p style={{fontSize: "18px", color: "#fff", float: "left", marginRight: "50px"}}>任务总数：
+                        <p style={{fontSize: "18px", color: "#fff", float: "left", marginRight: "50px"}}>任务数量：
                             <span
                                 style={{
                                     width: "80px",

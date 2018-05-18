@@ -31,6 +31,11 @@ const initialState = {
                 count:''
             },
         },
+        ToskCount:{
+            result:{
+                count:''
+            },
+        },
         getSubtaskListGroup:{
             result:{
                 list:[]
@@ -116,6 +121,10 @@ const ReportForms = (state=initialState, action) =>{
         //在呼管控人员人数
         case 'getControlPersonCountForX3_succeed':
             newState.data.PersonCount.result.count = action.data.result.count;
+            return newState;
+        //任务数量
+        case 'getSubtaskCount_succeed':
+            newState.data.ToskCount.result.count = action.data.result.count;
             return newState;
         //人员来源
         case 'getSubtaskListGroup_Type':

@@ -41,12 +41,23 @@ export function getControlPersonalListGroupBySource(creds) {
 }
 //人员总数
 export function getControlPersonCountForX3(creds) {
-    let path  = serverUrls + '/data/getControlPersonCountForX3';
+    let path  = serverUrls + '/data/getControlPersonCount';
     return dispatch => {
         post(path,creds).then((json) => {
             dispatch( {type: 'getControlPersonCountForX3_succeed',data: json} );
         }).catch((e)=>{
             dispatch({type: 'getControlPersonCountForX3_error',message: e.toString()} )
+        });
+    }
+}
+//任务总数
+export function getSubtaskCount(creds) {
+    let path  = serverUrls + '/data/getSubtaskCount';
+    return dispatch => {
+        post(path,creds).then((json) => {
+            dispatch( {type: 'getSubtaskCount_succeed',data: json} );
+        }).catch((e)=>{
+            dispatch({type: 'getSubtaskCount_error',message: e.toString()} )
         });
     }
 }

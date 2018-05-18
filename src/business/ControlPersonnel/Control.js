@@ -140,6 +140,12 @@ export  class Control extends Component{
         this.refs.SearchArea.init();
         store.dispatch(getControlPersonList(creds))
     }
+    changeSelection(selectedRowKeys){
+        this.setState({
+            selectedRowKeys,
+            selectedRowsId:selectedRowKeys
+        })
+    }
     render() {
         const { getFieldDecorator } = this.props.form;
         let nowPage = this.state.nowPage;
@@ -181,6 +187,55 @@ export  class Control extends Component{
         },{
             title: '隶属任务',
             dataIndex: 'zrdw',
+        },{
+            title: '任务周期',
+            dataIndex: 'cycle',
+        },{
+            title: '人员来源',
+            dataIndex: 'personFrom',
+        }, {
+            title: '更新时间',
+            dataIndex: 'updatetime',
+        }, {
+            title: '操作',
+            key: 'action',
+            render: (text, record) => (
+                <span>
+                    <span onClick={(e)=>this.editShowModal(record)} style={{cursor:'pointer'}}>详情</span>
+                    {/*<Divider className={controlType === 'GZ_NLHRY' || controlType === 'GZ_ZALY' || controlType === 'LY_DR' || controlType === 'LY_XZ' || controlType === 'LY_XZ' ? '' : 'noneDiv'} type="vertical" />*/}
+                    {/*<span className={controlType === 'GK_WGK' || controlType === 'GK_YGK' || controlType === 'GK_LKZRQ' || controlType === 'GK_SK' ? '' : 'noneDiv'} onClick={(e)=>this.editShowModal(record)} style={{cursor:'pointer'}}>详情</span>*/}
+                    {/*<Divider className={controlType === 'GK_WGK' || controlType === 'GK_YGK' || controlType === 'GK_LKZRQ' || controlType === 'GK_SK' ? '' : 'noneDiv'} type="vertical" />*/}
+                    {/*<Popconfirm title="是否确定该人员离开责任区？" okText="确定" cancelText="取消">*/}
+                    {/*<span className={controlType === 'GK_WGK' || controlType === 'GK_YGK' || controlType === 'GK_LKZRQ' || controlType === 'GK_SK' ? '' : 'noneDiv'} style={{cursor:'pointer'}}>离开责任区</span>*/}
+                    {/*</Popconfirm>*/}
+                </span>
+            ),
+        }];
+        const column = [{
+            title: '序号',
+            dataIndex: 'serial',
+        },{
+            title: '身份证号',
+            dataIndex: 'cardId',
+            width:180,
+        },{
+            title: '姓名',
+            dataIndex: 'label',
+        },{
+            title: '性别',
+            dataIndex: 'sex',
+        },{
+            title: '年龄',
+            dataIndex: 'age',
+        },{
+            title: '居住类型',
+            dataIndex: 'state',
+        },{
+            title: '现居住地址',
+            dataIndex: 'address',
+        },{
+            title: '联系电话',
+            dataIndex: 'phone',
         },{
             title: '任务周期',
             dataIndex: 'cycle',
@@ -294,6 +349,7 @@ export  class Control extends Component{
                             createClick={this.handChangeModalDialogueShow}
                             addShowModal={this.addShowModal}
                             handleExport={this.handleExport}
+                            changeSelection={selectedRowKeys=> this.changeSelection(selectedRowKeys)}
                             serchChange={this.serchChange}
                             form={this.props.form}
                             controlType = {this.props.controlType}
@@ -310,7 +366,7 @@ export  class Control extends Component{
                             <Spin size="large" />
                         </div>:
                         <div style={{padding:"0 15px"}}>
-                            <Table locale={{emptyText:'暂无数据'}} rowSelection={rowSelection} columns={columns} dataSource={dataList} bordered pagination={pagination}/>
+                            <Table locale={{emptyText:'暂无数据'}} rowSelection={rowSelection} columns={controlType === 'GK_WGK' ? column : columns} dataSource={dataList} bordered pagination={pagination}/>
                         </div>}
                     <div className="clear"></div>
                 </div>
@@ -570,8 +626,9 @@ const SearchArea = React.createClass({
             promptText:'',
             prompType:'',
             wordId:'',
-            ToskId:'',
-            ModalTitle:''
+            ToskId:'请选择任务',
+            ModalTitle:'',
+            zdyType:''
         };
     },
     handleNameChange: function(e) {
@@ -602,23 +659,28 @@ const SearchArea = React.createClass({
     handleClick: function() { //点击查询
         let controlType = this.props.controlType;
         let {name,cardId,status,Tosk,begindate,enddate} = this.state;
-        let creds = ''
-        if(controlType === 'GK_WGK'){
-            creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),taskname:Tosk, beginTime:begindate,endTime:enddate,control_type:0}}
-        }else if(controlType === 'GK_YGK'){
-            creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),taskname:Tosk, beginTime:begindate,endTime:enddate,control_type:1}}
-        }else if(controlType === 'GK_LKZRQ'){
-            creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),taskname:Tosk, beginTime:begindate,endTime:enddate,control_type:2}}
-        }else if(controlType === 'GK_SK'){
-            creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),taskname:Tosk, beginTime:begindate,endTime:enddate,control_type:3}}
-        } else if(controlType === 'LY_DR'){
-            creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),taskname:Tosk, beginTime:begindate,endTime:enddate,source:"901006"}}
-        } else if(controlType === 'LY_XZ'){
-            creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),taskname:Tosk, beginTime:begindate,endTime:enddate,source:"901008"}}
-        } else {
-            creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),taskname:Tosk, beginTime:begindate,endTime:enddate}}
+        if ( begindate!= "" && enddate!= "" && begindate > enddate) {
+            message.error('提示：开始时间不能大于结束时间！');
+            return;
+        }else{
+            let creds = ''
+            if(controlType === 'GK_WGK'){
+                creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),taskname:Tosk, beginTime:begindate,endTime:enddate,control_type:0}}
+            }else if(controlType === 'GK_YGK'){
+                creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),taskname:Tosk, beginTime:begindate,endTime:enddate,control_type:1}}
+            }else if(controlType === 'GK_LKZRQ'){
+                creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),taskname:Tosk, beginTime:begindate,endTime:enddate,control_type:2}}
+            }else if(controlType === 'GK_SK'){
+                creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),taskname:Tosk, beginTime:begindate,endTime:enddate,control_type:3}}
+            } else if(controlType === 'LY_DR'){
+                creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),taskname:Tosk, beginTime:begindate,endTime:enddate,source:"901006"}}
+            } else if(controlType === 'LY_XZ'){
+                creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),taskname:Tosk, beginTime:begindate,endTime:enddate,source:"901008"}}
+            } else {
+                creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),taskname:Tosk, beginTime:begindate,endTime:enddate}}
+            }
+            store.dispatch(getControlPersonList(creds))
         }
-        store.dispatch(getControlPersonList(creds))
     },
     // getList:function(controlType){
     // },
@@ -644,7 +706,7 @@ const SearchArea = React.createClass({
         setTimeout(()=>{
             let delCode = store.getState().ControlPersonnel.data.delCustomFiled.reason.code;
             if(delCode === '200'){
-                message.success(`提示：${store.getState().ControlPersonnel.data.delCustomFiled.reason.text}`);
+                message.success(`提示：字段删除成功`);
                 this.getNewWords();
             }else{
                 message.error(`提示：${store.getState().ControlPersonnel.data.delCustomFiled.reason.text}`);
@@ -740,7 +802,7 @@ const SearchArea = React.createClass({
             setTimeout(()=>{
                 let delCode = store.getState().ControlPersonnel.data.CustomFiled.reason.code;
                 if(delCode === '200'){
-                    message.success(`提示：${store.getState().ControlPersonnel.data.CustomFiled.reason.text}`);
+                    message.success(`提示：自定义字段${this.state.zdyType === 'add' ? '新增':'修改'}成功`);
                     this.getNewWords();
                 }else{
                     message.error(`提示：${store.getState().ControlPersonnel.data.CustomFiled.reason.text}`);
@@ -754,11 +816,13 @@ const SearchArea = React.createClass({
     getAddModal:function(type){
         if(type === 'add'){
             this.setState({
-                ModalTitle:'添加到任务'
+                ModalTitle:'添加到任务',
+                ToskId:'请选择任务'
             })
         }else{
             this.setState({
-                ModalTitle:'变更任务'
+                ModalTitle:'变更任务',
+                ToskId:'请选择任务'
             })
         }
         if(this.props.selectedRowsId.length > 0){
@@ -768,7 +832,7 @@ const SearchArea = React.createClass({
                 addModal:true
             });
         }else{
-            message.warning(`提示：请选择人员!`);
+            message.warning(`提示：请选择人员`);
         }
     },
     addNewsWord:function (type, record) {
@@ -779,7 +843,8 @@ const SearchArea = React.createClass({
                 wordName:record.name,
                 wordType:record.type,
                 OptionWords:record.value,
-                wordId:record.id
+                wordId:record.id,
+                zdyType:'update'
             })
             this.getSelects(record.type)
         }else if(type === 'add'){
@@ -787,7 +852,8 @@ const SearchArea = React.createClass({
                 showDel:{display:'none'},
                 wordName:'',
                 wordType:'',
-                wordId:''
+                wordId:'',
+                zdyType:'add'
             })
             this.getSelects('0')
         }
@@ -841,7 +907,7 @@ const SearchArea = React.createClass({
 
 
         } else if (info.file.status === 'error') {
-            message.error(`提示：${info.file.name} 上传失败!`);
+            message.error(`提示：${info.file.name} 上传失败`);
             this.setState({
                 importLoading: false,
             });
@@ -850,7 +916,7 @@ const SearchArea = React.createClass({
     beforeUpload:function(file, fileList) {
         var rag = /\.(xls|xlsx|XLS|XLSX)$/;
         if(!rag.test(file.name)){
-            message.error('提示：请上传excel!');
+            message.error('提示：请上传excel');
         }
         return;
     },
@@ -909,21 +975,26 @@ const SearchArea = React.createClass({
     choiceTask:function () {
         const user = JSON.parse(sessionStorage.getItem('user'));
         let creds = {id:this.state.ToskId,personalid:this.props.selectedRowsId,updateuser:user.user.name}
-        store.dispatch(updateTaskModelControlPerson(creds))
-        setTimeout(()=>{
-            let delCode = store.getState().ControlPersonnel.data.TaskModelControlPerson.reason.code;
-            if(delCode === '200'){
-                message.success(`提示：${store.getState().ControlPersonnel.data.TaskModelControlPerson.reason.text}`);
-            }else{
-                message.error(`提示：${store.getState().ControlPersonnel.data.TaskModelControlPerson.reason.text}`);
-            }
-        },200)
-        setTimeout(()=>{
-            this.getNewsList()
-        },200)
-        this.setState({
-            addModal:false
-        });
+        if(this.state.ToskId === '请选择任务'){
+            message.warning(`提示：${this.state.ToskId}`);
+        }else{
+            store.dispatch(updateTaskModelControlPerson(creds))
+            setTimeout(()=>{
+                let delCode = store.getState().ControlPersonnel.data.TaskModelControlPerson.reason.code;
+                if(delCode === '200'){
+                    message.success(`提示：${this.state.ModalTitle}成功`);
+                }else{
+                    message.error(`提示：${store.getState().ControlPersonnel.data.TaskModelControlPerson.reason.text}`);
+                }
+            },200)
+            setTimeout(()=>{
+                this.getNewsList();
+                this.props.changeSelection([]);
+            },200)
+            this.setState({
+                addModal:false
+            });
+        }
     },
     getSelectTosk:function(e){
         this.setState({
@@ -1036,6 +1107,14 @@ const SearchArea = React.createClass({
                 children.push(<Option key={j} value={toskList[j].id}>{toskList[j].name}</Option>);
             }
         }
+        const ToskSearch = (
+            controlType==='GK_WGK' ?
+            <span></span>:
+            <span>
+                <label htmlFor="" className="font14">隶属任务：</label>
+                <Input style={{width:'130px',marginRight:"10px"}} type="text"  id='name' placeholder='请输入隶属任务'  value={Tosk}  onChange={this.ToskChange}/>
+            </span>
+    )
         return (
             <div className="marLeft40 fl z_searchDiv">
                 <label htmlFor="" className="font14">身份证号：</label>
@@ -1049,8 +1128,7 @@ const SearchArea = React.createClass({
                     <Option value="1">暂住</Option>
                     <Option value="2">流动</Option>
                 </Select>
-                <label htmlFor="" className="font14">隶属任务：</label>
-                <Input style={{width:'130px',marginRight:"10px"}} type="text"  id='name' placeholder='请输入隶属任务'  value={Tosk}  onChange={this.ToskChange}/>
+                {ToskSearch}
                 <label htmlFor="" className="font14">更新时间：</label>
                 <DatePicker format={dateFormat} allowClear={false} style={{marginRight:"10px",width:'130px'}} value={beginDateValue} placeholder="请选择日期" onChange={this.handleBeginDeteClick}/>
                 <span className="font14" style={{margin:"0 10px 0 0"}}>至</span>
@@ -1068,7 +1146,7 @@ const SearchArea = React.createClass({
                            maskClosable={false}
                     >
                         <div style={{margin:'0 0 16px 0'}}>
-                            <Select style={{width:'450px',marginRight:"10px"}} placeholder='请选择任务' onChange={this.getSelectTosk}>
+                            <Select style={{width:'450px',marginRight:"10px"}} placeholder='请选择任务' value={this.state.ToskId} onChange={this.getSelectTosk}>
                                 {children}
                             </Select>
                             <ShallowBlueBtn width="80px" text="确定" margin="0 0 0 10px" onClick={this.choiceTask} />

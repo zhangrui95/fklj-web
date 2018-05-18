@@ -76,7 +76,13 @@ class PopulationStatistics extends Component {
     }
 
     componentDidMount() {
-        store.dispatch(getControlPersonCountForX3());
+        let myDate = new Date();
+        let NowYEAR = myDate.getFullYear();
+        let creds = {
+            startTime: NowYEAR + '-01' + '-01',
+            endTime: NowYEAR + '-12' + '-31',
+        }
+        store.dispatch(getControlPersonCountForX3(creds));
     }
 
     handleBeginDeteClick = (date, dateString) => {
@@ -104,6 +110,7 @@ class PopulationStatistics extends Component {
             store.dispatch(getControlPersonList(creds));
             store.dispatch(getControlPersonalListGroupByAddressType(creds));
             store.dispatch(getControlPersonalListGroupBySource(creds));
+            store.dispatch(getControlPersonCountForX3(creds));
         }
     }
     render() {
@@ -146,7 +153,7 @@ class PopulationStatistics extends Component {
                 <div className="sliderItemDiv">
                     {/*查询条件*/}
                     <div style={sliderdyHeader}>
-                        <p style={{fontSize: "18px", color: "#fff", float: "left", marginRight: "50px"}}>在呼管控人员总数：
+                        <p style={{fontSize: "18px", color: "#fff", float: "left", marginRight: "50px"}}>在呼管控人员数量：
                             <span
                                 style={{
                                     width: "80px",
@@ -258,7 +265,7 @@ class LiveCharts extends Component {
         const liveChartsList = [];
         for(let i in LiveTypeList){
             if(i!=='remove'){
-                liveChartsList.push({name:LiveTypeList[i].address_type == 0 ? '常住人员':(LiveTypeList[i].address_type === 1 ? '暂住人员' : '流动人员'),value:LiveTypeList[i].count})
+                liveChartsList.push({name:LiveTypeList[i].name == 0 ? '常住人员':(LiveTypeList[i].name === 1 ? '暂住人员' : '流动人员'),value:LiveTypeList[i].value})
             }
         }
         let isFetching = store.getState().ReportForms.data.ControlType.isFetching;
@@ -454,7 +461,7 @@ class ControlCharts extends Component {
         let sexChartsList = [];
         for(let i in ControlTypeList){
             if(i!=='remove'){
-                sexChartsList.push({name:ControlTypeList[i].control_type == 0 ? '未管控':(ControlTypeList[i].control_type === 1 ? '已管控' : (ControlTypeList[i].control_type === 2 ?'离开责任区':'失控')),value:ControlTypeList[i].count})
+                sexChartsList.push({name:ControlTypeList[i].name == 0 ? '未管控':(ControlTypeList[i].name === 1 ? '已管控' : (ControlTypeList[i].name === 2 ?'离开责任区':'失控')),value:ControlTypeList[i].value})
             }
         }
         let isFetching = store.getState().ReportForms.data.ControlType.isFetching;
@@ -544,11 +551,8 @@ class PersonFromCharts extends Component {
         var myDate = new Date();
         let NowYEAR = myDate.getFullYear();
         let creds = {
-            entityOrField: true,
-            pd: {
                 startTime: NowYEAR + '-01' + '-01',
                 endTime: NowYEAR + '-12' + '-31',
-            },
         }
         store.dispatch(getControlPersonalListGroupBySource(creds));
     }
@@ -557,7 +561,7 @@ class PersonFromCharts extends Component {
         const FormChartsList = [];
         for(let i in ListGroupBySource){
             if(i!=='remove'){
-                FormChartsList.push({name:ListGroupBySource[i].source == '901006' ? '后台导入' : '前端新增',value: ListGroupBySource[i].count})
+                FormChartsList.push({name:ListGroupBySource[i].name == '901006' ? '后台导入' : '前端新增',value: ListGroupBySource[i].value})
             }
         }
         let isFetching = store.getState().ReportForms.data.ControlType.isFetching;
