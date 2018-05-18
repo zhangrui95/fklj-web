@@ -10,7 +10,7 @@ import * as constants from "../../utils/Constants";
 import {serverUrls, getLocalTime} from '../../utils/index';
 import {monthFormat, dateFormat, serverUrl} from '../../utils/';
 import {Spin, Table, message, Input, Modal, Button, Form, Icon, Row, Col, Select, DatePicker, Divider, List, Popconfirm,Upload} from 'antd';
-import {getControlPersonList, getControlDetail,getControlExport,getControlDownload,getCustomFiledList,insertOrUpdateCustomFiled,delCustomFiled} from "../../actions/ControlPersonnel";
+import {getControlPersonList, getControlDetail,getControlExport,getControlDownload,getCustomFiledList,insertOrUpdateCustomFiled,delCustomFiled,updateTaskModelControlPerson,getTaskModelList} from "../../actions/ControlPersonnel";
 import moment from 'moment';
 import 'moment/locale/zh-cn';
 moment.locale('zh-cn');
@@ -24,22 +24,6 @@ const sliderdyHeader = {
 const FormItem = Form.Item;
 const Option = Select.Option;
 
-//分页配置文件
-const pagination = {
-    size: 'small',
-    pageSize: constants.recordPageSize,
-    showTotal(total) {
-        return `合计 ${total} 条记录`;
-    },
-    itemRender(current, type, originalElement) {
-        if (type === 'prev') {
-            return <a>上一页</a>;
-        } else if (type === 'next') {
-            return <a>下一页</a>;
-        }
-        return originalElement;
-    }
-};
 const formItemLayout = {
     labelCol: {
         xs: { span: 24 },
@@ -47,7 +31,7 @@ const formItemLayout = {
     },
     wrapperCol: {
         xs: { span: 24 },
-        sm: { span: 14 },
+        sm: { span: 16 },
     },
 };
 const newWord = []
@@ -68,7 +52,6 @@ export  class Control extends Component{
             enddate: '',
             key: '',
             record: null,
-            pagination: pagination,
             loading: false,
             personInfo:'',
             modalKey: 0,
@@ -77,10 +60,11 @@ export  class Control extends Component{
             zoomvisible:false,
             imgtext:'',
             text:null,
-            newWords:[]
+            newWords:[],
+            selectedRowKeys: [],
+            current: 1,
         };
         let controlType = this.props.controlType;
-        console.log(controlType)
     }
 
     componentDidMount() {
@@ -90,12 +74,15 @@ export  class Control extends Component{
     componentWillReceiveProps(nextProps) {
         if(this.props.controlType!==nextProps.controlType){
             this.getList(nextProps.controlType)
+            this.setState({
+                selectedRowKeys:[],
+                selectedRowsId:[]
+            })
         }
     }
 
 
     editShowModal = (record) => {
-        console.log(record)
         let cerds = {id:record.id}
         store.dispatch(getControlDetail(cerds))
         let cred = {}
@@ -153,6 +140,12 @@ export  class Control extends Component{
         this.refs.SearchArea.init();
         store.dispatch(getControlPersonList(creds))
     }
+    changeSelection(selectedRowKeys){
+        this.setState({
+            selectedRowKeys,
+            selectedRowsId:selectedRowKeys
+        })
+    }
     render() {
         const { getFieldDecorator } = this.props.form;
         let nowPage = this.state.nowPage;
@@ -163,7 +156,7 @@ export  class Control extends Component{
         let list = store.getState().ControlPersonnel.data.ControlPersonList.result.list;
         for(let i in list){
             if(i !== 'remove'){
-                dataList.push({id:list[i].id,key: parseInt(i) + 1, serial: parseInt(i) + 1, cardId: list[i].idcard, label: list[i].name, sex: list[i].sex == '0' ? '男': '女' ,age:list[i].age, state:(list[i].address_type == '0' ? '常住' : (list[i].address_type == '1' ? '暂住' : '流动')), phone:list[i].phone,zrdw:list[i].subordination_task, updatetime: getLocalTime(list[i].updatetime),cycle:list[i].cycle == '0' ? '按天' : '按周',address:list[i].address,personFrom:list[i].source === '901006' ? '后台导入':'前端新增'})
+                dataList.push({id:list[i].id,key: parseInt(i) + 1, serial: parseInt(i) + 1, cardId: list[i].idcard, label: list[i].name, sex: list[i].sex == '0' ? '男': '女' ,age:list[i].age, state:(list[i].address_type == '0' ? '常住' : (list[i].address_type == '1' ? '暂住' : '流动')), phone:list[i].phone,zrdw:list[i].taskname, updatetime: getLocalTime(list[i].updatetime),cycle:list[i].cycle == '0' ? '按天' : '按周',address:list[i].address,personFrom:list[i].source === '901006' ? '后台导入':'前端新增'})
             }
         }
         const columns = [{
@@ -218,15 +211,68 @@ export  class Control extends Component{
                 </span>
             ),
         }];
+        const column = [{
+            title: '序号',
+            dataIndex: 'serial',
+        },{
+            title: '身份证号',
+            dataIndex: 'cardId',
+            width:180,
+        },{
+            title: '姓名',
+            dataIndex: 'label',
+        },{
+            title: '性别',
+            dataIndex: 'sex',
+        },{
+            title: '年龄',
+            dataIndex: 'age',
+        },{
+            title: '居住类型',
+            dataIndex: 'state',
+        },{
+            title: '现居住地址',
+            dataIndex: 'address',
+        },{
+            title: '联系电话',
+            dataIndex: 'phone',
+        },{
+            title: '任务周期',
+            dataIndex: 'cycle',
+        },{
+            title: '人员来源',
+            dataIndex: 'personFrom',
+        }, {
+            title: '更新时间',
+            dataIndex: 'updatetime',
+        }, {
+            title: '操作',
+            key: 'action',
+            render: (text, record) => (
+                <span>
+                    <span onClick={(e)=>this.editShowModal(record)} style={{cursor:'pointer'}}>详情</span>
+                    {/*<Divider className={controlType === 'GZ_NLHRY' || controlType === 'GZ_ZALY' || controlType === 'LY_DR' || controlType === 'LY_XZ' || controlType === 'LY_XZ' ? '' : 'noneDiv'} type="vertical" />*/}
+                    {/*<span className={controlType === 'GK_WGK' || controlType === 'GK_YGK' || controlType === 'GK_LKZRQ' || controlType === 'GK_SK' ? '' : 'noneDiv'} onClick={(e)=>this.editShowModal(record)} style={{cursor:'pointer'}}>详情</span>*/}
+                    {/*<Divider className={controlType === 'GK_WGK' || controlType === 'GK_YGK' || controlType === 'GK_LKZRQ' || controlType === 'GK_SK' ? '' : 'noneDiv'} type="vertical" />*/}
+                    {/*<Popconfirm title="是否确定该人员离开责任区？" okText="确定" cancelText="取消">*/}
+                    {/*<span className={controlType === 'GK_WGK' || controlType === 'GK_YGK' || controlType === 'GK_LKZRQ' || controlType === 'GK_SK' ? '' : 'noneDiv'} style={{cursor:'pointer'}}>离开责任区</span>*/}
+                    {/*</Popconfirm>*/}
+                </span>
+            ),
+        }];
+        const {selectedRowKeys} = this.state
         const rowSelection = {
-            onChange: (selectedRowKeys, selectedRows) => {
-                console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+            selectedRowKeys,
+            onChange: (selectedRowKey, selectedRows) => {
+                console.log(`selectedRowKey: ${selectedRowKey}`, 'selectedRows: ', selectedRows);
+                this.setState({
+                    selectedRowKeys:selectedRowKey
+                })
                 const ids = [];
                 for(var i=0;i<selectedRows.length;i++){
                     var selectedRow = selectedRows[i];
                     ids.push(selectedRow.id);
                 }
-                console.log('ids',ids)
                 this.setState({
                     selectedRowsId:ids
                 });
@@ -238,7 +284,6 @@ export  class Control extends Component{
         const newFormList = [];
         let detail = store.getState().ControlPersonnel.data.getControlPersonListById.result.data;
         let newValue = store.getState().ControlPersonnel.data.FiledList.result.list;
-        // let value = detail.custom_filed_value.value[i].value
         if(newValue.length > 0){
             for(let i in newValue){
                 if(newValue[i].type == '0'){
@@ -249,7 +294,7 @@ export  class Control extends Component{
                                 label={newValue[i].name}
                             >
                                 {getFieldDecorator('wordText' + i, {
-                                    initialValue:this.state.modalType === 'edit' ? '' : '',
+                                    initialValue:this.state.modalType === 'edit' ? detail.custom_filed_value[i].value : '',
                                 })(
                                     <Input disabled/>
                                 )}
@@ -272,7 +317,7 @@ export  class Control extends Component{
                                 label={newValue[i].name}
                             >
                                 {getFieldDecorator('wordName', {
-                                    initialValue:this.state.modalType === 'edit' ? '' : '',
+                                    initialValue:this.state.modalType === 'edit' ? detail.custom_filed_value[i].value : '',
                                 })(
                                     <Select disabled>
                                         {children}
@@ -282,6 +327,13 @@ export  class Control extends Component{
                         </Col>
                     )
                 }
+            }
+        }
+        const pagination = {
+            onChange: (page) =>{
+                this.setState({
+                    current: page,
+                });
             }
         }
         return(
@@ -297,6 +349,7 @@ export  class Control extends Component{
                             createClick={this.handChangeModalDialogueShow}
                             addShowModal={this.addShowModal}
                             handleExport={this.handleExport}
+                            changeSelection={selectedRowKeys=> this.changeSelection(selectedRowKeys)}
                             serchChange={this.serchChange}
                             form={this.props.form}
                             controlType = {this.props.controlType}
@@ -313,23 +366,24 @@ export  class Control extends Component{
                             <Spin size="large" />
                         </div>:
                         <div style={{padding:"0 15px"}}>
-                            <Table locale={{emptyText:'暂无数据'}}  rowSelection={controlType === 'GZ_NLHRY' || controlType === 'GZ_ZALY' ? undefined : rowSelection} columns={columns} dataSource={dataList} bordered />
+                            <Table locale={{emptyText:'暂无数据'}} rowSelection={rowSelection} columns={controlType === 'GK_WGK' ? column : columns} dataSource={dataList} bordered pagination={pagination}/>
                         </div>}
                     <div className="clear"></div>
                 </div>
                 <Modal
-                    width={700}
+                    width={900}
                     title="任务详情"
                     visible={this.state.visible}
                     onCancel={this.handleCancel}
                     footer={null}
                     key={this.state.modalKey}
+                    maskClosable={false}
                 >
                     <Row>
                         <Form>
-                            <Col span={12} style={{ padding: '0 38px' }}>
+                            <Col span={12} style={{ padding: '0 65px' }}>
                                 <span style={{color:"#fff"}}>照片：</span>
-                                {detail.zpurl!=='' ? <img src={detail.zpurl} style={{ width: '130px', height: '160px' }} /> : <img src="../../images/zanwu.png" style={{ width: '130px', height: '160px' }} />}
+                                {detail.zpurl!==''||detail.zpurl !== undefined ? <img src={detail.zpurl} style={{ width: '130px', height: '160px' }} /> : <img src="../../images/zanwu.png" style={{ width: '130px', height: '160px' }} />}
                             </Col>
                             <Col span={12}>
                                 <FormItem
@@ -428,7 +482,7 @@ export  class Control extends Component{
                                     {getFieldDecorator('address', {
                                         initialValue:this.state.modalType === 'edit' ? detail.now_address : '',
                                     })(
-                                        <Input disabled/>
+                                        <Input title={detail.now_address} disabled/>
                                     )}
                                 </FormItem>
                             </Col>
@@ -462,9 +516,9 @@ export  class Control extends Component{
                                     label="隶属任务"
                                 >
                                     {getFieldDecorator('zrdw', {
-                                        initialValue: this.state.modalType === 'edit' ? detail.subordination_task : '',
+                                        initialValue: this.state.modalType === 'edit' ? detail.taskname : '',
                                     })(
-                                        <Input disabled/>
+                                        <Input title={detail.taskname} disabled/>
                                     )}
                                 </FormItem>
                             </Col>
@@ -474,7 +528,7 @@ export  class Control extends Component{
                                     label="任务周期"
                                 >
                                     {getFieldDecorator('cycle', {
-                                        initialValue:this.state.modalType === 'edit' ? (detail.cycle=='0'?'每天':'每周') : '',
+                                        initialValue:this.state.modalType === 'edit' ? (detail.cycle=='0'?'按天':'按周') : '',
                                     })(
                                         <Select notFoundContent='暂无' disabled>
                                             <Option value="">全部</Option>
@@ -556,7 +610,7 @@ const SearchArea = React.createClass({
             cardId:'',
             nameClear:'',
             status:'',
-            WorkPlace:'',
+            Tosk:'',
             begindate: '',
             enddate: '',
             cycle: '',
@@ -571,7 +625,10 @@ const SearchArea = React.createClass({
             prompt: false,
             promptText:'',
             prompType:'',
-            wordId:''
+            wordId:'',
+            ToskId:'请选择任务',
+            ModalTitle:'',
+            zdyType:''
         };
     },
     handleNameChange: function(e) {
@@ -594,39 +651,46 @@ const SearchArea = React.createClass({
             cycle: value
         });
     },
-    WorkPlaceChange:function (e) {
+    ToskChange:function (e) {
         this.setState({
-            WorkPlace: e.target.value
+            Tosk: e.target.value
         });
     },
     handleClick: function() { //点击查询
-        let {name,cardId,status,WorkPlace,begindate,enddate} = this.state;
-        let controlType = this.props.controlType
-        let creds = ''
-        if(controlType === 'GK_WGK'){
-            creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),subordination_task:WorkPlace, beginTime:begindate,endTime:enddate,control_type:0}}
-        }else if(controlType === 'GK_YGK'){
-            creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),subordination_task:WorkPlace, beginTime:begindate,endTime:enddate,control_type:1}}
-        }else if(controlType === 'GK_LKZRQ'){
-            creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),subordination_task:WorkPlace, beginTime:begindate,endTime:enddate,control_type:2}}
-        }else if(controlType === 'GK_SK'){
-            creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),subordination_task:WorkPlace, beginTime:begindate,endTime:enddate,control_type:3}}
-        } else if(controlType === 'LY_DR'){
-            creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),subordination_task:WorkPlace, beginTime:begindate,endTime:enddate,source:"901006"}}
-        } else if(controlType === 'LY_XZ'){
-            creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),subordination_task:WorkPlace, beginTime:begindate,endTime:enddate,source:"901008"}}
-        } else {
-            creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),subordination_task:WorkPlace, beginTime:begindate,endTime:enddate}}
+        let controlType = this.props.controlType;
+        let {name,cardId,status,Tosk,begindate,enddate} = this.state;
+        if ( begindate!= "" && enddate!= "" && begindate > enddate) {
+            message.error('提示：开始时间不能大于结束时间！');
+            return;
+        }else{
+            let creds = ''
+            if(controlType === 'GK_WGK'){
+                creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),taskname:Tosk, beginTime:begindate,endTime:enddate,control_type:0}}
+            }else if(controlType === 'GK_YGK'){
+                creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),taskname:Tosk, beginTime:begindate,endTime:enddate,control_type:1}}
+            }else if(controlType === 'GK_LKZRQ'){
+                creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),taskname:Tosk, beginTime:begindate,endTime:enddate,control_type:2}}
+            }else if(controlType === 'GK_SK'){
+                creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),taskname:Tosk, beginTime:begindate,endTime:enddate,control_type:3}}
+            } else if(controlType === 'LY_DR'){
+                creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),taskname:Tosk, beginTime:begindate,endTime:enddate,source:"901006"}}
+            } else if(controlType === 'LY_XZ'){
+                creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),taskname:Tosk, beginTime:begindate,endTime:enddate,source:"901008"}}
+            } else {
+                creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),taskname:Tosk, beginTime:begindate,endTime:enddate}}
+            }
+            store.dispatch(getControlPersonList(creds))
         }
-        store.dispatch(getControlPersonList(creds))
     },
+    // getList:function(controlType){
+    // },
     init:function () {
         this.setState({
             name: '',
             cardId:'',
             nameClear:'',
             status:'',
-            WorkPlace:'',
+            Tosk:'',
             begindate: '',
             enddate: '',
         });
@@ -642,7 +706,7 @@ const SearchArea = React.createClass({
         setTimeout(()=>{
             let delCode = store.getState().ControlPersonnel.data.delCustomFiled.reason.code;
             if(delCode === '200'){
-                message.success(`提示：${store.getState().ControlPersonnel.data.delCustomFiled.reason.text}`);
+                message.success(`提示：字段删除成功`);
                 this.getNewWords();
             }else{
                 message.error(`提示：${store.getState().ControlPersonnel.data.delCustomFiled.reason.text}`);
@@ -738,7 +802,7 @@ const SearchArea = React.createClass({
             setTimeout(()=>{
                 let delCode = store.getState().ControlPersonnel.data.CustomFiled.reason.code;
                 if(delCode === '200'){
-                    message.success(`提示：${store.getState().ControlPersonnel.data.CustomFiled.reason.text}`);
+                    message.success(`提示：自定义字段${this.state.zdyType === 'add' ? '新增':'修改'}成功`);
                     this.getNewWords();
                 }else{
                     message.error(`提示：${store.getState().ControlPersonnel.data.CustomFiled.reason.text}`);
@@ -749,10 +813,27 @@ const SearchArea = React.createClass({
             message.error(`提示：字段名称不能为空!`,5);
         }
     },
-    getAddModal:function(){
-        this.setState({
-            addModal:true
-        });
+    getAddModal:function(type){
+        if(type === 'add'){
+            this.setState({
+                ModalTitle:'添加到任务',
+                ToskId:'请选择任务'
+            })
+        }else{
+            this.setState({
+                ModalTitle:'变更任务',
+                ToskId:'请选择任务'
+            })
+        }
+        if(this.props.selectedRowsId.length > 0){
+            let creds = {switch:'1'}
+            store.dispatch(getTaskModelList(creds));
+            this.setState({
+                addModal:true
+            });
+        }else{
+            message.warning(`提示：请选择人员`);
+        }
     },
     addNewsWord:function (type, record) {
         // record.id
@@ -762,7 +843,8 @@ const SearchArea = React.createClass({
                 wordName:record.name,
                 wordType:record.type,
                 OptionWords:record.value,
-                wordId:record.id
+                wordId:record.id,
+                zdyType:'update'
             })
             this.getSelects(record.type)
         }else if(type === 'add'){
@@ -770,7 +852,8 @@ const SearchArea = React.createClass({
                 showDel:{display:'none'},
                 wordName:'',
                 wordType:'',
-                wordId:''
+                wordId:'',
+                zdyType:'add'
             })
             this.getSelects('0')
         }
@@ -787,10 +870,10 @@ const SearchArea = React.createClass({
     },
     importOnChange:function(info) {
         if(info.file.response.reason!==null){
-            if(info.file.response.reason.code === '400'){
-                message.error(`提示：${info.file.response.reason.text}`,5);
-            }else{
+            if(info.file.response.reason.code === '200'){
                 message.success(`提示：${info.file.response.reason.text}`);
+            }else{
+                message.error(`提示：${info.file.response.reason.text}`,5);
             }
         }
         if (info.file.status === 'uploading') {
@@ -818,14 +901,13 @@ const SearchArea = React.createClass({
                 creds = {}
             }
             store.dispatch(getControlPersonList(creds))
-
             this.setState({
                 importLoading: false,
             });
 
 
         } else if (info.file.status === 'error') {
-            message.error(`提示：${info.file.name} 上传失败!`);
+            message.error(`提示：${info.file.name} 上传失败`);
             this.setState({
                 importLoading: false,
             });
@@ -834,7 +916,7 @@ const SearchArea = React.createClass({
     beforeUpload:function(file, fileList) {
         var rag = /\.(xls|xlsx|XLS|XLSX)$/;
         if(!rag.test(file.name)){
-            message.error('提示：请上传excel!');
+            message.error('提示：请上传excel');
         }
         return;
     },
@@ -859,14 +941,69 @@ const SearchArea = React.createClass({
     },
     exportModal:function(){
         this.props.handleExport();
+        setTimeout(()=>{
+            this.hideModal();
+        },100)
     },
     downloadModal:function () {
         let path = serverUrls + store.getState().ControlPersonnel.data.Download.result.path;
         window.open(path);
+        setTimeout(()=>{
+            this.hideModal();
+        },100)
+    },
+    getNewsList:function(){
+        let controlType = this.props.controlType;
+        let cred = '';
+        if(controlType==='GK_WGK'){
+            cred = {pd:{control_type:0}}
+        }else if(controlType==='GK_YGK'){
+            cred = {pd:{control_type:1}}
+        }else if(controlType==='GK_LKZRQ') {
+            cred = {pd:{control_type:2}}
+        }else if(controlType==='GK_SK'){
+            cred = {pd:{control_type:3}}
+        }else if(controlType==='LY_DR'){
+            cred = {pd:{source:'901006'}}
+        }else if(controlType==='LY_XZ'){
+            cred = {pd:{source:'901008'}}
+        }else{
+            cred = {}
+        }
+        store.dispatch(getControlPersonList(cred))
+    },
+    choiceTask:function () {
+        const user = JSON.parse(sessionStorage.getItem('user'));
+        let creds = {id:this.state.ToskId,personalid:this.props.selectedRowsId,updateuser:user.user.name}
+        if(this.state.ToskId === '请选择任务'){
+            message.warning(`提示：${this.state.ToskId}`);
+        }else{
+            store.dispatch(updateTaskModelControlPerson(creds))
+            setTimeout(()=>{
+                let delCode = store.getState().ControlPersonnel.data.TaskModelControlPerson.reason.code;
+                if(delCode === '200'){
+                    message.success(`提示：${this.state.ModalTitle}成功`);
+                }else{
+                    message.error(`提示：${store.getState().ControlPersonnel.data.TaskModelControlPerson.reason.text}`);
+                }
+            },200)
+            setTimeout(()=>{
+                this.getNewsList();
+                this.props.changeSelection([]);
+            },200)
+            this.setState({
+                addModal:false
+            });
+        }
+    },
+    getSelectTosk:function(e){
+        this.setState({
+            ToskId: e
+        })
     },
     render() {
         const {getFieldDecorator} = this.props.form
-        let {name,cardId,status,WorkPlace, enddate, begindate,cycle,wordType,showInput,wordName,OptionWords,showDel} = this.state;
+        let {name,cardId,status,Tosk, enddate, begindate,cycle,wordType,showInput,wordName,OptionWords,showDel} = this.state;
         let beginDateValue = '';
         if (begindate === '') {} else {
             beginDateValue = moment(begindate, dateFormat);
@@ -928,7 +1065,7 @@ const SearchArea = React.createClass({
         };
         let btns = (
             <div style={{marginTop:"15px"}}>
-                <Button style={{width:"110px", marginRight:"10px",float:'left'}} onClick={this.getAddModal} className="btn_ok">添加到任务</Button>
+                <Button style={{width:"110px", marginRight:"10px",float:'left'}} onClick={() => this.getAddModal('add')} className="btn_ok">添加到任务</Button>
                 <div  style={{float:'left'}}>
                     <Upload {...upLoad} onChange={this.importOnChange} beforeUpload={this.beforeUpload} showUploadList={false}>
                         <Button style={{width:"80px", marginRight:"10px"}} className="btn_ok">导入</Button>
@@ -945,14 +1082,14 @@ const SearchArea = React.createClass({
         }else if(controlType === 'GK_YGK'){
             btns = (
                 <div style={{marginTop:"15px"}}>
-                    <Button style={{width:"110px", marginRight:"10px"}} onClick={this.getAddModal} className="btn_ok">变更任务</Button>
+                    <Button style={{width:"110px", marginRight:"10px"}} onClick={() => this.getAddModal('update')} className="btn_ok">变更任务</Button>
                     <Button style={{width:"80px", marginRight:"10px"}} className="btn_ok" onClick={() => this.getPrompt('export')}>导出</Button>
                 </div>
             )
         }else if(controlType === 'GK_LKZRQ' || controlType === 'GK_SK'){
             btns = (
                 <div style={{marginTop:"15px"}}>
-                    <Button style={{width:"110px", marginRight:"10px"}} onClick={this.getAddModal} className="btn_ok">添加到任务</Button>
+                    <Button style={{width:"110px", marginRight:"10px"}} onClick={() => this.getAddModal('add')} className="btn_ok">添加到任务</Button>
                     <Button style={{width:"80px", marginRight:"10px"}} className="btn_ok" onClick={() => this.getPrompt('export')}>导出</Button>
                 </div>
             )
@@ -963,6 +1100,21 @@ const SearchArea = React.createClass({
                 </div>
             )
         }
+        const children = [];
+        let toskList = store.getState().ControlPersonnel.data.getTaskModelList.result.list
+        for(let j in toskList){
+            if(j!='remove'){
+                children.push(<Option key={j} value={toskList[j].id}>{toskList[j].name}</Option>);
+            }
+        }
+        const ToskSearch = (
+            controlType==='GK_WGK' ?
+            <span></span>:
+            <span>
+                <label htmlFor="" className="font14">隶属任务：</label>
+                <Input style={{width:'130px',marginRight:"10px"}} type="text"  id='name' placeholder='请输入隶属任务'  value={Tosk}  onChange={this.ToskChange}/>
+            </span>
+    )
         return (
             <div className="marLeft40 fl z_searchDiv">
                 <label htmlFor="" className="font14">身份证号：</label>
@@ -976,8 +1128,7 @@ const SearchArea = React.createClass({
                     <Option value="1">暂住</Option>
                     <Option value="2">流动</Option>
                 </Select>
-                <label htmlFor="" className="font14">隶属任务：</label>
-                <Input style={{width:'130px',marginRight:"10px"}} type="text"  id='name' placeholder='请输入隶属任务'  value={WorkPlace}  onChange={this.WorkPlaceChange}/>
+                {ToskSearch}
                 <label htmlFor="" className="font14">更新时间：</label>
                 <DatePicker format={dateFormat} allowClear={false} style={{marginRight:"10px",width:'130px'}} value={beginDateValue} placeholder="请选择日期" onChange={this.handleBeginDeteClick}/>
                 <span className="font14" style={{margin:"0 10px 0 0"}}>至</span>
@@ -987,18 +1138,20 @@ const SearchArea = React.createClass({
                 <div>
                     {btns}
                     <Modal style={{top:"20%"}}
-                           title="任务列表"
+                           title={this.state.ModalTitle}
                            visible={this.state.addModal}
                            footer={null}
                            onCancel={this.hideModal}
-                           width={750}
+                           width={600}
+                           maskClosable={false}
                     >
                         <div style={{margin:'0 0 16px 0'}}>
-                            <Input style={{width:'520px',marginRight:"10px"}} type="text"  id='name' placeholder='请输入任务名称' onChange={this.handleCardChange}/>
-                            <ShallowBlueBtn width="80px" text="查询" margin="0 10px 0 0" onClick={this.handleClick} />
-                            <ShallowBlueBtn width="80px" text="重置" onClick={this.init} />
+                            <Select style={{width:'450px',marginRight:"10px"}} placeholder='请选择任务' value={this.state.ToskId} onChange={this.getSelectTosk}>
+                                {children}
+                            </Select>
+                            <ShallowBlueBtn width="80px" text="确定" margin="0 0 0 10px" onClick={this.choiceTask} />
+                            {/*<ShallowBlueBtn width="80px" text="取消" onClick={this.hideModal} />*/}
                         </div>
-                        <Table locale={{emptyText:'暂无数据'}} columns={columns} dataSource={data} bordered/>
                     </Modal>
                     <Modal style={{top:"38%"}}
                            title="提示"
@@ -1024,8 +1177,9 @@ const SearchArea = React.createClass({
                            footer={null}
                            className="ModalList"
                            onCancel={this.hideModal}
+                           maskClosable={false}
                     >
-                        <Table className={newWord.length < 1 ? 'noneDiv': 'activeDiv'} columns={list} dataSource={newWord} bordered  pagination={false} showHeader={false}/>
+                        <Table className={newWord.length < 1 ? 'noneDiv': 'activeDiv'} columns={list} dataSource={newWord} bordered  pagination={false} showHeader={false} />
                         <p style={{marginTop:"20px",textAlign:"center"}}>
                             <Button style={{margin:'0 15px 0 0 ',width:'100%',fontSize:'30px',lineHeight:'0'}} onClick={() => this.addNewsWord('add')} className="btn_ok">
                                 +
@@ -1037,6 +1191,7 @@ const SearchArea = React.createClass({
                            visible={this.state.zdyModals}
                            footer={null}
                            onCancel={this.hideModals}
+                           maskClosable={false}
                     >
                         <Form>
                             <FormItem

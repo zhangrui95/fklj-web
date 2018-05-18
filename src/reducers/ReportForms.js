@@ -8,172 +8,46 @@ import {store} from '../index.js';
 const initialState = {
     success: true,
     data: {
-        distributeChartsList: {//分布情况
-            reason: {
-                "code": "",
-                "text": ""
-            },
-            result: {
+        ControlType:{
+            result:{
                 list:[]
             },
-            isFetching:true,
+            isFetching:false
         },
-        originalChartsList: {
-            reason: {
-                "code": "",
-                "text": ""
-            },
-            result: {
+        LiveType:{
+            result:{
                 list:[]
             },
-            isFetching:true,
+            isFetching:false
         },
-        liveChartsList: {
-            reason: {
-                "code": "",
-                "text": ""
-            },
-            result: {
+        ListGroupBySource:{
+            result:{
                 list:[]
             },
-            isFetching:true,
+            isFetching:false
         },
-        sexChartsList: {
-            reason: {
-                "code": "",
-                "text": ""
+        PersonCount:{
+            result:{
+                count:''
             },
-            result: {
+        },
+        ToskCount:{
+            result:{
+                count:''
+            },
+        },
+        getSubtaskListGroup:{
+            result:{
                 list:[]
             },
-            isFetching:true,
+            isFetching:false
         },
-        obtainEmploymentChartsList: {
-            reason: {
-                "code": "",
-                "text": ""
-            },
-            result: {
+        getSubtaskListGroupByCycle:{
+            result:{
                 list:[]
             },
-            isFetching:true,
-        },
-        ageChartsList: {
-            reason: {
-                "code": "",
-                "text": ""
-            },
-            result: {
-                list:[]
-            },
-            isFetching:true,
-        },
-        AbnormalList: {
-            reason: {
-                "code": "",
-                "text": ""
-            },
-            result: {
-                list:[]
-            },
-            isFetching:true,
-        },
-        AttentionCategoryList: {
-            reason: {
-                "code": "",
-                "text": ""
-            },
-            result: {
-                list:[]
-            },
-            isFetching:true,
-        },
-        completeList: {
-            reason: {
-                "code": "",
-                "text": ""
-            },
-            result: {
-                list:[]
-            },
-            isFetching:true,
-        },
-        inflowList: {
-            reason: {
-                "code": "",
-                "text": ""
-            },
-            result: {
-                list:[]
-            },
-            isFetching:true,
-        },
-        dataSourcesList: {
-            reason: {
-                "code": "",
-                "text": ""
-            },
-            result: {
-                list:[]
-            },
-            isFetching:true,
-        },
-        flowOutList: {
-            reason: {
-                "code": "",
-                "text": ""
-            },
-            result: {
-                list:[]
-            },
-            isFetching:true,
-        },
-        activePersonnelList: {
-            reason: {
-                "code": "",
-                "text": ""
-            },
-            result: {
-                list:[]
-            },
-            isFetching:true,
-        },
-        totalAttention: {//查询-关注人员总和
-            reason: {
-                "code": "",
-                "text": ""
-            },
-            result: {
-                list:''
-            },
-        },
-        taskTotalAttention: {//查询-利剑数据的关注人员总和
-            reason: {
-                "code": "",
-                "text": ""
-            },
-            result: {
-                list:''
-            },
-        },
-        activityInflow: {//查询-活动数据的流入人员总和
-            reason: {
-                "code": "",
-                "text": ""
-            },
-            result: {
-                list:''
-            },
-        },
-        activityOutflow: {//查询-活动数据的流出人员总和
-            reason: {
-                "code": "",
-                "text": ""
-            },
-            result: {
-                list:''
-            },
-        },
+            isFetching:false
+        }
     },
     uiData: {
         menus: [
@@ -193,14 +67,14 @@ const initialState = {
                 haveSon: false,
                 isSelect: false
             },
-            {
-                id: '103',
-                menuName: '盘查统计',
-                isOpen: false,
-                search: 'type=hdsjtj',
-                haveSon: false,
-                isSelect: false
-            }
+            // {
+            //     id: '103',
+            //     menuName: '盘查统计',
+            //     isOpen: false,
+            //     search: 'type=hdsjtj',
+            //     haveSon: false,
+            //     isSelect: false
+            // }
         ]
     }
 }
@@ -220,127 +94,53 @@ const ReportForms = (state=initialState, action) =>{
                 }
             }
             return newState;
-        //分布情况加载
+        //管控情况
         case 'REQUEST_DISTRIBUTE_REPORTFORM':
-
-            newState.data.distributeChartsList.isFetching = true;
+            newState.data.ControlType.isFetching = true;
             return newState;
-
-        case ReportForm.DISTRIBUTE_CHARTS_DATA: //获取统计报表-分布情况 REQUEST_DISTRIBUTE_REPORTFORM
-            newState.data.distributeChartsList.result.list = action.data.result.list;
-            newState.data.distributeChartsList.isFetching = false;
+        case 'getControlPersonalListGroupByControlType_succeed': //管控情况
+            newState.data.ControlType.result.list = action.data.result.list;
+            newState.data.ControlType.isFetching = false;
             return newState;
-        //原籍地
-        case 'REQUEST_ORIGINAL_REPORTFORM':
-            newState.data.originalChartsList.isFetching = true;
+        //居住情况
+        case 'Live_Type':
+            newState.data.LiveType.isFetching = true;
             return newState;
-        case ReportForm.ORIGINAL_CHARTS_DATA: //获取统计报表-原籍地情况 REQUEST_ORIGINAL_REPORTFORM
-            newState.data.originalChartsList.result.list = action.data.result.list;
-            newState.data.originalChartsList.isFetching = false;
+        case 'getControlPersonalListGroupByAddressType_succeed':
+            newState.data.LiveType.result.list = action.data.result.list;
+            newState.data.LiveType.isFetching = false;
             return newState;
-        //居住
-        case 'REQUEST_LIVE_REPORTFORM':
-            newState.data.liveChartsList.isFetching = true;
+        //人员来源
+        case 'ListGroupBySource_Type':
+            newState.data.ListGroupBySource.isFetching = true;
             return newState;
-        case ReportForm.LIVE_CHARTS_DATA: //获取统计报表-居住情况 REQUEST_LIVE_REPORTFORM
-            newState.data.liveChartsList.result.list = action.data.result.list;
-            newState.data.liveChartsList.isFetching = false;
+        case 'getControlPersonalListGroupBySource_succeed':
+            newState.data.ListGroupBySource.result.list = action.data.result.list;
+            newState.data.ListGroupBySource.isFetching = false;
             return newState;
-        //性别
-        case 'REQUEST_SEX_REPORTFORM':
-            newState.data.sexChartsList.isFetching = true;
+        //在呼管控人员人数
+        case 'getControlPersonCountForX3_succeed':
+            newState.data.PersonCount.result.count = action.data.result.count;
             return newState;
-        case ReportForm.SEX_CHARTS_DATA: //获取统计报表-性别情况 REQUEST_SEX_REPORTFORM
-            newState.data.sexChartsList.result.list= action.data.result.list;
-            newState.data.sexChartsList.isFetching = false;
+        //任务数量
+        case 'getSubtaskCount_succeed':
+            newState.data.ToskCount.result.count = action.data.result.count;
             return newState;
-        //就业
-        case 'REQUEST_OBTAINEMPLOYMENT_REPORTFORM':
-            newState.data.obtainEmploymentChartsList.isFetching = true;
+        //人员来源
+        case 'getSubtaskListGroup_Type':
+            newState.data.getSubtaskListGroup.isFetching = true;
             return newState;
-        case ReportForm.OBTAINEMPLOYMENT_CHARTS_DATA: //获取统计报表就业-情况 REQUEST_OBTAINEMPLOYMENT_REPORTFORM
-            newState.data.obtainEmploymentChartsList.result.list = action.data.result.list;
-            newState.data.obtainEmploymentChartsList.isFetching = false;
+        case 'getSubtaskListGroupByType_succeed':
+            newState.data.getSubtaskListGroup.result.list = action.data.result.list;
+            newState.data.getSubtaskListGroup.isFetching = false;
             return newState;
-        //年龄
-        case 'REQUEST_AGE_REPORTFORM':
-            newState.data.ageChartsList.isFetching = true;
+        //任务周期
+        case 'getSubtaskListGroupByCycle_Type':
+            newState.data.getSubtaskListGroupByCycle.isFetching = true;
             return newState;
-        case ReportForm.AGE_CHARTS_DATA: //获取统计报表-年龄情况 REQUEST_AGE_REPORTFORM
-            newState.data.ageChartsList.result.list = action.data.result.list;
-            newState.data.ageChartsList.isFetching = false;
-            return newState;
-        //异常人数
-        case 'REQUEST_ABNORMAL_REPORTFORM':
-            newState.data.AbnormalList.isFetching = true;
-            return newState;
-        case ReportForm.ABNORMAL_CHARTS_DATA: //获取统计报表-异常人员情况 REQUEST_ABNORMAL_REPORTFORM
-            newState.data.AbnormalList.result.list = action.data.result.list;
-            newState.data.AbnormalList.isFetching = false;
-            return newState;
-        //人员类别
-        case 'REQUEST_ABNORMAL_REPORTFORM':
-            newState.data.AttentionCategoryList.isFetching = true;
-            return newState;
-        //关注类别
-        case 'REQUEST_ATTENTIONCATEGORY_REPORTFORM':
-            newState.data.AttentionCategoryList.isFetching = true;
-            return newState;
-        case ReportForm.ATTENTIONCATEGORY_CHARTS_DATA: //获取统计报表关注人员-人员类别情况 REQUEST_ATTENTIONCATEGORY_REPORTFORM
-            newState.data.AttentionCategoryList.result.list = action.data.result.list;
-            newState.data.AttentionCategoryList.isFetching = false;
-            return newState;
-        //完整性
-        case 'REQUEST_COMPLETE_REPORTFORM':
-            newState.data.completeList.isFetching = true;
-            return newState;
-        case ReportForm.COMPLETE_CHARTS_DATA: //获取统计报表-数据完整性情况 REQUEST_COMPLETE_REPORTFORM
-            newState.data.completeList.result.list = action.data.result.list;
-            newState.data.completeList.isFetching = false;
-            return newState;
-        //流入方式
-        case 'REQUEST_INFLOW_REPORTFORM':
-            newState.data.inflowList.isFetching = true;
-            return newState;
-        case ReportForm.INFLOW_CHARTS_DATA: //获取统计报表-流入方式性情况 REQUEST_INFLOW_REPORTFORM
-            newState.data.inflowList.result.list = action.data.result.list;
-            newState.data.inflowList.isFetching = false;
-            return newState;
-        //数据来源
-        case 'REQUEST_DATASOURCES_REPORTFORM':
-            newState.data.dataSourcesList.isFetching = true;
-            return newState;
-        case ReportForm.DATASOURCES_CHARTS_DATA: //获取统计报表-数据来源 REQUEST_DATASOURCES_REPORTFORM
-            newState.data.dataSourcesList.result.list = action.data.result.list;
-            newState.data.dataSourcesList.isFetching = false;
-            return newState;
-        //流出方式
-        case 'REQUEST_FLOWOUT_REPORTFORM':
-            newState.data.flowOutList.isFetching = true;
-            return newState;
-        case ReportForm.FLOWOUT_CHARTS_DATA: //获取统计报表-流出方式 REQUEST_FLOWOUT_REPORTFORM
-            newState.data.flowOutList.result.list = action.data.result.list;
-            newState.data.flowOutList.isFetching = false;
-            return newState;
-        //活动人员
-        case 'REQUEST_ACTIVEPERSONNEL_REPORTFORM':
-            newState.data.activePersonnelList.isFetching = true;
-            return newState;
-        case ReportForm.ACTIVEPERSONNEL_CHARTS_DATA: //获取统计报表-活动人员 REQUEST_ACTIVEPERSONNEL_REPORTFORM
-            newState.data.activePersonnelList.result.list = action.data.result.list;
-            newState.data.activePersonnelList.isFetching = false;
-            return newState;
-        case ReportForm.TOTALATTENTION_CHARTS_DATA: //获取统计报表-查询-总体数据的关注人员总和
-            newState.data.totalAttention.result.list = action.data.result.list;
-            return newState;
-        case ReportForm.TASKTOTALATTENTION_CHARTS_DATA: //获取统计报表-查询-利剑数据的关注人员总和
-            newState.data.taskTotalAttention.result.list = action.data.result.list;
-            return newState;
-        case ReportForm.ACTIVITYINFLOW_CHARTS_DATA: //获取统计报表-查询-活动数据的流入人员总和
-            newState.data.activityInflow.result.list = action.data.result.list;
-            return newState;
-        case ReportForm.ACTIVITYOUTFLOW_CHARTS_DATA: //获取统计报表-查询-活动数据的流出人员总和
-            newState.data.activityOutflow.result.list = action.data.result.list;
+        case 'getSubtaskListGroupByCycle_succeed':
+            newState.data.getSubtaskListGroupByCycle.result.list = action.data.result.list;
+            newState.data.getSubtaskListGroupByCycle.isFetching = false;
             return newState;
         case REPORTFORMS_MENU_INIT://初始化菜单
             for(let x in newState.uiData.menus){

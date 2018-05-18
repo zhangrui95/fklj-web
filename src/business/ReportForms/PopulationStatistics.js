@@ -32,26 +32,12 @@ import {
 } from "../generalPurposeModule";
 
 import {
-    fetchDistributeChartsData,
-    postOriginalChartsData,
-    postLiveChartsData,
-    postSexChartsData,
-    postObtainEmploymentChartsData,
-    fetchAgeChartsData,
-    postTotalAttentionData,
-    postAgeChartsData,
-    postDistributeChartsData
+    getControlPersonList,
+    getControlPersonalListGroupByAddressType,
+    getControlPersonalListGroupBySource,
+    getControlPersonCountForX3
 } from "../../actions/ReportForms"
 import EchartsReact from 'echarts-for-react';
-require("echarts/map/js/province/heilongjiang.js");
-require("echarts/map/js/province/neimenggu.js");
-require("echarts/map/js/province/guangxi.js");
-require("echarts/map/js/province/xinjiang.js");
-require("echarts/map/js/province/shandong.js");
-require("echarts/map/js/province/liaoning.js");
-require("echarts/map/js/province/jilin.js");
-// require("echarts/map/js/city/huhehaote.js");
-require("../../components/map/city/huhehaote.js");
 import {
     DatePicker,
     Spin,
@@ -81,100 +67,24 @@ class PopulationStatistics extends Component {
             beginDate: '',
             endDate: '',
             dateSet: {
-                beginTimeSet: '',
+                startTimeSet: '',
                 endTimeSet: ''
             },
-            beginTimeSet: '',
+            startTimeSet: '',
             endTimeSet: ''
         };
     }
 
-
-    handleDayClick(event) {
-        let nowTImes = getYmd(getNowFormatDate(), 'ymd');
-        this.setState({
-            queryType: "day",
-            // beginTimeSet: nowTImes,
-            // endTimeSet: nowTImes,
-            // dateSet: {
-            //     beginTimeSet: nowTImes,
-            //     endTimeSet: nowTImes
-            // },
-        });
-        let creds = {
-            currentPage: 1,
-            entityOrField: true,
-            pd: {
-                beginTime: nowTImes,
-                endTime: nowTImes,
-            },
-            showCount: constants.pageSize
-        }
-        store.dispatch(postTotalAttentionData(creds));
-        store.dispatch(postOriginalChartsData(creds));
-        store.dispatch(postLiveChartsData(creds));
-        store.dispatch(postObtainEmploymentChartsData(creds));
-        store.dispatch(postSexChartsData(creds));
-        store.dispatch(postAgeChartsData(creds));
-
-    }
-
-    handleYearClick(event) {
-        var myDate = new Date();
+    componentDidMount() {
+        let myDate = new Date();
         let NowYEAR = myDate.getFullYear();
-        this.setState({
-            queryType: "year",
-            // beginTimeSet: NowYEAR + '-01' + '-01',
-            // endTimeSet: NowYEAR + '-12' + '-31',
-            // dateSet: {
-            //     beginTimeSet: NowYEAR + '-01' + '-01',
-            //     endTimeSet: NowYEAR + '-12' + '-31'
-            // },
-        });
         let creds = {
-            currentPage: 1,
-            entityOrField: true,
-            pd: {
-                beginTime: NowYEAR + '-01' + '-01',
-                endTime: NowYEAR + '-12' + '-31',
-            },
-            showCount: constants.pageSize
+            startTime: NowYEAR + '-01' + '-01',
+            endTime: NowYEAR + '-12' + '-31',
         }
-        store.dispatch(postTotalAttentionData(creds));
-        store.dispatch(postOriginalChartsData(creds));
-        store.dispatch(postLiveChartsData(creds));
-        store.dispatch(postObtainEmploymentChartsData(creds));
-        store.dispatch(postSexChartsData(creds));
-        store.dispatch(postAgeChartsData(creds));
+        store.dispatch(getControlPersonCountForX3(creds));
     }
 
-    handleWeekClick(event) {
-        this.setState({
-            queryType: "week",
-            // beginTimeSet: getMondayTime(),
-            // endTimeSet: getSundayTime(),
-            // dateSet: {
-            //     beginTimeSet: getMondayTime(),
-            //     endTimeSet: getSundayTime()
-            // },
-        });
-        let creds = {
-            currentPage: 1,
-            entityOrField: true,
-            pd: {
-                beginTime: getMondayTime(),
-                endTime: getSundayTime(),
-            },
-            showCount: constants.pageSize
-        }
-        store.dispatch(postTotalAttentionData(creds));
-        store.dispatch(postOriginalChartsData(creds));
-        store.dispatch(postLiveChartsData(creds));
-        store.dispatch(postObtainEmploymentChartsData(creds));
-        store.dispatch(postSexChartsData(creds));
-        store.dispatch(postAgeChartsData(creds));
-
-    }
     handleBeginDeteClick = (date, dateString) => {
         this.setState({
             beginDate: dateString,
@@ -189,64 +99,26 @@ class PopulationStatistics extends Component {
 
     handleQueryClick = () => { //查询按钮点击事件
         this.setState({
-            beginTimeSet: this.state.beginDate,
+            startTimeSet: this.state.beginDate,
             endTimeSet: this.state.endDate,
         });
-        let creds = {
-            currentPage: 1,
-            entityOrField: true,
-            pd: {
-                beginTime: this.state.beginDate,
-                endTime: this.state.endDate,
-            },
-            showCount: constants.pageSize
+        if ( this.state.beginDate!= "" && this.state.endDate != "" && this.state.beginDate > this.state.endDate) {
+            message.error('提示：开始时间不能大于结束时间！');
+            return;
+        }else{
+            let creds = {startTime: this.state.beginDate, endTime: this.state.endDate,}
+            store.dispatch(getControlPersonList(creds));
+            store.dispatch(getControlPersonalListGroupByAddressType(creds));
+            store.dispatch(getControlPersonalListGroupBySource(creds));
+            store.dispatch(getControlPersonCountForX3(creds));
         }
-        store.dispatch(postTotalAttentionData(creds));
-        store.dispatch(postOriginalChartsData(creds));
-        store.dispatch(postLiveChartsData(creds));
-        store.dispatch(postObtainEmploymentChartsData(creds));
-        store.dispatch(postSexChartsData(creds));
-        store.dispatch(postAgeChartsData(creds));
-
     }
-    //生命周期  实例化期 真实的dom被渲染出来之后调用
-    componentDidMount() {
-        //当前传过来的类型
-        var myDate = new Date();
-        let NowYEAR = myDate.getFullYear();
-        let creds = {
-            entityOrField: true,
-            pd: {
-                beginTime: NowYEAR + '-01' + '-01',
-                endTime: NowYEAR + '-12' + '-31',
-            },
-        }
-        store.dispatch(postTotalAttentionData(creds));
-    }
-    //接收到新的propos state 后进行渲染之前调用
-    // componentWillUpdate(nextProps, nextState) {
-    //     let isTrue = Compare(this.state.dateSet, nextState.dateSet);
-    //     if (isTrue === false) {
-    //         let creds = {
-    //             currentPage: 1,
-    //             entityOrField: true,
-    //             pd: {
-    //                 beginTime: nextState.dateSet.beginTimeSet,
-    //                 endTime: nextState.dateSet.endTimeSet,
-    //             },
-    //             showCount: constants.pageSize
-    //         }
-    //         store.dispatch(postTotalAttentionData(creds));
-    //     }
-    // }
-
-
     render() {
         let dateSet = {
-            beginTimeSet: this.state.beginTimeSet,
+            startTimeSet: this.state.startTimeSet,
             endTimeSet: this.state.endTimeSet
         };
-        let totalAttention = store.getState().ReportForms.data.totalAttention.result.list;
+        let totalAttention = store.getState().ReportForms.data.PersonCount.result.count;
         let queryType = this.state.queryType;
         let begin = this.state.beginDate;
         let end = this.state.endDate;
@@ -274,10 +146,6 @@ class PopulationStatistics extends Component {
                 <DatePicker placeholder="" onChange={this.handleEndDeteClick} format={dateFormat} allowClear={false} style={{marginRight:"10px"}} value={endDateValue}/>
             )
         }
-        if (beginDateValue != "" && endDateValue != "" && beginDateValue > endDateValue) {
-            message.error('提示：开始时间不能大于结束时间！');
-            return;
-        }
 
         return (
 
@@ -285,7 +153,7 @@ class PopulationStatistics extends Component {
                 <div className="sliderItemDiv">
                     {/*查询条件*/}
                     <div style={sliderdyHeader}>
-                        <p style={{fontSize: "18px", color: "#fff", float: "left", marginRight: "50px"}}>在呼管控人员总数：
+                        <p style={{fontSize: "18px", color: "#fff", float: "left", marginRight: "50px"}}>在呼管控人员数量：
                             <span
                                 style={{
                                     width: "80px",
@@ -295,36 +163,10 @@ class PopulationStatistics extends Component {
                                 }}
                             >{totalAttention}</span>
                         </p>
-                        {queryType === "day" ? <ul style={smallIcon}>
-                            <li style={IconLiActive} onClick={(event) => this.handleDayClick(event)} >本日</li>
-                            <li style={IconLi} onClick={(event) => this.handleWeekClick(event)} >本周</li>
-                            <li style={IconLinoborder} onClick={(event) => this.handleYearClick(event)}>本年</li>
-                            <div style={clear}></div>
-                        </ul>: queryType === "week" ? <ul style={smallIcon}>
-                            <li style={IconLi} onClick={(event) => this.handleDayClick(event)} >本日</li>
-                            <li style={IconLiActive} onClick={(event) => this.handleWeekClick(event)} >本周</li>
-                            <li style={IconLinoborder} onClick={(event) => this.handleYearClick(event)}>本年</li>
-                            <div style={clear}></div>
-                        </ul> : queryType === "year" ? <ul style={smallIcon}>
-                                <li style={IconLi} onClick={(event) => this.handleDayClick(event)} >本日</li>
-                                <li style={IconLi} onClick={(event) => this.handleWeekClick(event)} >本周</li>
-                                <li style={IconLinoborderActive} onClick={(event) => this.handleYearClick(event)}>本年</li>
-                                <div style={clear}></div>
-                            </ul>
-                            :<ul style={smallIcon}>
-                                <li style={IconLi} onClick={(event) => this.handleDayClick(event)} >本日</li>
-                                <li style={IconLi} onClick={(event) => this.handleWeekClick(event)} >本周</li>
-                                <li style={IconLinoborder} onClick={(event) => this.handleYearClick(event)}>本年</li>
-                                <div style={clear}></div></ul>
-                        }
                         <div style={{float: "left", marginLeft: "50px"}}>
-                            <label htmlFor="" style={labelStyle2}>其他时间：</label>
-                            {/* <DatePicker format={dateFormat} allowClear={false} style={{marginRight: "10px"}}
-                                        value={beginDateValue}  onChange={this.handleBeginDeteClick}/>*/}
+                            <label htmlFor="" style={labelStyle2}>统计时间：</label>
                             { beginPicker }
                             <span className="font14" style={{marginRight: "10px"}}>至</span>
-                            {/* <DatePicker format={dateFormat} allowClear={false} style={{marginRight: "10px"}}
-                                        value={endDateValue}  onChange={this.handleEndDeteClick}/>*/}
                             { endPicker }
                             <ShallowBlueBtn text="查询" margin="0 0 0 20px" width="60px"  onClick={this.handleQueryClick}/>
 
@@ -347,24 +189,15 @@ class PopulationStatistics extends Component {
                                 fontWeight: "bold",
                                 paddingLeft: "20px",
                                 margin: "20px 0"
-                            }}>管控情况</p>C
+                            }}>管控情况</p>
                             {/*添加图表*/}
                             <div>
                                 <ControlCharts  dateSet={dateSet}/>
                             </div>
                         </div>
                         <div style={{float: "left", borderBottom: '1px solid #0C5F93', width: "50%", height: "43%"}}>
-                            <p style = {
-                                {
-                                    fontSize: "16px",
-                                    color: "#fff",
-                                    fontWeight: "bold",
-                                    paddingLeft: "20px",
-                                    margin: "20px 0"
-                                }
-                            } > 拟来呼人员</p> { /*添加图表*/ }
-                            <div>
-                                <ComeInCharts  dateSet={dateSet}/>
+                            <div style={{color:"#FFF"}}>
+                                <p style={{fontSize: 30, color:"rgb(231, 231, 231)" , textAlign: 'center',marginTop:'25%'}}>{this.props.context !== undefined ? this.props.context: '功能开发中...'}</p>
                             </div>
                         </div>
                         <div style={clear}></div>
@@ -416,359 +249,31 @@ class PopulationStatistics extends Component {
     }
 }
 
-
-//分布情况图表
-class DistributeCharts extends Component {
-    componentDidMount() {
-        //当前传过来的类型
-        var myDate = new Date();
-        let NowYEAR = myDate.getFullYear();
-        let creds = {
-            entityOrField: true,
-            pd: {
-                beginTime: NowYEAR + '-01' + '-01',
-                endTime: NowYEAR + '-12' + '-31',
-            },
-        }
-        store.dispatch(postDistributeChartsData(creds));
-    }
-    //组件props发生变化，更新state
-    componentWillReceiveProps(nextProps) {
-        /* let isTrue = Compare(this.props.dateSet,nextProps.dateSet);
-         if(isTrue === false){
-             let creds = {
-                 currentPage:1,
-                 entityOrField:true,
-                 pd:{
-                     beginTime:nextProps.dateSet.beginTimeSet,
-                     endTime:nextProps.dateSet.endTimeSet,
-                 },
-                 showCount: constants.pageSize
-             }
-             store.dispatch(postDistributeChartsData(creds));
-         }*/
-    }
-    render() {
-
-        // let distributeChartsList = store.getState().ReportForms.data.distributeChartsList.result.list;
-        let distributeChartsList = [{name: "呼和浩特市", value: 2},{name: "包头市", value: 0},{name: "乌海市", value: 0},{name: "赤峰市", value: 0},{name: "呼伦贝尔市", value: 0},{name: "兴安盟", value: 0}];
-        // let isFetching = store.getState().ReportForms.data.distributeChartsList.isFetching;
-        let isFetching = false;
-        let numData = [];
-        for (var i = 0; i < distributeChartsList.length; i++) {
-            var distribute = distributeChartsList[i];
-            var number = distribute.value;
-            var num = parseInt(number);
-            numData.push(
-                num
-            );
-            //var maxInNumbers = Math.max.apply(Math, number);
-            // console.log('original',number);
-        }
-        var maxInNumbers = Math.max.apply(Math, numData);
-        let maxNum = maxInNumbers * constants.doubleNum;
-        let optionMap = {
-            // title: {
-            //     text: 'iphone销量',
-            //     subtext: '纯属虚构',
-            //     left: 'center'
-            // },
-            // textStyle:{
-            //     color:"#fff",
-            //     fontSize:8
-            // },
-            tooltip: {
-                trigger: 'item',
-                formatter: '{b}<br/>{c} (人)'
-            },
-            // legend: {
-            //     orient: 'vertical',
-            //     left: 'left',
-            //     data:['iphone3']
-            // },
-            // visualMap: {
-            //     min: 0,
-            //     max: 210,
-            //     left: 'left',
-            //     top: 'bottom',
-            //     text: ['高', '低'],           // 文本，默认为数值文本
-            //     calculable: true
-            // },
-            visualMap: {
-                min: 0,
-                max: maxNum,
-                top: '120px',
-                text: ['高', '低'],
-                show: true,
-                realtime: false,
-                calculable: true,
-                inRange: {
-                    color: ['#00ACEE', '#F88A6F']
-                },
-                outOfRange: { //范围外颜色
-                    color: ['#F5F5DC']
-                },
-                textStyle: {
-                    color: "#fff"
-                }
-            },
-            toolbox: {
-                show: false,
-                orient: 'vertical',
-                left: 'right',
-                top: 'center',
-                feature: {
-                    dataView: {
-                        readOnly: false
-                    },
-                    restore: {},
-                    saveAsImage: {}
-                }
-            },
-            series: [{
-                name: '人数',
-                type: 'map',
-                mapType: global.configUrl.clientArea,
-                roam: false,
-                top: '0px',
-                label: {
-                    normal: {
-                        show: false,
-                        formatter: '{c}',
-                        textStyle: {
-                            color: "#fff"
-                        }
-                    },
-                    emphasis: {
-                        show: false,
-                        textStyle: {
-                            color: "#fff"
-                        }
-                    }
-                },
-                data: distributeChartsList
-            }]
-        };
-        return (
-            <div style={{position:"relative",height:"99%"}}>
-                {isFetching ===  true?
-                    <div style={{textAlign:"center",position:"absolute",left:"45%",top:"30%"}}>
-                        <Spin size="large" />
-                    </div>:
-                    <EchartsReact
-                        option={optionMap}
-                        style={{height: '90%', width: '100%'}}
-                    />}
-            </div>
-        );
-    }
-}
-
-
-//原籍地图表
-class OriginalCharts extends Component {
-
-    componentDidMount() {
-        //当前传过来的类型
-        var myDate = new Date();
-        let NowYEAR = myDate.getFullYear();
-        let creds = {
-            entityOrField: true,
-            pd: {
-                beginTime: NowYEAR + '-01' + '-01',
-                endTime: NowYEAR + '-12' + '-31',
-            },
-        }
-        store.dispatch(postOriginalChartsData(creds));
-    }
-    //组件props发生变化，更新state
-    // componentWillReceiveProps(nextProps) {
-    //     //下一个类型
-    //     let isTrue = Compare(this.props.dateSet, nextProps.dateSet);
-    //     if (isTrue === false) {
-    //         let creds = {
-    //             currentPage: 1,
-    //             entityOrField: true,
-    //             pd: {
-    //                 beginTime: nextProps.dateSet.beginTimeSet,
-    //                 endTime: nextProps.dateSet.endTimeSet,
-    //             },
-    //             showCount: constants.pageSize
-    //         }
-    //         store.dispatch(postOriginalChartsData(creds));
-    //     }
-    // }
-
-
-    render() {
-        let originalChartsList = [{name:'乌鲁木齐市',value:'2'}]
-        // let originalChartsList = store.getState().ReportForms.data.originalChartsList.result.list;
-        // let isFetching = store.getState().ReportForms.data.originalChartsList.isFetching;
-        let isFetching = false;
-        let numData = [];
-        for (var i = 0; i < originalChartsList.length; i++) {
-            var original = originalChartsList[i];
-            var number = original.value;
-            var num = parseInt(number);
-            numData.push(
-                num
-            );
-            //var maxInNumbers = Math.max.apply(Math, number);
-            // console.log('original',number);
-        }
-        var maxInNumbers = Math.max.apply(Math, numData);
-        let maxNum = maxInNumbers * constants.doubleNum;
-        let optionMap = {
-            // title: {
-            //     text: 'iphone销量',
-            //     subtext: '纯属虚构',
-            //     left: 'center'
-            // },
-            tooltip: {
-                trigger: 'item',
-                formatter: '{b}<br/>{c} (人)'
-            },
-            // legend: {
-            //     orient: 'vertical',
-            //     left: 'left',
-            //     data:[
-            //         {
-            //             name:'居住人数',
-            //             textStyle: {
-            //                 color: '#FFCE44'
-            //             }
-            //         }
-            //     ]
-            // },
-            visualMap: {
-                min: 0,
-                max: maxNum,
-                top: "120px",
-                show: true,
-                text: ['高', '低'],
-                realtime: false,
-                calculable: true,
-                inRange: {
-                    color: ['#00ACEE', '#F88A6F']
-                },
-                outOfRange: { //范围外颜色
-                    color: ['#F5F5DC']
-                },
-                textStyle: {
-                    color: "#fff"
-                }
-            },
-            toolbox: {
-                show: false,
-                orient: 'vertical',
-                left: 'right',
-                top: 'center',
-                feature: {
-                    dataView: {
-                        readOnly: false
-                    },
-                    restore: {},
-                    saveAsImage: {}
-                }
-            },
-            series: [{
-                name: '居住人数',
-                type: 'map',
-                mapType: '新疆',
-                roam: false,
-                top: '0px',
-                label: {
-                    normal: {
-                        show: false,
-                        position: 'bottom',
-                        formatter: '{c}',
-
-                        textStyle: {
-                            color: "#fff"
-                        }
-                    },
-                    emphasis: {
-                        show: false,
-                        textStyle: {
-                            color: "#fff"
-                        }
-                    }
-                },
-                data: originalChartsList
-
-            }]
-        };
-
-        return (
-            <div style={{position:"relative",height:"99%"}}>
-                {isFetching ===  true?
-                    <div style={{textAlign:"center",position:"absolute",left:"45%",top:"30%"}}>
-                        <Spin size="large" />
-                    </div>:
-                    <EchartsReact
-                        option={optionMap}
-                        style={{height: '90%', width: '100%',}}
-                    />}
-            </div>
-        );
-    }
-}
-
 //居住情况图表
 class LiveCharts extends Component {
-
-
     componentDidMount() {
         var myDate = new Date();
         let NowYEAR = myDate.getFullYear();
         let creds = {
-            entityOrField: true,
-            pd: {
-                beginTime: NowYEAR + '-01' + '-01',
-                endTime: NowYEAR + '-12' + '-31',
-            },
+            startTime: NowYEAR + '-01' + '-01',
+            endTime: NowYEAR + '-12' + '-31',
         }
-        store.dispatch(postLiveChartsData(creds));
+        store.dispatch(getControlPersonalListGroupByAddressType(creds));
     }
-    //组件props发生变化，更新state
-    // componentWillReceiveProps(nextProps) {
-    //     //下一个类型
-    //     let isTrue = Compare(this.props.dateSet, nextProps.dateSet);
-    //     if (isTrue === false) {
-    //         let creds = {
-    //             currentPage: 1,
-    //             entityOrField: true,
-    //             pd: {
-    //                 beginTime: nextProps.dateSet.beginTimeSet,
-    //                 endTime: nextProps.dateSet.endTimeSet,
-    //             },
-    //             showCount: constants.pageSize
-    //         }
-    //         store.dispatch(postLiveChartsData(creds));
-    //     }
-    // }
-
     render() {
-        // let liveChartsList = store.getState().ReportForms.data.liveChartsList.result.list;
-        let liveChartsList = [{name: "常住人员", value: 12}, {name: "流动人员", value: 26}, {name: "暂住人员", value: 5}];
-        // let isFetching = store.getState().ReportForms.data.liveChartsList.isFetching;
-        let isFetching = false;
+        const LiveTypeList = store.getState().ReportForms.data.LiveType.result.list;
+        const liveChartsList = [];
+        for(let i in LiveTypeList){
+            if(i!=='remove'){
+                liveChartsList.push({name:LiveTypeList[i].name == 0 ? '常住人员':(LiveTypeList[i].name === 1 ? '暂住人员' : '流动人员'),value:LiveTypeList[i].value})
+            }
+        }
+        let isFetching = store.getState().ReportForms.data.ControlType.isFetching;
         var liveOption = {
-            // title : {
-            //     text: '某站点用户访问来源',
-            //     subtext: '纯属虚构',
-            //     x:'center'
-            // },
             tooltip: {
                 trigger: 'item',
                 formatter: "{a} <br/>{b} : {c} ({d}%)"
             },
-            // legend: {
-            //     orient: 'vertical',
-            //     left: 'left',
-            //     data: ['暂住人员','暂住关注人员','常住关注人员'],
-
-            // },
             color: ['#3dc7d1', '#00acee', '#f88a6f'],
             textStyle: {
                 color: "#fff"
@@ -820,7 +325,7 @@ class LiveCharts extends Component {
         );
     }
 }
-//年龄构成
+//拟来呼人员
 class ComeInCharts extends Component {
 
     componentDidMount() {
@@ -829,11 +334,11 @@ class ComeInCharts extends Component {
         let creds = {
             entityOrField: true,
             pd: {
-                beginTime: NowYEAR + '-01' + '-01',
+                startTime: NowYEAR + '-01' + '-01',
                 endTime: NowYEAR + '-12' + '-31',
             },
         }
-        store.dispatch(postAgeChartsData(creds));
+        // store.dispatch(postAgeChartsData(creds));
     }
     //组件props发生变化，更新state
     // componentWillReceiveProps(nextProps) {
@@ -844,7 +349,7 @@ class ComeInCharts extends Component {
     //             currentPage: 1,
     //             entityOrField: true,
     //             pd: {
-    //                 beginTime: nextProps.dateSet.beginTimeSet,
+    //                 startTime: nextProps.dateSet.startTimeSet,
     //                 endTime: nextProps.dateSet.endTimeSet,
     //             },
     //             showCount: constants.pageSize
@@ -946,35 +451,20 @@ class ControlCharts extends Component {
         var myDate = new Date();
         let NowYEAR = myDate.getFullYear();
         let creds = {
-            entityOrField: true,
-            pd: {
-                beginTime: NowYEAR + '-01' + '-01',
-                endTime: NowYEAR + '-12' + '-31',
-            },
+            startTime: NowYEAR + '-01' + '-01',
+            endTime: NowYEAR + '-12' + '-31',
         }
-        store.dispatch(postSexChartsData(creds));
+        store.dispatch(getControlPersonList(creds));
     }
-    //组件props发生变化，更新state
-    // componentWillReceiveProps(nextProps) {
-    //     let isTrue = Compare(this.props.dateSet, nextProps.dateSet);
-    //     if (isTrue === false) {
-    //         let creds = {
-    //             currentPage: 1,
-    //             entityOrField: true,
-    //             pd: {
-    //                 beginTime: nextProps.dateSet.beginTimeSet,
-    //                 endTime: nextProps.dateSet.endTimeSet,
-    //             },
-    //             showCount: constants.pageSize
-    //         }
-    //         store.dispatch(postSexChartsData(creds));
-    //     }
-    // }
     render() {
-        // let sexChartsList = store.getState().ReportForms.data.sexChartsList.result.list;
-        let sexChartsList = [{name: "未管控", value: "15"}, {name: "已管控", value: "28"}, {name: "失控", value: "9"}, {name: "离开责任区", value: "32"}];
-        // let isFetching = store.getState().ReportForms.data.sexChartsList.isFetching;
-        let isFetching = false;
+        const ControlTypeList = store.getState().ReportForms.data.ControlType.result.list;
+        let sexChartsList = [];
+        for(let i in ControlTypeList){
+            if(i!=='remove'){
+                sexChartsList.push({name:ControlTypeList[i].name == 0 ? '未管控':(ControlTypeList[i].name === 1 ? '已管控' : (ControlTypeList[i].name === 2 ?'离开责任区':'失控')),value:ControlTypeList[i].value})
+            }
+        }
+        let isFetching = store.getState().ReportForms.data.ControlType.isFetching;
         let option = {
             tooltip: {
                 trigger: 'item',
@@ -1061,35 +551,20 @@ class PersonFromCharts extends Component {
         var myDate = new Date();
         let NowYEAR = myDate.getFullYear();
         let creds = {
-            entityOrField: true,
-            pd: {
-                beginTime: NowYEAR + '-01' + '-01',
+                startTime: NowYEAR + '-01' + '-01',
                 endTime: NowYEAR + '-12' + '-31',
-            },
         }
-        store.dispatch(postSexChartsData(creds));
+        store.dispatch(getControlPersonalListGroupBySource(creds));
     }
-    //组件props发生变化，更新state
-    // componentWillReceiveProps(nextProps) {
-    //     let isTrue = Compare(this.props.dateSet, nextProps.dateSet);
-    //     if (isTrue === false) {
-    //         let creds = {
-    //             currentPage: 1,
-    //             entityOrField: true,
-    //             pd: {
-    //                 beginTime: nextProps.dateSet.beginTimeSet,
-    //                 endTime: nextProps.dateSet.endTimeSet,
-    //             },
-    //             showCount: constants.pageSize
-    //         }
-    //         store.dispatch(postSexChartsData(creds));
-    //     }
-    // }
     render() {
-        // let sexChartsList = store.getState().ReportForms.data.sexChartsList.result.list;
-        let sexChartsList = [{name: "导入", value: "75"}, {name: "新增", value: "38"}];
-        // let isFetching = store.getState().ReportForms.data.sexChartsList.isFetching;
-        let isFetching = false;
+        const ListGroupBySource = store.getState().ReportForms.data.ListGroupBySource.result.list;
+        const FormChartsList = [];
+        for(let i in ListGroupBySource){
+            if(i!=='remove'){
+                FormChartsList.push({name:ListGroupBySource[i].name == '901006' ? '后台导入' : '前端新增',value: ListGroupBySource[i].value})
+            }
+        }
+        let isFetching = store.getState().ReportForms.data.ControlType.isFetching;
         let option = {
             tooltip: {
                 trigger: 'item',
@@ -1141,7 +616,7 @@ class PersonFromCharts extends Component {
                         show: true,
                     }
                 },
-                data: sexChartsList,
+                data: FormChartsList,
             },
 
             ]
@@ -1164,7 +639,7 @@ class PersonFromCharts extends Component {
 
 const sliderdyHeader = {
     borderBottom: "1px solid #0C5F93",
-    padding: "18px 10px",
+    padding: "18px 10px 2px",
     overflow: "hidden"
 }
 const labelStyle2 = {

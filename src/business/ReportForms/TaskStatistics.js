@@ -32,10 +32,9 @@ import {
 } from "../generalPurposeModule";
 import EchartsReact from 'echarts-for-react';
 import {
-    postAbnormalChartsData,
-    postAttentionCategoryChartsData,
-    postCompleteChartsData,
-    postTaskTotalAttentionData,
+    getSubtaskListGroupByType,
+    getSubtaskListGroupByCycle,
+    getSubtaskCount
 } from "../../actions/ReportForms"
 import {
     DatePicker,
@@ -64,96 +63,14 @@ class TaskStatistics extends Component {
             beginDate: '',
             endDate: '',
             dateSet: {
-                beginTimeSet: '',
+                startTimeSet: '',
                 endTimeSet: ''
             },
-            beginTimeSet: '',
+            startTimeSet: '',
             endTimeSet: ''
         };
 
     }
-
-    handleDayClick(event) {
-        let nowTImes = getYmd(getNowFormatDate(), 'ymd');
-        this.setState({
-            queryType: "day",
-            // beginTimeSet: nowTImes,
-            // endTimeSet: nowTImes,
-            // dateSet: {
-            //     beginTimeSet: nowTImes,
-            //     endTimeSet: nowTImes
-            // },
-        });
-        let creds = {
-            currentPage: 1,
-            entityOrField: true,
-            pd: {
-                beginTime: nowTImes,
-                endTime: nowTImes,
-            },
-            showCount: constants.pageSize
-
-        }
-        store.dispatch(postTaskTotalAttentionData(creds));
-        store.dispatch(postAbnormalChartsData(creds));
-        store.dispatch(postAttentionCategoryChartsData(creds));
-        store.dispatch(postCompleteChartsData(creds));
-    }
-
-    handleYearClick(event) {
-        var myDate = new Date();
-        let NowYEAR = myDate.getFullYear();
-        this.setState({
-            queryType: "year",
-            // beginTimeSet: NowYEAR + '-01' + '-01',
-            // endTimeSet: NowYEAR + '-12' + '-31',
-            // dateSet: {
-            //     beginTimeSet: NowYEAR + '-01' + '-01',
-            //     endTimeSet: NowYEAR + '-12' + '-31'
-            // },
-        });
-        let creds = {
-            currentPage: 1,
-            entityOrField: true,
-            pd: {
-                beginTime: NowYEAR + '-01' + '-01',
-                endTime: NowYEAR + '-12' + '-31',
-            },
-            showCount: constants.pageSize
-
-        }
-        store.dispatch(postTaskTotalAttentionData(creds));
-        store.dispatch(postAbnormalChartsData(creds));
-        store.dispatch(postAttentionCategoryChartsData(creds));
-        store.dispatch(postCompleteChartsData(creds));
-    }
-
-    handleWeekClick(event) {
-        this.setState({
-            queryType: "week",
-            // beginTimeSet: getMondayTime(),
-            // endTimeSet: getSundayTime(),
-            // dateSet: {
-            //     beginTimeSet: getMondayTime(),
-            //     endTimeSet: getSundayTime()
-            // },
-        });
-        let creds = {
-            currentPage: 1,
-            entityOrField: true,
-            pd: {
-                beginTime: getMondayTime(),
-                endTime: getSundayTime(),
-            },
-            showCount: constants.pageSize
-
-        }
-        store.dispatch(postTaskTotalAttentionData(creds));
-        store.dispatch(postAbnormalChartsData(creds));
-        store.dispatch(postAttentionCategoryChartsData(creds));
-        store.dispatch(postCompleteChartsData(creds));
-    }
-
     handleBeginDeteClick = (date, dateString) => {
         this.setState({
             beginDate: dateString,
@@ -167,37 +84,29 @@ class TaskStatistics extends Component {
     }
     handleQueryClick = () => { //查询按钮点击事件
         this.setState({
-            beginTimeSet: this.state.beginDate,
+            startTimeSet: this.state.beginDate,
             endTimeSet: this.state.endDate,
         });
-        let creds = {
-            currentPage: 1,
-            entityOrField: true,
-            pd: {
-                beginTime: this.state.beginDate,
-                endTime: this.state.endDate,
-            },
-            showCount: constants.pageSize
-
+        if ( this.state.beginDate!= "" && this.state.endDate != "" && this.state.beginDate > this.state.endDate) {
+            message.error('提示：开始时间不能大于结束时间！');
+            return;
+        }else{
+            let creds = {startTime: this.state.beginDate, endTime: this.state.endDate,}
+            store.dispatch(getSubtaskListGroupByType(creds));
+            store.dispatch(getSubtaskListGroupByCycle(creds));
+            store.dispatch(getSubtaskCount(creds));
         }
-        store.dispatch(postTaskTotalAttentionData(creds));
-        store.dispatch(postAbnormalChartsData(creds));
-        store.dispatch(postAttentionCategoryChartsData(creds));
-        store.dispatch(postCompleteChartsData(creds));
     }
 
     componentDidMount() {
         //当前传过来的类型
-        var myDate = new Date();
+        let myDate = new Date();
         let NowYEAR = myDate.getFullYear();
         let creds = {
-            entityOrField: true,
-            pd: {
-                beginTime: NowYEAR + '-01' + '-01',
+                startTime: NowYEAR + '-01' + '-01',
                 endTime: NowYEAR + '-12' + '-31',
-            },
         }
-        store.dispatch(postTaskTotalAttentionData(creds));
+        store.dispatch(getSubtaskCount(creds));
     }
 
     //接收到新的propos state 后进行渲染之前调用
@@ -205,24 +114,19 @@ class TaskStatistics extends Component {
         let isTrue = Compare(this.state.dateSet, nextState.dateSet);
         if (isTrue === false) {
             let creds = {
-                currentPage: 1,
-                entityOrField: true,
-                pd: {
-                    beginTime: nextState.dateSet.beginTimeSet,
+                    startTime: nextState.dateSet.startTimeSet,
                     endTime: nextState.dateSet.endTimeSet,
-                },
-                showCount: constants.pageSize
             }
-            store.dispatch(postTaskTotalAttentionData(creds));
+            // store.dispatch(postTaskTotalAttentionData(creds));
         }
     }
 
     render() {
         let dateSet = {
-            beginTimeSet: this.state.beginTimeSet,
+            startTimeSet: this.state.startTimeSet,
             endTimeSet: this.state.endTimeSet
         };
-        let taskTotalAttention = store.getState().ReportForms.data.taskTotalAttention.result.list;
+        let taskTotalAttention = store.getState().ReportForms.data.ToskCount.result.count;
         let queryType = this.state.queryType;
         let begin = this.state.beginDate;
         let end = this.state.endDate;
@@ -234,48 +138,12 @@ class TaskStatistics extends Component {
         if (end === '') {} else {
             endDateValue = moment(end, dateFormat);
         }
-        if (beginDateValue != "" && endDateValue != "" && beginDateValue > endDateValue) {
-            message.error('提示：开始时间不能大于结束时间！');
-            return;
-        }
-
-        let dateSwitching;
-        if (queryType === 'day') {
-            dateSwitching = <ul style={smallIcon}>
-                <li style={IconLiActive} onClick={(event) => this.handleDayClick(event)}>本日</li>
-                <li style={IconLi} onClick={(event) => this.handleWeekClick(event)}>本周</li>
-                <li style={IconLinoborder} onClick={(event) => this.handleYearClick(event)}>本年</li>
-                <div style={clear}></div>
-            </ul>;
-        } else if (queryType === 'week') {
-            dateSwitching = <ul style={smallIcon}>
-                <li style={IconLi} onClick={(event) => this.handleDayClick(event)}>本日</li>
-                <li style={IconLiActive} onClick={(event) => this.handleWeekClick(event)}>本周</li>
-                <li style={IconLinoborder} onClick={(event) => this.handleYearClick(event)}>本年</li>
-                <div style={clear}></div>
-            </ul>;
-        } else if (queryType === 'year') {
-            dateSwitching = <ul style={smallIcon}>
-                <li style={IconLi} onClick={(event) => this.handleDayClick(event)}>本日</li>
-                <li style={IconLi} onClick={(event) => this.handleWeekClick(event)}>本周</li>
-                <li style={IconLinoborderActive} onClick={(event) => this.handleYearClick(event)}>本年</li>
-                <div style={clear}></div>
-            </ul>;
-        } else {
-            dateSwitching = <ul style={smallIcon}>
-                <li style={IconLi} onClick={(event) => this.handleDayClick(event)}>本日</li>
-                <li style={IconLi} onClick={(event) => this.handleWeekClick(event)}>本周</li>
-                <li style={IconLinoborder} onClick={(event) => this.handleYearClick(event)}>本年</li>
-                <div style={clear}></div>
-            </ul>;
-        }
-
         return (
             <div className="sliderWrap" style={{borderBottom: "0", height: 'auto'}}>
                 <div className="sliderItemDiv">
                     {/*查询条件*/}
                     <div style={sliderdyHeader}>
-                        <p style={{fontSize: "18px", color: "#fff", float: "left", marginRight: "50px"}}>任务总数：
+                        <p style={{fontSize: "18px", color: "#fff", float: "left", marginRight: "50px"}}>任务数量：
                             <span
                                 style={{
                                     width: "80px",
@@ -284,9 +152,8 @@ class TaskStatistics extends Component {
                                     zoom: "1"
                                 }}>{taskTotalAttention}</span>
                         </p>
-                        {dateSwitching}
                         <div style={{float: "left", marginLeft: "50px"}}>
-                            <label htmlFor="" style={labelStyle2}>其他时间：</label>
+                            <label htmlFor="" style={labelStyle2}>统计时间：</label>
                             <DatePicker  placeholder="" format={dateFormat} allowClear={false} style={{marginRight: "10px"}}
                                          value={beginDateValue} onChange={this.handleBeginDeteClick}/>
                             <span className="font14" style={{marginRight: "10px"}}>至</span>
@@ -305,7 +172,7 @@ class TaskStatistics extends Component {
                             borderRight: "1px solid #0C5F93",
                             borderBottom: '1px solid #0C5F93',
                             width: "49.9%",
-                            height: "43%"
+                            height: "60%"
                         }}>
                             <p style={{
                                 fontSize: "16px",
@@ -319,42 +186,7 @@ class TaskStatistics extends Component {
                                 <TaskDoneCharts dateSet={dateSet}/>
                             </div>
                         </div>
-                        <div style={{float: "left", borderBottom: '1px solid #0C5F93', width: "49.9%", height: "43%"}}>
-                            <p style={{
-                                fontSize: "16px",
-                                color: "#fff",
-                                fontWeight: "bold",
-                                paddingLeft: "20px",
-                                margin: "20px 0"
-                            }}>任务状态</p>
-                            {/*添加图表*/}
-                            <div>
-                                <TaskStateCharts dateSet={dateSet}/>
-                            </div>
-                        </div>
-                    </div>
-                    {/*第二行*/}
-                    <div style={{background: "rgba(25,41,85,0.5)", marginBottom: "20px"}}>
-                        <div style={{
-                            float: "left",
-                            borderRight: "1px solid #0C5F93",
-                            borderBottom: '1px solid #0C5F93',
-                            width: "49.9%",
-                            height: "43%"
-                        }}>
-                            <p style={{
-                                fontSize: "16px",
-                                color: "#fff",
-                                fontWeight: "bold",
-                                paddingLeft: "20px",
-                                margin: "20px 0"
-                            }}>任务类别</p>
-                            {/*添加图表*/}
-                            <div>
-                                <TaskTypeCharts dateSet={dateSet}/>
-                            </div>
-                        </div>
-                        <div style={{float: "left", borderBottom: '1px solid #0C5F93', width: "49.9%", height: "43%"}}>
+                        <div style={{float: "left", width: "49.9%", borderBottom: '1px solid #0C5F93', height: "60%"}}>
                             <p style={{
                                 fontSize: "16px",
                                 color: "#fff",
@@ -367,7 +199,6 @@ class TaskStatistics extends Component {
                                 <TaskCycleCharts dateSet={dateSet}/>
                             </div>
                         </div>
-                        <div style={clear}></div>
                     </div>
                 </div>
 
@@ -382,53 +213,26 @@ class TaskDoneCharts extends Component {
         var myDate = new Date();
         let NowYEAR = myDate.getFullYear();
         let creds = {
-            entityOrField: true,
-            pd: {
-                beginTime: NowYEAR + '-01' + '-01',
-                endTime: NowYEAR + '-12' + '-31',
-            },
+            startTime: NowYEAR + '-01' + '-01',
+            endTime: NowYEAR + '-12' + '-31',
         }
-        // store.dispatch(postLiveChartsData(creds));
+        store.dispatch(getSubtaskListGroupByType(creds));
     }
-    //组件props发生变化，更新state
-    // componentWillReceiveProps(nextProps) {
-    //     //下一个类型
-    //     let isTrue = Compare(this.props.dateSet, nextProps.dateSet);
-    //     if (isTrue === false) {
-    //         let creds = {
-    //             currentPage: 1,
-    //             entityOrField: true,
-    //             pd: {
-    //                 beginTime: nextProps.dateSet.beginTimeSet,
-    //                 endTime: nextProps.dateSet.endTimeSet,
-    //             },
-    //             showCount: constants.pageSize
-    //         }
-    //         store.dispatch(postLiveChartsData(creds));
-    //     }
-    // }
 
     render() {
-        // let liveChartsList = store.getState().ReportForms.data.liveChartsList.result.list;
-        let liveChartsList = [{name: "超期", value: 12}, {name: "已办", value: 26}, {name: "待办", value: 5}];
-        // let isFetching = store.getState().ReportForms.data.liveChartsList.isFetching;
-        let isFetching = false;
+        const ToskChartsList = store.getState().ReportForms.data.getSubtaskListGroup.result.list;
+        let ToskChartsLists = [];
+        for(let i in ToskChartsList){
+            if(i!=='remove'){
+                ToskChartsLists.push({name:ToskChartsList[i]. type == 0 ? '待办任务':(ToskChartsList[i]. type === 1 ? '已完成任务' : '超期任务'),value:ToskChartsList[i].count})
+            }
+        }
+        let isFetching = store.getState().ReportForms.data.getSubtaskListGroup.isFetching;
         var liveOption = {
-            // title : {
-            //     text: '某站点用户访问来源',
-            //     subtext: '纯属虚构',
-            //     x:'center'
-            // },
             tooltip: {
                 trigger: 'item',
                 formatter: "{a} <br/>{b} : {c} ({d}%)"
             },
-            // legend: {
-            //     orient: 'vertical',
-            //     left: 'left',
-            //     data: ['暂住人员','暂住关注人员','常住关注人员'],
-
-            // },
             color: ['#3dc7d1', '#00acee', '#f88a6f'],
             textStyle: {
                 color: "#fff"
@@ -455,7 +259,7 @@ class TaskDoneCharts extends Component {
                     }
                 },
 
-                data: liveChartsList,
+                data: ToskChartsLists,
                 itemStyle: {
                     emphasis: {
                         shadowBlur: 10,
@@ -480,251 +284,26 @@ class TaskDoneCharts extends Component {
         );
     }
 }
-//任务状态
-class TaskStateCharts extends Component {
-    componentDidMount() {
-        var myDate = new Date();
-        let NowYEAR = myDate.getFullYear();
-        let creds = {
-            entityOrField: true,
-            pd: {
-                beginTime: NowYEAR + '-01' + '-01',
-                endTime: NowYEAR + '-12' + '-31',
-            },
-        }
-        // store.dispatch(postSexChartsData(creds));
-    }
-    //组件props发生变化，更新state
-    // componentWillReceiveProps(nextProps) {
-    //     let isTrue = Compare(this.props.dateSet, nextProps.dateSet);
-    //     if (isTrue === false) {
-    //         let creds = {
-    //             currentPage: 1,
-    //             entityOrField: true,
-    //             pd: {
-    //                 beginTime: nextProps.dateSet.beginTimeSet,
-    //                 endTime: nextProps.dateSet.endTimeSet,
-    //             },
-    //             showCount: constants.pageSize
-    //         }
-    //         store.dispatch(postSexChartsData(creds));
-    //     }
-    // }
-    render() {
-        // let sexChartsList = store.getState().ReportForms.data.sexChartsList.result.list;
-        let sexChartsList = [{name: "启动", value: "75"}, {name: "关闭", value: "38"}];
-        // let isFetching = store.getState().ReportForms.data.sexChartsList.isFetching;
-        let isFetching = false;
-        let option = {
-            tooltip: {
-                trigger: 'item',
-                formatter: "{a} <br/>{b}: {c} ({d}%)"
-            },
-            legend: {
-                orient: 'horizontal',
-                left: 'center',
-                top: "bottom",
-                data: [{
-                    name: '启动',
-                    textStyle: {
-                        color: '#fff'
-                    }
-                }, {
-                    name: '关闭',
-                    textStyle: {
-                        color: '#fff'
-                    }
-                }]
-            },
-            color: ['#39a0ff', '#fad336'],
-            series: [{
-                name: '任务状态',
-                type: 'pie',
-                radius: ['55%', '70%'],
-                avoidLabelOverlap: false,
-
-                top: 'top',
-
-                label: {
-                    normal: {
-                        show: true,
-                        position: 'outside',
-                        formatter: '{b}\n{c}',
-                        textStyle: {
-                            color: "#fff"
-                        }
-                    },
-                    emphasis: {
-                        show: true,
-                        textStyle: {
-                            color: "#fff"
-                        }
-                    }
-                },
-                labelLine: {
-                    normal: {
-                        show: true,
-                    }
-                },
-                data: sexChartsList,
-            },
-
-            ]
-        };
-        return (
-            <div style={{position:"relative",height:"99%"}}>
-                {isFetching ===  true?
-                    <div style={{textAlign:"center",position:"absolute",left:"45%",top:"30%"}}>
-                        <Spin size="large" />
-                    </div>:
-                    <EchartsReact
-                        option={option}
-                        style={{height: '80%', width: '100%',}}
-                    />}
-            </div>
-        );
-    }
-}
-//任务类别
-class TaskTypeCharts extends Component {
-    componentDidMount() {
-        var myDate = new Date();
-        let NowYEAR = myDate.getFullYear();
-        let creds = {
-            entityOrField: true,
-            pd: {
-                beginTime: NowYEAR + '-01' + '-01',
-                endTime: NowYEAR + '-12' + '-31',
-            },
-        }
-        // store.dispatch(postSexChartsData(creds));
-    }
-    //组件props发生变化，更新state
-    // componentWillReceiveProps(nextProps) {
-    //     let isTrue = Compare(this.props.dateSet, nextProps.dateSet);
-    //     if (isTrue === false) {
-    //         let creds = {
-    //             currentPage: 1,
-    //             entityOrField: true,
-    //             pd: {
-    //                 beginTime: nextProps.dateSet.beginTimeSet,
-    //                 endTime: nextProps.dateSet.endTimeSet,
-    //             },
-    //             showCount: constants.pageSize
-    //         }
-    //         store.dispatch(postSexChartsData(creds));
-    //     }
-    // }
-    render() {
-        // let sexChartsList = store.getState().ReportForms.data.sexChartsList.result.list;
-        let sexChartsList = [{name: "周期任务", value: "75"}, {name: "一次性任务", value: "38"}];
-        // let isFetching = store.getState().ReportForms.data.sexChartsList.isFetching;
-        let isFetching = false;
-        let option = {
-            tooltip: {
-                trigger: 'item',
-                formatter: "{a} <br/>{b}: {c} ({d}%)"
-            },
-            legend: {
-                orient: 'horizontal',
-                left: 'center',
-                top: "bottom",
-                data: [{
-                    name: '周期任务',
-                    textStyle: {
-                        color: '#fff'
-                    }
-                }, {
-                    name: '一次性任务',
-                    textStyle: {
-                        color: '#fff'
-                    }
-                }]
-            },
-            color: ['#39a0ff', '#fad336'],
-            series: [{
-                name: '任务类别',
-                type: 'pie',
-                radius: ['55%', '70%'],
-                avoidLabelOverlap: false,
-
-                top: 'top',
-
-                label: {
-                    normal: {
-                        show: true,
-                        position: 'outside',
-                        formatter: '{b}\n{c}',
-                        textStyle: {
-                            color: "#fff"
-                        }
-                    },
-                    emphasis: {
-                        show: true,
-                        textStyle: {
-                            color: "#fff"
-                        }
-                    }
-                },
-                labelLine: {
-                    normal: {
-                        show: true,
-                    }
-                },
-                data: sexChartsList,
-            },
-
-            ]
-        };
-        return (
-            <div style={{position:"relative",height:"99%"}}>
-                {isFetching ===  true?
-                    <div style={{textAlign:"center",position:"absolute",left:"45%",top:"30%"}}>
-                        <Spin size="large" />
-                    </div>:
-                    <EchartsReact
-                        option={option}
-                        style={{height: '80%', width: '100%',}}
-                    />}
-            </div>
-        );
-    }
-}
 //任务周期
 class TaskCycleCharts extends Component {
     componentDidMount() {
         var myDate = new Date();
         let NowYEAR = myDate.getFullYear();
         let creds = {
-            entityOrField: true,
-            pd: {
-                beginTime: NowYEAR + '-01' + '-01',
-                endTime: NowYEAR + '-12' + '-31',
-            },
+            startTime: NowYEAR + '-01' + '-01',
+            endTime: NowYEAR + '-12' + '-31',
         }
-        // store.dispatch(postSexChartsData(creds));
+        store.dispatch(getSubtaskListGroupByCycle(creds));
     }
-    //组件props发生变化，更新state
-    // componentWillReceiveProps(nextProps) {
-    //     let isTrue = Compare(this.props.dateSet, nextProps.dateSet);
-    //     if (isTrue === false) {
-    //         let creds = {
-    //             currentPage: 1,
-    //             entityOrField: true,
-    //             pd: {
-    //                 beginTime: nextProps.dateSet.beginTimeSet,
-    //                 endTime: nextProps.dateSet.endTimeSet,
-    //             },
-    //             showCount: constants.pageSize
-    //         }
-    //         store.dispatch(postSexChartsData(creds));
-    //     }
-    // }
     render() {
-        // let sexChartsList = store.getState().ReportForms.data.sexChartsList.result.list;
-        let sexChartsList = [{name: "按天任务", value: "75"}, {name: "按周任务", value: "38"}];
-        // let isFetching = store.getState().ReportForms.data.sexChartsList.isFetching;
-        let isFetching = false;
+        let List = store.getState().ReportForms.data.getSubtaskListGroupByCycle.result.list;
+        let TostCycleChartsList = [];
+        for(let i in List){
+            if(i!=='remove'){
+                TostCycleChartsList.push({name:List[i].cycle == 0 ? '每天':(List[i].cycle == 1 ? '每周' : '每月'),value:List[i].count})
+            }
+        }
+        let isFetching = store.getState().ReportForms.data.getSubtaskListGroupByCycle.isFetching;
         let option = {
             tooltip: {
                 trigger: 'item',
@@ -746,7 +325,7 @@ class TaskCycleCharts extends Component {
                     }
                 }]
             },
-            color: ['#39a0ff', '#fad336'],
+            color: ['#3dc7d1', '#00acee', '#f88a6f', '#fad336'],
             series: [{
                 name: '任务周期',
                 type: 'pie',
@@ -776,7 +355,7 @@ class TaskCycleCharts extends Component {
                         show: true,
                     }
                 },
-                data: sexChartsList,
+                data: TostCycleChartsList,
             },
 
             ]
@@ -797,7 +376,7 @@ class TaskCycleCharts extends Component {
 }
 const sliderdyHeader = {
     borderBottom: "1px solid #0C5F93",
-    padding: "18px 10px",
+    padding: "18px 10px 2px",
     overflow: "hidden"
 }
 const labelStyle2 = {

@@ -49,8 +49,9 @@ const initialState = {
         getControlPersonListById: {
             reason: 1,
             result: {
+                list:[],
                 data: {
-                    custom_filed_value:{value:[]}
+                    custom_filed_value:[]
                 }
             }
         },
@@ -64,6 +65,21 @@ const initialState = {
             reason:"",
             result:{
                 path:""
+            }
+        },
+        TaskModelControlPerson:{
+            reason: {
+                "code": "",
+                "text": ""
+            },
+            result: {
+
+            }
+        },
+        getTaskModelList:{
+            reason: {},
+            result: {
+                list: [],
             }
         }
     },
@@ -170,8 +186,8 @@ const initialState = {
                 ]
             }
         ]
-    }
-
+    },
+    isFetching:false
 }
 
 
@@ -245,8 +261,12 @@ const ControlPersonnel =(state = initialState, action) =>{
                 }
             }
             return newState;
+        case 'List_Loading':
+            newState.isFetching = true;
+            return newState;
         case 'Control_Person_List':
             newState.data.ControlPersonList = action.data;
+            newState.isFetching = false;
             return newState;
         case 'Control_PersonList_By_Id':
             newState.data.getControlPersonListById = action.data;
@@ -266,6 +286,13 @@ const ControlPersonnel =(state = initialState, action) =>{
         case 'delCustomFiled_succeed':
             newState.data.delCustomFiled = action.data;
             return newState;
+        case 'updateTaskModelControlPerson_succeed':
+            newState.data.TaskModelControlPerson = action.data;
+            return newState;
+        case 'getTaskModelList_succeed':
+            newState.data.getTaskModelList = action.data;
+            return newState;
+
         default:
             if(store !== undefined ){
                 return store.getState().ControlPersonnel;
