@@ -35,8 +35,8 @@ import {connect} from "react-redux";
 import {changeNavigation} from "./actions/actions";
 import PhoneDetails from "./components/shared/PhoneDetails";
 import {versionNumberQuote} from "./utils/Configuration";
-import moment from 'moment';
-moment.locale('zh-cn');
+import { LocaleProvider } from 'antd';
+import zhCN from 'antd/lib/locale-provider/zh_CN';
 
 export let store = createDevToolsStore(mainReducer);
 const history = syncHistoryWithStore(browserHistory, store);
@@ -67,6 +67,7 @@ class Index extends Component{
     render(){
         return (
             <div>
+                <LocaleProvider locale={zhCN}>
                 <Provider store={store}>
                     <Router history={history} onUpdate={() => window.scrollTo(0, 0)}>
                         <div>
@@ -94,6 +95,7 @@ class Index extends Component{
                         </div>
                     </Router>
                 </Provider>
+                </LocaleProvider>
                 <div style={{position:"fixed",bottom:5,left:30,color:"#fff",fontSize:12}}>版本号:&nbsp;&nbsp;{versionNumberQuote}</div>
             </div>
             

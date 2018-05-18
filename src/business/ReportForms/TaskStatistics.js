@@ -300,7 +300,7 @@ class TaskCycleCharts extends Component {
         let TostCycleChartsList = [];
         for(let i in List){
             if(i!=='remove'){
-                TostCycleChartsList.push({name:List[i].cycle == 0 ? '每天':(List[i].cycle == 1 ? '每周' : '每月'),value:List[i].count})
+                TostCycleChartsList.push({name:List[i].cycle == 0 ? '按天':(List[i].cycle == 1 ? '按周' : '按月'),value:List[i].count})
             }
         }
         let isFetching = store.getState().ReportForms.data.getSubtaskListGroupByCycle.isFetching;
