@@ -46,7 +46,7 @@ import {
     Pagination
 } from 'antd';
 import {
-    postTaskListHushiData, postChildrenTaskListHushiData, postTaskListHushiByIdData, postWeiguankongData, editTaskHushiData,postPersonListForTaskData
+    postTaskListHushiData, postChildrenTaskListHushiData, postTaskListHushiByIdData, postWeiguankongData, editTaskHushiData, postPersonListForTaskData
 } from "../../actions/TaskManagement";
 
 import moment from 'moment';
@@ -146,6 +146,7 @@ export class PatrolTask extends Component {
             expandKeys: [],
             childrenid: '',
             disabled: false,
+
         };
         this.pageChange = this.pageChange.bind(this);
     }
@@ -186,7 +187,7 @@ export class PatrolTask extends Component {
     // 编辑查看时 盘查对象
     personListFortaskQuery = (id) => {
         let creds = {
-                id: id,
+            id: id,
         }
         store.dispatch(postPersonListForTaskData(creds));
     }
@@ -199,7 +200,7 @@ export class PatrolTask extends Component {
             disabl: false
         });
         // 盘查对象项
-        
+
     }
     // 查看
     seeShowModal = (record) => {
@@ -352,7 +353,7 @@ export class PatrolTask extends Component {
         //
         // })
     }
-    serchChange = (name, category, enddate, begindate, cycle, personname,page) => {
+    serchChange = (name, category, enddate, begindate, cycle, personname, page) => {
         this.setState({
             name: name,
             category: category,
@@ -360,7 +361,7 @@ export class PatrolTask extends Component {
             begindate: begindate,
             cycle: cycle,
             personname: personname,
-            nowPage:page
+            nowPage: page
         });
     }
     pageChange(nowPage) {
@@ -466,7 +467,7 @@ export class PatrolTask extends Component {
                 id: record.id,
                 taskswitch: "1",
                 updateuser: user.user.name
-            } 
+            }
             let params = {
                 currentPage: this.state.nowPage,
                 pd: {
@@ -479,7 +480,7 @@ export class PatrolTask extends Component {
                 },
                 showCount: 10
             }
-            store.dispatch(editTaskHushiData(creds,params))
+            store.dispatch(editTaskHushiData(creds, params))
         } else {
             let creds = {
                 id: record.id,
@@ -498,7 +499,7 @@ export class PatrolTask extends Component {
                 },
                 showCount: 10
             }
-            store.dispatch(editTaskHushiData(creds,params))
+            store.dispatch(editTaskHushiData(creds, params))
         }
     }
     // 子任务名称查询变换函数
@@ -544,7 +545,7 @@ export class PatrolTask extends Component {
         console.log('childrenIsFetching', childrenIsFetching);
         //let data = this.state.date;
         let data = store.getState().TaskManagement.data.taskListHushi.result.list;
-        let total = store.getState().TaskManagement.data.taskListHushi.result.total;
+        let page = store.getState().TaskManagement.data.taskListHushi.result.page;
         let childrendata = store.getState().TaskManagement.data.childrentaskListHushi.result.list;
         let childrenTotal = store.getState().TaskManagement.data.childrentaskListHushi.result.total;
         let look = this.state.look
@@ -589,7 +590,7 @@ export class PatrolTask extends Component {
         // 根据未管控人员作为盘查对象 在添加的时候使用
         let weiguankongList = store.getState().TaskManagement.data.weiguankongList.result.list;
         let personListForTask = store.getState().TaskManagement.data.personListForTask.result.list;
-        console.log('personListForTask',personListForTask);
+        console.log('personListForTask', personListForTask);
         const checkObjOption = [];
         if (personListForTask) {
             for (let i = 0; i < personListForTask.length; i++) {
@@ -716,7 +717,37 @@ export class PatrolTask extends Component {
         }
         const treeList = [{ "children": [{ "label": "张三", "value": "4103000000001", "key": "4103000000001" }, { "label": "李四", "value": "4103000000002", "key": "4103000000002" }, { "label": "王二", "value": "4103000000003", "key": "4103000000003" }], "label": "全部", "value": "410000000000", "key": "410000000000" }];
         // 子任务列表的名称查询
+        const pagination = {
+            onChange: (page) => {
+                this.setState({
+                    nowPage: page,
+                });
+                let { name, category, enddate, begindate, cycle, personname } = this.state;
+                let creds = {
+                    currentPage: page,
+                    entityOrField: true,
+                    pd: {
+                        name: name,
+                        starttime: begindate,
+                        endtime: enddate,
+                        category: category,
+                        cycle: cycle,
+                        personname: personname,
+                    },
+                    showCount: 10
+                }
+                store.dispatch(postTaskListHushiData(creds));
+                this.setState({
+                    selectedRowsId: [],
+                    selectedRowKeys: [],
+                });
+            },
+            current: page.currentPage,
+            total: page.totalResult,
+            pageSize: page.showCount,
+            showQuickJumper: true,
 
+        }
 
         return (
             <div className="sliderWrap">
@@ -746,12 +777,12 @@ export class PatrolTask extends Component {
                             <Spin size="large" />
                         </div> :
                         <div style={{ padding: "0 15px" }}>
-                            <Table locale={{ emptyText: '暂无数据' }} columns={columns} dataSource={dataList} bordered pagination={false} />
+                            <Table locale={{ emptyText: '暂无数据' }} columns={columns} dataSource={dataList} bordered pagination={pagination} />
                         </div>}
                     <div className="clear"></div>
                 </div>
                 {/*分页*/}
-                <Pag pageSize={10} nowPage={nowPage} totalRecord={total} pageChange={this.pageChange} />
+                {/* <Pag pageSize={10} nowPage={nowPage} totalRecord={total} pageChange={this.pageChange} /> */}
                 <Modal width={800}
                     title="新增任务"
                     visible={this.state.visible}
@@ -1209,7 +1240,7 @@ const SearchArea = React.createClass({
             showCount: 10
         }
         store.dispatch(postTaskListHushiData(creds));
-        this.props.serchChange(name, category, enddate, begindate, cycle, personname,page);
+        this.props.serchChange(name, category, enddate, begindate, cycle, personname, page);
     },
     init: function () {
         let page = 1;
@@ -1235,7 +1266,7 @@ const SearchArea = React.createClass({
             showCount: 10
         }
         store.dispatch(postTaskListHushiData(params));
-        this.props.serchChange('', '', '', '', '', '',page);
+        this.props.serchChange('', '', '', '', '', '', page);
     },
     showModal: function () {
         this.setState({

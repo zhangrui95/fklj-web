@@ -26,7 +26,7 @@ const initialState = {
                 "text": ""
             },
             result: {
-                total: 0,
+                page: {},
                 list: [],
             }
         },
@@ -176,7 +176,7 @@ const TaskManagement = (state = initialState, action) => {
             }
         case 'TaskListHushi-data': //任务列表
             newState.data.taskListHushi.result.list = action.data.result.list;
-            newState.data.taskListHushi.result.total = action.data.result.page.totalResult;//page?reason
+            newState.data.taskListHushi.result.page = action.data.result.page;//page?reason
             newState.isFetching = false;
             return newState;
         case 'REQUEST_CHILDREN_TASK_LIST_HUSHI_DATA'://子任务列表
