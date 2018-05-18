@@ -63,18 +63,26 @@ export  class Control extends Component{
             newWords:[],
             selectedRowKeys: [],
             current: 1,
+            name: '',
+            cardId:'',
+            status:'',
+            Tosk:'',
+            begindate: '',
+            enddate: '',
         };
         let controlType = this.props.controlType;
     }
 
     componentDidMount() {
-        this.getList(this.props.controlType)
+        this.getList(this.props.controlType,1)
     }
 
     componentWillReceiveProps(nextProps) {
         if(this.props.controlType!==nextProps.controlType){
-            this.getList(nextProps.controlType)
+            this.getList(nextProps.controlType,1)
+            this.refs.SearchArea.init();
             this.setState({
+                current: 1,
                 selectedRowKeys:[],
                 selectedRowsId:[]
             })
@@ -120,30 +128,41 @@ export  class Control extends Component{
         this.child = ref
     }
 
-    getList(controlType){
-        let creds = '';
-        if(controlType==='GK_WGK'){
-            creds = {pd:{control_type:0}}
-        }else if(controlType==='GK_YGK'){
-            creds = {pd:{control_type:1}}
-        }else if(controlType==='GK_LKZRQ') {
-            creds = {pd:{control_type:2}}
-        }else if(controlType==='GK_SK'){
-            creds = {pd:{control_type:3}}
-        }else if(controlType==='LY_DR'){
-            creds = {pd:{source:'901006'}}
-        }else if(controlType==='LY_XZ'){
-            creds = {pd:{source:'901008'}}
-        }else{
-            creds = {}
+    getList(controlType,page){
+        let {name,cardId,status,Tosk, enddate, begindate} = this.state;
+        let creds = ''
+        if(controlType === 'GK_WGK'){
+            creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),taskname:Tosk, beginTime:begindate,endTime:enddate,control_type:0},showCount:10,currentPage:page}
+        }else if(controlType === 'GK_YGK'){
+            creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),taskname:Tosk, beginTime:begindate,endTime:enddate,control_type:1},showCount:10,currentPage:page}
+        }else if(controlType === 'GK_LKZRQ'){
+            creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),taskname:Tosk, beginTime:begindate,endTime:enddate,control_type:2},showCount:10,currentPage:page}
+        }else if(controlType === 'GK_SK'){
+            creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),taskname:Tosk, beginTime:begindate,endTime:enddate,control_type:3},showCount:10,currentPage:page}
+        } else if(controlType === 'LY_DR'){
+            creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),taskname:Tosk, beginTime:begindate,endTime:enddate,source:"901006"},showCount:10,currentPage:page}
+        } else if(controlType === 'LY_XZ'){
+            creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),taskname:Tosk, beginTime:begindate,endTime:enddate,source:"901008"},showCount:10,currentPage:page}
+        } else {
+            creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),taskname:Tosk, beginTime:begindate,endTime:enddate},showCount:10,currentPage:page}
         }
-        this.refs.SearchArea.init();
         store.dispatch(getControlPersonList(creds))
     }
-    changeSelection(selectedRowKeys){
+    changeSelection(selectedRowKeys,current){
         this.setState({
             selectedRowKeys,
-            selectedRowsId:selectedRowKeys
+            selectedRowsId:selectedRowKeys,
+            current
+        })
+    }
+    getSearch(name,cardId,status,Tosk,begindate,enddate){
+        this.setState({
+            name,
+            cardId,
+            status,
+            Tosk,
+            begindate,
+            enddate
         })
     }
     render() {
@@ -156,7 +175,8 @@ export  class Control extends Component{
         let list = store.getState().ControlPersonnel.data.ControlPersonList.result.list;
         for(let i in list){
             if(i !== 'remove'){
-                dataList.push({id:list[i].id,key: parseInt(i) + 1, serial: parseInt(i) + 1, cardId: list[i].idcard, label: list[i].name, sex: list[i].sex == '0' ? '男': '女' ,age:list[i].age, state:(list[i].address_type == '0' ? '常住' : (list[i].address_type == '1' ? '暂住' : '流动')), phone:list[i].phone,zrdw:list[i].taskname, updatetime: getLocalTime(list[i].updatetime),cycle:list[i].cycle == '0' ? '按天' : '按周',address:list[i].address,personFrom:list[i].source === '901006' ? '后台导入':'前端新增'})
+                let c = (parseInt(this.state.current) - 1) * 10 + parseInt(i) + 1;
+                dataList.push({id:list[i].id,key:list[i].id, serial: c, cardId: list[i].idcard, label: list[i].name, sex: list[i].sex == '0' ? '男': '女' ,age:list[i].age, state:(list[i].address_type == '0' ? '常住' : (list[i].address_type == '1' ? '暂住' : '流动')), phone:list[i].phone,zrdw:list[i].taskname, updatetime: getLocalTime(list[i].updatetime),cycle:list[i].cycle == '0' ? '按天' : '按周',address:list[i].address,personFrom:list[i].source === '901006' ? '后台导入':'前端新增'})
             }
         }
         const columns = [{
@@ -268,13 +288,13 @@ export  class Control extends Component{
                 this.setState({
                     selectedRowKeys:selectedRowKey
                 })
-                const ids = [];
-                for(var i=0;i<selectedRows.length;i++){
-                    var selectedRow = selectedRows[i];
-                    ids.push(selectedRow.id);
-                }
+                // const ids = [];
+                // for(var i=0;i<selectedRows.length;i++){
+                //     var selectedRow = selectedRows[i];
+                //     ids.push(selectedRow.id);
+                // }
                 this.setState({
-                    selectedRowsId:ids
+                    selectedRowsId:`${selectedRowKey}`.split(',')
                 });
             },
             getCheckboxProps: record => ({
@@ -334,7 +354,10 @@ export  class Control extends Component{
                 this.setState({
                     current: page,
                 });
-            }
+                this.getList(this.props.controlType, page)
+            },
+            total: store.getState().ControlPersonnel.data.ControlPersonList.result.page.totalResult,
+            current: this.state.current,
         }
         return(
             <div className="sliderWrap">
@@ -349,7 +372,8 @@ export  class Control extends Component{
                             createClick={this.handChangeModalDialogueShow}
                             addShowModal={this.addShowModal}
                             handleExport={this.handleExport}
-                            changeSelection={selectedRowKeys=> this.changeSelection(selectedRowKeys)}
+                            changeSelection={(selectedRowKeys,current)=> this.changeSelection(selectedRowKeys,current)}
+                            getSearch={(name,cardId,status,Tosk,begindate,enddate)=> this.getSearch(name,cardId,status,Tosk,begindate,enddate)}
                             serchChange={this.serchChange}
                             form={this.props.form}
                             controlType = {this.props.controlType}
@@ -665,22 +689,24 @@ const SearchArea = React.createClass({
         }else{
             let creds = ''
             if(controlType === 'GK_WGK'){
-                creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),taskname:Tosk, beginTime:begindate,endTime:enddate,control_type:0}}
+                creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),taskname:Tosk, beginTime:begindate,endTime:enddate,control_type:0},showCount:10,currentPage:1}
             }else if(controlType === 'GK_YGK'){
-                creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),taskname:Tosk, beginTime:begindate,endTime:enddate,control_type:1}}
+                creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),taskname:Tosk, beginTime:begindate,endTime:enddate,control_type:1},showCount:10,currentPage:1}
             }else if(controlType === 'GK_LKZRQ'){
-                creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),taskname:Tosk, beginTime:begindate,endTime:enddate,control_type:2}}
+                creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),taskname:Tosk, beginTime:begindate,endTime:enddate,control_type:2},showCount:10,currentPage:1}
             }else if(controlType === 'GK_SK'){
-                creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),taskname:Tosk, beginTime:begindate,endTime:enddate,control_type:3}}
+                creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),taskname:Tosk, beginTime:begindate,endTime:enddate,control_type:3},showCount:10,currentPage:1}
             } else if(controlType === 'LY_DR'){
-                creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),taskname:Tosk, beginTime:begindate,endTime:enddate,source:"901006"}}
+                creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),taskname:Tosk, beginTime:begindate,endTime:enddate,source:"901006"},showCount:10,currentPage:1}
             } else if(controlType === 'LY_XZ'){
-                creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),taskname:Tosk, beginTime:begindate,endTime:enddate,source:"901008"}}
+                creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),taskname:Tosk, beginTime:begindate,endTime:enddate,source:"901008"},showCount:10,currentPage:1}
             } else {
-                creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),taskname:Tosk, beginTime:begindate,endTime:enddate}}
+                creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),taskname:Tosk, beginTime:begindate,endTime:enddate},showCount:10,currentPage:1}
             }
             store.dispatch(getControlPersonList(creds))
         }
+        this.props.getSearch(name, cardId, status, Tosk, begindate, enddate);
+        this.props.changeSelection([],1);
     },
     // getList:function(controlType){
     // },
@@ -694,6 +720,22 @@ const SearchArea = React.createClass({
             begindate: '',
             enddate: '',
         });
+        this.props.getSearch('', '', '', '', '', '');
+    },
+    inits:function () {
+        this.setState({
+            name: '',
+            cardId:'',
+            nameClear:'',
+            status:'',
+            Tosk:'',
+            begindate: '',
+            enddate: '',
+        });
+        this.props.getSearch('', '', '', '', '', '');
+        setTimeout(()=>{
+            this.handleClick();
+        },200)
     },
     showModal: function() {
         this.setState({
@@ -704,8 +746,8 @@ const SearchArea = React.createClass({
         let id = this.state.wordId;
         store.dispatch(delCustomFiled({id:id}))
         setTimeout(()=>{
-            let delCode = store.getState().ControlPersonnel.data.delCustomFiled.reason.code;
-            if(delCode === '200'){
+            let delCode = store.getState().ControlPersonnel.data.delCustomFiled.reason;
+            if(delCode === null){
                 message.success(`提示：字段删除成功`);
                 this.getNewWords();
             }else{
@@ -800,8 +842,8 @@ const SearchArea = React.createClass({
         if(this.state.wordName!==""){
             store.dispatch(insertOrUpdateCustomFiled(creds));
             setTimeout(()=>{
-                let delCode = store.getState().ControlPersonnel.data.CustomFiled.reason.code;
-                if(delCode === '200'){
+                let delCode = store.getState().ControlPersonnel.data.CustomFiled.reason;
+                if(delCode === null){
                     message.success(`提示：自定义字段${this.state.zdyType === 'add' ? '新增':'修改'}成功`);
                     this.getNewWords();
                 }else{
@@ -870,7 +912,7 @@ const SearchArea = React.createClass({
     },
     importOnChange:function(info) {
         if(info.file.response.reason!==null){
-            if(info.file.response.reason.code === '200'){
+            if(info.file.response.reason.code === ""){
                 message.success(`提示：${info.file.response.reason.text}`);
             }else{
                 message.error(`提示：${info.file.response.reason.text}`,5);
@@ -880,23 +922,23 @@ const SearchArea = React.createClass({
             this.importEnterLoading();
         }
         if (info.file.status !== 'uploading') {
-            //console.log(info.file, info.fileList);
+
         }
         if (info.file.status === 'done') {
             let creds = '';
             let controlType = this.props.controlType
             if(controlType==='GK_WGK'){
-                creds = {pd:{control_type:0}}
+                creds = {pd:{control_type:0},showCount:10,currentPage:1}
             }else if(controlType==='GK_YGK'){
-                creds = {pd:{control_type:1}}
+                creds = {pd:{control_type:1},showCount:10,currentPage:1}
             }else if(controlType==='GK_LKZRQ') {
-                creds = {pd:{control_type:2}}
+                creds = {pd:{control_type:2},showCount:10,currentPage:1}
             }else if(controlType==='GK_SK'){
-                creds = {pd:{control_type:3}}
+                creds = {pd:{control_type:3},showCount:10,currentPage:1}
             }else if(controlType==='LY_DR'){
-                creds = {pd:{source:'901006'}}
+                creds = {pd:{source:'901006'},showCount:10,currentPage:1}
             }else if(controlType==='LY_XZ'){
-                creds = {pd:{source:'901008'}}
+                creds = {pd:{source:'901008'},showCount:10,currentPage:1}
             }else{
                 creds = {}
             }
@@ -904,8 +946,7 @@ const SearchArea = React.createClass({
             this.setState({
                 importLoading: false,
             });
-
-
+            this.props.changeSelection([],1);
         } else if (info.file.status === 'error') {
             message.error(`提示：${info.file.name} 上传失败`);
             this.setState({
@@ -943,6 +984,7 @@ const SearchArea = React.createClass({
         this.props.handleExport();
         setTimeout(()=>{
             this.hideModal();
+            this.props.changeSelection([],1);
         },100)
     },
     downloadModal:function () {
@@ -971,6 +1013,7 @@ const SearchArea = React.createClass({
             cred = {}
         }
         store.dispatch(getControlPersonList(cred))
+        this.props.changeSelection([],1);
     },
     choiceTask:function () {
         const user = JSON.parse(sessionStorage.getItem('user'));
@@ -980,8 +1023,8 @@ const SearchArea = React.createClass({
         }else{
             store.dispatch(updateTaskModelControlPerson(creds))
             setTimeout(()=>{
-                let delCode = store.getState().ControlPersonnel.data.TaskModelControlPerson.reason.code;
-                if(delCode === '200'){
+                let delCode = store.getState().ControlPersonnel.data.TaskModelControlPerson.reason;
+                if(delCode === null){
                     message.success(`提示：${this.state.ModalTitle}成功`);
                 }else{
                     message.error(`提示：${store.getState().ControlPersonnel.data.TaskModelControlPerson.reason.text}`);
@@ -989,7 +1032,7 @@ const SearchArea = React.createClass({
             },200)
             setTimeout(()=>{
                 this.getNewsList();
-                this.props.changeSelection([]);
+                this.props.changeSelection([],1);
             },200)
             this.setState({
                 addModal:false
@@ -1109,12 +1152,12 @@ const SearchArea = React.createClass({
         }
         const ToskSearch = (
             controlType==='GK_WGK' ?
-            <span></span>:
-            <span>
+                <span></span>:
+                <span>
                 <label htmlFor="" className="font14">隶属任务：</label>
                 <Input style={{width:'130px',marginRight:"10px"}} type="text"  id='name' placeholder='请输入隶属任务'  value={Tosk}  onChange={this.ToskChange}/>
             </span>
-    )
+        )
         return (
             <div className="marLeft40 fl z_searchDiv">
                 <label htmlFor="" className="font14">身份证号：</label>
@@ -1134,7 +1177,7 @@ const SearchArea = React.createClass({
                 <span className="font14" style={{margin:"0 10px 0 0"}}>至</span>
                 <DatePicker format={dateFormat} allowClear={false} style={{marginRight:"10px",width:'130px'}} placeholder="请选择日期"  value={endDateValue} onChange={this.handleEndDeteClick}/>
                 <ShallowBlueBtn width="80px" text="查询" margin="0 10px 0 0" onClick={this.handleClick} />
-                <ShallowBlueBtn width="80px" text="重置" margin="0 10px 0 0" onClick={this.init} />
+                <ShallowBlueBtn width="80px" text="重置" margin="0 10px 0 0" onClick={this.inits} />
                 <div>
                     {btns}
                     <Modal style={{top:"20%"}}
