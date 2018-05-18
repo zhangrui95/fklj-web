@@ -47,7 +47,7 @@ const initialState = {
                 "text": ""
             },
             result: {
-                total: 0,
+                page: {},
                 list: [],
             }
         },
@@ -195,7 +195,7 @@ const TaskManagement = (state = initialState, action) => {
             }
         case 'Three_TaskListHushi-data':
             newState.data.threetaskListHushi.result.list = action.data.result.list;
-            newState.data.threetaskListHushi.result.total = action.data.result.page.totalResult;//page?reason
+            newState.data.threetaskListHushi.result.page = action.data.result.page;//page?reason
             newState.isFetching = false;
             return newState;
         // case 'REQUEST_TASK_LIST_HUSHI_BYID_DATA'://根据id获取任务模板信息

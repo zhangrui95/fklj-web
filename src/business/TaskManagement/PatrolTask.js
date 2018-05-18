@@ -737,10 +737,6 @@ export class PatrolTask extends Component {
                     showCount: 10
                 }
                 store.dispatch(postTaskListHushiData(creds));
-                this.setState({
-                    selectedRowsId: [],
-                    selectedRowKeys: [],
-                });
             },
             current: page.currentPage,
             total: page.totalResult,

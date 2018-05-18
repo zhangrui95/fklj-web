@@ -286,6 +286,7 @@ export class DoneTask extends Component {
         let isFetching = store.getState().TaskManagement.isFetching;
         let recordNumber = parseInt((nowPage - 1) * 10);
         let data = store.getState().TaskManagement.data.threetaskListHushi.result.list;
+        let page = store.getState().TaskManagement.data.threetaskListHushi.result.page;
         let byidObj = store.getState().TaskManagement.data.threetaskListHushiById.result;
         console.log('byidObj', byidObj);
         let dataList = [];
@@ -416,7 +417,34 @@ export class DoneTask extends Component {
         }
         const treeList = [{ "children": [{ "children": [{ "label": "(卡点)测试", "value": "ec02ed04ad6147b7a421ab912a7cf6b6", "key": "ec02ed04ad6147b7a421ab912a7cf6b6" }], "label": "洛阳市公安局", "value": "410300000000", "key": "410300000000" }, { "label": "(卡点)01018", "value": "9ec30a5f4e554bc78f13fea61a61452c", "key": "9ec30a5f4e554bc78f13fea61a61452c" }, { "label": "(卡点)1221卡点", "value": "713141c655624b86acae70b4a674d8a7", "key": "713141c655624b86acae70b4a674d8a7" }, { "label": "(卡点)001", "value": "8cd3a75ab7fa49979f67eef4d59a9cad", "key": "8cd3a75ab7fa49979f67eef4d59a9cad" }, { "label": "(卡点)M78卡点", "value": "f24c58a0aadb42ca826c02c26f74a461", "key": "f24c58a0aadb42ca826c02c26f74a461" }, { "label": "(卡点)002", "value": "aad06faa7acf49df9504a6e97ae7946f", "key": "aad06faa7acf49df9504a6e97ae7946f" }], "label": "河南省公安厅", "value": "410000000000", "key": "410000000000" }]
         const plainOptions = ['一级', '二级', '三级'];
+        const pagination = {
+            onChange: (page) => {
+                this.setState({
+                    nowPage: page,
+                });
+                let { name, category, enddate, begindate, cycle, personname } = this.state;
+                let creds = {
+                    currentPage: page,
+                    entityOrField: true,
+                    pd: {
+                        name: name,
+                        starttime: begindate,
+                        endtime: enddate,
+                        category: category,
+                        cycle: cycle,
+                        personname: personname,
+                        type: '1'
+                    },
+                    showCount: 10
+                }
+                store.dispatch(postThreeTaskListHushiData(creds));
+            },
+            current: page.currentPage,
+            total: page.totalResult,
+            pageSize: page.showCount,
+            showQuickJumper: true,
 
+        }
         return (
             <div className="sliderWrap">
                 <div className="sliderItemDiv">
@@ -442,12 +470,12 @@ export class DoneTask extends Component {
                             <Spin size="large" />
                         </div> :
                         <div style={{ padding: "0 15px" }}>
-                            <Table locale={{ emptyText: '暂无数据' }} columns={columns} dataSource={dataList} bordered pagination={false} />
+                            <Table locale={{ emptyText: '暂无数据' }} columns={columns} dataSource={dataList} bordered pagination={pagination} />
                         </div>}
                     <div className="clear"></div>
                 </div>
                 {/*分页*/}
-                <Pag pageSize={10} nowPage={nowPage} totalRecord={10} pageChange={this.pageChange} />
+                {/* <Pag pageSize={10} nowPage={nowPage} totalRecord={10} pageChange={this.pageChange} /> */}
                 <Modal width={800}
                     title="任务详情"
                     visible={this.state.visible}
@@ -596,7 +624,7 @@ export class DoneTask extends Component {
                             </Col>
                         </Row>
                         <Row>
-                            
+
                         </Row>
                     </Form>
                 </Modal>
