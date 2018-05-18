@@ -42,10 +42,11 @@ import {
     Divider,
     Popconfirm,
     Radio,
-    Tag
+    Tag,
+    Pagination
 } from 'antd';
 import {
-    postTaskListHushiData, postChildrenTaskListHushiData,postTaskListHushiByIdData
+    postTaskListHushiData, postChildrenTaskListHushiData, postTaskListHushiByIdData, postWeiguankongData, editTaskHushiData,postPersonListForTaskData
 } from "../../actions/TaskManagement";
 
 import moment from 'moment';
@@ -105,14 +106,20 @@ export class PatrolTask extends Component {
         super(props);
         this.state = {
             nowPage: 1,
+            childrennowpage: 1,
             ModalDialogueShow: 'none',
             ModalDialogueType: 'add',
             lineId: '',
             highRiskLine: null,
             selectedRowsId: [],
             name: '',
-            begindate: '',
+            category: '',
             enddate: '',
+            begindate: '',
+            taskswitch: '',
+            cycle: '',
+            personname: '',
+            childrenname: '',
             record: null,
             pagination: pagination,
             loading: false,
@@ -137,8 +144,8 @@ export class PatrolTask extends Component {
             // ],
             lookIndex: -1,
             expandKeys: [],
-            id: '',
-            disabled:false,
+            childrenid: '',
+            disabled: false,
         };
         this.pageChange = this.pageChange.bind(this);
     }
@@ -161,11 +168,27 @@ export class PatrolTask extends Component {
 
     }
     // 根据id查询任务信息
-    byidtaskquery= (id)=>{
-        let creds={
-            id:id,
+    byidtaskquery = (id) => {
+        let creds = {
+            id: id,
         }
         store.dispatch(postTaskListHushiByIdData(creds));
+    }
+    // 未管控人员作为盘查对象在添加的时候使用
+    weiguankongQuery = () => {
+        let creds = {
+            pd: {
+                control_type: "0",
+            }
+        }
+        store.dispatch(postWeiguankongData(creds));
+    }
+    // 编辑查看时 盘查对象
+    personListFortaskQuery = (id) => {
+        let creds = {
+                id: id,
+        }
+        store.dispatch(postPersonListForTaskData(creds));
     }
     editShowModal = (record) => {
         this.setState({
@@ -173,8 +196,10 @@ export class PatrolTask extends Component {
             personInfo: record,
             modalType: 'edit',
             RadioValue: '',
-            disabl:false
+            disabl: false
         });
+        // 盘查对象项
+        
     }
     // 查看
     seeShowModal = (record) => {
@@ -183,26 +208,33 @@ export class PatrolTask extends Component {
             personInfo: record,
             modalType: 'edit',
             RadioValue: '',
-            disabled:true
+            disabled: true
         });
         this.byidtaskquery(record.id);
+        // this.weiguankongQuery();
+        this.personListFortaskQuery(record.id);
     }
     addShowModal = (record) => {
         this.setState({
             visible: true,
             modalType: 'add',
-            disabl:false
+            disabl: false
         });
     }
     // 点击展示子任务列表
     showChildren = (id) => {
-        console.log('id**',id);
+        console.log('id**', id);
         this.setState({
             childrenModal: true,
-            id: id
+            childrenid: id
         });
         let creds = {
-            id: id
+            currentPage: 1,
+            pd: {
+                id: id
+            },
+            showCount: 10
+
         }
         store.dispatch(postChildrenTaskListHushiData(creds));
     }
@@ -211,7 +243,8 @@ export class PatrolTask extends Component {
             visible: false,
             updateVisible: false,
             childrenModal: false,
-            modalKey: this.state.modalKey + 1
+            modalKey: this.state.modalKey + 1,
+            childrenid: ''
         });
     }
     handleDelete = () => {
@@ -319,22 +352,34 @@ export class PatrolTask extends Component {
         //
         // })
     }
+    serchChange = (name, category, enddate, begindate, cycle, personname,page) => {
+        this.setState({
+            name: name,
+            category: category,
+            enddate: enddate,
+            begindate: begindate,
+            cycle: cycle,
+            personname: personname,
+            nowPage:page
+        });
+    }
     pageChange(nowPage) {
         this.state = Object.assign({}, this.state, { nowPage: nowPage });
-        // let creds = {
-        //     currentPage:nowPage,
-        //     entityOrField:true,
-        //     pd:{
-        //         beginTime:this.state.beginDate ,
-        //         endTime:this.state.endDate,
-        //         name:this.state.name,
-        //         unit:this.state.unit,
-        //         task_stauts:this.state.status,
-        //         task_type:'113003',
-        //     },
-        //     showCount: constants.pageSize
-        // }
-        // store.dispatch(fetchPatrolTaskData(creds));
+        let { name, category, enddate, begindate, cycle, personname } = this.state;
+        let creds = {
+            currentPage: nowPage,
+            entityOrField: true,
+            pd: {
+                name: name,
+                starttime: begindate,
+                endtime: enddate,
+                category: category,
+                cycle: cycle,
+                personname: personname,
+            },
+            showCount: 10
+        }
+        store.dispatch(postTaskListHushiData(creds));
         this.setState({
             selectedRowsId: [],
             selectedRowKeys: [],
@@ -370,6 +415,7 @@ export class PatrolTask extends Component {
         }
     }
     RowsChange = (e) => {
+        console.log('look', e);
         this.setState({
             look: e,
         });
@@ -393,13 +439,114 @@ export class PatrolTask extends Component {
             })
         }
     }
+    expandedRowRender = (record) => {
+        console.log('record', record);
+        const list = [];
+        if (record.control_person) {
+            let dataList = JSON.parse(record.control_person.value);
+            console.log('dataList', dataList);
+            for (let i = 0; i < dataList.length; i++) {
+                let item = dataList[i];
+                list.push(
+                    <Tag color="#2db7f5" style={{ marginBottom: '8px' }}>{item.name + " " + item.idcard}</Tag>
+                );
+            }
+        }
+        return (
+            <div style={{ padding: '8px', paddingBottom: '0px' }}>
+                {list}
+            </div>
+        )
+    }
+    // 任务的启动或关闭
+    isOpen = (record) => {
+        let user = JSON.parse(sessionStorage.getItem('user'));
+        if (record.taskswitch === 0) {//启动任务
+            let creds = {
+                id: record.id,
+                taskswitch: "1",
+                updateuser: user.user.name
+            } 
+            let params = {
+                currentPage: this.state.nowPage,
+                pd: {
+                    category: '',
+                    cycle: '',
+                    name: "",
+                    personname: '',
+                    starttime: '',
+                    endtime: '',
+                },
+                showCount: 10
+            }
+            store.dispatch(editTaskHushiData(creds,params))
+        } else {
+            let creds = {
+                id: record.id,
+                taskswitch: "0",
+                updateuser: user.user.name
+            }
+            let params = {
+                currentPage: this.state.nowPage,
+                pd: {
+                    category: '',
+                    cycle: '',
+                    name: "",
+                    personname: '',
+                    starttime: '',
+                    endtime: '',
+                },
+                showCount: 10
+            }
+            store.dispatch(editTaskHushiData(creds,params))
+        }
+    }
+    // 子任务名称查询变换函数
+    childrennameChange = (e) => {
+        this.setState({
+            childrenname: e.target.value
+        });
+    }
+    // 子任务列表点击查询按钮
+    handleChidernQuery = () => {
+        let creds = {
+            currentPage: 1,
+            pd: {
+                id: this.state.childrenid,
+                name: this.state.childrenname
+            },
+            showCount: 10
+
+        }
+        store.dispatch(postChildrenTaskListHushiData(creds));
+    }
+    // 子任务重置
+    handleChidernClear = () => {
+        this.setState({
+            childrenname: ''
+        });
+        let creds = {
+            currentPage: 1,
+            pd: {
+                id: this.state.childrenid,
+                name: ''
+            },
+            showCount: 10
+
+        }
+        store.dispatch(postChildrenTaskListHushiData(creds));
+    }
     render() {
         const { getFieldDecorator } = this.props.form;
         let nowPage = this.state.nowPage;
         let isFetching = store.getState().TaskManagement.isFetching;
+        let childrenIsFetching = store.getState().TaskManagement.data.childrentaskListHushi.childrenIsFetching;
+        console.log('childrenIsFetching', childrenIsFetching);
         //let data = this.state.date;
         let data = store.getState().TaskManagement.data.taskListHushi.result.list;
+        let total = store.getState().TaskManagement.data.taskListHushi.result.total;
         let childrendata = store.getState().TaskManagement.data.childrentaskListHushi.result.list;
+        let childrenTotal = store.getState().TaskManagement.data.childrentaskListHushi.result.total;
         let look = this.state.look
         let recordNumber = parseInt((nowPage - 1) * 10);
         let dataList = [];
@@ -411,58 +558,83 @@ export class PatrolTask extends Component {
                 name: item.name,
                 category: item.category,
                 cycle: item.cycle,
-                starttime: getMyDate(item.starttime/1000),
-                endtime: getMyDate(item.endtime/1000),
+                starttime: getMyDate(item.starttime / 1000),
+                endtime: getMyDate(item.endtime / 1000),
                 createuser: item.createuser,
                 taskswitch: item.taskswitch,
                 count: item.count,
-                id:item.id,
+                id: item.id,
             });
         }
         let childrenDataList = [];
-        for (let i = 0; i < childrendata.length; i++) {
-            let item = childrendata[i];
-            let childrenSerial = recordNumber + i + 1;
-            childrenDataList.push({
-                childrenSerial: childrenSerial,
-                name: item.name,
-                createtime: getMyDate(item.createtime/1000),
-                type: item.type,
-                id:item.id,
-            });
+        let recordNumberChildren = parseInt((this.state.childrennowpage - 1) * 10);
+        if (childrendata) {
+            for (let i = 0; i < childrendata.length; i++) {
+                let item = childrendata[i];
+                let childrenSerial = recordNumberChildren + i + 1;
+                childrenDataList.push({
+                    childrenSerial: childrenSerial,
+                    name: item.name,
+                    createtime: getMyDate(item.createtime / 1000),
+                    type: item.type,
+                    id: item.id,
+                    control_person: item.control_person,
+                });
+            }
         }
+
         // 根据id查询任务信息
         let ogjByid = store.getState().TaskManagement.data.taskListHushiById.result;
-        console.log('ogjByid',ogjByid);
+        console.log('ogjByid', ogjByid);
+        // 根据未管控人员作为盘查对象 在添加的时候使用
+        let weiguankongList = store.getState().TaskManagement.data.weiguankongList.result.list;
+        let personListForTask = store.getState().TaskManagement.data.personListForTask.result.list;
+        console.log('personListForTask',personListForTask);
+        const checkObjOption = [];
+        if (personListForTask) {
+            for (let i = 0; i < personListForTask.length; i++) {
+                let item = personListForTask[i];
+                checkObjOption.push(
+                    <Option key={item.id} value={item.id} title={item.name + " " + item.idcard}>{item.name + " " + item.idcard}</Option>
+                );
+            }
+        }
+        const selectOption = [];
+        if (ogjByid) {
+            if (ogjByid.personList) {
+                if (ogjByid.personList.length > 0) {
+                    for (let i = 0; i < ogjByid.personList.length; i++) {
+                        let item = ogjByid.personList[i];
+                        selectOption.push(
+                            item.id
+                        );
+                    }
+                }
+
+            }
+        }
+        console.log('selectOption', selectOption);
+
         // 子任务列表
         const colu = [{
             title: '序号',
             dataIndex: 'childrenSerial',
-            width: 80,
         }, {
             title: '任务名称',
             dataIndex: 'name',
         }, {
             title: '任务开始时间',
             dataIndex: 'createtime',
-            width: 180,
         }, {
             title: '任务状态',
             key: 'type',
             render: (text, record) => (
-                <span>{record.type === '0' ? '待办任务' : record.type === '1' ? '已完成任务' : '超期任务'}</span>
-            ),
-        }, {
-            title: '查看对象',
-            key: 'action',
-            render: (text, record, index) => (
-                <span style={{ cursor: 'pointer' }} onClick={() => this.getLook(index)}>{index == this.state.lookIndex ? '收起' : '查看'}</span>
+                <span>{record.type == 0 ? '待办任务' : record.type === 1 ? '已完成任务' : '超期任务'}</span>
             ),
         }]
         const columns = [{
             title: '序号',
             dataIndex: 'serial',
-            width: 80,
         }, {
             title: '任务名称',
             dataIndex: 'name',
@@ -470,31 +642,28 @@ export class PatrolTask extends Component {
             title: '任务类别',
             dataIndex: 'category',
             render: (text, record) => (
-                <span>{record.category === '0' ? '周期' : '一次性'}</span>
+                <span>{record.category == 0 ? '周期' : '一次性'}</span>
             ),
         }, {
             title: '任务周期',
             dataIndex: 'cycle',
             render: (text, record) => (
-                <span>{record.cycle === '0' ? '每天' : record.cycle === '1' ? '每周' : '每月'}</span>
+                <span>{record.cycle === 0 ? '按天' : record.cycle === 1 ? '按周' : '按月'}</span>
             ),
         }, {
             title: '任务开始时间',
             dataIndex: 'starttime',
-            width: 180,
         }, {
             title: '任务结束时间',
             dataIndex: 'endtime',
-            width: 180,
         }, {
             title: '任务创建者',
             dataIndex: 'createuser',
-            width: 180,
         }, {
             title: '任务状态',
             dataIndex: 'taskswitch',
             render: (text, record) => (
-                <span>{record.taskswitch === '0' ? '关闭' : '启动'}</span>
+                <span>{record.taskswitch == 0 ? '关闭' : '启动'}</span>
             ),
         }, {
             title: '盘查数量',
@@ -504,8 +673,8 @@ export class PatrolTask extends Component {
             key: 'action',
             render: (text, record) => (
                 <span>
-                    <Popconfirm title={record.switch === '0' ? '确定关闭该任务？' : '确定启动该任务？'} okText="确定" cancelText="取消">
-                        <span style={{ cursor: 'pointer' }}>{record.switch === '0' ? '关闭' : '启动'}</span>
+                    <Popconfirm title={record.taskswitch === 0 ? '确定启动该任务？' : '确定关闭该任务？'} okText="确定" cancelText="取消" onConfirm={() => this.isOpen(record)}>
+                        <span style={{ cursor: 'pointer' }}>{record.taskswitch === 1 ? '关闭' : '启动'}</span>
                     </Popconfirm>
                     <Divider type="vertical" />
                     <span onClick={(e) => this.seeShowModal(record)} style={{ cursor: 'pointer' }}>查看</span>
@@ -546,6 +715,8 @@ export class PatrolTask extends Component {
             return;
         }
         const treeList = [{ "children": [{ "label": "张三", "value": "4103000000001", "key": "4103000000001" }, { "label": "李四", "value": "4103000000002", "key": "4103000000002" }, { "label": "王二", "value": "4103000000003", "key": "4103000000003" }], "label": "全部", "value": "410000000000", "key": "410000000000" }];
+        // 子任务列表的名称查询
+
 
         return (
             <div className="sliderWrap">
@@ -561,6 +732,8 @@ export class PatrolTask extends Component {
                             addShowModal={this.addShowModal}
                             handleDelete={this.handleDelete}
                             serchChange={this.serchChange}
+                            checkObjOption={checkObjOption}
+                            nowPage={this.state.nowPage}
                         />
 
                         <div className="clear"></div>
@@ -578,7 +751,7 @@ export class PatrolTask extends Component {
                     <div className="clear"></div>
                 </div>
                 {/*分页*/}
-                <Pag pageSize={10} nowPage={nowPage} totalRecord={10} pageChange={this.pageChange} />
+                <Pag pageSize={10} nowPage={nowPage} totalRecord={total} pageChange={this.pageChange} />
                 <Modal width={800}
                     title="新增任务"
                     visible={this.state.visible}
@@ -617,7 +790,7 @@ export class PatrolTask extends Component {
                                             required: true,
                                             message: '请选择任务开始时间!'
                                         }],
-                                        initialValue:  '',
+                                        initialValue: '',
                                     })(
                                         <DatePicker showTime placeholder="" format="YYYY-MM-DD HH:mm:ss" allowClear={false} style={{ width: '220px' }} />
                                     )}
@@ -633,7 +806,7 @@ export class PatrolTask extends Component {
                                             required: true,
                                             message: '请选择任务结束时间!'
                                         }],
-                                        initialValue:  '',
+                                        initialValue: '',
                                     })(
                                         <DatePicker showTime placeholder="" format="YYYY-MM-DD HH:mm:ss" allowClear={false} style={{ width: '220px' }} />
                                     )}
@@ -668,7 +841,7 @@ export class PatrolTask extends Component {
                                             required: true,
                                             message: '请选择任务周期!'
                                         }],
-                                        initialValue:  '',
+                                        initialValue: '',
                                         validateFirst: true
                                     })(
                                         <Select onChange={this.onChange} >
@@ -690,7 +863,7 @@ export class PatrolTask extends Component {
                                     label="盘查对象"
                                 >
                                     {getFieldDecorator('personList', {
-                                        initialValue:  '',
+                                        initialValue: '',
                                         validateFirst: true
                                     })(
                                         <Input />
@@ -701,7 +874,7 @@ export class PatrolTask extends Component {
                                     label="隶属任务"
                                 >
                                     {getFieldDecorator('TaskCom', {
-                                        initialValue:  '',
+                                        initialValue: '',
                                         validateFirst: true
                                     })(
                                         <Input />
@@ -723,7 +896,7 @@ export class PatrolTask extends Component {
                                     label="备注"
                                 >
                                     {getFieldDecorator('TaskContent', {
-                                        initialValue:  '',
+                                        initialValue: '',
                                         validateFirst: true
                                     })(
                                         <TextArea rows={2} />
@@ -744,6 +917,7 @@ export class PatrolTask extends Component {
                     visible={this.state.updateVisible}
                     onCancel={this.handleCancel}
                     footer={null}
+                // key={this.state.modalKey}
                 >
                     <Form onSubmit={this.saveModel}>
                         <Row className="formItemLeft">
@@ -759,11 +933,11 @@ export class PatrolTask extends Component {
                                         }, {
                                             max: 20, message: '最多输入二十个字符!',
                                         }],
-                                        initialValue: this.state.modalType === 'edit' ? ogjByid.name : '',
+                                        initialValue: this.state.modalType === 'edit' ? ogjByid ? ogjByid.name : '' : '',
                                         validateFirst: true
                                     })(
-                                        this.state.disabled?
-                                        <Input disabled/>:<Input />
+                                        this.state.disabled ?
+                                            <Input disabled /> : <Input />
                                     )}
                                 </FormItem>
                             </Col>
@@ -777,9 +951,12 @@ export class PatrolTask extends Component {
                                             required: true,
                                             message: '请选择任务开始时间!'
                                         }],
-                                        initialValue: this.state.modalType === 'edit' ? moment(this.state.personInfo.starttime, 'YYYY-MM-DD HH:mm:ss') : '',
+                                        initialValue: this.state.modalType === 'edit' ? ogjByid ? moment(getMyDate(ogjByid.starttime / 1000), 'YYYY-MM-DD HH:mm:ss') : '' : '',
                                     })(
-                                        <DatePicker showTime placeholder="" format="YYYY-MM-DD HH:mm:ss" allowClear={false} style={{ width: '220px' }} />
+                                        this.state.disabled ?
+                                            <DatePicker showTime placeholder="" format="YYYY-MM-DD HH:mm:ss" allowClear={false} style={{ width: '220px' }} disabled />
+                                            :
+                                            <DatePicker showTime placeholder="" format="YYYY-MM-DD HH:mm:ss" allowClear={false} style={{ width: '220px' }} />
                                     )}
                                 </FormItem>
                             </Col>
@@ -793,9 +970,11 @@ export class PatrolTask extends Component {
                                             required: true,
                                             message: '请选择任务结束时间!'
                                         }],
-                                        initialValue: this.state.modalType === 'edit' ? moment(this.state.personInfo.endtime, 'YYYY-MM-DD HH:mm:ss') : '',
+                                        initialValue: this.state.modalType === 'edit' ? ogjByid ? moment(getMyDate(ogjByid.endtime / 1000), 'YYYY-MM-DD HH:mm:ss') : '' : '',
                                     })(
-                                        <DatePicker showTime placeholder="" format="YYYY-MM-DD HH:mm:ss" allowClear={false} style={{ width: '220px' }} />
+                                        this.state.disabled ?
+                                            <DatePicker showTime placeholder="" format="YYYY-MM-DD HH:mm:ss" allowClear={false} style={{ width: '220px' }} disabled /> :
+                                            <DatePicker showTime placeholder="" format="YYYY-MM-DD HH:mm:ss" allowClear={false} style={{ width: '220px' }} />
                                     )}
                                 </FormItem>
                             </Col>
@@ -809,12 +988,20 @@ export class PatrolTask extends Component {
                                             required: true,
                                             message: '请选择任务类别!'
                                         }],
-                                        initialValue: this.state.modalType === 'edit' ? this.state.personInfo.category : '',
+                                        initialValue: this.state.modalType === 'edit' ? ogjByid ? ogjByid.category : '' : '',
                                         validateFirst: true
                                     })(
-                                        <Select onChange={this.onChange} >
-                                            <Option value="循环任务">循环任务</Option>
-                                        </Select>
+                                        this.state.disabled ?
+                                            <Select onChange={this.onChange} disabled>
+                                                <Option value=''>全部</Option>
+                                                <Option value={0}>周期</Option>
+                                                <Option value={1}>一次性</Option>
+                                            </Select> :
+                                            <Select onChange={this.onChange} >
+                                                <Option value=''>全部</Option>
+                                                <Option value={0}>周期</Option>
+                                                <Option value={1}>一次性</Option>
+                                            </Select>
                                     )}
                                 </FormItem>
                             </Col>
@@ -828,13 +1015,22 @@ export class PatrolTask extends Component {
                                             required: true,
                                             message: '请选择任务周期!'
                                         }],
-                                        initialValue: this.state.modalType === 'edit' ? this.state.personInfo.cycle : '',
+                                        initialValue: this.state.modalType === 'edit' ? ogjByid ? ogjByid.cycle : '' : '',
                                         validateFirst: true
                                     })(
-                                        <Select onChange={this.onChange} >
-                                            <Option value="按周">按周</Option>
-                                            <Option value="按天">按天</Option>
-                                        </Select>
+                                        this.state.disabled ?
+                                            <Select onChange={this.onChange} disabled>
+                                                <Option value=''>全部</Option>
+                                                <Option value={0}>按天</Option>
+                                                <Option value={1}>按周</Option>
+                                                <Option value={2}>按月</Option>
+                                            </Select> :
+                                            <Select onChange={this.onChange}>
+                                                <Option value=''>全部</Option>
+                                                <Option value={0}>按天</Option>
+                                                <Option value={1}>按周</Option>
+                                                <Option value={2}>按月</Option>
+                                            </Select>
                                     )}
                                 </FormItem>
                             </Col>
@@ -848,12 +1044,12 @@ export class PatrolTask extends Component {
                                             required: true,
                                             message: '请选择任务创建者!'
                                         }],
-                                        initialValue: this.state.modalType === 'edit' ? this.state.personInfo.createuser : '',
+                                        initialValue: this.state.modalType === 'edit' ? ogjByid ? ogjByid.createuser : '' : '',
                                         validateFirst: true
                                     })(
-                                        <Select onChange={this.onChange} >
-                                            <Option value="循环任务">系统默认</Option>
-                                        </Select>
+                                        this.state.disabled ?
+                                            <Input disabled /> :
+                                            <Input />
                                     )}
                                 </FormItem>
                             </Col>
@@ -867,13 +1063,22 @@ export class PatrolTask extends Component {
                                             required: true,
                                             message: '请选择任务状态!'
                                         }],
-                                        initialValue: this.state.modalType === 'edit' ? this.state.personInfo.taskswitch : '',
+                                        initialValue: this.state.modalType === 'edit' ? ogjByid ? ogjByid.taskswitch : '' : '',
                                         validateFirst: true
                                     })(
-                                        <Select onChange={this.onChange} >
-                                            <Option value="0">启动</Option>
-                                            <Option value="1">关闭</Option>
-                                        </Select>
+                                        this.state.disabled ?
+                                            <Select disabled>
+                                                <Option value=''>全部</Option>
+                                                <Option value={0}>待办任务</Option>
+                                                <Option value={1}>已完成任务</Option>
+                                                <Option value={2}>超期任务</Option>
+                                            </Select> :
+                                            <Select >
+                                                <Option value=''>全部</Option>
+                                                <Option value={0}>待办任务</Option>
+                                                <Option value={1}>已完成任务</Option>
+                                                <Option value={2}>超期任务</Option>
+                                            </Select>
                                     )}
                                 </FormItem>
                             </Col>
@@ -883,30 +1088,53 @@ export class PatrolTask extends Component {
                                     label="盘查对象"
                                 >
                                     {getFieldDecorator('personList', {
-                                        // initialValue: this.state.modalType === 'edit' ? this.state.personInfo.TaskPerson : '',
+                                        initialValue: this.state.modalType === 'edit' ? ogjByid ? selectOption : '' : '',
                                         validateFirst: true
                                     })(
-                                        <TreeSelect
-                                            style={{ marginRight: '10px' }}
-                                            value={unit}
-                                            dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-                                            treeData={treeList}
-                                            placeholder="请选择派发单位"
-                                            onChange={this.unitChange}
-                                            showSearch={false}
-                                            treeCheckable={true}
-                                            dropdownMatchSelectWidth={false}
-                                            showCheckedStrategy="SHOW_PARENT"
-                                            notFoundContent='暂无'
-                                        />
+                                        // <TreeSelect
+                                        //     style={{ marginRight: '10px' }}
+                                        //     value={unit}
+                                        //     dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                                        //     treeData={treeList}
+                                        //     placeholder="请选择派发单位"
+                                        //     onChange={this.unitChange}
+                                        //     showSearch={false}
+                                        //     treeCheckable={true}
+                                        //     dropdownMatchSelectWidth={false}
+                                        //     showCheckedStrategy="SHOW_PARENT"
+                                        //     notFoundContent='暂无'
+                                        // />
+                                        this.state.disabled ?
+                                            <Select disabled
+                                                mode="multiple"
+                                                size='default'
+                                                placeholder="盘查对象"
+                                                // defaultValue={['a10', 'c12']}
+                                                style={{ width: '100%' }}
+                                                key="taskpersonsee"
+                                            >
+                                                <Option value=''>全部</Option>
+                                                {checkObjOption}
+                                            </Select> :
+                                            <Select
+                                                mode="multiple"
+                                                size='default'
+                                                placeholder="盘查对象"
+                                                // defaultValue={['a10', 'c12']}
+                                                style={{ width: '100%' }}
+                                                key="taskpersonsee"
+                                            >
+                                                <Option value=''>全部</Option>
+                                                {checkObjOption}
+                                            </Select>
                                     )}
                                 </FormItem>
                             </Col>
                         </Row>
                         <Row>
                             <Col span={15} style={{ textAlign: 'right' }}>
-                                <Button htmlType="submit" className="btn_ok">保存</Button>
-                                <Button style={{ marginLeft: 30 }} onClick={this.handleCancel} className="btn_delete">取消</Button>
+                                {this.state.disabled ? '' : <Button htmlType="submit" className="btn_ok">保存</Button>}
+                                {this.state.disabled ? '' : <Button style={{ marginLeft: 30 }} onClick={this.handleCancel} className="btn_delete">取消</Button>}
                             </Col>
                         </Row>
                     </Form>
@@ -917,26 +1145,35 @@ export class PatrolTask extends Component {
                     footer={null}
                     onCancel={this.handleCancel}
                     width={750}
+                    style={{ position: "relative" }}
                 >
                     <div style={{ margin: '0 0 16px 0' }}>
-                        <Input style={{ width: '520px', marginRight: "10px" }} type="text" id='name' placeholder='请输入任务名称' />
-                        <ShallowBlueBtn width="80px" text="查询" margin="0 10px 0 0" onClick={this.handleClick} />
-                        <ShallowBlueBtn width="80px" text="重置" onClick={this.init} />
+                        <Input style={{ width: '520px', marginRight: "10px" }} value={this.state.childrenname} onChange={this.childrennameChange} type="text" id='chirdenname' placeholder='请输入任务名称' />
+                        <ShallowBlueBtn width="80px" text="查询" margin="0 10px 0 0" onClick={this.handleChidernQuery} />
+                        <ShallowBlueBtn width="80px" text="重置" onClick={this.handleChidernClear} />
                     </div>
-                    <Table locale={{ emptyText: '暂无数据' }}
-                        columns={colu}
-                        expandedRowKeys={this.state.expandKeys}
-                        dataSource={childrenDataList}
-                        bordered
-                        onExpandedRowsChange={this.RowsChange}
-                        expandRowByClick={true}
-                        expandIconAsCell={false}
-                        expandedRowRender={record =>
-                            <div>
-                                <Tag style={{ float: 'left', margin: '4px 0 0 8px' }} color="#2b6cc5">张三</Tag>
-                                <Tag style={{ float: 'left', margin: '4px 0 0 8px' }} color="#2b6cc5">李四</Tag>
-                            </div>}
-                    />
+                    {childrenIsFetching === true ?
+                        <div style={{ textAlign: "center", position: "absolute", left: "45%", top: "50%" }}>
+                            <Spin size="large" />
+                        </div> :
+                        <Table locale={{ emptyText: '暂无数据' }}
+                            columns={colu}
+                            // expandedRowKeys={this.state.expandKeys}
+                            dataSource={childrenDataList}
+                            bordered
+                            // onExpandedRowsChange={this.RowsChange}
+                            // expandRowByClick={true}
+                            // expandIconAsCell={false}
+                            rowKey={(record) => record.id}
+                            expandedRowRender={(record) => this.expandedRowRender(record)}
+                            pagination={false}
+                        />}
+                    <div className="clear"></div>
+                    {childrenDataList.length > 0 ?
+                        <Pagination size="small" total={childrenTotal} current={this.state.childrennowpage} pageSize={10} /> :
+                        ''
+                    }
+
                 </Modal>
             </div>
         )
@@ -950,37 +1187,55 @@ const SearchArea = React.createClass({
             name: '',
             begindate: '',
             enddate: '',
-            unit: '',
-            status: '',
+            category: '',
             cycle: '',
-            questionName: '',
-            treeList: [{ "children": [{ "children": [{ "label": "(卡点)测试", "value": "ec02ed04ad6147b7a421ab912a7cf6b6", "key": "ec02ed04ad6147b7a421ab912a7cf6b6" }], "label": "洛阳市公安局", "value": "410300000000", "key": "410300000000" }, { "label": "(卡点)01018", "value": "9ec30a5f4e554bc78f13fea61a61452c", "key": "9ec30a5f4e554bc78f13fea61a61452c" }, { "label": "(卡点)1221卡点", "value": "713141c655624b86acae70b4a674d8a7", "key": "713141c655624b86acae70b4a674d8a7" }, { "label": "(卡点)001", "value": "8cd3a75ab7fa49979f67eef4d59a9cad", "key": "8cd3a75ab7fa49979f67eef4d59a9cad" }, { "label": "(卡点)M78卡点", "value": "f24c58a0aadb42ca826c02c26f74a461", "key": "f24c58a0aadb42ca826c02c26f74a461" }, { "label": "(卡点)002", "value": "aad06faa7acf49df9504a6e97ae7946f", "key": "aad06faa7acf49df9504a6e97ae7946f" }], "label": "河南省公安厅", "value": "410000000000", "key": "410000000000" }],
+            personname: '',
+
         };
     },
-    handleNameChange: function (e) {
-        this.setState({
-            name: e.target.value
-        });
-    },
-    statusChange: function (value) {
-        this.setState({
-            status: value
-        });
-    },
     handleClick: function () { //点击查询
-        let { name, begindate, enddate, status } = this.state;
-        console.log('查询', name, begindate, enddate, status);
+        let page = 1;
+        let { name, category, enddate, begindate, cycle, personname } = this.state;
+        let creds = {
+            current: 1,
+            pd: {
+                name: name,
+                starttime: begindate,
+                endtime: enddate,
+                category: category,
+                cycle: cycle,
+                personname: personname,
+            },
+            showCount: 10
+        }
+        store.dispatch(postTaskListHushiData(creds));
+        this.props.serchChange(name, category, enddate, begindate, cycle, personname,page);
     },
     init: function () {
+        let page = 1;
+        let { name, category, enddate, begindate, cycle, personname } = this.state;
         this.setState({
             name: '',
             begindate: '',
             enddate: '',
-            unit: '',
-            status: '',
+            category: '',
             cycle: '',
-            questionName: '',
+            personname: '',
         });
+        let params = {
+            currentPage: 1,
+            pd: {
+                category: '',
+                cycle: '',
+                name: "",
+                personname: '',
+                starttime: '',
+                endtime: '',
+            },
+            showCount: 10
+        }
+        store.dispatch(postTaskListHushiData(params));
+        this.props.serchChange('', '', '', '', '', '',page);
     },
     showModal: function () {
         this.setState({
@@ -1006,6 +1261,16 @@ const SearchArea = React.createClass({
             unit_text: label[0],
         });
     },
+    handleNameChange: function (e) {
+        this.setState({
+            name: e.target.value
+        });
+    },
+    categoryChange: function (value) {
+        this.setState({
+            category: value
+        });
+    },
     handleBeginDeteClick: function (date, dateString) {
         this.setState({
             begindate: dateString,
@@ -1021,14 +1286,18 @@ const SearchArea = React.createClass({
             cycle: value,
         });
     },
-    questionNameChange: function (e) {
+    personnameChange: function (e) {
         this.setState({
-            questionName: e.target.value,
+            personname: e.target.value,
         });
     },
+    // personnameOnselect: function () {
+    //     this.props.weiguankongQuery();
+    // },
     render() {
-        let { name, unit, enddate, begindate, status, cycle, questionName } = this.state;
+        let { name, category, enddate, begindate, taskswitch, cycle, personname } = this.state;
         let beginDateValue = '';
+
         if (begindate === '') { } else {
             beginDateValue = moment(begindate, dateFormat);
         }
@@ -1036,35 +1305,55 @@ const SearchArea = React.createClass({
         if (enddate === '') { } else {
             endDateValue = moment(enddate, dateFormat);
         }
-        unit = (unit === '' ? '全部' : unit);
+        let weiguankongList = store.getState().TaskManagement.data.weiguankongList.result.list;
+        // const Option = [];
+        // if (weiguankongList) {
+        //     for (let i = 0; i < weiguankongList.length; i++) {
+        //         let item = weiguankongList[i];
+        //         Option.push(
+        //             <Option key={item.id} value={item.id} title={item.name + " " + item.idcard}>{item.name + " " + item.idcard}</Option>
+        //         );
+        //     }
+        // }
+        // unit = (unit === '' ? '全部' : unit);
         return (
-            <div className="marLeft40 fl z_searchDiv">
-                <Button style={{ width: "100px", marginRight: '10px' }}
+            <div className="marLeft40 fl z_searchDiv" style={{ width: "97%" }}>
+                {/* <Button style={{ width: "100px", marginRight: '10px' }}
                     onClick={this.props.addShowModal}
                     className="btn_ok"
                 >
                     新增任务
-                </Button>
+                </Button> */}
                 <label htmlFor="" className="font14">任务名称：</label>
-                <Input style={{ width: '121px', marginRight: "10px" }} type="text" id='name' placeholder='请输入任务名称' value={name} onChange={this.handleNameChange} />
+                <Input style={{ width: '25%', marginRight: "10px" }} type="text" id='name' placeholder='请输入任务名称' value={name} onChange={this.handleNameChange} />
                 <label htmlFor="" className="font14">任务类别：</label>
-                <Select value={status} style={{ width: 100, margin: "0 10px 0 0" }} onChange={this.statusChange} notFoundContent='暂无'>
-                    <Option value="">全部</Option>
-                    <Option value="循环任务">循环任务</Option>
+                <Select style={{ width: "10%", margin: "0 10px 0 0" }} value={this.state.category} onChange={this.categoryChange} notFoundContent='暂无'>
+                    <Option value=''>全部</Option>
+                    <Option value="0">周期</Option>
+                    <Option value="1">一次性</Option>
                 </Select>
                 <label htmlFor="" className="font14">任务周期：</label>
-                <Select value={cycle} style={{ width: 100, margin: "0 10px 0 0" }} onChange={this.cycleChange} notFoundContent='暂无'>
-                    <Option value="按周">按周</Option>
-                    <Option value="按天">按天</Option>
+                <Select style={{ width: "10%", margin: "0 10px 0 0" }} value={this.state.cycle} onChange={this.cycleChange} notFoundContent='暂无'>
+                    <Option value=''>全部</Option>
+                    <Option value="0">按天</Option>
+                    <Option value="1">按周</Option>
+                    <Option value="2">按月</Option>
                 </Select>
                 <label htmlFor="" className="font14">盘查对象：</label>
-                <Input style={{ width: '121px', marginRight: "10px" }} type="text" id='name' placeholder='请输入盘查对象' value={questionName} onChange={this.questionNameChange} />
-                <label htmlFor="" className="font14">任务时间：</label>
-                <DatePicker placeholder="请选择日期" format={dateFormat} allowClear={false} style={{ marginRight: "10px" }} value={beginDateValue} defaultValue="" onChange={this.handleBeginDeteClick} />
-                <span className="font14" style={{ margin: "0 10px 0 0" }}>至</span>
-                <DatePicker placeholder="请选择日期" format={dateFormat} allowClear={false} style={{ marginRight: "10px" }} value={endDateValue} defaultValue="" onChange={this.handleEndDeteClick} />
-                <ShallowBlueBtn width="80px" text="查询" margin="0 10px 0 0" onClick={this.handleClick} />
-                <ShallowBlueBtn width="80px" text="重置" margin="0 10px 0 0" onClick={this.init} />
+                {/* <Select style={{ width: "30%", margin: "0 10px 0 0" }} value={this.state.personname} notFoundContent='暂无' onChange={this.personnameChange} >
+                    <Option value=''>全部</Option>
+                    {this.props.checkObjOption}
+                </Select> */}
+                <Input style={{ width: '25%', marginRight: "10px" }} type="text" id='personname' placeholder='请输入任务名称' value={personname} onChange={this.personnameChange} />
+
+                <div style={{ marginTop: '10px' }}>
+                    <label htmlFor="" className="font14">任务时间：</label>
+                    <DatePicker placeholder="请选择日期" format={dateFormat} allowClear={false} style={{ marginRight: "10px" }} value={beginDateValue} defaultValue="" onChange={this.handleBeginDeteClick} />
+                    <span className="font14" style={{ margin: "0 10px 0 0" }}>至</span>
+                    <DatePicker placeholder="请选择日期" format={dateFormat} allowClear={false} style={{ marginRight: "10px" }} value={endDateValue} defaultValue="" onChange={this.handleEndDeteClick} />
+                    <ShallowBlueBtn width="80px" text="查询" margin="0 10px 0 0" onClick={this.handleClick} />
+                    <ShallowBlueBtn width="80px" text="重置" margin="0 10px 0 0" onClick={this.init} />
+                </div>
             </div>
         );
     }

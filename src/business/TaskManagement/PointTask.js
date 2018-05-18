@@ -42,7 +42,7 @@ import {
     Popconfirm
 } from 'antd';
 import {
-    postThreeTaskListHushiData,postThreeTaskListHushiByIdData
+    postThreeTaskListHushiData, postThreeTaskListHushiByIdData, postWeiguankongData
 } from "../../actions/TaskManagement";
 import moment from 'moment';
 import 'moment/locale/zh-cn';
@@ -108,8 +108,12 @@ export class PointTask extends Component {
             highRiskLine: null,
             selectedRowsId: [],
             name: '',
-            begindate: '',
+            category: '',
             enddate: '',
+            begindate: '',
+            taskswitch: '',
+            cycle: '',
+            personname: '',
             data: [],
             record: null,
             pagination: pagination,
@@ -139,10 +143,20 @@ export class PointTask extends Component {
                 personname: '',
                 createtime: '',
                 endtime: '',
+                type: '0'
             },
             showCount: 10
         }
         store.dispatch(postThreeTaskListHushiData(params));
+    }
+    // 未管控人员作为盘查对象 在添加的时候使用
+    weiguankongQuery = () => {
+        let creds = {
+            pd: {
+                control_type: "0",
+            }
+        }
+        store.dispatch(postWeiguankongData(creds));
     }
     editShowModal = (record) => {
         this.setState({
@@ -198,8 +212,35 @@ export class PointTask extends Component {
     saveModel = (e) => {
         this.handleCancel();
     }
+    serchChange = (name, category, enddate, begindate, cycle, personname,page) => {
+        this.setState({
+            name: name,
+            category: category,
+            enddate: enddate,
+            begindate: begindate,
+            cycle: cycle,
+            personname: personname,
+            nowPage:page
+        });
+    }
     pageChange(nowPage) {
         this.state = Object.assign({}, this.state, { nowPage: nowPage });
+        let { name, category, enddate, begindate, cycle, personname } = this.state;
+        let creds = {
+            currentPage: nowPage,
+            entityOrField: true,
+            pd: {
+                name: name,
+                starttime: begindate,
+                endtime: enddate,
+                category: category,
+                cycle: cycle,
+                personname: personname,
+                type: '0'
+            },
+            showCount: 10
+        }
+        store.dispatch(postThreeTaskListHushiData(creds));
         this.setState({
             selectedRowsId: [],
             selectedRowKeys: [],
@@ -243,8 +284,9 @@ export class PointTask extends Component {
         let isFetching = store.getState().TaskManagement.isFetching;
         let recordNumber = parseInt((nowPage - 1) * 10);
         let data = store.getState().TaskManagement.data.threetaskListHushi.result.list;
+        let total = store.getState().TaskManagement.data.threetaskListHushi.result.total;
         let byidObj = store.getState().TaskManagement.data.threetaskListHushiById.result;
-        console.log('byidObj',byidObj);
+        console.log('byidObj', byidObj);
         let dataList = [];
         for (let i = 0; i < data.length; i++) {
             let item = data[i];
@@ -254,20 +296,43 @@ export class PointTask extends Component {
                 name: item.name,
                 category: item.category,
                 cycle: item.cycle,
-                createtime: getMyDate(item.createtime/1000),
-                endtime: getMyDate(item.endtime/1000),
+                createtime: getMyDate(item.createtime / 1000),
+                endtime: getMyDate(item.endtime / 1000),
                 createuser: item.createuser,
                 type: item.type,
                 count2: item.count2,
-                count1:item.count1,
+                count1: item.count1,
                 id: item.id,
 
             });
         }
+        // 根据未管控人员作为盘查对象
+        let weiguankongList = store.getState().TaskManagement.data.weiguankongList.result.list;
+        const checkObjOption = [];
+ 
+        const selectOption = [];
+        if (byidObj) {
+            if (byidObj.personList) {
+                if (byidObj.personList.length > 0) {
+                    for (let i = 0; i < byidObj.personList.length; i++) {
+                        let item = byidObj.personList[i];
+                        checkObjOption.push(
+                            <Option key={item.id} value={item.id} title={item.name + " " + item.idcard}>{item.name + " " + item.idcard}</Option>
+                        );
+                    }
+                    for (let i = 0; i < byidObj.personList.length; i++) {
+                        let item = byidObj.personList[i];
+                        selectOption.push(
+                            item.id
+                        );
+                    }
+                }
+
+            }
+        }
         const columns = [{
             title: '序号',
             dataIndex: 'serial',
-            width: 80,
         }, {
             title: '任务名称',
             dataIndex: 'name',
@@ -275,39 +340,35 @@ export class PointTask extends Component {
             title: '任务类别',
             dataIndex: 'category',
             render: (text, record) => (
-                <span>{record.category === '0' ? '周期' : '一次性'}</span>
+                <span>{record.category === 0 ? '周期' : '一次性'}</span>
             ),
         }, {
             title: '盘查对象',
             dataIndex: 'checkObject',
-            width: 180,
             render: (text, record) => (
-                <span>{record.count2 +'/'+ record.count1}</span>
+                <span>{record.count2 + '/' + record.count1}</span>
             ),
         }, {
             title: '任务周期',
             dataIndex: 'cycle',
             render: (text, record) => (
-                <span>{record.cycle === '0' ? '每天' : record.cycle === '1' ? '每周' : '每月'}</span>
+                <span>{record.cycle === 0 ? '按天' : record.cycle === 1 ? '按周' : '按月'}</span>
             ),
         }, {
             title: '任务开始时间',
             dataIndex: 'createtime',
-            width: 180,
         }, {
             title: '任务结束时间',
             dataIndex: 'endtime',
-            width: 180,
         }, {
             title: '任务创建者',
             dataIndex: 'createuser',
-            width: 180,
         }, {
             title: '任务状态',
             dataIndex: 'type',
 
             render: (text, record) => (
-                <span>{record.type === '0' ? '待办任务' : record.type === '1' ? '已完成任务' : '超期任务'}</span>
+                <span>{record.type === 0 ? '待办任务' : record.type === 1 ? '已完成任务' : '超期任务'}</span>
             ),
         }, {
             title: '操作',
@@ -355,7 +416,6 @@ export class PointTask extends Component {
         }
         const treeList = [{ "children": [{ "children": [{ "label": "(卡点)测试", "value": "ec02ed04ad6147b7a421ab912a7cf6b6", "key": "ec02ed04ad6147b7a421ab912a7cf6b6" }], "label": "洛阳市公安局", "value": "410300000000", "key": "410300000000" }, { "label": "(卡点)01018", "value": "9ec30a5f4e554bc78f13fea61a61452c", "key": "9ec30a5f4e554bc78f13fea61a61452c" }, { "label": "(卡点)1221卡点", "value": "713141c655624b86acae70b4a674d8a7", "key": "713141c655624b86acae70b4a674d8a7" }, { "label": "(卡点)001", "value": "8cd3a75ab7fa49979f67eef4d59a9cad", "key": "8cd3a75ab7fa49979f67eef4d59a9cad" }, { "label": "(卡点)M78卡点", "value": "f24c58a0aadb42ca826c02c26f74a461", "key": "f24c58a0aadb42ca826c02c26f74a461" }, { "label": "(卡点)002", "value": "aad06faa7acf49df9504a6e97ae7946f", "key": "aad06faa7acf49df9504a6e97ae7946f" }], "label": "河南省公安厅", "value": "410000000000", "key": "410000000000" }]
         const plainOptions = ['一级', '二级', '三级'];
-        const checkObjOption = [];
 
         return (
             <div className="sliderWrap">
@@ -370,6 +430,7 @@ export class PointTask extends Component {
                             createClick={this.handChangeModalDialogueShow}
                             handleDelete={this.handleDelete}
                             serchChange={this.serchChange}
+                            checkObjOption={checkObjOption}
                         />
                         <div className="clear"></div>
                     </div>
@@ -386,12 +447,13 @@ export class PointTask extends Component {
                     <div className="clear"></div>
                 </div>
                 {/*分页*/}
-                <Pag pageSize={10} nowPage={nowPage} totalRecord={10} pageChange={this.pageChange} />
+                <Pag pageSize={10} nowPage={nowPage} totalRecord={total} pageChange={this.pageChange} />
                 <Modal width={800}
                     title="任务详情"
                     visible={this.state.visible}
                     onCancel={this.handleCancel}
                     footer={null}
+                    key='point'
                 >
                     <Form onSubmit={this.saveModel}>
                         <Row className="formItemLeft">
@@ -401,7 +463,7 @@ export class PointTask extends Component {
                                     label="任务名称"
                                 >
                                     {getFieldDecorator('name', {
-                                        initialValue: this.state.modalType === 'edit' ?byidObj.name : '',
+                                        initialValue: this.state.modalType === 'edit' ? byidObj?byidObj.name : '':'',
                                         validateFirst: true
                                     })(
                                         <Input disabled />
@@ -414,7 +476,7 @@ export class PointTask extends Component {
                                     label="任务开始时间"
                                 >
                                     {getFieldDecorator('createtime', {
-                                        initialValue: this.state.modalType === 'edit' ? moment(getMyDate(byidObj.createtime/1000), 'YYYY-MM-DD HH:mm:ss') : '',
+                                        initialValue: this.state.modalType === 'edit' ?byidObj? moment(getMyDate(byidObj.createtime / 1000), 'YYYY-MM-DD HH:mm:ss') : '':'',
                                     })(
                                         <DatePicker showTime placeholder="" format="YYYY-MM-DD HH:mm:ss" allowClear={false} style={{ width: '220px' }} disabled />
                                     )}
@@ -426,7 +488,7 @@ export class PointTask extends Component {
                                     label="任务结束时间"
                                 >
                                     {getFieldDecorator('endtime', {
-                                        initialValue: this.state.modalType === 'edit' ? moment(getMyDate(byidObj.endtime/1000), 'YYYY-MM-DD HH:mm:ss') : '',
+                                        initialValue: this.state.modalType === 'edit' ?byidObj? moment(getMyDate(byidObj.endtime / 1000), 'YYYY-MM-DD HH:mm:ss') : '':'',
                                     })(
                                         <DatePicker showTime placeholder="" format="YYYY-MM-DD HH:mm:ss" allowClear={false} style={{ width: '220px' }} disabled />
                                     )}
@@ -438,7 +500,7 @@ export class PointTask extends Component {
                                     label="任务类别"
                                 >
                                     {getFieldDecorator('category', {
-                                        initialValue: this.state.modalType === 'edit' ? byidObj.category : '',
+                                        initialValue: this.state.modalType === 'edit' ?byidObj? byidObj.category : '':'',
                                         validateFirst: true
                                     })(
                                         <Select onChange={this.onChange} disabled>
@@ -454,13 +516,13 @@ export class PointTask extends Component {
                                     label="任务周期"
                                 >
                                     {getFieldDecorator('cycle', {
-                                        initialValue: this.state.modalType === 'edit' ? byidObj.cycle : '',
+                                        initialValue: this.state.modalType === 'edit' ?byidObj? byidObj.cycle : '':'',
                                         validateFirst: true
                                     })(
                                         <Select onChange={this.onChange} disabled>
-                                            <Option value="0">每天</Option>
-                                            <Option value="1">每周</Option>
-                                            <Option value="2">每月</Option>
+                                            <Option value="0">按天</Option>
+                                            <Option value="1">按周</Option>
+                                            <Option value="2">按月</Option>
                                         </Select>
                                     )}
                                 </FormItem>
@@ -471,7 +533,7 @@ export class PointTask extends Component {
                                     label="任务创建者"
                                 >
                                     {getFieldDecorator('createuser', {
-                                        initialValue: this.state.modalType === 'edit' ? byidObj.createuser : '',
+                                        initialValue: this.state.modalType === 'edit' ?byidObj? byidObj.createuser : '':'',
                                         validateFirst: true
                                     })(
                                         <Input disabled />
@@ -484,7 +546,7 @@ export class PointTask extends Component {
                                     label="任务状态"
                                 >
                                     {getFieldDecorator('type', {
-                                        initialValue: this.state.modalType === 'edit' ? byidObj.type : '',
+                                        initialValue: this.state.modalType === 'edit' ?byidObj? byidObj.type : '':'',
                                         validateFirst: true
                                     })(
                                         <Select onChange={this.onChange} disabled>
@@ -501,7 +563,7 @@ export class PointTask extends Component {
                                     label="盘查对象"
                                 >
                                     {getFieldDecorator('TaskPerson', {
-                                        initialValue: this.state.modalType === 'edit' ? byidObj.TaskPerson : '',
+                                        initialValue: this.state.modalType === 'edit' ?byidObj? selectOption : '':'',
                                         validateFirst: true
                                     })(
                                         // <TreeSelect
@@ -521,10 +583,11 @@ export class PointTask extends Component {
                                         <Select
                                             mode="multiple"
                                             size='default'
-                                            placeholder="Please select"
+                                            placeholder="盘查对象"
                                             defaultValue={['a10', 'c12']}
                                             onChange={this.handleChange}
                                             style={{ width: '100%' }}
+                                            disabled
                                         >
                                             {checkObjOption}
                                         </Select>
@@ -533,10 +596,10 @@ export class PointTask extends Component {
                             </Col>
                         </Row>
                         <Row>
-                            <Col span={15} style={{ textAlign: 'right' }}>
+                            {/* <Col span={15} style={{ textAlign: 'right' }}>
                                 <Button htmlType="submit" className="btn_ok">保存</Button>
                                 <Button style={{ marginLeft: 30 }} onClick={this.handleCancel} className="btn_delete">取消</Button>
-                            </Col>
+                            </Col> */}
                         </Row>
                     </Form>
                 </Modal>
@@ -694,37 +757,56 @@ const SearchArea = React.createClass({
             name: '',
             begindate: '',
             enddate: '',
-            unit: '',
-            status: '',
+            category: '',
             cycle: '',
-            questionName: '',
-            treeList: [{ "children": [{ "children": [{ "label": "(卡点)测试", "value": "ec02ed04ad6147b7a421ab912a7cf6b6", "key": "ec02ed04ad6147b7a421ab912a7cf6b6" }], "label": "洛阳市公安局", "value": "410300000000", "key": "410300000000" }, { "label": "(卡点)01018", "value": "9ec30a5f4e554bc78f13fea61a61452c", "key": "9ec30a5f4e554bc78f13fea61a61452c" }, { "label": "(卡点)1221卡点", "value": "713141c655624b86acae70b4a674d8a7", "key": "713141c655624b86acae70b4a674d8a7" }, { "label": "(卡点)001", "value": "8cd3a75ab7fa49979f67eef4d59a9cad", "key": "8cd3a75ab7fa49979f67eef4d59a9cad" }, { "label": "(卡点)M78卡点", "value": "f24c58a0aadb42ca826c02c26f74a461", "key": "f24c58a0aadb42ca826c02c26f74a461" }, { "label": "(卡点)002", "value": "aad06faa7acf49df9504a6e97ae7946f", "key": "aad06faa7acf49df9504a6e97ae7946f" }], "label": "河南省公安厅", "value": "410000000000", "key": "410000000000" }],
+            personname: '',
+
         };
     },
-    handleNameChange: function (e) {
-        this.setState({
-            name: e.target.value
-        });
-    },
-    statusChange: function (value) {
-        this.setState({
-            status: value
-        });
-    },
     handleClick: function () { //点击查询
-        let { name, begindate, enddate, status } = this.state;
-        console.log('查询', name, begindate, enddate, status);
+        let page = 1;
+        let { name, category, enddate, begindate, cycle, personname } = this.state;
+        let creds = {
+            current: 1,
+            pd: {
+                name: name,
+                starttime: begindate,
+                endtime: enddate,
+                category: category,
+                cycle: cycle,
+                personname: personname,
+                type: '0'
+            },
+            showCount: 10
+        }
+        store.dispatch(postThreeTaskListHushiData(creds));
+        this.props.serchChange(name, category, enddate, begindate, cycle, personname,page);
     },
     init: function () {
+        let page = 1;
         this.setState({
             name: '',
             begindate: '',
             enddate: '',
-            unit: '',
-            status: '',
+            category: '',
             cycle: '',
-            questionName: '',
+            personname: '',
         });
+        let params = {
+            currentPage: 1,
+            pd: {
+                category: '',
+                cycle: '',
+                name: "",
+                personname: '',
+                starttime: '',
+                endtime: '',
+                type: '0'
+            },
+            showCount: 10
+        }
+        store.dispatch(postThreeTaskListHushiData(params));
+        this.props.serchChange('', '', '', '', '', '',page);
     },
     showModal: function () {
         this.setState({
@@ -750,6 +832,16 @@ const SearchArea = React.createClass({
             unit_text: label[0],
         });
     },
+    handleNameChange: function (e) {
+        this.setState({
+            name: e.target.value
+        });
+    },
+    categoryChange: function (value) {
+        this.setState({
+            category: value
+        });
+    },
     handleBeginDeteClick: function (date, dateString) {
         this.setState({
             begindate: dateString,
@@ -765,14 +857,18 @@ const SearchArea = React.createClass({
             cycle: value,
         });
     },
-    questionNameChange: function (e) {
+    personnameChange: function (e) {
         this.setState({
-            questionName: e.target.value,
+            personname: e.target.value,
         });
     },
+    // personnameOnselect: function () {
+    //     this.props.weiguankongQuery();
+    // },
     render() {
-        let { name, unit, enddate, begindate, status, cycle, questionName } = this.state;
+        let { name, category, enddate, begindate, taskswitch, cycle, personname } = this.state;
         let beginDateValue = '';
+
         if (begindate === '') { } else {
             beginDateValue = moment(begindate, dateFormat);
         }
@@ -780,29 +876,51 @@ const SearchArea = React.createClass({
         if (enddate === '') { } else {
             endDateValue = moment(enddate, dateFormat);
         }
-        unit = (unit === '' ? '全部' : unit);
+        let weiguankongList = store.getState().TaskManagement.data.weiguankongList.result.list;
+        // const Option = [];
+        // if (weiguankongList) {
+        //     for (let i = 0; i < weiguankongList.length; i++) {
+        //         let item = weiguankongList[i];
+        //         Option.push(
+        //             <Option key={item.id} value={item.id} title={item.name + " " + item.idcard}>{item.name + " " + item.idcard}</Option>
+        //         );
+        //     }
+        // }
+        // unit = (unit === '' ? '全部' : unit);
         return (
-            <div className="marLeft40 fl z_searchDiv">
+            <div className="marLeft40 fl z_searchDiv" style={{ width: "97%" }}>
+                {/* <Button style={{ width: "100px", marginRight: '10px' }}
+                    onClick={this.props.addShowModal}
+                    className="btn_ok"
+                >
+                    新增任务
+                </Button> */}
                 <label htmlFor="" className="font14">任务名称：</label>
-                <Input style={{ width: '121px', marginRight: "10px" }} type="text" id='name' placeholder='请输入任务名称' value={name} onChange={this.handleNameChange} />
+                <Input style={{ width: '25%', marginRight: "10px" }} type="text" id='name' placeholder='请输入任务名称' value={name} onChange={this.handleNameChange} />
                 <label htmlFor="" className="font14">任务类别：</label>
-                <Select value={status} style={{ width: 100, margin: "0 10px 0 0" }} onChange={this.statusChange} notFoundContent='暂无'>
-                    <Option value="">全部</Option>
-                    <Option value="循环任务">循环任务</Option>
+                <Select style={{ width: "10%", margin: "0 10px 0 0" }} value={this.state.category} onChange={this.categoryChange} notFoundContent='暂无'>
+                    <Option value=''>全部</Option>
+                    <Option value="0">周期</Option>
+                    <Option value="1">一次性</Option>
                 </Select>
                 <label htmlFor="" className="font14">任务周期：</label>
-                <Select value={cycle} style={{ width: 100, margin: "0 10px 0 0" }} onChange={this.cycleChange} notFoundContent='暂无'>
-                    <Option value="按周">按周</Option>
-                    <Option value="按天">按天</Option>
+                <Select style={{ width: "10%", margin: "0 10px 0 0" }} value={this.state.cycle} onChange={this.cycleChange} notFoundContent='暂无'>
+                    <Option value=''>全部</Option>
+                    <Option value="0">按天</Option>
+                    <Option value="1">按周</Option>
+                    <Option value="2">按月</Option>
                 </Select>
                 <label htmlFor="" className="font14">盘查对象：</label>
-                <Input style={{ width: '121px', marginRight: "10px" }} type="text" id='name' placeholder='请输入盘查对象' value={questionName} onChange={this.questionNameChange} />
-                <label htmlFor="" className="font14">任务时间：</label>
-                <DatePicker placeholder="请选择日期" format={dateFormat} allowClear={false} style={{ marginRight: "10px" }} value={beginDateValue} defaultValue="" onChange={this.handleBeginDeteClick} />
-                <span className="font14" style={{ margin: "0 10px 0 0" }}>至</span>
-                <DatePicker placeholder="请选择日期" format={dateFormat} allowClear={false} style={{ marginRight: "10px" }} value={endDateValue} defaultValue="" onChange={this.handleEndDeteClick} />
-                <ShallowBlueBtn width="80px" text="查询" margin="0 10px 0 0" onClick={this.handleClick} />
-                <ShallowBlueBtn width="80px" text="重置" margin="0 10px 0 0" onClick={this.init} />
+                <Input style={{ width: '25%', marginRight: "10px" }} type="text" id='personname' placeholder='请输入任务名称' value={personname} onChange={this.personnameChange} />
+
+                <div style={{ marginTop: '10px' }}>
+                    <label htmlFor="" className="font14">任务时间：</label>
+                    <DatePicker placeholder="请选择日期" format={dateFormat} allowClear={false} style={{ marginRight: "10px" }} value={beginDateValue} defaultValue="" onChange={this.handleBeginDeteClick} />
+                    <span className="font14" style={{ margin: "0 10px 0 0" }}>至</span>
+                    <DatePicker placeholder="请选择日期" format={dateFormat} allowClear={false} style={{ marginRight: "10px" }} value={endDateValue} defaultValue="" onChange={this.handleEndDeteClick} />
+                    <ShallowBlueBtn width="80px" text="查询" margin="0 10px 0 0" onClick={this.handleClick} />
+                    <ShallowBlueBtn width="80px" text="重置" margin="0 10px 0 0" onClick={this.init} />
+                </div>
             </div>
         );
     }

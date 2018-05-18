@@ -387,7 +387,7 @@ export function receivedNilaihurenyuanError(message) {
 export const HOMECONTROLPERSON_HUSHI_DATA = 'homecontrolPerson_hushi_data';
 export const HOMECONTROLPERSON_HUSHI_ERROR = 'homecontrolPerson_hushi_error';
 export function postHomeControlPeson_hushi_Data(creds) {
-    let path = '/data/getQianStatistics';
+    let path = '/data/getControlPersonalListGroupByAddressType';
     return dispatch => {
         dispatch({ type: "REQUEST_HOME_CONTROLPERSON_REPORT" });
         post(api + path, creds).then((json) => {

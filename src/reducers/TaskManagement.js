@@ -38,7 +38,8 @@ const initialState = {
             result: {
                 total: 0,
                 list: [],
-            }
+            },
+            childrenIsFetching: true
         },
         threetaskListHushi: {//待办 超期 已完成 列表
             reason: {
@@ -68,6 +69,24 @@ const initialState = {
 
             }
         },
+        weiguankongList: {//查询未管控作为盘查对象
+            reason: {
+                "code": "",
+                "text": ""
+            },
+            result: {
+                list: [],
+            }
+        },
+        personListForTask: {//编辑查看时 返回的盘查人员
+            reason: {
+                "code": "",
+                "text": ""
+            },
+            result: {
+                list: [],
+            }
+        }
     },
     uiData: {
         menus: [
@@ -160,16 +179,13 @@ const TaskManagement = (state = initialState, action) => {
             newState.data.taskListHushi.result.total = action.data.result.page.totalResult;//page?reason
             newState.isFetching = false;
             return newState;
-        // case 'REQUEST_CHILDREN_TASK_LIST_HUSHI_DATA'://子任务列表
-        //     return {
-        //         ...state,//原状态
-        //         isFetching: true,
-        //         didInvalidate: false
-        //     }
+        case 'REQUEST_CHILDREN_TASK_LIST_HUSHI_DATA'://子任务列表
+            newState.data.childrentaskListHushi.childrenIsFetching = true;
+            return newState;
         case 'Children_TaskListHushi-data': //子任务列表
             newState.data.childrentaskListHushi.result.list = action.data.result.pdList;
-            //newState.data.childrentaskListHushi.result.total = action.data.result.page.totalResult;//page?reason
-            // newState.isFetching = false;
+            newState.data.childrentaskListHushi.result.total = action.data.result.page.totalResult;//page?reason
+            newState.data.childrentaskListHushi.childrenIsFetching = false;
             return newState;
         case 'REQUEST_THREE_TASK_LIST_HUSHI_DATA'://待办 超期 已完成
             return {
@@ -202,7 +218,12 @@ const TaskManagement = (state = initialState, action) => {
             newState.data.threetaskListHushiById.result = action.data.result.data;
             // newState.isFetching = false;
             return newState;
-
+        case 'Task_weiguankongHushi-data'://查询未管控人员作为盘查对象 在添加任务时
+            newState.data.weiguankongList.result.list = action.data.result.list;
+            return newState;
+        case 'Task_PersonListForTaskHushi-data'://编辑查看时 盘查对象项
+            newState.data.personListForTask.result.list = action.data.result.list;
+            return newState;
         default:
             if (store !== undefined) {
                 return store.getState().TaskManagement;

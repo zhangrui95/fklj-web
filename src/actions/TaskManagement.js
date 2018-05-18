@@ -235,11 +235,11 @@ export function addTaskHushiData(creds, params) {
         post(api + path, creds).then((json) => {
             if (json.reason === null) {
                 let creds = params
-                message.success('保存成功！');
+                message.success('操作成功！');
                 store.dispatch(postTaskListHushiData(creds));
 
             } else {
-                message.error(json.reason.text);
+                message.error(`提示：${json.reason.text}`);
             }
         }).catch((e) => {
         });
@@ -248,16 +248,16 @@ export function addTaskHushiData(creds, params) {
 }
 // 编辑任务
 export function editTaskHushiData(creds, params) {
-    let path = "/data/savecodeall"
+    let path = "/data/updateTaskModel"
     return dispatch => {
         post(api + path, creds).then((json) => {
             if (json.reason === null) {
-                let creds = params
-                message.success('保存成功！');
-                store.dispatch(postTaskListHushiData(creds));
+                let parma = params
+                message.success('操作成功！');
+                store.dispatch(postTaskListHushiData(parma));
 
             } else {
-                message.error(json.reason.text);
+                message.error(`提示：${json.reason.text}`);
             }
         }).catch((e) => {
         });
@@ -300,44 +300,63 @@ export function postThreeTaskListHushiByIdData(creds) {
         });
     }
 }
-// 启动
-export function startUpTaskHushiData(creds, params) {
-    let path = "/data/savecodeall"
+// // 启动
+// export function startUpTaskHushiData(creds, params) {
+//     let path = "/data/savecodeall"
+//     return dispatch => {
+//         post(api + path, creds).then((json) => {
+//             if (json.reason === null) {
+//                 let creds = params
+//                 message.success('启动成功！');
+//                 store.dispatch(postTaskListHushiData(creds));
+
+//             } else {
+//                 message.error(json.reason.text);
+//             }
+//         }).catch((e) => {
+//         });
+//         ;
+//     }
+// }
+// // 关闭
+// export function closeTaskHushiData(creds, params) {
+//     let path = "/data/savecodeall"
+//     return dispatch => {
+//         post(api + path, creds).then((json) => {
+//             if (json.reason === null) {
+//                 let creds = params
+//                 message.success('关闭成功！');
+//                 store.dispatch(postTaskListHushiData(creds));
+
+//             } else {
+//                 message.error(json.reason.text);
+//             }
+//         }).catch((e) => {
+//         });
+//         ;
+//     }
+// }
+// 查询未管控作为盘查对象字典项  添加时可使用
+export function postWeiguankongData(creds) {
+    let path = '/data/getControlPersonList';
     return dispatch => {
         post(api + path, creds).then((json) => {
-            if (json.reason === null) {
-                let creds = params
-                message.success('启动成功！');
-                store.dispatch(postTaskListHushiData(creds));
-
-            } else {
-                message.error(json.reason.text);
-            }
+            dispatch({ type: 'Task_weiguankongHushi-data', data: json });
         }).catch((e) => {
+            dispatch({ type: 'Task_weiguankongHushi-error', message: e.toString() })
         });
-        ;
     }
 }
-// 关闭
-export function closeTaskHushiData(creds, params) {
-    let path = "/data/savecodeall"
+
+// 编辑查看时盘查对象字典项
+export function postPersonListForTaskData(creds) {
+    let path = '/data/getControlPersonListForTaskPersonal';
     return dispatch => {
         post(api + path, creds).then((json) => {
-            if (json.reason === null) {
-                let creds = params
-                message.success('关闭成功！');
-                store.dispatch(postTaskListHushiData(creds));
-
-            } else {
-                message.error(json.reason.text);
-            }
+            dispatch({ type: 'Task_PersonListForTaskHushi-data', data: json });
         }).catch((e) => {
+            dispatch({ type: 'Task_PersonListForTaskHushi-error', message: e.toString() })
         });
-        ;
     }
 }
-
-
-
-
 
