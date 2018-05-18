@@ -1,6 +1,6 @@
 // 任务管理模块-action-洛阳
-import { api, fetchRankUnitTreeData } from "../actions";
-import { post, get, put } from "../request";
+import { api, fetchRankUnitTreeData } from "./actions";
+import { post, get, put } from "./request";
 import * as constants from "../utils/Constants";
 import { store } from '../index.js';
 import { message } from 'antd';
@@ -216,6 +216,18 @@ export function postTaskListHushiData(creds) {
         });
     }
 }
+// 根据id查询任务模板信息
+export function postTaskListHushiByIdData(creds) {
+    let path = '/data/getTaskModelById';
+    return dispatch => {
+        // dispatch({ type: "REQUEST_TASK_LIST_HUSHI_BYID_DATA" });
+        post(api + path, creds).then((json) => {
+            dispatch({ type: 'TaskListHushi-data-byid', data: json });
+        }).catch((e) => {
+            dispatch({ type: 'TaskListHushi-error-byid', message: e.toString() })
+        });
+    }
+}
 // 增加任务
 export function addTaskHushiData(creds, params) {
     let path = "/data/savecodeall"
@@ -223,11 +235,11 @@ export function addTaskHushiData(creds, params) {
         post(api + path, creds).then((json) => {
             if (json.reason === null) {
                 let creds = params
-                message.success('保存成功！');
+                message.success('操作成功！');
                 store.dispatch(postTaskListHushiData(creds));
 
             } else {
-                message.error(json.reason.text);
+                message.error(`提示：${json.reason.text}`);
             }
         }).catch((e) => {
         });
@@ -236,16 +248,16 @@ export function addTaskHushiData(creds, params) {
 }
 // 编辑任务
 export function editTaskHushiData(creds, params) {
-    let path = "/data/savecodeall"
+    let path = "/data/updateTaskModel"
     return dispatch => {
         post(api + path, creds).then((json) => {
             if (json.reason === null) {
-                let creds = params
-                message.success('保存成功！');
-                store.dispatch(postTaskListHushiData(creds));
+                let parma = params
+                message.success('操作成功！');
+                store.dispatch(postTaskListHushiData(parma));
 
             } else {
-                message.error(json.reason.text);
+                message.error(`提示：${json.reason.text}`);
             }
         }).catch((e) => {
         });
@@ -254,7 +266,7 @@ export function editTaskHushiData(creds, params) {
 }
 // 子任务列表
 export function postChildrenTaskListHushiData(creds) {
-    let path = '/data/getExaminePatrolTasklistPage';
+    let path = '/data/getSubtaskByTakModelId';
     return dispatch => {
         dispatch({ type: "REQUEST_CHILDREN_TASK_LIST_HUSHI_DATA" });
         post(api + path, creds).then((json) => {
@@ -264,44 +276,87 @@ export function postChildrenTaskListHushiData(creds) {
         });
     }
 }
-// 启动
-export function startUpTaskHushiData(creds, params) {
-    let path = "/data/savecodeall"
+//待办 超期 已完成的列表
+export function postThreeTaskListHushiData(creds) {
+    let path = '/data/getSubtaskList';
     return dispatch => {
+        dispatch({ type: "REQUEST_THREE_TASK_LIST_HUSHI_DATA" });
         post(api + path, creds).then((json) => {
-            if (json.reason === null) {
-                let creds = params
-                message.success('启动成功！');
-                store.dispatch(postTaskListHushiData(creds));
-
-            } else {
-                message.error(json.reason.text);
-            }
+            dispatch({ type: 'Three_TaskListHushi-data', data: json });
         }).catch((e) => {
+            dispatch({ type: 'Three_TaskListHushi-error', message: e.toString() })
         });
-        ;
     }
 }
-// 关闭
-export function closeTaskHushiData(creds, params) {
-    let path = "/data/savecodeall"
+// 根据待办 超期 已完成的id 获取信息
+export function postThreeTaskListHushiByIdData(creds) {
+    let path = '/data/getSubtaskById';
+    return dispatch => {
+        dispatch({ type: "REQUEST_THREE_TASK_LIST_HUSHI_BYID_DATA" });
+        post(api + path, creds).then((json) => {
+            dispatch({ type: 'Three_TaskListHushi-data-byid', data: json });
+        }).catch((e) => {
+            dispatch({ type: 'Three_TaskListHushi-error-byid', message: e.toString() })
+        });
+    }
+}
+// // 启动
+// export function startUpTaskHushiData(creds, params) {
+//     let path = "/data/savecodeall"
+//     return dispatch => {
+//         post(api + path, creds).then((json) => {
+//             if (json.reason === null) {
+//                 let creds = params
+//                 message.success('启动成功！');
+//                 store.dispatch(postTaskListHushiData(creds));
+
+//             } else {
+//                 message.error(json.reason.text);
+//             }
+//         }).catch((e) => {
+//         });
+//         ;
+//     }
+// }
+// // 关闭
+// export function closeTaskHushiData(creds, params) {
+//     let path = "/data/savecodeall"
+//     return dispatch => {
+//         post(api + path, creds).then((json) => {
+//             if (json.reason === null) {
+//                 let creds = params
+//                 message.success('关闭成功！');
+//                 store.dispatch(postTaskListHushiData(creds));
+
+//             } else {
+//                 message.error(json.reason.text);
+//             }
+//         }).catch((e) => {
+//         });
+//         ;
+//     }
+// }
+// 查询未管控作为盘查对象字典项  添加时可使用
+export function postWeiguankongData(creds) {
+    let path = '/data/getControlPersonList';
     return dispatch => {
         post(api + path, creds).then((json) => {
-            if (json.reason === null) {
-                let creds = params
-                message.success('关闭成功！');
-                store.dispatch(postTaskListHushiData(creds));
-
-            } else {
-                message.error(json.reason.text);
-            }
+            dispatch({ type: 'Task_weiguankongHushi-data', data: json });
         }).catch((e) => {
+            dispatch({ type: 'Task_weiguankongHushi-error', message: e.toString() })
         });
-        ;
     }
 }
 
-
-
-
+// 编辑查看时盘查对象字典项
+export function postPersonListForTaskData(creds) {
+    let path = '/data/getControlPersonListForTaskPersonal';
+    return dispatch => {
+        post(api + path, creds).then((json) => {
+            dispatch({ type: 'Task_PersonListForTaskHushi-data', data: json });
+        }).catch((e) => {
+            dispatch({ type: 'Task_PersonListForTaskHushi-error', message: e.toString() })
+        });
+    }
+}
 

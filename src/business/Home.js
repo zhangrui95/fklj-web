@@ -36,7 +36,8 @@ import {
     postActivityStatisticsData,
     postPersonnelListData,
     postDistributeMapData,
-    postAirportCoordMapData
+    postAirportCoordMapData,
+    postHomeControlPeson_hushi_Data,//呼市反恐 管控人员
 } from "../actions/Home"
 import {
     monthFormat,
@@ -286,87 +287,13 @@ class Home extends Component {
                 <div>
                     <div>
                         <div style={{position:"relative"}}>
-                            {mapType === "migrate"?<div>
-                                <div style={{width:"40%",margin:"0 auto",paddingTop:"15px",paddingBottom:"20px",position:"absolute",left:"30%",top:"0",zIndex:'99'}}>
-                                    <div style={{float:"left"}}>
-                                        <ul style={smallIcon2}>
-                                            <li style={IconLi} onClick={(event) => this.handleChinaMap(event)}>分布图</li>
-                                            <li style={IconLinoborderActive} onClick={(event)=>this.handleMigrateMap(event)}>流动图</li>
-                                        </ul>
-                                        <div style={clear}></div>
-                                    </div>
-                                    <div style={{float:"right"}}>
-                                        { queryType === "week" ? <ul style={smallIcon}>
-                                            <li style={IconLiActive} onClick={(event) => this.handleWeekClickMap(event)} >本周</li>
-                                            <li style={IconLi} onClick={(event) => this.handleMonthClickMap(event)} >本月</li>
-                                            <li style={IconLinoborder} onClick={(event) => this.handleYearClickMap(event)}>本年</li>
-                                            <div style={clear}></div>
-                                        </ul> : queryType === "month" ? <ul style={smallIcon}>
-                                            <li style={IconLi} onClick={(event) => this.handleWeekClickMap(event)} >本周</li>
-                                            <li style={IconLiActive} onClick={(event) => this.handleMonthClickMap(event)} >本月</li>
-                                            <li style={IconLinoborder} onClick={(event) => this.handleYearClickMap(event)}>本年</li>
-                                            <div style={clear}></div>
-                                        </ul> : queryType === "year" ? <ul style={smallIcon}>
-                                            <li style={IconLi} onClick={(event) => this.handleWeekClickMap(event)} >本周</li>
-                                            <li style={IconLi} onClick={(event) => this.handleMonthClickMap(event)} >本月</li>
-                                            <li style={IconLinoborderActive} onClick={(event) => this.handleYearClickMap(event)}>本年</li>
-                                            <div style={clear}></div>
-                                        </ul>
-                                            :<ul style={smallIcon}>
-                                                <li style={IconLi} onClick={(event) => this.handleWeekClickMap(event)} >本周</li>
-                                                <li style={IconLi} onClick={(event) => this.handleMonthClickMap(event)} >本月</li>
-                                                <li style={IconLinoborder} onClick={(event) => this.handleYearClickMap(event)}>本年</li>
-                                                <div style={clear}></div></ul>
-                                        }
-                                        <div style={clear}></div>
-                                    </div>
-                                    <div style={clear}></div>
-                                </div>
+                            
                                 {/*地图*/}
                                 {/*<ChinaMap />*/}
 
                                 <AirportCoordComponent airportCoordMapData={airportCoordMapData} dateSet={dateSet}/>
-                            </div>:<div>
-                                <div style={{width:"40%",margin:"0 auto",paddingTop:"15px",paddingBottom:"20px",position:"absolute",left:"30%",top:"0",zIndex:'99'}}>
-                                    <div style={{float:"left"}}>
-                                        <ul style={smallIcon2}>
-                                            <li style={IconLiActive} onClick={(event)=>this.handleChinaMap(event)}>分布图</li>
-                                            <li style={IconLinoborder} onClick={(event)=>this.handleMigrateMap(event)}>流动图</li>
-                                        </ul>
-                                        <div style={clear}></div>
-                                    </div>
-                                    <div style={{float:"right"}}>
-                                        { queryType === "week" ? <ul style={smallIcon}>
-                                            <li style={IconLiActive} onClick={(event) => this.handleWeekClickMap(event)} >本周</li>
-                                            <li style={IconLi} onClick={(event) => this.handleMonthClickMap(event)} >本月</li>
-                                            <li style={IconLinoborder} onClick={(event) => this.handleYearClickMap(event)}>本年</li>
-                                            <div style={clear}></div>
-                                        </ul> : queryType === "month" ? <ul style={smallIcon}>
-                                            <li style={IconLi} onClick={(event) => this.handleWeekClickMap(event)} >本周</li>
-                                            <li style={IconLiActive} onClick={(event) => this.handleMonthClickMap(event)} >本月</li>
-                                            <li style={IconLinoborder} onClick={(event) => this.handleYearClickMap(event)}>本年</li>
-                                            <div style={clear}></div>
-                                        </ul> : queryType === "year" ? <ul style={smallIcon}>
-                                            <li style={IconLi} onClick={(event) => this.handleWeekClickMap(event)} >本周</li>
-                                            <li style={IconLi} onClick={(event) => this.handleMonthClickMap(event)} >本月</li>
-                                            <li style={IconLinoborderActive} onClick={(event) => this.handleYearClickMap(event)}>本年</li>
-                                            <div style={clear}></div>
-                                        </ul>
-                                            :<ul style={smallIcon}>
-                                                <li style={IconLi} onClick={(event) => this.handleWeekClickMap(event)} >本周</li>
-                                                <li style={IconLi} onClick={(event) => this.handleMonthClickMap(event)} >本月</li>
-                                                <li style={IconLinoborder} onClick={(event) => this.handleYearClickMap(event)}>本年</li>
-                                                <div style={clear}></div></ul>
-                                        }
-                                        <div style={clear}></div>
-                                    </div>
-                                    <div style={clear}></div>
-                                </div>
-                                {/*地图*/}
-                                <ChinaMap distributeMapData={distributeMapData} dateSet={dateSet}/>
-                                {/*<AirportCoordComponent />*/}
-                            </div>
-                            }
+                            
+                            
 
                             {/*任务数据统计*/}
                             <TaskStatistics dateSet={dateSet} />
@@ -704,12 +631,12 @@ class AirportCoordComponent extends Component {
             <div>
 
                 <div style={{height:'84%'}}>
-                    {isFetching ===  true? <div style={{textAlign:"center",position:"absolute",left:"45%",top:"50%"}}>
+                    {isFetching ===  true? <div style={{textAlign:"center",position:"absolute",left:"47%",top:"50%"}}>
                         <Spin size="large" />
                     </div>:
                         <EchartsReact
                             option={this.getOtion()}
-                            style={{height: '100%', width: '100%'}}
+                            style={{height: '100%', width: '110%',paddingTop:'5%'}}
                         />}
                 </div>
             </div>
