@@ -553,9 +553,7 @@ handleDelete = () => {
                 {text !== ''? 
                    <span title={text} style={{cursor:"pointer"}}>
                        {
-                           text.length <= 10?
-                           text.slice(0,9):text.slice(0,9)+"..."
-
+                           text !==undefined ? (text.length <= 10? text.slice(0,9):text.slice(0,9)+"..."):''
                        }
                    </span>
                    :

@@ -47,6 +47,8 @@ const Regular =(regular)=>{
                 callback();
                 return;
             }
+        case 'zdyName':
+            regs = {reg: /^[A-Za-z0-9\u4e00-\u9fa5]{1,12}$/, msg: '字段名称最多12字符，且不可包含标点及特殊字符'}
     }
     return regs
 }
