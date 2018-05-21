@@ -407,7 +407,7 @@ export function receivedHomeControlPeson_hushi_Error(message) {
 export const POLICESTATION_HUSHI_DATA = 'policeStation_hushi_data';
 export const POLICESTATION_HUSHI_ERROR = 'policeStation_hushi_error';
 export function postPoliceStation_hushi_Data(creds) {
-    let path = '/data/getQianStatistics';
+    let path = '/data/getControlPersonListGroupByPoliceUnit';
     return dispatch => {
         dispatch({ type: "REQUEST_POLICESTATION_HUSHI_REPORT" });
         post(api + path, creds).then((json) => {
