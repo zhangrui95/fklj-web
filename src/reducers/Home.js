@@ -161,7 +161,8 @@ const initialState = {
                 "text": ""
             },
             result: {
-                list: []
+                list: [],
+                page:{}
             },
             isFetching: true,
         },
@@ -269,6 +270,7 @@ const Home = (state = initialState, action) => {
             return newState;
         case Homes.POLICESTATION_HUSHI_DATA: //派出所任务统计
             newState.data.policeStationData.result.list = action.data.result.list;
+            newState.data.policeStationData.result.page = action.data.result.page;
             newState.data.policeStationData.isFetching = false;
             return newState;
         case 'REQUEST_HAVEBEENCHECKED_HUSHI_REPORT'://已盘查任务
