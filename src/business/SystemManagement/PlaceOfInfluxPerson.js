@@ -507,6 +507,17 @@ export class PlaceOfInfluxPerson extends Component {
         //         <Option key={cityTag.code}>{cityTag.name}</Option>
         //     )
         // }
+        const pagination = {
+            onChange: (page) =>{
+                this.setState({
+                    nowPage: page,
+                });
+                this.pageChange(page)
+            },
+            showQuickJumper:'true',
+            total: totalRecord,
+            current: this.state.nowPage,
+        }
         return (
             <div className="sliderWrap">
                 <div className="sliderItemDiv">
@@ -534,12 +545,12 @@ export class PlaceOfInfluxPerson extends Component {
                             <Spin size="large" />
                         </div> :
                         <div style={{ padding: '0 15px' }}>
-                            <Table rowSelection={rowSelection} columns={columns} dataSource={data} bordered pagination={false} />
+                            <Table rowSelection={rowSelection} columns={columns} dataSource={data} bordered pagination={pagination} />
                         </div>}
                     <div className="clear"></div>
                 </div>
                 {/*分页*/}
-                <Pag pageSize={10} nowPage={nowPage} totalRecord={totalRecord} pageChange={this.pageChange} />
+                {/*<Pag pageSize={10} nowPage={nowPage} totalRecord={totalRecord} pageChange={this.pageChange} />*/}
                 {/*<ModalDialogue 
                 width="562px" 
                 isShow={this.state.ModalDialogueShow} 

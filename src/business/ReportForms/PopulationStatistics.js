@@ -471,6 +471,7 @@ class ControlCharts extends Component {
                 formatter: "{a} <br/>{b}: {c} ({d}%)"
             },
             legend: {
+                show:false,
                 orient: 'horizontal',
                 left: 'center',
                 top: "bottom",
@@ -502,7 +503,6 @@ class ControlCharts extends Component {
                 type: 'pie',
                 radius: ['55%', '70%'],
                 avoidLabelOverlap: false,
-
                 top: 'top',
 
                 label: {

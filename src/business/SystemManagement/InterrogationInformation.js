@@ -468,6 +468,17 @@ export class InterrogationInformation extends Component {
         // if (InterrogationInformation_dateBegin === '') {} else {
         //     beginDateValue = moment(InterrogationInformation_dateBegin, dateFormat);
         // }
+        const pagination = {
+            onChange: (page) =>{
+                this.setState({
+                    nowPage: page,
+                });
+                this.pageChange(page)
+            },
+            showQuickJumper:'true',
+            total: totalRecord,
+            current: this.state.nowPage,
+        }
         return (
             <div className="sliderWrap">
                 <div className="sliderItemDiv">
@@ -497,14 +508,14 @@ export class InterrogationInformation extends Component {
                             rowSelection={rowSelection} 
                             columns={columns} 
                             dataSource={data} 
-                            bordered  
-                            pagination={false} 
+                            bordered
+                            pagination={pagination}
                         />
                         </div>}
                     <div className="clear"></div>
                 </div>
                 {/*分页*/}
-                <Pag pageSize={10} nowPage={nowPage} totalRecord={totalRecord} pageChange={this.pageChange} />
+                {/*<Pag pageSize={10} nowPage={nowPage} totalRecord={totalRecord} pageChange={this.pageChange} />*/}
 
                 {/*<ModalDialogue width="433px"  isShow={this.state.ModalDialogueShow} changeStatus={this.handChangeModalDialogueShow} />*/}
                 <Modal
