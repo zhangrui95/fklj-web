@@ -113,6 +113,22 @@ class PopulationStatistics extends Component {
             store.dispatch(getControlPersonCountForX3(creds));
         }
     }
+    inits = () => {
+        this.setState({
+            beginDate:'',
+            endDate: '',
+        });
+        let myDate = new Date();
+        let NowYEAR = myDate.getFullYear();
+        let creds = {
+            startTime: NowYEAR + '-01' + '-01',
+            endTime: NowYEAR + '-12' + '-31',
+        }
+        store.dispatch(getControlPersonList(creds));
+        store.dispatch(getControlPersonalListGroupByAddressType(creds));
+        store.dispatch(getControlPersonalListGroupBySource(creds));
+        store.dispatch(getControlPersonCountForX3(creds));
+    }
     render() {
         let dateSet = {
             startTimeSet: this.state.startTimeSet,
@@ -126,27 +142,26 @@ class PopulationStatistics extends Component {
         let beginPicker = '';
         if (begin === '') {
             beginPicker = (
-                <DatePicker placeholder="" onChange={this.handleBeginDeteClick}  format={dateFormat} allowClear={false} style={{marginRight:"10px"}}/>
+                <DatePicker placeholder="请选择日期" value={beginDateValue} onChange={this.handleBeginDeteClick}  format={dateFormat} allowClear={false} style={{marginRight:"10px"}}/>
             )
         } else {
             beginDateValue = moment(begin, dateFormat);
             beginPicker = (
-                <DatePicker placeholder="" onChange={this.handleBeginDeteClick}  format={dateFormat} allowClear={false} style={{marginRight:"10px"}} value={beginDateValue}/>
+                <DatePicker placeholder="请选择日期" onChange={this.handleBeginDeteClick}  format={dateFormat} allowClear={false} style={{marginRight:"10px"}} value={beginDateValue}/>
             )
         }
         let endDateValue = '';
         let endPicker = '';
         if (end === '') {
             endPicker = (
-                <DatePicker placeholder="" onChange={this.handleEndDeteClick} format={dateFormat} allowClear={false} style={{marginRight:"10px"}}/>
+                <DatePicker value={endDateValue} placeholder="请选择日期" onChange={this.handleEndDeteClick} format={dateFormat} allowClear={false} style={{marginRight:"10px"}}/>
             )
         } else {
             endDateValue = moment(end, dateFormat);
             endPicker = (
-                <DatePicker placeholder="" onChange={this.handleEndDeteClick} format={dateFormat} allowClear={false} style={{marginRight:"10px"}} value={endDateValue}/>
+                <DatePicker placeholder="请选择日期" onChange={this.handleEndDeteClick} format={dateFormat} allowClear={false} style={{marginRight:"10px"}} value={endDateValue}/>
             )
         }
-
         return (
 
             <div className="sliderWrap" style={{borderBottom: "0", height: 'auto'}}>
@@ -168,8 +183,8 @@ class PopulationStatistics extends Component {
                             { beginPicker }
                             <span className="font14" style={{marginRight: "10px"}}>至</span>
                             { endPicker }
-                            <ShallowBlueBtn text="查询" margin="0 0 0 20px" width="60px"  onClick={this.handleQueryClick}/>
-
+                            <ShallowBlueBtn width="80px" text="查询" margin="0 10px 0 10px" onClick={this.handleQueryClick}/>
+                            <ShallowBlueBtn width="80px" text="重置" onClick={this.inits} />
                         </div>
                         <div style={clear}></div>
                     </div>

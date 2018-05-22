@@ -120,7 +120,21 @@ class TaskStatistics extends Component {
             // store.dispatch(postTaskTotalAttentionData(creds));
         }
     }
-
+    inits = () => {
+        this.setState({
+            beginDate:'',
+            endDate: '',
+        });
+        let myDate = new Date();
+        let NowYEAR = myDate.getFullYear();
+        let creds = {
+            startTime: NowYEAR + '-01' + '-01',
+            endTime: NowYEAR + '-12' + '-31',
+        }
+        store.dispatch(getSubtaskListGroupByType(creds));
+        store.dispatch(getSubtaskListGroupByCycle(creds));
+        store.dispatch(getSubtaskCount(creds));
+    }
     render() {
         let dateSet = {
             startTimeSet: this.state.startTimeSet,
@@ -154,13 +168,13 @@ class TaskStatistics extends Component {
                         </p>
                         <div style={{float: "left", marginLeft: "50px"}}>
                             <label htmlFor="" style={labelStyle2}>统计时间：</label>
-                            <DatePicker  placeholder="" format={dateFormat} allowClear={false} style={{marginRight: "10px"}}
+                            <DatePicker  placeholder="请选择日期" format={dateFormat} allowClear={false} style={{marginRight: "10px"}}
                                          value={beginDateValue} onChange={this.handleBeginDeteClick}/>
                             <span className="font14" style={{marginRight: "10px"}}>至</span>
-                            <DatePicker  placeholder="" format={dateFormat} allowClear={false} style={{marginRight: "10px"}}
+                            <DatePicker  placeholder="请选择日期" format={dateFormat} allowClear={false} style={{marginRight: "10px"}}
                                          value={endDateValue} onChange={this.handleEndDeteClick}/>
-                            <ShallowBlueBtn text="查询" margin="0 0 0 20px" width="60px" onClick={this.handleQueryClick}/>
-
+                            <ShallowBlueBtn  width="80px" text="查询" margin="0 10px 0 10px" onClick={this.handleQueryClick}/>
+                            <ShallowBlueBtn width="80px" text="重置" onClick={this.inits} />
                         </div>
                         <div style={clear}></div>
                     </div>
