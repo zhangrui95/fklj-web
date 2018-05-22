@@ -153,7 +153,7 @@ export  class Control extends Component{
         } else if(controlType === 'LY_DR'){
             creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),taskname:Tosk, beginTime:begindate,endTime:enddate,source:"901006"},showCount:10,currentPage:page}
         } else if(controlType === 'LY_XZ'){
-            creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),taskname:Tosk, beginTime:begindate,endTime:enddate,source:"901008"},showCount:10,currentPage:page}
+            creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),taskname:Tosk, beginTime:begindate,endTime:enddate,source:"901001"},showCount:10,currentPage:page}
         } else {
             creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),taskname:Tosk, beginTime:begindate,endTime:enddate},showCount:10,currentPage:page}
         }
@@ -724,7 +724,7 @@ const SearchArea = React.createClass({
             } else if(controlType === 'LY_DR'){
                 creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),taskname:Tosk, beginTime:begindate,endTime:enddate,source:"901006"},showCount:10,currentPage:1}
             } else if(controlType === 'LY_XZ'){
-                creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),taskname:Tosk, beginTime:begindate,endTime:enddate,source:"901008"},showCount:10,currentPage:1}
+                creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),taskname:Tosk, beginTime:begindate,endTime:enddate,source:"901001"},showCount:10,currentPage:1}
             } else {
                 creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),taskname:Tosk, beginTime:begindate,endTime:enddate},showCount:10,currentPage:1}
             }
@@ -986,7 +986,7 @@ const SearchArea = React.createClass({
             }else if(controlType==='LY_DR'){
                 creds = {pd:{source:'901006'},showCount:10,currentPage:1}
             }else if(controlType==='LY_XZ'){
-                creds = {pd:{source:'901008'},showCount:10,currentPage:1}
+                creds = {pd:{source:'901001'},showCount:10,currentPage:1}
             }else{
                 creds = {}
             }
@@ -1063,7 +1063,7 @@ const SearchArea = React.createClass({
         }else if(controlType==='LY_DR'){
             cred = {pd:{source:'901006'}}
         }else if(controlType==='LY_XZ'){
-            cred = {pd:{source:'901008'}}
+            cred = {pd:{source:'901001'}}
         }else{
             cred = {}
         }

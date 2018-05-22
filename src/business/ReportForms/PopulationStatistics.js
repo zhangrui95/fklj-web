@@ -475,11 +475,6 @@ class ControlCharts extends Component {
                 left: 'center',
                 top: "bottom",
                 data: [{
-                    name: '失控',
-                    textStyle: {
-                        color: '#fff'
-                    }
-                }, {
                     name: '未管控',
                     textStyle: {
                         color: '#fff'
@@ -494,9 +489,14 @@ class ControlCharts extends Component {
                     textStyle: {
                         color: '#fff'
                     }
+                },{
+                    name: '失控',
+                    textStyle: {
+                        color: '#fff'
+                    }
                 }]
             },
-            color: ['#39a0ff', '#37cbcb', '#fad336', '#f2627b'],
+            color: [ '#f88a6f','#39a0ff','#37cbcb','#fad336'],
             series: [{
                 name: '管控情况',
                 type: 'pie',
@@ -561,7 +561,7 @@ class PersonFromCharts extends Component {
         const FormChartsList = [];
         for(let i in ListGroupBySource){
             if(i!=='remove'){
-                FormChartsList.push({name:ListGroupBySource[i].name == '901006' ? '后台导入' : '前端新增',value: ListGroupBySource[i].value})
+                FormChartsList.push({name:ListGroupBySource[i].name == '901006' ? '后台导入' : (ListGroupBySource[i].name == '901001' ? '前端新增':''),value: ListGroupBySource[i].value})
             }
         }
         let isFetching = store.getState().ReportForms.data.ControlType.isFetching;

@@ -753,7 +753,7 @@ handleDelete = () => {
                                         //placeholder="请选择状态"
                                         optionFilterProp="children"
                                         onChange={this.statusChange}
-                                        value={status}
+                                        // value={status}
                                         dropdownMatchSelectWidth={false}
                                         filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                                 >
