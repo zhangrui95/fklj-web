@@ -177,7 +177,6 @@ export  class Control extends Component{
         })
     }
     ImgError(e){
-        console.log('img-error===========>',e)
         e.setState({
             ImgFalse:false
         })
@@ -349,7 +348,7 @@ export  class Control extends Component{
                     )
                 }else if(newValue[i].type == '1'){
                     let strs = []
-                    strs=newValue[i].value.split("，");
+                    strs=newValue[i].value.split(/[,，]/);
                     const children = [];
                     for(let j in strs){
                         if(j!='remove'){
@@ -851,25 +850,63 @@ const SearchArea = React.createClass({
         });
     },
     saveNewWord:function () {
-        let creds = {}
+        let creds = ''
+        let TorF = true;
+        let strs=this.state.OptionWords.split(/[,，]/);
         const user = JSON.parse(sessionStorage.getItem('user'));
         if(this.state.wordId === ''){
             if(this.state.wordType === '文本'){
                 creds = {createuser:user.user.name,name:this.state.wordName,type:"0",updateuser:'',value:''}
+                this.getZdy(creds);
             }else{
-                creds = {createuser:user.user.name,name:this.state.wordName,type:"1",updateuser:'',value:this.state.OptionWords}
+                if(this.state.OptionWords.trim()!==""){
+                    strs.map((str)=>{
+                        let reg = Regular('xlz').reg
+                        if(!reg.test(str)){
+                            message.error(Regular('xlz').msg);
+                            TorF = false;
+                            return;
+                        }
+                    })
+                    if(TorF){
+                        creds = {createuser:user.user.name,name:this.state.wordName,type:"1",updateuser:'',value:this.state.OptionWords}
+                        this.getZdy(creds);
+                    }
+                }else{
+                    message.error(`提示：下拉值不能为空`);
+                    return;
+                }
             }
         }else{
             if(this.state.wordType === '文本'){
                 creds = {createuser:user.user.name,name:this.state.wordName,type:"0",value:'',id:this.state.wordId}
+                this.getZdy(creds);
             }else{
-                creds = {createuser:user.user.name,name:this.state.wordName,type:"1",value:this.state.OptionWords,id:this.state.wordId}
+                if(this.state.OptionWords.trim()!==""){
+                    strs.map((str)=>{
+                        let reg = Regular('xlz').reg
+                        if(!reg.test(str)){
+                            message.error(Regular('xlz').msg);
+                            TorF = false;
+                            return;
+                        }
+                    })
+                    if(TorF){
+                        creds = {createuser:user.user.name,name:this.state.wordName,type:"1",value:this.state.OptionWords,id:this.state.wordId}
+                        this.getZdy(creds);
+                    }
+                }else{
+                    message.error(`提示：下拉值不能为空`);
+                    return;
+                }
             }
         }
-        if(this.state.wordName.trim()!==""){
+    },
+    getZdy:function(creds){
+        if(this.state.wordName.trim()!==''){
             let reg = Regular('zdyName').reg
             if(!reg.test(this.state.wordName.trim())){
-                message.error(Regular('zdyName').msg,5);
+                message.error(Regular('zdyName').msg);
             }else{
                 store.dispatch(insertOrUpdateCustomFiled(creds));
                 setTimeout(()=>{
@@ -877,14 +914,15 @@ const SearchArea = React.createClass({
                     if(delCode === null){
                         message.success(`提示：自定义字段${this.state.zdyType === 'add' ? '新增':'修改'}成功`);
                         this.getNewWords();
-                    }else{
-                        message.error(`提示：${store.getState().ControlPersonnel.data.CustomFiled.reason.text}`);
+                        this.hideModals();
                     }
+                    // else{
+                    //     message.error(`提示：${store.getState().ControlPersonnel.data.CustomFiled.reason.text}`);
+                    // }
                 },100)
-                this.hideModals();
             }
         }else{
-            message.error(`提示：字段名称不能为空`,5);
+            message.error(`提示：字段名称不能为空`);
         }
     },
     getAddModal:function(type){
