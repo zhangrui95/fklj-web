@@ -92,40 +92,40 @@ class SystemManagementRight extends Component{
         });
         switch(isSelectMenu.menuName){
             case constants.SYSTEMMANAGEMENT_MENU_HORRORSOFTWARE:
-                content = <HorrorSoftware   />
+                content = <HorrorSoftware />
                 break
             case constants.SYSTEMMANAGEMENT_MENU_INTERROGATIONINFORMATION:
-                content =<InterrogationInformation />
+                content = <InterrogationInformation />
                 break
             case constants.SYSTEMMANAGEMENT_MENU_ABNORMALEMINDER:
 
-                content =<ExceptionParameterReminder />
+                content = <ExceptionParameterReminder />
                 //exceptionParameterReminderInfo={exceptionParameterReminderInfo_local}
                 break
             // case constants.SYSTEMMANAGEMENT_MENU_BLACKLIST:
             //     content =<BlackList  blackList={blackList}/>
             //     break
             case constants.SYSTEMMANAGEMENT_MENU_WHITELIST:
-                content =<WhiteList />  
+                content = <WhiteList />
                 break
             // case constants.SYSTEMMANAGEMENT_MENU_HIGHRISK_CITIES:
             //     content =<HighRiskCities highRiskCitiesList={highRiskCitiesList} />
             //     break
             case constants.SYSTEMMANAGEMENT_MENU_HIGHRISKAREA:
-                content =<HighRiskLine />
+                content = <HighRiskLine />
                 break
 
             case constants.SYSTEMMANAGEMENT_MENU_PLACEOFORIGINPERSON:
-                content =<PlaceOfOriginPerson  />  
+                content = <PlaceOfOriginPerson  />
                 break
             case constants.SYSTEMMANAGEMENT_MENU_PLACEOFINFLUXPERSON:
-                content =<PlaceOfInfluxPerson  />  
+                content = <PlaceOfInfluxPerson  />
                 break
             case constants.SYSTEMMANAGEMENT_MENU_REDLIST:
-              content =<RedList  redList={redList}/>
+              content = <RedList  redList={redList}/>
               break
               case constants.SYSTEMMANAGEMENT_MENU_CODE:
-              content =<CodingTable codeTable={codeTable}/>
+              content = <CodingTable codeTable={codeTable}/>
               break
             case constants.SYSREMSETUP_MODULE_TIME:
                 content = <AddSystem/>

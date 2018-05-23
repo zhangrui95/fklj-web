@@ -258,6 +258,17 @@ export class WhiteList extends Component {
                 disabled: record.name === 'Disabled User', // Column configuration not to be checked
             }),
         };
+        const pagination = {
+            onChange: (page) =>{
+                this.setState({
+                    nowPage: page,
+                });
+                this.pageChange(page)
+            },
+            showQuickJumper:'true',
+            total: totalRecord,
+            current: this.state.nowPage,
+        }
         return (
             <div className="sliderWrap">
                 <div className="sliderItemDiv">
@@ -284,12 +295,12 @@ export class WhiteList extends Component {
                             <Spin size="large" />
                         </div>:
                         <div>
-                            <Table rowSelection={rowSelection} columns={columns} dataSource={data} bordered  pagination={false} />
+                            <Table rowSelection={rowSelection} columns={columns} dataSource={data} bordered  pagination={pagination} />
                         </div>}
                     <div className="clear"></div>
                 </div>
                 {/*分页*/}
-                <Pag pageSize={constants.pageSize} nowPage={nowPage} totalRecord={totalRecord} pageChange={this.pageChange} />
+                {/*<Pag pageSize={constants.pageSize} nowPage={nowPage} totalRecord={totalRecord} pageChange={this.pageChange} />*/}
                 {/*模态框*/}
                 <ModalDialogue width="433px" 
                 isShow={this.state.ModalDialogueShow} 

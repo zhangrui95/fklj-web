@@ -128,22 +128,22 @@ let statusList = {
 }
 const FormItem = Form.Item;
 
-//分页配置文件
-const pagination = {
-    size: 'small',
-    pageSize: constants.recordPageSize,
-    showTotal(total) {
-        return `合计 ${total} 条记录`;
-    },
-    itemRender(current, type, originalElement) {
-        if (type === 'prev') {
-            return <a>上一页</a>;
-        } else if (type === 'next') {
-            return <a>下一页</a>;
-        }
-        return originalElement;
-    }
-};
+// //分页配置文件
+// const pagination = {
+//     size: 'small',
+//     pageSize: constants.recordPageSize,
+//     showTotal(total) {
+//         return `合计 ${total} 条记录`;
+//     },
+//     itemRender(current, type, originalElement) {
+//         if (type === 'prev') {
+//             return <a>上一页</a>;
+//         } else if (type === 'next') {
+//             return <a>下一页</a>;
+//         }
+//         return originalElement;
+//     }
+// };
 
 export class HorrorSoftware extends Component {
     constructor(props) { //初始化nowPage为1
@@ -161,7 +161,6 @@ export class HorrorSoftware extends Component {
             enddate: '',
             data: [],
             record: null,
-            pagination: pagination,
             loading: false,
             personInfo:'',
             modalKey: 0,
@@ -518,7 +517,17 @@ export class HorrorSoftware extends Component {
                 disabled: record.name === 'Disabled User', // Column configuration not to be checked
             }),
         };
-
+        const pagination = {
+            onChange: (page) =>{
+                this.setState({
+                    nowPage: page,
+                });
+                this.pageChange(page)
+            },
+            showQuickJumper:'true',
+            total: totalRecord,
+            current: this.state.nowPage,
+        }
         return (
             <div className="sliderWrap">
                 <div className="sliderItemDiv">
@@ -549,14 +558,14 @@ export class HorrorSoftware extends Component {
                             rowSelection={rowSelection} 
                             columns={columns} 
                             dataSource={data} 
-                            bordered  
-                            pagination={false} 
+                            bordered
+                            pagination={pagination}
                         />
                         </div>}
                     <div className="clear"></div>
                 </div>
                 {/*分页*/}
-                <Pag pageSize={10} nowPage={nowPage} totalRecord={totalRecord} pageChange={this.pageChange} />
+                {/*<Pag pageSize={10} nowPage={nowPage} totalRecord={totalRecord} pageChange={this.pageChange} />*/}
                 {/*模态框*/}
                 {/*<ModalDialogue width="433px" 
                     isShow={this.state.ModalDialogueShow} 

@@ -298,7 +298,17 @@ export class RedList extends Component {
         const {
             getFieldDecorator
         } = this.props.form;
-
+        const pagination = {
+            onChange: (page) =>{
+                this.setState({
+                    nowPage: page,
+                });
+                this.pageChange(page)
+            },
+            showQuickJumper:'true',
+            total: totalRecord,
+            current: this.state.nowPage,
+        }
         return (
             <div className="sliderWrap">
                 <div className="sliderItemDiv">
@@ -325,11 +335,11 @@ export class RedList extends Component {
                         </div> :
                         <div style={{padding: "0 15px"}}>
                             <Table rowSelection={rowSelection} columns={columns} dataSource={data} bordered
-                                   pagination={false}/>
+                                   pagination={pagination}/>
                         </div>}
                     <div className="clear"></div>
                 </div>
-                <Pag pageSize={10} nowPage={nowPage} totalRecord={totalRecord} pageChange={this.pageChange}/>
+                {/*<Pag pageSize={10} nowPage={nowPage} totalRecord={totalRecord} pageChange={this.pageChange}/>*/}
 
                 {/*编辑模态框*/}
                 {/*<Modal title="红名单" visible = {this.state.visible} onOk={this.handleOk} onCancel={this.handleCancel}>*/}

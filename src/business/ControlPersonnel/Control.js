@@ -10,6 +10,7 @@ import * as constants from "../../utils/Constants";
 import {serverUrls, getLocalTime} from '../../utils/index';
 import {monthFormat, dateFormat, serverUrl} from '../../utils/';
 import {Spin, Table, message, Input, Modal, Button, Form, Icon, Row, Col, Select, DatePicker, Divider, List, Popconfirm,Upload} from 'antd';
+import {Regular} from '../../components/Regular'
 import {getControlPersonList, getControlDetail,getControlExport,getControlDownload,getCustomFiledList,insertOrUpdateCustomFiled,delCustomFiled,updateTaskModelControlPerson,getTaskModelList} from "../../actions/ControlPersonnel";
 import moment from 'moment';
 import 'moment/locale/zh-cn';
@@ -69,6 +70,7 @@ export  class Control extends Component{
             Tosk:'',
             begindate: '',
             enddate: '',
+            ImgFalse:true
         };
         let controlType = this.props.controlType;
     }
@@ -79,13 +81,21 @@ export  class Control extends Component{
 
     componentWillReceiveProps(nextProps) {
         if(this.props.controlType!==nextProps.controlType){
-            this.getList(nextProps.controlType,1)
-            this.refs.SearchArea.init();
             this.setState({
                 current: 1,
                 selectedRowKeys:[],
-                selectedRowsId:[]
+                selectedRowsId:[],
+                name: '',
+                cardId:'',
+                status:'',
+                Tosk:'',
+                begindate: '',
+                enddate: '',
             })
+            setTimeout(()=>{
+                this.getList(nextProps.controlType,1)
+                this.refs.SearchArea.init();
+            },0)
         }
     }
 
@@ -98,7 +108,8 @@ export  class Control extends Component{
         this.setState({
             visible: true,
             modalType: 'edit',
-            newWords:newWord
+            newWords:newWord,
+            ImgFalse:true
         });
     }
     addShowModal = (record) => {
@@ -142,7 +153,7 @@ export  class Control extends Component{
         } else if(controlType === 'LY_DR'){
             creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),taskname:Tosk, beginTime:begindate,endTime:enddate,source:"901006"},showCount:10,currentPage:page}
         } else if(controlType === 'LY_XZ'){
-            creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),taskname:Tosk, beginTime:begindate,endTime:enddate,source:"901008"},showCount:10,currentPage:page}
+            creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),taskname:Tosk, beginTime:begindate,endTime:enddate,source:"901001"},showCount:10,currentPage:page}
         } else {
             creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),taskname:Tosk, beginTime:begindate,endTime:enddate},showCount:10,currentPage:page}
         }
@@ -165,6 +176,12 @@ export  class Control extends Component{
             enddate
         })
     }
+    ImgError(e){
+        console.log('img-error===========>',e)
+        e.setState({
+            ImgFalse:false
+        })
+    }
     render() {
         const { getFieldDecorator } = this.props.form;
         let nowPage = this.state.nowPage;
@@ -176,12 +193,13 @@ export  class Control extends Component{
         for(let i in list){
             if(i !== 'remove'){
                 let c = (parseInt(this.state.current) - 1) * 10 + parseInt(i) + 1;
-                dataList.push({id:list[i].id,key:list[i].id, serial: c, cardId: list[i].idcard, label: list[i].name, sex: list[i].sex == '0' ? '男': '女' ,age:list[i].age, state:(list[i].address_type == '0' ? '常住' : (list[i].address_type == '1' ? '暂住' : '流动')), phone:list[i].phone,zrdw:list[i].taskname, updatetime: getLocalTime(list[i].updatetime),cycle:list[i].cycle == '0' ? '按天' : '按周',address:list[i].address,personFrom:list[i].source === '901006' ? '后台导入':'前端新增'})
+                dataList.push({id:list[i].id,key:list[i].id, serial: c, cardId: list[i].idcard, label: list[i].name, sex: list[i].sex == '0' ? '男': '女' ,age:list[i].age, state:(list[i].address_type == '0' ? '常住' : (list[i].address_type == '1' ? '暂住' : '流动')), phone:list[i].phone,zrdw:list[i].taskname, updatetime: getLocalTime(list[i].updatetime),cycle:list[i].cycle == '0' ? '按天' : (list[i].cycle == '1'?'按周':''),address:list[i].now_address,personFrom:list[i].source === '901006' ? '后台导入':'前端新增'})
             }
         }
         const columns = [{
             title: '序号',
             dataIndex: 'serial',
+            width:50,
         },{
             title: '身份证号',
             dataIndex: 'cardId',
@@ -189,18 +207,22 @@ export  class Control extends Component{
         },{
             title: '姓名',
             dataIndex: 'label',
+            width:150,
         },{
             title: '性别',
             dataIndex: 'sex',
+            width:50,
         },{
             title: '年龄',
             dataIndex: 'age',
+            width:50,
         },{
             title: '居住类型',
             dataIndex: 'state',
         },{
             title: '现居住地址',
             dataIndex: 'address',
+            width:200,
         },{
             title: '联系电话',
             dataIndex: 'phone',
@@ -219,6 +241,7 @@ export  class Control extends Component{
         }, {
             title: '操作',
             key: 'action',
+            width:80,
             render: (text, record) => (
                 <span>
                     <span onClick={(e)=>this.editShowModal(record)} style={{cursor:'pointer'}}>详情</span>
@@ -234,6 +257,7 @@ export  class Control extends Component{
         const column = [{
             title: '序号',
             dataIndex: 'serial',
+            width:50,
         },{
             title: '身份证号',
             dataIndex: 'cardId',
@@ -241,24 +265,25 @@ export  class Control extends Component{
         },{
             title: '姓名',
             dataIndex: 'label',
+            width:150,
         },{
             title: '性别',
             dataIndex: 'sex',
+            width:50,
         },{
             title: '年龄',
             dataIndex: 'age',
+            width:50,
         },{
             title: '居住类型',
             dataIndex: 'state',
         },{
             title: '现居住地址',
             dataIndex: 'address',
+            width:200,
         },{
             title: '联系电话',
             dataIndex: 'phone',
-        },{
-            title: '任务周期',
-            dataIndex: 'cycle',
         },{
             title: '人员来源',
             dataIndex: 'personFrom',
@@ -268,6 +293,7 @@ export  class Control extends Component{
         }, {
             title: '操作',
             key: 'action',
+            width:80,
             render: (text, record) => (
                 <span>
                     <span onClick={(e)=>this.editShowModal(record)} style={{cursor:'pointer'}}>详情</span>
@@ -408,7 +434,7 @@ export  class Control extends Component{
                         <Form>
                             <Col span={12} style={{ padding: '0 65px' }}>
                                 <span style={{color:"#fff"}}>照片：</span>
-                                {detail.zpurl!==''||detail.zpurl !== undefined ? <img src={detail.zpurl} style={{ width: '130px', height: '160px' }} /> : <img src="../../images/zanwu.png" style={{ width: '130px', height: '160px' }} />}
+                                {(detail.zpurl!==''&&this.state.ImgFalse)? <img src={detail.zpurl} style={{ width: '130px', height: '160px' }} onError={() =>this.ImgError(this)}/> : <img src="../../images/zanwu.png" style={{ width: '130px', height: '160px' }} />}
                             </Col>
                             <Col span={12}>
                                 <FormItem
@@ -466,7 +492,7 @@ export  class Control extends Component{
                                     {getFieldDecorator('address', {
                                         initialValue:this.state.modalType === 'edit' ? detail.address : '',
                                     })(
-                                        <Input disabled/>
+                                        <Input title={detail.address} disabled/>
                                     )}
                                 </FormItem>
                             </Col>
@@ -535,7 +561,7 @@ export  class Control extends Component{
                                     )}
                                 </FormItem>
                             </Col>
-                            <Col span={12}>
+                            <Col span={12} className={controlType === 'GK_WGK'?'noneDiv':''}>
                                 <FormItem
                                     {...formItemLayout}
                                     label="隶属任务"
@@ -547,16 +573,16 @@ export  class Control extends Component{
                                     )}
                                 </FormItem>
                             </Col>
-                            <Col span={12}>
+                            <Col span={12} className={controlType === 'GK_WGK'?'noneDiv':''}>
                                 <FormItem
                                     {...formItemLayout}
                                     label="任务周期"
                                 >
                                     {getFieldDecorator('cycle', {
-                                        initialValue:this.state.modalType === 'edit' ? (detail.cycle=='0'?'按天':'按周') : '',
+                                        initialValue:this.state.modalType === 'edit' ? (detail.cycle=='0'?'按天':(detail.cycle=='1'?'按周':'')) : '',
                                     })(
                                         <Select notFoundContent='暂无' disabled>
-                                            <Option value="">全部</Option>
+                                            {/*<Option value="">全部</Option>*/}
                                             <Option value="按周">按周</Option>
                                             <Option value="按天">按天</Option>
                                         </Select>
@@ -700,7 +726,7 @@ const SearchArea = React.createClass({
             } else if(controlType === 'LY_DR'){
                 creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),taskname:Tosk, beginTime:begindate,endTime:enddate,source:"901006"},showCount:10,currentPage:1}
             } else if(controlType === 'LY_XZ'){
-                creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),taskname:Tosk, beginTime:begindate,endTime:enddate,source:"901008"},showCount:10,currentPage:1}
+                creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),taskname:Tosk, beginTime:begindate,endTime:enddate,source:"901001"},showCount:10,currentPage:1}
             } else {
                 creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),taskname:Tosk, beginTime:begindate,endTime:enddate},showCount:10,currentPage:1}
             }
@@ -745,7 +771,7 @@ const SearchArea = React.createClass({
     },
     hideModalOk: function() {
         let id = this.state.wordId;
-        store.dispatch(delCustomFiled({id:id}))
+        store.dispatch(delCustomFiled({id:id}));
         setTimeout(()=>{
             let delCode = store.getState().ControlPersonnel.data.delCustomFiled.reason;
             if(delCode === null){
@@ -840,20 +866,25 @@ const SearchArea = React.createClass({
                 creds = {createuser:user.user.name,name:this.state.wordName,type:"1",value:this.state.OptionWords,id:this.state.wordId}
             }
         }
-        if(this.state.wordName!==""){
-            store.dispatch(insertOrUpdateCustomFiled(creds));
-            setTimeout(()=>{
-                let delCode = store.getState().ControlPersonnel.data.CustomFiled.reason;
-                if(delCode === null){
-                    message.success(`提示：自定义字段${this.state.zdyType === 'add' ? '新增':'修改'}成功`);
-                    this.getNewWords();
-                }else{
-                    message.error(`提示：${store.getState().ControlPersonnel.data.CustomFiled.reason.text}`);
-                }
-            },100)
-            this.hideModals();
+        if(this.state.wordName.trim()!==""){
+            let reg = Regular('zdyName').reg
+            if(!reg.test(this.state.wordName.trim())){
+                message.error(Regular('zdyName').msg,5);
+            }else{
+                store.dispatch(insertOrUpdateCustomFiled(creds));
+                setTimeout(()=>{
+                    let delCode = store.getState().ControlPersonnel.data.CustomFiled.reason;
+                    if(delCode === null){
+                        message.success(`提示：自定义字段${this.state.zdyType === 'add' ? '新增':'修改'}成功`);
+                        this.getNewWords();
+                    }else{
+                        message.error(`提示：${store.getState().ControlPersonnel.data.CustomFiled.reason.text}`);
+                    }
+                },100)
+                this.hideModals();
+            }
         }else{
-            message.error(`提示：字段名称不能为空!`,5);
+            message.error(`提示：字段名称不能为空`,5);
         }
     },
     getAddModal:function(type){
@@ -869,7 +900,7 @@ const SearchArea = React.createClass({
             })
         }
         if(this.props.selectedRowsId.length > 0){
-            let creds = {switch:'1'}
+            let creds = { taskswitch:'1',showCount:9999999}
             store.dispatch(getTaskModelList(creds));
             this.setState({
                 addModal:true
@@ -911,12 +942,30 @@ const SearchArea = React.createClass({
             zdyModals:false
         })
     },
+    errorText:function(path){
+        let paths = serverUrls + path;
+        window.open(paths);
+        message.destroy();
+    },
+    getOnClose:function(){
+        message.destroy();
+    },
     importOnChange:function(info) {
         if(info.file.response.reason!==null){
             if(info.file.response.reason.code === ""){
-                message.success(`提示：${info.file.response.reason.text}`);
+                if(info.file.response.result.errorExcelPath === "" ||info.file.response.result.errorExcelPath === undefined){
+                    message.success(`提示：${info.file.response.reason.text}`);
+                }else{
+                    message.warning(
+                        <content>
+                            <span>提示：{info.file.response.reason.text}</span>
+                            <a onClick={()=>this.errorText(info.file.response.result.errorExcelPath)}> 下载失败数据明细 </a>
+                            <a onClick={this.getOnClose}> 关闭 </a>
+                        </content>,0
+                    );
+                }
             }else{
-                message.error(`提示：${info.file.response.reason.text}`,5);
+                message.error(`提示：${info.file.response.reason.text}`,5)
             }
         }
         if (info.file.status === 'uploading') {
@@ -939,7 +988,7 @@ const SearchArea = React.createClass({
             }else if(controlType==='LY_DR'){
                 creds = {pd:{source:'901006'},showCount:10,currentPage:1}
             }else if(controlType==='LY_XZ'){
-                creds = {pd:{source:'901008'},showCount:10,currentPage:1}
+                creds = {pd:{source:'901001'},showCount:10,currentPage:1}
             }else{
                 creds = {}
             }
@@ -969,17 +1018,24 @@ const SearchArea = React.createClass({
                 prompType:'download'
             })
             store.dispatch(getControlDownload())
-        }else if(type === 'export'){
             this.setState({
-                promptText:'是否确定导出数据？',
-                prompType:'export'
+                prompt:true,
             })
-            let creds = {ids:this.props.selectedRowsId.toString()}
-            store.dispatch(getControlExport(creds))
+        }else if(type === 'export'){
+            if(this.props.selectedRowsId.length > 0){
+                this.setState({
+                    promptText:'是否确定导出数据？',
+                    prompType:'export'
+                })
+                let creds = {ids:this.props.selectedRowsId.toString()}
+                store.dispatch(getControlExport(creds))
+                this.setState({
+                    prompt:true,
+                })
+            }else{
+                message.warning('提示：请选择需导出的人员');
+            }
         }
-        this.setState({
-            prompt:true,
-        })
     },
     exportModal:function(){
         this.props.handleExport();
@@ -1009,7 +1065,7 @@ const SearchArea = React.createClass({
         }else if(controlType==='LY_DR'){
             cred = {pd:{source:'901006'}}
         }else if(controlType==='LY_XZ'){
-            cred = {pd:{source:'901008'}}
+            cred = {pd:{source:'901001'}}
         }else{
             cred = {}
         }
@@ -1044,6 +1100,10 @@ const SearchArea = React.createClass({
         this.setState({
             ToskId: e
         })
+    },
+    getSelectSearch:function(e){
+        let creds = { taskswitch:'1',showCount:9999999,pd:{name:e}}
+        store.dispatch(getTaskModelList(creds));
     },
     render() {
         const {getFieldDecorator} = this.props.form
@@ -1162,7 +1222,7 @@ const SearchArea = React.createClass({
         return (
             <div className="marLeft40 fl z_searchDiv">
                 <label htmlFor="" className="font14">身份证号：</label>
-                <Input style={{width:'130px',marginRight:"10px"}} type="text"  id='name' placeholder='请输入身份证号'  value={cardId} onChange={this.handleCardChange}/>
+                <Input style={{width:'230px',marginRight:"10px"}} type="text"  id='name' placeholder='请输入身份证号'  value={cardId} onChange={this.handleCardChange}/>
                 <label htmlFor="" className="font14">姓名：</label>
                 <Input style={{width:'130px',marginRight:"10px"}} type="text"  id='name' placeholder='请输入人员姓名'  value={name}  onChange={this.handleNameChange}/>
                 <label htmlFor="" className="font14">居住类型：</label>
@@ -1190,7 +1250,7 @@ const SearchArea = React.createClass({
                            maskClosable={false}
                     >
                         <div style={{margin:'0 0 16px 0'}}>
-                            <Select style={{width:'450px',marginRight:"10px"}} placeholder='请选择任务' value={this.state.ToskId} onChange={this.getSelectTosk}>
+                            <Select style={{width:'450px',marginRight:"10px"}} placeholder='请选择任务' value={this.state.ToskId} onChange={this.getSelectTosk} showSearch={true}  filterOption={false} onSearch={this.getSelectSearch}>
                                 {children}
                             </Select>
                             <ShallowBlueBtn width="80px" text="确定" margin="0 0 0 10px" onClick={this.choiceTask} />
@@ -1215,7 +1275,7 @@ const SearchArea = React.createClass({
                         </p>
 
                     </Modal>
-                    <Modal style={{top:"38%"}}
+                    <Modal style={{top:"20%"}}
                            title="自定义字段"
                            visible={this.state.zdyModal}
                            footer={null}

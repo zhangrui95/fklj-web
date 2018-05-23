@@ -120,7 +120,21 @@ class TaskStatistics extends Component {
             // store.dispatch(postTaskTotalAttentionData(creds));
         }
     }
-
+    inits = () => {
+        this.setState({
+            beginDate:'',
+            endDate: '',
+        });
+        let myDate = new Date();
+        let NowYEAR = myDate.getFullYear();
+        let creds = {
+            startTime: NowYEAR + '-01' + '-01',
+            endTime: NowYEAR + '-12' + '-31',
+        }
+        store.dispatch(getSubtaskListGroupByType(creds));
+        store.dispatch(getSubtaskListGroupByCycle(creds));
+        store.dispatch(getSubtaskCount(creds));
+    }
     render() {
         let dateSet = {
             startTimeSet: this.state.startTimeSet,
@@ -154,13 +168,13 @@ class TaskStatistics extends Component {
                         </p>
                         <div style={{float: "left", marginLeft: "50px"}}>
                             <label htmlFor="" style={labelStyle2}>统计时间：</label>
-                            <DatePicker  placeholder="" format={dateFormat} allowClear={false} style={{marginRight: "10px"}}
+                            <DatePicker  placeholder="请选择日期" format={dateFormat} allowClear={false} style={{marginRight: "10px"}}
                                          value={beginDateValue} onChange={this.handleBeginDeteClick}/>
                             <span className="font14" style={{marginRight: "10px"}}>至</span>
-                            <DatePicker  placeholder="" format={dateFormat} allowClear={false} style={{marginRight: "10px"}}
+                            <DatePicker  placeholder="请选择日期" format={dateFormat} allowClear={false} style={{marginRight: "10px"}}
                                          value={endDateValue} onChange={this.handleEndDeteClick}/>
-                            <ShallowBlueBtn text="查询" margin="0 0 0 20px" width="60px" onClick={this.handleQueryClick}/>
-
+                            <ShallowBlueBtn  width="80px" text="查询" margin="0 10px 0 10px" onClick={this.handleQueryClick}/>
+                            <ShallowBlueBtn width="80px" text="重置" onClick={this.inits} />
                         </div>
                         <div style={clear}></div>
                     </div>
@@ -170,9 +184,9 @@ class TaskStatistics extends Component {
                         <div style={{
                             float: "left",
                             borderRight: "1px solid #0C5F93",
-                            borderBottom: '1px solid #0C5F93',
+                            // borderBottom: '1px solid #0C5F93',
                             width: "49.9%",
-                            height: "60%"
+                            height: "633px"
                         }}>
                             <p style={{
                                 fontSize: "16px",
@@ -182,11 +196,11 @@ class TaskStatistics extends Component {
                                 margin: "20px 0"
                             }}>任务完成情况</p>
                             {/*添加图表*/}
-                            <div>
+                            <div style={{height:'80%'}}>
                                 <TaskDoneCharts dateSet={dateSet}/>
                             </div>
                         </div>
-                        <div style={{float: "left", width: "49.9%", borderBottom: '1px solid #0C5F93', height: "60%"}}>
+                        <div style={{float: "left", width: "49.9%", height: "633px"}}>
                             <p style={{
                                 fontSize: "16px",
                                 color: "#fff",
@@ -195,7 +209,7 @@ class TaskStatistics extends Component {
                                 margin: "20px 0"
                             }}>任务周期</p>
                             {/*添加图表*/}
-                            <div>
+                            <div style={{height:'80%'}}>
                                 <TaskCycleCharts dateSet={dateSet}/>
                             </div>
                         </div>
@@ -224,7 +238,7 @@ class TaskDoneCharts extends Component {
         let ToskChartsLists = [];
         for(let i in ToskChartsList){
             if(i!=='remove'){
-                ToskChartsLists.push({name:ToskChartsList[i]. type == 0 ? '待办任务':(ToskChartsList[i]. type === 1 ? '已完成任务' : '超期任务'),value:ToskChartsList[i].count})
+                ToskChartsLists.push({name:ToskChartsList[i].name == 0 ? '待办任务':(ToskChartsList[i].name === 1 ? '已完成任务' : '超期任务'),value:ToskChartsList[i].value})
             }
         }
         let isFetching = store.getState().ReportForms.data.getSubtaskListGroup.isFetching;
@@ -240,7 +254,7 @@ class TaskDoneCharts extends Component {
             series: [{
                 name: '任务完成情况',
                 type: 'pie',
-                radius: '55%',
+                radius: '60%',
                 center: ['50%', '50%'],
                 label: {
                     normal: {
@@ -300,7 +314,7 @@ class TaskCycleCharts extends Component {
         let TostCycleChartsList = [];
         for(let i in List){
             if(i!=='remove'){
-                TostCycleChartsList.push({name:List[i].cycle == 0 ? '按天':(List[i].cycle == 1 ? '按周' : '按月'),value:List[i].count})
+                TostCycleChartsList.push({name:List[i].name== 0 ? '按天':(List[i].name == 1 ? '按周' : '按月'),value:List[i].value})
             }
         }
         let isFetching = store.getState().ReportForms.data.getSubtaskListGroupByCycle.isFetching;
@@ -325,15 +339,14 @@ class TaskCycleCharts extends Component {
                     }
                 }]
             },
-            color: ['#3dc7d1', '#00acee', '#f88a6f', '#fad336'],
+            color: ['#3dc7d1', '#00acee', '#fad336', '#f88a6f'],
             series: [{
                 name: '任务周期',
                 type: 'pie',
                 radius: ['55%', '70%'],
+                center: ['50%', '56%'],
                 avoidLabelOverlap: false,
-
-                top: 'top',
-
+                // top: 'top',
                 label: {
                     normal: {
                         show: true,

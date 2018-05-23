@@ -64,22 +64,22 @@ const Option = Select.Option;
 const SHOW_PARENT = TreeSelect.SHOW_PARENT;
 const {TextArea } = Input;
 
-//分页配置文件
-const pagination = {
-    size: 'small',
-    pageSize: constants.recordPageSize,
-    showTotal(total) {
-        return `合计 ${total} 条记录`;
-    },
-    itemRender(current, type, originalElement) {
-        if (type === 'prev') {
-            return <a>上一页</a>;
-        } else if (type === 'next') {
-            return <a>下一页</a>;
-        }
-        return originalElement;
-    }
-};
+// //分页配置文件
+// const pagination = {
+//     size: 'small',
+//     pageSize: constants.recordPageSize,
+//     showTotal(total) {
+//         return `合计 ${total} 条记录`;
+//     },
+//     itemRender(current, type, originalElement) {
+//         if (type === 'prev') {
+//             return <a>上一页</a>;
+//         } else if (type === 'next') {
+//             return <a>下一页</a>;
+//         }
+//         return originalElement;
+//     }
+// };
 
 //表格样式
 const tableStyle = {
@@ -142,7 +142,7 @@ export class CodingTable extends Component {
             dateEnd: '',
             data: [],
             record: null,
-            pagination: pagination,
+            // pagination: pagination,
             loading: false,
             personInfo:'',
             modalKey: 0,
@@ -553,9 +553,7 @@ handleDelete = () => {
                 {text !== ''? 
                    <span title={text} style={{cursor:"pointer"}}>
                        {
-                           text.length <= 10?
-                           text.slice(0,9):text.slice(0,9)+"..."
-
+                           text !==undefined ? (text.length <= 10? text.slice(0,9):text.slice(0,9)+"..."):''
                        }
                    </span>
                    :
@@ -637,6 +635,17 @@ handleDelete = () => {
             <Option key={statusUnit.key} value={statusUnit.value}>{statusUnit.key}</Option>
         )
     }
+           const pagination = {
+               onChange: (page) =>{
+                   this.setState({
+                       nowPage: page,
+                   });
+                   this.pageChange(page)
+               },
+               showQuickJumper:'true',
+               total: totalRecord,
+               current: this.state.nowPage,
+           }
            return(
             <div className="sliderWrap">
                 <div className="sliderItemDiv">
@@ -662,13 +671,14 @@ handleDelete = () => {
                                 columns={columns} 
                                 dataSource={data} 
                                 bordered  
-                                pagination={false} 
+                                // pagination={false}
+                                pagination={pagination}
                             />
                         </div>}
                         <div className="clear"></div>
                     </div>
                     {/*分页*/}
-                    <Pag pageSize={10} nowPage={nowPage} totalRecord={totalRecord} pageChange={this.pageChange} />
+                    {/*<Pag pageSize={10} nowPage={nowPage} totalRecord={totalRecord} pageChange={this.pageChange} />*/}
                     {/* 模态框 */}
                     <Modal
                     title="数据字典"
@@ -755,7 +765,7 @@ handleDelete = () => {
                                         //placeholder="请选择状态"
                                         optionFilterProp="children"
                                         onChange={this.statusChange}
-                                        value={status}
+                                        // value={status}
                                         dropdownMatchSelectWidth={false}
                                         filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                                 >

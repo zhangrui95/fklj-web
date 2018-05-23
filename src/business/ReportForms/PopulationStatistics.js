@@ -113,6 +113,22 @@ class PopulationStatistics extends Component {
             store.dispatch(getControlPersonCountForX3(creds));
         }
     }
+    inits = () => {
+        this.setState({
+            beginDate:'',
+            endDate: '',
+        });
+        let myDate = new Date();
+        let NowYEAR = myDate.getFullYear();
+        let creds = {
+            startTime: NowYEAR + '-01' + '-01',
+            endTime: NowYEAR + '-12' + '-31',
+        }
+        store.dispatch(getControlPersonList(creds));
+        store.dispatch(getControlPersonalListGroupByAddressType(creds));
+        store.dispatch(getControlPersonalListGroupBySource(creds));
+        store.dispatch(getControlPersonCountForX3(creds));
+    }
     render() {
         let dateSet = {
             startTimeSet: this.state.startTimeSet,
@@ -126,27 +142,26 @@ class PopulationStatistics extends Component {
         let beginPicker = '';
         if (begin === '') {
             beginPicker = (
-                <DatePicker placeholder="" onChange={this.handleBeginDeteClick}  format={dateFormat} allowClear={false} style={{marginRight:"10px"}}/>
+                <DatePicker placeholder="请选择日期" value={beginDateValue} onChange={this.handleBeginDeteClick}  format={dateFormat} allowClear={false} style={{marginRight:"10px"}}/>
             )
         } else {
             beginDateValue = moment(begin, dateFormat);
             beginPicker = (
-                <DatePicker placeholder="" onChange={this.handleBeginDeteClick}  format={dateFormat} allowClear={false} style={{marginRight:"10px"}} value={beginDateValue}/>
+                <DatePicker placeholder="请选择日期" onChange={this.handleBeginDeteClick}  format={dateFormat} allowClear={false} style={{marginRight:"10px"}} value={beginDateValue}/>
             )
         }
         let endDateValue = '';
         let endPicker = '';
         if (end === '') {
             endPicker = (
-                <DatePicker placeholder="" onChange={this.handleEndDeteClick} format={dateFormat} allowClear={false} style={{marginRight:"10px"}}/>
+                <DatePicker value={endDateValue} placeholder="请选择日期" onChange={this.handleEndDeteClick} format={dateFormat} allowClear={false} style={{marginRight:"10px"}}/>
             )
         } else {
             endDateValue = moment(end, dateFormat);
             endPicker = (
-                <DatePicker placeholder="" onChange={this.handleEndDeteClick} format={dateFormat} allowClear={false} style={{marginRight:"10px"}} value={endDateValue}/>
+                <DatePicker placeholder="请选择日期" onChange={this.handleEndDeteClick} format={dateFormat} allowClear={false} style={{marginRight:"10px"}} value={endDateValue}/>
             )
         }
-
         return (
 
             <div className="sliderWrap" style={{borderBottom: "0", height: 'auto'}}>
@@ -168,8 +183,8 @@ class PopulationStatistics extends Component {
                             { beginPicker }
                             <span className="font14" style={{marginRight: "10px"}}>至</span>
                             { endPicker }
-                            <ShallowBlueBtn text="查询" margin="0 0 0 20px" width="60px"  onClick={this.handleQueryClick}/>
-
+                            <ShallowBlueBtn width="80px" text="查询" margin="0 10px 0 10px" onClick={this.handleQueryClick}/>
+                            <ShallowBlueBtn width="80px" text="重置" onClick={this.inits} />
                         </div>
                         <div style={clear}></div>
                     </div>
@@ -281,8 +296,8 @@ class LiveCharts extends Component {
             series: [{
                 name: '居住情况',
                 type: 'pie',
-                radius: '55%',
-                center: ['50%', '50%'],
+                radius: '61%',
+                center: ['50%', '44%'],
                 label: {
                     normal: {
                         show: true,
@@ -471,15 +486,11 @@ class ControlCharts extends Component {
                 formatter: "{a} <br/>{b}: {c} ({d}%)"
             },
             legend: {
+                show:false,
                 orient: 'horizontal',
                 left: 'center',
                 top: "bottom",
                 data: [{
-                    name: '失控',
-                    textStyle: {
-                        color: '#fff'
-                    }
-                }, {
                     name: '未管控',
                     textStyle: {
                         color: '#fff'
@@ -494,15 +505,20 @@ class ControlCharts extends Component {
                     textStyle: {
                         color: '#fff'
                     }
+                },{
+                    name: '失控',
+                    textStyle: {
+                        color: '#fff'
+                    }
                 }]
             },
-            color: ['#39a0ff', '#37cbcb', '#fad336', '#f2627b'],
+            color: [ '#f88a6f','#39a0ff','#37cbcb','#fad336'],
             series: [{
                 name: '管控情况',
                 type: 'pie',
                 radius: ['55%', '70%'],
+                center: ['50%', '50%'],
                 avoidLabelOverlap: false,
-
                 top: 'top',
 
                 label: {
@@ -561,7 +577,7 @@ class PersonFromCharts extends Component {
         const FormChartsList = [];
         for(let i in ListGroupBySource){
             if(i!=='remove'){
-                FormChartsList.push({name:ListGroupBySource[i].name == '901006' ? '后台导入' : '前端新增',value: ListGroupBySource[i].value})
+                FormChartsList.push({name:ListGroupBySource[i].name == '901006' ? '后台导入' : (ListGroupBySource[i].name == '901001' ? '前端新增':''),value: ListGroupBySource[i].value})
             }
         }
         let isFetching = store.getState().ReportForms.data.ControlType.isFetching;
@@ -591,6 +607,7 @@ class PersonFromCharts extends Component {
                 name: '人员来源',
                 type: 'pie',
                 radius: ['55%', '70%'],
+                center: ['50%', '50%'],
                 avoidLabelOverlap: false,
 
                 top: 'top',
