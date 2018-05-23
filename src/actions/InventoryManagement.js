@@ -162,13 +162,24 @@ export function receivedCumtomerCarError(message) {
 // 呼市反恐利剑
 // 列表展示
 export function postInventoryListHushiData(creds) {
-    let path = '/data/getExaminePatrolTasklistPage';
+    let path = '/data/getExamineManage';
     return dispatch => {
         dispatch({ type: "REQUEST_INVENTORY_LIST_HUSHI_DATA" });
         post(api + path, creds).then((json) => {
             dispatch({ type: 'InventoryListHushi-data', data: json });
         }).catch((e) => {
             dispatch({ type: 'InventoryListHushi-error', message: e.toString() })
+        });
+    }
+}
+// 详情展示
+export function postInventoryListHushiDetailsData(creds) {
+    let path = '/data/getExamineManageDetails';
+    return dispatch => {
+        post(api + path, creds).then((json) => {
+            dispatch({ type: 'InventoryListHushiDetails-data', data: json });
+        }).catch((e) => {
+            dispatch({ type: 'InventoryListHushiDetails-error', message: e.toString() })
         });
     }
 }

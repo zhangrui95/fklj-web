@@ -1,20 +1,19 @@
-// 盘查管理-周期任务-按天
+ // 盘查管理-周期任务-按天
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { mainReducer } from "../../reducers/reducers";
 import { StylePage, ShallowBlueBtn, Pag, InterrogationDetailsItem, Tabs } from "../generalPurposeModule";
 import { store } from '../../index.js';
 import * as constants from "../../utils/Constants";
-import { monthFormat, dateFormat, serverUrl, getMyDate } from '../../utils/';
-import { Spin, Table, message, Input, Modal, Button, Form, Icon, Row, Col, Select, DatePicker, Tag, Divider, Radio } from 'antd';
+import { monthFormat, dateFormat, serverUrl } from '../../utils/';
+import { Spin, Table, message, Input, Modal, Button, Form, Icon, Row, Col, Select, DatePicker, Tag, Divider } from 'antd';
 import { BannerAnimImg } from '../../components/BannerAnim';
-import { postInterrogationDetailsUsersData } from "../../actions/InterrogationDetails";
+import { postInterrogationDetailsUsersData} from "../../actions/InterrogationDetails";
 import { SwordData } from "../InterrogationDetails/SwordData";
 import { changeTab } from "../../actions/actions";
 import {
     postInventoryListHushiData, postInventoryListHushiDetailsData
 } from "../../actions/InventoryManagement";
-
 import moment from 'moment';
 moment.locale('zh-cn');
 
@@ -27,7 +26,7 @@ const sliderdyHeader = {
 const FormItem = Form.Item;
 const Option = Select.Option;
 const { TextArea } = Input;
-const RadioGroup = Radio.Group;
+
 //分页配置文件
 const pagination = {
     size: 'small',
@@ -65,7 +64,7 @@ const formText = {
     },
 };
 
-export class WithWeek extends Component {
+export class OldWithDay extends Component {
     constructor(props) { //初始化nowPage为1
         super(props);
         this.state = {
@@ -114,13 +113,13 @@ export class WithWeek extends Component {
             currentPage: 1,
             pd: {
                 idcard: '',
-                taskname: '',
+                subtask_name: '',
                 name: "",
                 address_type: '',
                 police_name: '',
                 endtime: '',
                 starttime: '',
-                cycle: 1,
+                cycle:0,
             },
             showCount: 10
         }
@@ -132,10 +131,6 @@ export class WithWeek extends Component {
             personInfo: record,
             modalType: 'edit'
         });
-        let creds = {
-            idcard: record.idcard
-        }
-        store.dispatch(postInventoryListHushiDetailsData(creds));
     }
     addShowModal = (record) => {
         this.setState({
@@ -165,7 +160,7 @@ export class WithWeek extends Component {
             },
             showCount: constants.pageSize
         }
-        store.dispatch(postInterrogationDetailsUsersData(creds));
+        this.props.dispatch(postInterrogationDetailsUsersData(creds));
     }
     // 原反恐利剑 取消
     handleOldCancel = () => {
@@ -295,7 +290,7 @@ export class WithWeek extends Component {
             begindate: begindate,
             subtask_name: subtask_name,
             address_type: address_type,
-            police_name: police_name,
+            police_name:police_name,
             nowPage: page
         });
     }
@@ -359,31 +354,30 @@ export class WithWeek extends Component {
     render() {
         const { getFieldDecorator } = this.props.form;
         let nowPage = this.state.nowPage;
-        let isFetching = store.getState().InventoryManagement.data.invenListHushi.isFetching;
+        let isFetching = store.getState().ControlPersonnel.isFetching;
         let data = store.getState().InventoryManagement.data.invenListHushi.result.list;
         let obj = store.getState().InventoryManagement.data.invenListHushiDetails.result;
         let page = store.getState().InventoryManagement.data.invenListHushi.result.page;
         let dataList = [];
         let recordNumber = parseInt((nowPage - 1) * 10);
-        if (data) {
-            for (let i = 0; i < data.length; i++) {
-                let item = data[i];
-                let serial = recordNumber + i + 1;
-                dataList.push({
-                    serial: serial,
-                    name: item.name,
-                    idcard: item.idcard,
-                    sex: item.sex,
-                    age: item.age,
-                    address_type: item.address_type,
-                    now_address: item.now_address,
-                    phone: item.phone,
-                    taskname: item.taskname,
-                    police_name: item.police_name,
-                    checktime: getMyDate(item.checktime / 1000),
+        for (let i = 0; i < data.length; i++) {
+            let item = data[i];
+            let serial = recordNumber + i + 1;
+            dataList.push({
+                serial: serial,
+                name: item.name,
+                idcard: item.idcard,
+                sex: item.sex,
+                age: item.age,
+                address_type: item.address_type,
+                now_address: item.now_address,
+                phone: item.phone,
+                subtask_name: item.subtask_name,
+                police: item.police,
+                checktime: item.checktime,
+                id: item.id,
 
-                });
-            }
+            });
         }
         const columns = [{
             title: '序号',
@@ -404,9 +398,6 @@ export class WithWeek extends Component {
         }, {
             title: '居住类型',
             dataIndex: 'address_type',
-            render: (text, record) => (
-                <span>{record.address_type === 0 ? '常住' : record.address_type === 1 ? '暂住' : '流动'}</span>
-            ),
         }, {
             title: '现居住地址',
             dataIndex: 'now_address',
@@ -415,10 +406,10 @@ export class WithWeek extends Component {
             dataIndex: 'phone',
         }, {
             title: '隶属任务',
-            dataIndex: 'taskname',
+            dataIndex: 'subtask_name',
         }, {
             title: '盘查警员',
-            dataIndex: 'police_name',
+            dataIndex: 'police',
         }, {
             title: '盘查时间',
             dataIndex: 'checktime',
@@ -427,7 +418,7 @@ export class WithWeek extends Component {
             key: 'action',
             render: (text, record) => (
                 <span>
-                    <span onClick={(e) => this.editShowModal(record)} style={{ cursor: 'pointer' }}>详情</span>
+                    <span onClick={(e) => this.oldDetailsShowModal(record)} style={{ cursor: 'pointer' }}>详情</span>
                 </span>
             ),
         }];
@@ -448,26 +439,23 @@ export class WithWeek extends Component {
             }),
         };
         let imgArray = [];
-        if (obj) {
-            if (obj.paint) {
-                let arrayImg = JSON.parse(obj.paint.paint_photo_path);
-                var imgObjText = obj.paint.text;
-                // let arrayImg = ["../../images/zanwu.png", "../../images/zanwu.png", "../../images/zanwu.png"];
-                if (arrayImg && arrayImg.length > 0) {
-                    for (let i = 0; i < arrayImg.length; i++) {
-                        imgArray.push(
-                            <img src={arrayImg[i]} key={i} alt="" style={{ width: '100px', height: '120px', margin: '5px' }}
-                                onClick={handleImgClick => this.handleImgClick(arrayImg, arrayImg[i], i)} />
-                        );
-                    }
-                } else {
-                    imgArray.push(
-                        <div style={{ fontSize: 16, color: '#fff', width: '100%', textAlign: "center" }}>暂无写实照片</div>
-                    );
-                }
+        // if (paint_real) {
+        //     let imgObj = JSON.parse(paint_real.value);
+        //     var imgObjText = imgObj.text;
+        let arrayImg = ["../../images/zanwu.png", "../../images/zanwu.png", "../../images/zanwu.png"];
+        if (arrayImg && arrayImg.length > 0) {
+            for (let i = 0; i < arrayImg.length; i++) {
+                imgArray.push(
+                    <img src={arrayImg[i]} key={i} alt="" style={{ width: '100px', height: '120px', margin: '5px' }}
+                        onClick={handleImgClick => this.handleImgClick(arrayImg, arrayImg[i], i)} />
+                );
             }
+        } else {
+            imgArray.push(
+                <div style={{ fontSize: 16, color: '#fff', width: '100%', textAlign: "center" }}>暂无写实照片</div>
+            );
         }
-
+        // }
         let tabs = store.getState().InterrogationDetailsUsers.uiData.tabs;
         let isSelectTab, content;
         //查找被选中的标签
@@ -503,7 +491,7 @@ export class WithWeek extends Component {
                         police_name: police_name,
                         endtime: enddate,
                         starttime: begindate,
-                        cycle: 1,
+                        cycle:0,
                     },
                     showCount: 10
                 }
@@ -541,7 +529,7 @@ export class WithWeek extends Component {
                             <Spin size="large" />
                         </div> :
                         <div style={{ padding: "0 15px" }}>
-                            <Table locale={{ emptyText: '暂无数据' }} columns={columns} dataSource={dataList} bordered pagination={pagination} />
+                            <Table locale={{ emptyText: '暂无数据' }} columns={columns} dataSource={this.state.data} bordered pagination={pagination} />
                         </div>}
                     <div className="clear"></div>
                 </div>
@@ -643,12 +631,7 @@ export class WithWeek extends Component {
                                             {getFieldDecorator('address_type', {
                                                 initialValue: obj ? obj.address_type ? obj.address_type : '' : '',
                                             })(
-                                                <Select disabled>
-                                                    <Option value=''>全部</Option>
-                                                    <Option value={0}>常住</Option>
-                                                    <Option value={1}>暂住</Option>
-                                                    <Option value={2}>流动</Option>
-                                                </Select>
+                                                <Input disabled />
                                             )}
                                         </FormItem>
                                         <FormItem
@@ -667,8 +650,8 @@ export class WithWeek extends Component {
                                             label="工作地址"
                                             style={{ marginBottom: '5px' }}
                                         >
-                                            {getFieldDecorator('work_address', {
-                                                initialValue: obj ? obj.work_address ? obj.work_address : '' : '',
+                                            {getFieldDecorator('workAddress', {
+                                                initialValue: this.state.personInfo.workAddress,
                                             })(
                                                 <Input disabled />
                                             )}
@@ -700,8 +683,8 @@ export class WithWeek extends Component {
                                             label="盘查警员"
                                             style={{ marginBottom: '5px' }}
                                         >
-                                            {getFieldDecorator('police_name', {
-                                                initialValue: obj ? obj.police_name ? obj.police_name : '' : '',
+                                            {getFieldDecorator('police', {
+                                                initialValue: obj ? obj.idcard ? obj.idcard : '' : '',
                                             })(
                                                 <Input disabled />
                                             )}
@@ -711,14 +694,10 @@ export class WithWeek extends Component {
                                             label="任务周期"
                                             style={{ marginBottom: '5px' }}
                                         >
-                                            {getFieldDecorator('cycle', {
-                                                initialValue: obj ? obj.cycle ? obj.cycle : '' : '',
+                                            {getFieldDecorator('taskCycle', {
+                                                initialValue: obj ? obj.idcard ? obj.idcard : '' : '',
                                             })(
-                                                <Select disabled>
-                                                    <Option value={0}>常住</Option>
-                                                    <Option value={1}>暂住</Option>
-                                                    <Option value={2}>流动</Option>
-                                                </Select>
+                                                <Input disabled />
                                             )}
                                         </FormItem>
                                         <FormItem
@@ -726,8 +705,8 @@ export class WithWeek extends Component {
                                             label="人员来源"
                                             style={{ marginBottom: '5px' }}
                                         >
-                                            {getFieldDecorator('source', {
-                                                initialValue: obj ? obj.source ? obj.source : '' : '',
+                                            {getFieldDecorator('personnelSource', {
+                                                initialValue: obj ? obj.idcard ? obj.idcard : '' : '',
                                             })(
                                                 <Input disabled />
                                             )}
@@ -737,8 +716,8 @@ export class WithWeek extends Component {
                                             label="人员属性"
                                             style={{ marginBottom: '5px' }}
                                         >
-                                            {getFieldDecorator('attribute', {
-                                                initialValue: obj ? obj.attribute ? obj.attribute : '' : '',
+                                            {getFieldDecorator('personnelAttribute', {
+                                                initialValue: obj ? obj.idcard ? obj.idcard : '' : '',
                                             })(
                                                 <Input disabled />
                                             )}
@@ -748,36 +727,19 @@ export class WithWeek extends Component {
                                             label="是否有车"
                                             style={{ marginBottom: '5px' }}
                                         >
-                                            {getFieldDecorator('carstatus', {
-                                                initialValue: obj ? obj.carstatus ? obj.carstatus : '' : '',
+                                            {getFieldDecorator('isCar', {
+                                                initialValue: obj ? obj.idcard ? obj.idcard : '' : '',
                                             })(
-                                                <RadioGroup disabled style={{ color: '#fff' }}>
-                                                    <Radio value={false}>无车</Radio>
-                                                    <Radio value={true}>有车</Radio>
-                                                </RadioGroup>
+                                                <Input disabled />
                                             )}
                                         </FormItem>
-                                        {obj ? obj.carstatus ?
-                                            <FormItem
-                                                {...formItemLayout}
-                                                label="车牌号"
-                                                style={{ marginBottom: '5px' }}
-                                            >
-                                                {getFieldDecorator('carnumber', {
-                                                    initialValue: obj ? obj.carnumber ? obj.carnumber : '' : '',
-                                                })(
-                                                    <Input disabled />
-                                                )}
-                                            </FormItem>
-                                            : '' : ''
-                                        }
                                         <FormItem
                                             {...formItemLayout}
                                             label="盘查时间"
                                             style={{ marginBottom: '5px' }}
                                         >
-                                            {getFieldDecorator('checktime', {
-                                                initialValue: obj ? obj.checktime ? obj.checktime : '' : '',
+                                            {getFieldDecorator('value', {
+                                                initialValue: obj ? obj.idcard ? obj.idcard : '' : '',
                                             })(
                                                 <Input disabled />
                                             )}
@@ -788,7 +750,7 @@ export class WithWeek extends Component {
                                 <Divider style={{ background: 'rgb(29, 40, 81)', height: '2px', margin: '18px 0' }} />
                                 <Row>
                                     <Col span={24} style={{ fontSize: '16px', color: "#fff" }}>写实详情</Col>
-                                    <Row style={{ padding: '32px 32px 0 32px' }}>
+                                    <Row style={{ padding: '32px' }}>
                                         <Col span={24}>
                                             {imgArray}
                                             <Modal
@@ -806,10 +768,10 @@ export class WithWeek extends Component {
                                                 {...formText}
                                                 label="详情"
                                             >
-                                                {getFieldDecorator('paintText', {
-                                                    initialValue: obj ? obj.paint ? obj.paint.text : '' : ''
+                                                {getFieldDecorator('value', {
+                                                    initialValue: this.state.personInfo.content
                                                 })(
-                                                    <TextArea rows={2} disabled style={{ resize: 'none' }} />
+                                                    <TextArea rows={2} disabled />
                                                 )}
                                             </FormItem>
                                         </Col>
@@ -867,13 +829,13 @@ const SearchArea = React.createClass({
             currentPage: 1,
             pd: {
                 idcard: idcard,
-                taskname: subtask_name,
+                subtask_name: subtask_name,
                 name: name,
                 address_type: address_type,
                 police_name: police_name,
                 endtime: enddate,
                 starttime: begindate,
-                cycle: 1,
+                cycle:0,
             },
             showCount: 10
         }
@@ -895,18 +857,18 @@ const SearchArea = React.createClass({
             currentPage: 1,
             pd: {
                 idcard: '',
-                taskname: '',
+                subtask_name: '',
                 name: '',
                 address_type: '',
                 police_name: '',
                 endtime: '',
                 starttime: '',
-                cycle: 1,
+                cycle:0,
             },
             showCount: 10
         }
         store.dispatch(postInventoryListHushiData(params));
-        this.props.serchChange('', '', '', '', '', '', '', page);
+        this.props.serchChange('', '', '', '', '', '', page);
     },
     componentWillReceiveProps: function (nextProps) {
         if (this.props.type !== nextProps.type) {
@@ -928,14 +890,14 @@ const SearchArea = React.createClass({
             police_name: e.target.value,
         });
     },
-    handleaddressTypeClick: function (value) {
+    handleaddressTypeClick:function(value){
         this.setState({
             address_type: value
         });
     },
-    handleSubtaskNameClick: function (e) {
+    handleSubtaskNameClick:function(e){
         this.setState({
-            subtask_name: e.target.value
+            subtask_name:e.target.value
         });
     },
     handleBeginDeteClick: function (date, dateString) {
@@ -959,7 +921,7 @@ const SearchArea = React.createClass({
             tagsSelect: value
         });
     },
-
+    
     onOkBegin: function (e) {
         let beginDate = this.state.beginDate;
         if (e === undefined) {
@@ -1029,11 +991,11 @@ const SearchArea = React.createClass({
                     <Select style={{ width: "10%", margin: "0 10px 0 0" }} value={address_type} onChange={this.handleaddressTypeClick} notFoundContent='暂无'>
                         <Option value=''>全部</Option>
                         <Option value={0}>常住</Option>
-                        <Option value={1}>暂住</Option>
-                        <Option value={2}>流动</Option>
+                        <Option value={1}>流动</Option>
+                        <Option value={2}>暂住</Option>
                     </Select>
                     <label htmlFor="" className="font14">隶属任务：</label>
-                    <Input value={subtask_name} style={{ width: '130px', marginRight: "10px" }} type="text" id='subtask_name' placeholder='请输入隶属任务名称' onChange={this.handleSubtaskNameClick} />
+                    <Input value={subtask_name} style={{ width: '130px', marginRight: "10px" }} type="text" id='subtask_name' placeholder='请输入隶属任务名称' onChange={this.handleSubtaskNameClick}/>
                     <label htmlFor="" className="font14">盘查警员：</label>
                     <Input style={{ width: '130px', marginRight: "10px" }} type="text" id='police_name' placeholder='请输入警员姓名' value={police_name} onChange={this.handlePoliceNameClick} />
                 </div>
@@ -1050,5 +1012,5 @@ const SearchArea = React.createClass({
         );
     }
 })
-WithWeek = Form.create()(WithWeek);
-export default connect(mainReducer)(WithWeek);
+OldWithDay = Form.create()(OldWithDay);
+export default connect(mainReducer)(OldWithDay);

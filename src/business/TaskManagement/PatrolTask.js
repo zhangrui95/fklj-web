@@ -184,13 +184,6 @@ export class PatrolTask extends Component {
         }
         store.dispatch(postWeiguankongData(creds));
     }
-    // 编辑查看时 盘查对象
-    personListFortaskQuery = (id) => {
-        let creds = {
-            id: id,
-        }
-        store.dispatch(postPersonListForTaskData(creds));
-    }
     editShowModal = (record) => {
         this.setState({
             updateVisible: true,
@@ -204,16 +197,22 @@ export class PatrolTask extends Component {
     }
     // 查看
     seeShowModal = (record) => {
+        let creds = {
+            id: record.id,
+        }
+        store.dispatch(postPersonListForTaskData(creds,this.goback));
+        this.byidtaskquery(record.id);
+        // this.weiguankongQuery();
+    }
+    // 等盘查对象数据调取成功后，再调取弹出模态框等方法
+    goback = () => {
         this.setState({
             updateVisible: true,
-            personInfo: record,
+            // personInfo: record,
             modalType: 'edit',
             RadioValue: '',
             disabled: true
-        });
-        this.byidtaskquery(record.id);
-        // this.weiguankongQuery();
-        this.personListFortaskQuery(record.id);
+        });   
     }
     addShowModal = (record) => {
         this.setState({
@@ -939,269 +938,273 @@ export class PatrolTask extends Component {
                         </Row>
                     </Form>
                 </Modal>
-                <Modal width={800}
-                    title="任务编辑"
-                    visible={this.state.updateVisible}
-                    onCancel={this.handleCancel}
-                    footer={null}
-                // key={this.state.modalKey}
-                >
-                    <Form onSubmit={this.saveModel}>
-                        <Row className="formItemLeft">
-                            <Col span={24}>
-                                <FormItem
-                                    {...formItemLayouts}
-                                    label="任务名称"
-                                >
-                                    {getFieldDecorator('name', {
-                                        rules: [{
-                                            required: true, message: '请输入名称!',
+                {this.state.updateVisible ?
+                    <Modal width={800}
+                        title="任务编辑"
+                        visible={this.state.updateVisible}
+                        onCancel={this.handleCancel}
+                        footer={null}
+                    // key={this.state.modalKey}
+                    >
+                        <Form onSubmit={this.saveModel}>
+                            <Row className="formItemLeft">
+                                <Col span={24}>
+                                    <FormItem
+                                        {...formItemLayouts}
+                                        label="任务名称"
+                                    >
+                                        {getFieldDecorator('name', {
+                                            rules: [{
+                                                required: true, message: '请输入名称!',
 
-                                        }, {
-                                            max: 20, message: '最多输入二十个字符!',
-                                        }],
-                                        initialValue: this.state.modalType === 'edit' ? ogjByid ? ogjByid.name : '' : '',
-                                        validateFirst: true
-                                    })(
-                                        this.state.disabled ?
-                                            <Input disabled /> : <Input />
-                                    )}
-                                </FormItem>
-                            </Col>
-                            <Col span={12}>
-                                <FormItem
-                                    {...formItemLayout}
-                                    label="任务开始时间"
-                                >
-                                    {getFieldDecorator('starttime', {
-                                        rules: [{
-                                            required: true,
-                                            message: '请选择任务开始时间!'
-                                        }],
-                                        initialValue: this.state.modalType === 'edit' ? ogjByid ? moment(getMyDate(ogjByid.starttime / 1000), 'YYYY-MM-DD HH:mm:ss') : '' : '',
-                                    })(
-                                        this.state.disabled ?
-                                            <DatePicker showTime placeholder="" format="YYYY-MM-DD HH:mm:ss" allowClear={false} style={{ width: '220px' }} disabled />
-                                            :
-                                            <DatePicker showTime placeholder="" format="YYYY-MM-DD HH:mm:ss" allowClear={false} style={{ width: '220px' }} />
-                                    )}
-                                </FormItem>
-                            </Col>
-                            <Col span={12}>
-                                <FormItem
-                                    {...formItemLayout}
-                                    label="任务结束时间"
-                                >
-                                    {getFieldDecorator('endtime', {
-                                        rules: [{
-                                            required: true,
-                                            message: '请选择任务结束时间!'
-                                        }],
-                                        initialValue: this.state.modalType === 'edit' ? ogjByid ? moment(getMyDate(ogjByid.endtime / 1000), 'YYYY-MM-DD HH:mm:ss') : '' : '',
-                                    })(
-                                        this.state.disabled ?
-                                            <DatePicker showTime placeholder="" format="YYYY-MM-DD HH:mm:ss" allowClear={false} style={{ width: '220px' }} disabled /> :
-                                            <DatePicker showTime placeholder="" format="YYYY-MM-DD HH:mm:ss" allowClear={false} style={{ width: '220px' }} />
-                                    )}
-                                </FormItem>
-                            </Col>
-                            <Col span={12}>
-                                <FormItem
-                                    {...formItemLayout}
-                                    label="任务类别"
-                                >
-                                    {getFieldDecorator('category', {
-                                        rules: [{
-                                            required: true,
-                                            message: '请选择任务类别!'
-                                        }],
-                                        initialValue: this.state.modalType === 'edit' ? ogjByid ? ogjByid.category : '' : '',
-                                        validateFirst: true
-                                    })(
-                                        this.state.disabled ?
-                                            <Select onChange={this.onChange} disabled>
-                                                <Option value=''>全部</Option>
-                                                <Option value={0}>周期</Option>
-                                                <Option value={1}>一次性</Option>
-                                            </Select> :
-                                            <Select onChange={this.onChange} >
-                                                <Option value=''>全部</Option>
-                                                <Option value={0}>周期</Option>
-                                                <Option value={1}>一次性</Option>
-                                            </Select>
-                                    )}
-                                </FormItem>
-                            </Col>
-                            <Col span={12}>
-                                <FormItem
-                                    {...formItemLayout}
-                                    label="任务周期"
-                                >
-                                    {getFieldDecorator('cycle', {
-                                        rules: [{
-                                            required: true,
-                                            message: '请选择任务周期!'
-                                        }],
-                                        initialValue: this.state.modalType === 'edit' ? ogjByid ? ogjByid.cycle : '' : '',
-                                        validateFirst: true
-                                    })(
-                                        this.state.disabled ?
-                                            <Select onChange={this.onChange} disabled>
-                                                <Option value=''>全部</Option>
-                                                <Option value={0}>按天</Option>
-                                                <Option value={1}>按周</Option>
-                                                <Option value={2}>按月</Option>
-                                            </Select> :
-                                            <Select onChange={this.onChange}>
-                                                <Option value=''>全部</Option>
-                                                <Option value={0}>按天</Option>
-                                                <Option value={1}>按周</Option>
-                                                <Option value={2}>按月</Option>
-                                            </Select>
-                                    )}
-                                </FormItem>
-                            </Col>
-                            <Col span={12}>
-                                <FormItem
-                                    {...formItemLayout}
-                                    label="任务创建者"
-                                >
-                                    {getFieldDecorator('createuser', {
-                                        rules: [{
-                                            required: true,
-                                            message: '请选择任务创建者!'
-                                        }],
-                                        initialValue: this.state.modalType === 'edit' ? ogjByid ? ogjByid.createuser : '' : '',
-                                        validateFirst: true
-                                    })(
-                                        this.state.disabled ?
-                                            <Input disabled /> :
-                                            <Input />
-                                    )}
-                                </FormItem>
-                            </Col>
-                            <Col span={12}>
-                                <FormItem
-                                    {...formItemLayout}
-                                    label="任务状态"
-                                >
-                                    {getFieldDecorator('taskswitch', {
-                                        rules: [{
-                                            required: true,
-                                            message: '请选择任务状态!'
-                                        }],
-                                        initialValue: this.state.modalType === 'edit' ? ogjByid ? ogjByid.taskswitch : '' : '',
-                                        validateFirst: true
-                                    })(
-                                        this.state.disabled ?
-                                            <Select disabled>
-                                                <Option value=''>全部</Option>
-                                                <Option value={0}>待办任务</Option>
-                                                <Option value={1}>已完成任务</Option>
-                                                <Option value={2}>超期任务</Option>
-                                            </Select> :
-                                            <Select >
-                                                <Option value=''>全部</Option>
-                                                <Option value={0}>待办任务</Option>
-                                                <Option value={1}>已完成任务</Option>
-                                                <Option value={2}>超期任务</Option>
-                                            </Select>
-                                    )}
-                                </FormItem>
-                            </Col>
-                            <Col span={24}>
-                                <FormItem
-                                    {...formItemLayouts}
-                                    label="盘查对象"
-                                >
-                                    {getFieldDecorator('personList', {
-                                        initialValue: this.state.modalType === 'edit' ? ogjByid ? selectOption : '' : '',
-                                        validateFirst: true
-                                    })(
-                                        // <TreeSelect
-                                        //     style={{ marginRight: '10px' }}
-                                        //     value={unit}
-                                        //     dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-                                        //     treeData={treeList}
-                                        //     placeholder="请选择派发单位"
-                                        //     onChange={this.unitChange}
-                                        //     showSearch={false}
-                                        //     treeCheckable={true}
-                                        //     dropdownMatchSelectWidth={false}
-                                        //     showCheckedStrategy="SHOW_PARENT"
-                                        //     notFoundContent='暂无'
-                                        // />
-                                        this.state.disabled ?
-                                            <Select disabled
-                                                mode="multiple"
-                                                size='default'
-                                                placeholder="盘查对象"
-                                                // defaultValue={['a10', 'c12']}
-                                                style={{ width: '100%' }}
-                                                key="taskpersonsee"
-                                            >
-                                                <Option value=''>全部</Option>
-                                                {checkObjOption}
-                                            </Select> :
-                                            <Select
-                                                mode="multiple"
-                                                size='default'
-                                                placeholder="盘查对象"
-                                                // defaultValue={['a10', 'c12']}
-                                                style={{ width: '100%' }}
-                                                key="taskpersonsee"
-                                            >
-                                                <Option value=''>全部</Option>
-                                                {checkObjOption}
-                                            </Select>
-                                    )}
-                                </FormItem>
-                            </Col>
-                        </Row>
-                        <Row>
-                            <Col span={15} style={{ textAlign: 'right' }}>
-                                {this.state.disabled ? '' : <Button htmlType="submit" className="btn_ok">保存</Button>}
-                                {this.state.disabled ? '' : <Button style={{ marginLeft: 30 }} onClick={this.handleCancel} className="btn_delete">取消</Button>}
-                            </Col>
-                        </Row>
-                    </Form>
-                </Modal>
-                <Modal
-                    title="子任务列表"
-                    visible={this.state.childrenModal}
-                    footer={null}
-                    onCancel={this.handleCancel}
-                    width={750}
-                    style={{ position: "relative" }}
-                >
-                    <div style={{ margin: '0 0 16px 0' }}>
-                        <Input style={{ width: '520px', marginRight: "10px" }} value={this.state.childrenname} onChange={this.childrennameChange} type="text" id='chirdenname' placeholder='请输入任务名称' />
-                        <ShallowBlueBtn width="80px" text="查询" margin="0 10px 0 0" onClick={this.handleChidernQuery} />
-                        <ShallowBlueBtn width="80px" text="重置" onClick={this.handleChidernClear} />
-                    </div>
-                    {childrenIsFetching === true ?
-                        <div style={{ textAlign: "center", position: "absolute", left: "45%", top: "50%" }}>
-                            <Spin size="large" />
-                        </div> :
-                        <Table locale={{ emptyText: '暂无数据' }}
-                            columns={colu}
-                            // expandedRowKeys={this.state.expandKeys}
-                            dataSource={childrenDataList}
-                            bordered
-                            // onExpandedRowsChange={this.RowsChange}
-                            // expandRowByClick={true}
-                            // expandIconAsCell={false}
-                            rowKey={(record) => record.id}
-                            expandedRowRender={(record) => this.expandedRowRender(record)}
-                            pagination={false}
-                        />}
-                    <div className="clear"></div>
-                    {childrenDataList.length > 0 ?
-                        <Pagination size="small" total={childrenTotal} current={this.state.childrennowpage} pageSize={10} /> :
-                        ''
-                    }
+                                            }, {
+                                                max: 20, message: '最多输入二十个字符!',
+                                            }],
+                                            initialValue: this.state.modalType === 'edit' ? ogjByid ? ogjByid.name : '' : '',
+                                            validateFirst: true
+                                        })(
+                                            this.state.disabled ?
+                                                <Input disabled /> : <Input />
+                                        )}
+                                    </FormItem>
+                                </Col>
+                                <Col span={12}>
+                                    <FormItem
+                                        {...formItemLayout}
+                                        label="任务开始时间"
+                                    >
+                                        {getFieldDecorator('starttime', {
+                                            rules: [{
+                                                required: true,
+                                                message: '请选择任务开始时间!'
+                                            }],
+                                            initialValue: this.state.modalType === 'edit' ? ogjByid ? moment(getMyDate(ogjByid.starttime / 1000), 'YYYY-MM-DD HH:mm:ss') : '' : '',
+                                        })(
+                                            this.state.disabled ?
+                                                <DatePicker showTime placeholder="" format="YYYY-MM-DD HH:mm:ss" allowClear={false} style={{ width: '220px' }} disabled />
+                                                :
+                                                <DatePicker showTime placeholder="" format="YYYY-MM-DD HH:mm:ss" allowClear={false} style={{ width: '220px' }} />
+                                        )}
+                                    </FormItem>
+                                </Col>
+                                <Col span={12}>
+                                    <FormItem
+                                        {...formItemLayout}
+                                        label="任务结束时间"
+                                    >
+                                        {getFieldDecorator('endtime', {
+                                            rules: [{
+                                                required: true,
+                                                message: '请选择任务结束时间!'
+                                            }],
+                                            initialValue: this.state.modalType === 'edit' ? ogjByid ? moment(getMyDate(ogjByid.endtime / 1000), 'YYYY-MM-DD HH:mm:ss') : '' : '',
+                                        })(
+                                            this.state.disabled ?
+                                                <DatePicker showTime placeholder="" format="YYYY-MM-DD HH:mm:ss" allowClear={false} style={{ width: '220px' }} disabled /> :
+                                                <DatePicker showTime placeholder="" format="YYYY-MM-DD HH:mm:ss" allowClear={false} style={{ width: '220px' }} />
+                                        )}
+                                    </FormItem>
+                                </Col>
+                                <Col span={12}>
+                                    <FormItem
+                                        {...formItemLayout}
+                                        label="任务类别"
+                                    >
+                                        {getFieldDecorator('category', {
+                                            rules: [{
+                                                required: true,
+                                                message: '请选择任务类别!'
+                                            }],
+                                            initialValue: this.state.modalType === 'edit' ? ogjByid ? ogjByid.category : '' : '',
+                                            validateFirst: true
+                                        })(
+                                            this.state.disabled ?
+                                                <Select onChange={this.onChange} disabled>
+                                                    <Option value=''>全部</Option>
+                                                    <Option value={0}>周期</Option>
+                                                    <Option value={1}>一次性</Option>
+                                                </Select> :
+                                                <Select onChange={this.onChange} >
+                                                    <Option value=''>全部</Option>
+                                                    <Option value={0}>周期</Option>
+                                                    <Option value={1}>一次性</Option>
+                                                </Select>
+                                        )}
+                                    </FormItem>
+                                </Col>
+                                <Col span={12}>
+                                    <FormItem
+                                        {...formItemLayout}
+                                        label="任务周期"
+                                    >
+                                        {getFieldDecorator('cycle', {
+                                            rules: [{
+                                                required: true,
+                                                message: '请选择任务周期!'
+                                            }],
+                                            initialValue: this.state.modalType === 'edit' ? ogjByid ? ogjByid.cycle : '' : '',
+                                            validateFirst: true
+                                        })(
+                                            this.state.disabled ?
+                                                <Select onChange={this.onChange} disabled>
+                                                    <Option value=''>全部</Option>
+                                                    <Option value={0}>按天</Option>
+                                                    <Option value={1}>按周</Option>
+                                                    <Option value={2}>按月</Option>
+                                                </Select> :
+                                                <Select onChange={this.onChange}>
+                                                    <Option value=''>全部</Option>
+                                                    <Option value={0}>按天</Option>
+                                                    <Option value={1}>按周</Option>
+                                                    <Option value={2}>按月</Option>
+                                                </Select>
+                                        )}
+                                    </FormItem>
+                                </Col>
+                                <Col span={12}>
+                                    <FormItem
+                                        {...formItemLayout}
+                                        label="任务创建者"
+                                    >
+                                        {getFieldDecorator('createuser', {
+                                            rules: [{
+                                                required: true,
+                                                message: '请选择任务创建者!'
+                                            }],
+                                            initialValue: this.state.modalType === 'edit' ? ogjByid ? ogjByid.createuser : '' : '',
+                                            validateFirst: true
+                                        })(
+                                            this.state.disabled ?
+                                                <Input disabled /> :
+                                                <Input />
+                                        )}
+                                    </FormItem>
+                                </Col>
+                                <Col span={12}>
+                                    <FormItem
+                                        {...formItemLayout}
+                                        label="任务状态"
+                                    >
+                                        {getFieldDecorator('taskswitch', {
+                                            rules: [{
+                                                required: true,
+                                                message: '请选择任务状态!'
+                                            }],
+                                            initialValue: this.state.modalType === 'edit' ? ogjByid ? ogjByid.taskswitch : '' : '',
+                                            validateFirst: true
+                                        })(
+                                            this.state.disabled ?
+                                                <Select disabled>
+                                                    <Option value=''>全部</Option>
+                                                    <Option value={0}>待办任务</Option>
+                                                    <Option value={1}>已完成任务</Option>
+                                                    <Option value={2}>超期任务</Option>
+                                                </Select> :
+                                                <Select >
+                                                    <Option value=''>全部</Option>
+                                                    <Option value={0}>待办任务</Option>
+                                                    <Option value={1}>已完成任务</Option>
+                                                    <Option value={2}>超期任务</Option>
+                                                </Select>
+                                        )}
+                                    </FormItem>
+                                </Col>
+                                <Col span={24}>
+                                    <FormItem
+                                        {...formItemLayouts}
+                                        label="盘查对象"
+                                    >
+                                        {getFieldDecorator('personList', {
+                                            initialValue: this.state.modalType === 'edit' ? ogjByid ? selectOption : '' : '',
+                                            validateFirst: true
+                                        })(
+                                            // <TreeSelect
+                                            //     style={{ marginRight: '10px' }}
+                                            //     value={unit}
+                                            //     dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                                            //     treeData={treeList}
+                                            //     placeholder="请选择派发单位"
+                                            //     onChange={this.unitChange}
+                                            //     showSearch={false}
+                                            //     treeCheckable={true}
+                                            //     dropdownMatchSelectWidth={false}
+                                            //     showCheckedStrategy="SHOW_PARENT"
+                                            //     notFoundContent='暂无'
+                                            // />
+                                            this.state.disabled ?
+                                                <Select disabled
+                                                    mode="multiple"
+                                                    size='default'
+                                                    placeholder="盘查对象"
+                                                    // defaultValue={['a10', 'c12']}
+                                                    style={{ width: '100%' }}
+                                                    key="taskpersonsee"
+                                                >
+                                                    <Option value=''>全部</Option>
+                                                    {checkObjOption}
+                                                </Select> :
+                                                <Select
+                                                    mode="multiple"
+                                                    size='default'
+                                                    placeholder="盘查对象"
+                                                    // defaultValue={['a10', 'c12']}
+                                                    style={{ width: '100%' }}
+                                                    key="taskpersonsee"
+                                                >
+                                                    <Option value=''>全部</Option>
+                                                    {checkObjOption}
+                                                </Select>
+                                        )}
+                                    </FormItem>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col span={15} style={{ textAlign: 'right' }}>
+                                    {this.state.disabled ? '' : <Button htmlType="submit" className="btn_ok">保存</Button>}
+                                    {this.state.disabled ? '' : <Button style={{ marginLeft: 30 }} onClick={this.handleCancel} className="btn_delete">取消</Button>}
+                                </Col>
+                            </Row>
+                        </Form>
+                    </Modal> : ''}
+                {this.state.childrenModal ?
+                    <Modal
+                        title="子任务列表"
+                        visible={this.state.childrenModal}
+                        footer={null}
+                        onCancel={this.handleCancel}
+                        width={750}
+                        style={{ position: "relative" }}
+                    >
+                        <div style={{ margin: '0 0 16px 0' }}>
+                            <Input style={{ width: '520px', marginRight: "10px" }} value={this.state.childrenname} onChange={this.childrennameChange} type="text" id='chirdenname' placeholder='请输入任务名称' />
+                            <ShallowBlueBtn width="80px" text="查询" margin="0 10px 0 0" onClick={this.handleChidernQuery} />
+                            <ShallowBlueBtn width="80px" text="重置" onClick={this.handleChidernClear} />
+                        </div>
+                        {childrenIsFetching === true ?
+                            <div style={{ textAlign: "center", position: "absolute", left: "45%", top: "50%" }}>
+                                <Spin size="large" />
+                            </div> :
+                            <Table locale={{ emptyText: '暂无数据' }}
+                                columns={colu}
+                                // expandedRowKeys={this.state.expandKeys}
+                                dataSource={childrenDataList}
+                                bordered
+                                // onExpandedRowsChange={this.RowsChange}
+                                // expandRowByClick={true}
+                                // expandIconAsCell={false}
+                                rowKey={(record) => record.id}
+                                expandedRowRender={(record) => this.expandedRowRender(record)}
+                                pagination={false}
+                            />}
+                        <div className="clear"></div>
+                        {childrenDataList.length > 0 ?
+                            <Pagination size="small" total={childrenTotal} current={this.state.childrennowpage} pageSize={10} /> :
+                            ''
+                        }
 
-                </Modal>
+                    </Modal> : ''
+                }
+
             </div>
         )
     }
@@ -1332,6 +1335,10 @@ const SearchArea = React.createClass({
         if (enddate === '') { } else {
             endDateValue = moment(enddate, dateFormat);
         }
+        if (beginDateValue != "" && endDateValue != "" && beginDateValue > endDateValue) {
+            message.error('提示：开始时间不能大于结束时间！');
+            return;
+        }
         let weiguankongList = store.getState().TaskManagement.data.weiguankongList.result.list;
         // const Option = [];
         // if (weiguankongList) {
@@ -1371,7 +1378,7 @@ const SearchArea = React.createClass({
                     <Option value=''>全部</Option>
                     {this.props.checkObjOption}
                 </Select> */}
-                <Input style={{ width: '25%', marginRight: "10px" }} type="text" id='personname' placeholder='请输入任务名称' value={personname} onChange={this.personnameChange} />
+                <Input style={{ width: '25%', marginRight: "10px" }} type="text" id='personname' placeholder='请输入盘查对象名称' value={personname} onChange={this.personnameChange} />
 
                 <div style={{ marginTop: '10px' }}>
                     <label htmlFor="" className="font14">任务时间：</label>

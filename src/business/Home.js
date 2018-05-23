@@ -1001,7 +1001,7 @@ class ActiveDataStatistics extends Component {
             entityOrField: true,
             pd: {
             },
-            showCount: 10
+            showCount: 6
         }
         store.dispatch(postPoliceStation_hushi_Data(param));
     }
@@ -1074,7 +1074,7 @@ class ActiveDataStatistics extends Component {
                     entityOrField: true,
                     pd: {
                     },
-                    showCount: 10
+                    showCount: 6
                 }
                 store.dispatch(postPoliceStation_hushi_Data(creds));
             },

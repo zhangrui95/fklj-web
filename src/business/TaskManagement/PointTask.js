@@ -159,16 +159,18 @@ export class PointTask extends Component {
         store.dispatch(postWeiguankongData(creds));
     }
     editShowModal = (record) => {
-        this.setState({
-            visible: true,
-            personInfo: record,
-            modalType: 'edit'
-        });
-        // this.onCheckChange(record.checkedList);
         let creds = {
             id: record.id
         }
-        store.dispatch(postThreeTaskListHushiByIdData(creds));
+        store.dispatch(postThreeTaskListHushiByIdData(creds,this.goback));
+        // this.onCheckChange(record.checkedList);   
+    }
+    goback = () => {
+        this.setState({
+            visible: true,
+            // personInfo: record,
+            modalType: 'edit'
+        });
     }
     handleCancel = () => {
         this.setState({
@@ -902,6 +904,10 @@ const SearchArea = React.createClass({
         if (enddate === '') { } else {
             endDateValue = moment(enddate, dateFormat);
         }
+        if (beginDateValue != "" && endDateValue != "" && beginDateValue > endDateValue) {
+            message.error('提示：开始时间不能大于结束时间！');
+            return;
+        }
         let weiguankongList = store.getState().TaskManagement.data.weiguankongList.result.list;
         // const Option = [];
         // if (weiguankongList) {
@@ -937,7 +943,7 @@ const SearchArea = React.createClass({
                     <Option value="2">按月</Option>
                 </Select>
                 <label htmlFor="" className="font14">盘查对象：</label>
-                <Input style={{ width: '25%', marginRight: "10px" }} type="text" id='personname' placeholder='请输入任务名称' value={personname} onChange={this.personnameChange} />
+                <Input style={{ width: '25%', marginRight: "10px" }} type="text" id='personname' placeholder='请输入盘查对象名称' value={personname} onChange={this.personnameChange} />
 
                 <div style={{ marginTop: '10px' }}>
                     <label htmlFor="" className="font14">任务时间：</label>
