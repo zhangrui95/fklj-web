@@ -296,8 +296,8 @@ class LiveCharts extends Component {
             series: [{
                 name: '居住情况',
                 type: 'pie',
-                radius: '55%',
-                center: ['50%', '50%'],
+                radius: '61%',
+                center: ['50%', '44%'],
                 label: {
                     normal: {
                         show: true,
@@ -517,6 +517,7 @@ class ControlCharts extends Component {
                 name: '管控情况',
                 type: 'pie',
                 radius: ['55%', '70%'],
+                center: ['50%', '50%'],
                 avoidLabelOverlap: false,
                 top: 'top',
 
@@ -606,6 +607,7 @@ class PersonFromCharts extends Component {
                 name: '人员来源',
                 type: 'pie',
                 radius: ['55%', '70%'],
+                center: ['50%', '50%'],
                 avoidLabelOverlap: false,
 
                 top: 'top',

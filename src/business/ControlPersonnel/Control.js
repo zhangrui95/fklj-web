@@ -222,6 +222,7 @@ export  class Control extends Component{
         },{
             title: '现居住地址',
             dataIndex: 'address',
+            width:200,
         },{
             title: '联系电话',
             dataIndex: 'phone',
@@ -279,6 +280,7 @@ export  class Control extends Component{
         },{
             title: '现居住地址',
             dataIndex: 'address',
+            width:200,
         },{
             title: '联系电话',
             dataIndex: 'phone',
@@ -490,7 +492,7 @@ export  class Control extends Component{
                                     {getFieldDecorator('address', {
                                         initialValue:this.state.modalType === 'edit' ? detail.address : '',
                                     })(
-                                        <Input disabled/>
+                                        <Input title={detail.address} disabled/>
                                     )}
                                 </FormItem>
                             </Col>
@@ -559,7 +561,7 @@ export  class Control extends Component{
                                     )}
                                 </FormItem>
                             </Col>
-                            <Col span={12}>
+                            <Col span={12} className={controlType === 'GK_WGK'?'noneDiv':''}>
                                 <FormItem
                                     {...formItemLayout}
                                     label="隶属任务"
@@ -571,13 +573,13 @@ export  class Control extends Component{
                                     )}
                                 </FormItem>
                             </Col>
-                            <Col span={12}>
+                            <Col span={12} className={controlType === 'GK_WGK'?'noneDiv':''}>
                                 <FormItem
                                     {...formItemLayout}
                                     label="任务周期"
                                 >
                                     {getFieldDecorator('cycle', {
-                                        initialValue:this.state.modalType === 'edit' ? (detail.cycle=='0'?'按天':(detail.cycle=='0'?'按周':'')) : '',
+                                        initialValue:this.state.modalType === 'edit' ? (detail.cycle=='0'?'按天':(detail.cycle=='1'?'按周':'')) : '',
                                     })(
                                         <Select notFoundContent='暂无' disabled>
                                             {/*<Option value="">全部</Option>*/}

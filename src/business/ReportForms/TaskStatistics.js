@@ -254,7 +254,7 @@ class TaskDoneCharts extends Component {
             series: [{
                 name: '任务完成情况',
                 type: 'pie',
-                radius: '55%',
+                radius: '60%',
                 center: ['50%', '50%'],
                 label: {
                     normal: {
@@ -344,10 +344,9 @@ class TaskCycleCharts extends Component {
                 name: '任务周期',
                 type: 'pie',
                 radius: ['55%', '70%'],
+                center: ['50%', '56%'],
                 avoidLabelOverlap: false,
-
-                top: 'top',
-
+                // top: 'top',
                 label: {
                     normal: {
                         show: true,
