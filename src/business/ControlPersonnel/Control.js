@@ -192,7 +192,7 @@ export  class Control extends Component{
         for(let i in list){
             if(i !== 'remove'){
                 let c = (parseInt(this.state.current) - 1) * 10 + parseInt(i) + 1;
-                dataList.push({id:list[i].id,key:list[i].id, serial: c, cardId: list[i].idcard, label: list[i].name, sex: list[i].sex == '0' ? '男': '女' ,age:list[i].age, state:(list[i].address_type == '0' ? '常住' : (list[i].address_type == '1' ? '暂住' : '流动')), phone:list[i].phone,zrdw:list[i].taskname, updatetime: getLocalTime(list[i].updatetime),cycle:list[i].cycle == '0' ? '按天' : (list[i].cycle == '1'?'按周':''),address:list[i].now_address,personFrom:list[i].source === '901006' ? '后台导入':'前端新增'})
+                dataList.push({id:list[i].id,key:list[i].id, serial: c, cardId: list[i].idcard, label: list[i].name, sex: list[i].sex == '1' ? '男': '女' ,age:list[i].age, state:(list[i].address_type == '0' ? '常住' : (list[i].address_type == '1' ? '暂住' : '流动')), phone:list[i].phone,zrdw:list[i].taskname, updatetime: getLocalTime(list[i].updatetime),cycle:list[i].cycle == '0' ? '按天' : (list[i].cycle == '1'?'按周':''),address:list[i].now_address,personFrom:list[i].source === '901006' ? '后台导入':'前端新增'})
             }
         }
         const columns = [{
@@ -228,6 +228,7 @@ export  class Control extends Component{
         },{
             title: '隶属任务',
             dataIndex: 'zrdw',
+            width:250,
         },{
             title: '任务周期',
             dataIndex: 'cycle',
@@ -465,7 +466,7 @@ export  class Control extends Component{
                                     label="性别"
                                 >
                                     {getFieldDecorator('sex', {
-                                        initialValue:this.state.modalType === 'edit' ? (detail.sex == '0' ? '男' : '女') : '',
+                                        initialValue:this.state.modalType === 'edit' ? (detail.sex == '1' ? '男' : '女') : '',
                                     })(
                                         <Input disabled/>
                                     )}
@@ -542,7 +543,7 @@ export  class Control extends Component{
                                     label="工作地址"
                                 >
                                     {getFieldDecorator('address', {
-                                        initialValue:this.state.modalType === 'edit' ? '' : '',
+                                        initialValue:this.state.modalType === 'edit' ? detail.work_address : '',
                                     })(
                                         <Input disabled/>
                                     )}
@@ -606,7 +607,7 @@ export  class Control extends Component{
                                     label="人员属性"
                                 >
                                     {getFieldDecorator('personType', {
-                                        initialValue: this.state.modalType === 'edit' ? this.state.personInfo.personType : '',
+                                        initialValue: this.state.modalType === 'edit' ? (detail.attribute === "1"? '涉疆人员':(detail.attribute === "2"?'涉藏人员':'')) : '',
                                     })(
                                         <Input disabled/>
                                     )}
@@ -618,7 +619,7 @@ export  class Control extends Component{
                                     label="是否有车"
                                 >
                                     {getFieldDecorator('car', {
-                                        initialValue: this.state.modalType === 'edit' ? this.state.personInfo.car : '',
+                                        initialValue: this.state.modalType === 'edit' ? (detail.carstatus ? '有车，'+detail.carnumber : '暂无') : '',
                                     })(
                                         <Input disabled/>
                                     )}
