@@ -125,7 +125,8 @@ export class Header extends Component {
         })
         let pathUrl;
         if (fk && hs) {
-            pathUrl = '/Transfer';
+            pathUrl = '/Home';
+            // pathUrl = '/Transfer';
         } else if (fk && !hs) {
             pathUrl = '/Homes';
         } else if (hs && !fk) {
