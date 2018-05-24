@@ -545,7 +545,7 @@ export  class Control extends Component{
                                     {getFieldDecorator('address', {
                                         initialValue:this.state.modalType === 'edit' ? detail.work_address : '',
                                     })(
-                                        <Input disabled/>
+                                        <Input title={detail.work_address} disabled/>
                                     )}
                                 </FormItem>
                             </Col>
