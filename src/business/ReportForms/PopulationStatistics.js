@@ -512,7 +512,7 @@ class ControlCharts extends Component {
                     }
                 }]
             },
-            color: [ '#f88a6f','#39a0ff','#37cbcb','#fad336'],
+            color: [ '#f88a6f','#00acee','#37cbcb','#fad336'],
             series: [{
                 name: '管控情况',
                 type: 'pie',
@@ -602,7 +602,7 @@ class PersonFromCharts extends Component {
                     }
                 }]
             },
-            color: ['#39a0ff', '#fad336'],
+            color: ['#00acee', '#fad336'],
             series: [{
                 name: '人员来源',
                 type: 'pie',

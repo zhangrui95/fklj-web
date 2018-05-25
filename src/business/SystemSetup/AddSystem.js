@@ -74,6 +74,12 @@ export  class AddSystem extends Component{
             })
         }
     }
+    cycleChange(){
+
+    }
+    getSave(){
+
+    }
     render() {
         return(
             <div className="sliderWrap">
@@ -100,8 +106,18 @@ export  class AddSystem extends Component{
                             </FormItem>
                             <span style={{color:'#fff', float:'left',lineHeight:'40px'}}>小时</span>
                         </div>
+                        <FormItem
+                            style={{width:'300px', float:'left'}}
+                            {...formItemLayout}
+                            label="默认周期设置"
+                        >
+                            <Select placeholder="请选择默认周期" onChange={this.cycleChange}>
+                                <Option key="0">按天</Option>
+                                <Option key="1">按月</Option>
+                            </Select>
+                        </FormItem>
                     </Form>
-                    <ShallowBlueBtn width="80px" text="确定" margin="5px 10px" />
+                    <ShallowBlueBtn width="80px" text="确定" margin="5px 10px" onClick={this.getSave}/>
                 </div>
             </div>
         )
