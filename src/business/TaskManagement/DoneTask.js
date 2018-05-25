@@ -161,16 +161,18 @@ export class DoneTask extends Component {
         store.dispatch(postWeiguankongData(creds));
     }
     editShowModal = (record) => {
-        this.setState({
-            visible: true,
-            personInfo: record,
-            modalType: 'edit'
-        });
-        // this.onCheckChange(record.checkedList);
         let creds = {
             id: record.id
         }
-        store.dispatch(postThreeTaskListHushiByIdData(creds));
+        store.dispatch(postThreeTaskListHushiByIdData(creds,this.goback));
+        // this.onCheckChange(record.checkedList);   
+    }
+    goback = () => {
+        this.setState({
+            visible: true,
+            // personInfo: record,
+            modalType: 'edit'
+        });
     }
     handleCancel = () => {
         this.setState({
@@ -318,7 +320,7 @@ export class DoneTask extends Component {
                     for (let i = 0; i < byidObj.personList.length; i++) {
                         let item = byidObj.personList[i];
                         checkObjOption.push(
-                            <Option key={item.id} value={item.id} title={item.name + " " + item.id}>{item.name + " " + item.id}</Option>
+                            <Option key={item.id} value={item.id} title={item.name + " " + item.idcard}>{item.name + " " + item.idcard}</Option>
                         );
                     }
                     for (let i = 0; i < byidObj.personList.length; i++) {
@@ -481,7 +483,7 @@ export class DoneTask extends Component {
                     visible={this.state.visible}
                     onCancel={this.handleCancel}
                     footer={null}
-                    key='done'
+                    key={this.state.modalKey}
                 >
                     <Form onSubmit={this.saveModel}>
                         <Row className="formItemLeft">
@@ -901,6 +903,10 @@ const SearchArea = React.createClass({
         if (enddate === '') { } else {
             endDateValue = moment(enddate, dateFormat);
         }
+        if (beginDateValue != "" && endDateValue != "" && beginDateValue > endDateValue) {
+            message.error('提示：开始时间不能大于结束时间！');
+            return;
+        }
         let weiguankongList = store.getState().TaskManagement.data.weiguankongList.result.list;
         // const Option = [];
         // if (weiguankongList) {
@@ -936,7 +942,7 @@ const SearchArea = React.createClass({
                     <Option value="2">按月</Option>
                 </Select>
                 <label htmlFor="" className="font14">盘查对象：</label>
-                <Input style={{ width: '25%', marginRight: "10px" }} type="text" id='personname' placeholder='请输入任务名称' value={personname} onChange={this.personnameChange} />
+                <Input style={{ width: '25%', marginRight: "10px" }} type="text" id='personname' placeholder='请输入盘查对象名称' value={personname} onChange={this.personnameChange} />
                 <div style={{ marginTop: '10px' }}>
                     <label htmlFor="" className="font14">任务时间：</label>
                     <DatePicker placeholder="请选择日期" format={dateFormat} allowClear={false} style={{ marginRight: "10px" }} value={beginDateValue} defaultValue="" onChange={this.handleBeginDeteClick} />

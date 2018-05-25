@@ -8,6 +8,7 @@ import { connect } from "react-redux";
 import { store } from '../index.js';
 import { WithDay } from "./InventoryManagement/WithDay";
 import { WithWeek } from "./InventoryManagement/WithWeek";
+import { OldWithDay } from "./InventoryManagement/OldWithDay";
 import { CarInventory } from "./InventoryManagement/WithWeek";
 import { fetchPersonnelInventoryData, fetchCarInventoryData, fetchBayonetInventoryData } from "../actions/InventoryManagement";
 import * as constants from "../utils/Constants";
@@ -44,6 +45,12 @@ class InventoryManagementRight extends Component {
                 break
             case constants.INVENTORYMANAGEMENT_HUSHI_MODULE_AZ://按周
                 content = <WithWeek />
+                break
+            case constants.INVENTORYMANAGEMENT_HUSHI_OLD_MODULE_AT://旧版按天
+                content = <OldWithDay />
+                break
+            case constants.INVENTORYMANAGEMENT_HUSHI_OLD_MODULE_AZ://旧版按周
+                content = <OldWithDay />
                 break
             default:
                 break

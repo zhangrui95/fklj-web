@@ -219,6 +219,7 @@ export const CONTROLPERSONNEL_TYPE = 'Control_personnel_type';//管控人员-更
 export const CONTROLPERSONNEL_Person = 'Control_personnel_person';//管控人员-更选项-呼市-管控人员
 export const CONTROLPERSONNEL_AddOrOut = 'Control_personnel_addorout';//管控人员-更选项-呼市-管控人员
 export const INVENTORYMANAGEMENT_HUSHI_ZQRW = 'Inventorymanagement_hushi_zqrw';//盘查管理-呼市-周期任务
+export const INVENTORYMANAGEMENT_HUSHI_OLDZQRW = 'Inventorymanagement_hushi_old_zqrw';//盘查管理-呼市-旧版周期任务
 export const INVENTORYMANAGEMENT_HUSHI_CURRENT = 'Inventorymanagement_hushi_current';//盘查管理-更选项-呼市
 
 export const SYSTEMSETUP_ADD = 'System_Setup_add';//更选项-呼市-系统设置-添加到任务
@@ -343,7 +344,9 @@ export function changeMenu(menu, type, moduleName) {//改变目录状态
         if (type === 'openAndClose') {
             if (menu.id === '101') {
                 return { type: INVENTORYMANAGEMENT_HUSHI_ZQRW }
-            }
+            }else if (menu.id === '102') {
+                return { type: INVENTORYMANAGEMENT_HUSHI_OLDZQRW }
+            } 
         } else if (type === 'getData') {//点击目录
             return { type: INVENTORYMANAGEMENT_HUSHI_CURRENT, menu: menu };
         }

@@ -36,7 +36,7 @@ const initialState = {
                 "text": ""
             },
             result: {
-                total: 0,
+                page: {},
                 list: [],
             },
             childrenIsFetching: true
@@ -184,7 +184,7 @@ const TaskManagement = (state = initialState, action) => {
             return newState;
         case 'Children_TaskListHushi-data': //子任务列表
             newState.data.childrentaskListHushi.result.list = action.data.result.pdList;
-            newState.data.childrentaskListHushi.result.total = action.data.result.page.totalResult;//page?reason
+            newState.data.childrentaskListHushi.result.page = action.data.result.page;//page?reason
             newState.data.childrentaskListHushi.childrenIsFetching = false;
             return newState;
         case 'REQUEST_THREE_TASK_LIST_HUSHI_DATA'://待办 超期 已完成

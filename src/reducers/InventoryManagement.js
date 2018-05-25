@@ -6,6 +6,7 @@ import { lyInitialStateReturn } from "./initialState"
 import {
     NVENTORYMANAGEMENT_MENU_HUSHI_INIT,
     INVENTORYMANAGEMENT_HUSHI_ZQRW,
+    INVENTORYMANAGEMENT_HUSHI_OLDZQRW,
     INVENTORYMANAGEMENT_HUSHI_CURRENT,
 } from "../actions/actions";
 import { store } from '../index.js';
@@ -101,21 +102,50 @@ const initialState = { //盘查管理
                 "text": ""
             },
             result: {
-                total: 0,
+                page: 0,
                 list: [],
             }
         },
         // 呼市反恐
-        invenListHushi: {//盘查列表展示
+        invenListHushi: {//盘查列表展示 按天
             reason: {
                 "code": "",
                 "text": ""
             },
             result: {
-                total: 0,
+                page: {},
                 list: [],
+            },
+            isFetching: true
+        },
+        invenListHushiDetails: {//盘查详情
+            reason: {
+                "code": "",
+                "text": ""
+            },
+            result: {
             }
-        }
+        },
+        // 呼市反恐 旧版反恐
+        oldinvenListHushi: {//盘查列表展示
+            reason: {
+                "code": "",
+                "text": ""
+            },
+            result: {
+                page: {},
+                list: [],
+            },
+            isFetching: true
+        },
+        oldinvenListHushiDetails: {//盘查详情
+            reason: {
+                "code": "",
+                "text": ""
+            },
+            result: {
+            }
+        },
     },
     uiData: {
         menus: [
@@ -145,6 +175,26 @@ const initialState = { //盘查管理
                         isShow: true,
                         code: ""
                     }
+                ]
+            },
+            {
+                id: '102',
+                menuName: '旧版本任务',
+                isOpen: false,
+                search: 'type=pcgl',
+                haveSon: true,
+                isSelect: false,
+                isShow: false,
+                code: "",
+                sonMenu: [
+                    {
+                        id: '1021',
+                        menuName: '旧版按天',
+                        search: 'type=zqrw&state=1',
+                        isSelect: false,
+                        isShow: true,
+                        code: ""
+                    },
                 ]
             }
         ]
@@ -216,6 +266,7 @@ const InventoryManagement = (state = initialState, action) => {
                 }
             }
             newState.uiData.menus[0].isOpen = true;
+            newState.uiData.menus[1].isOpen = false;
             newState.uiData.menus[0].sonMenu[0].isSelect = true;
             return newState;
         case INVENTORYMANAGEMENT_HUSHI_ZQRW: //呼市-周期任务
@@ -225,7 +276,13 @@ const InventoryManagement = (state = initialState, action) => {
                 newState.uiData.menus[0].isOpen = true;
             }
             return newState;
-
+        case INVENTORYMANAGEMENT_HUSHI_OLDZQRW: //呼市-旧版周期任务
+            if (newState.uiData.menus[1].isOpen === true) {
+                newState.uiData.menus[1].isOpen = false;
+            } else {
+                newState.uiData.menus[1].isOpen = true;
+            }
+            return newState;
         case INVENTORYMANAGEMENT_HUSHI_CURRENT:
             //遍历一级目录
             for (let x in newState.uiData.menus) {
@@ -247,15 +304,37 @@ const InventoryManagement = (state = initialState, action) => {
 
         // 呼市反恐利剑
         case 'REQUEST_INVENTORY_LIST_HUSHI_DATA':
-            return {
-                ...state,//原状态
-                isFetching: true,
-                didInvalidate: false
-            }
+            // return {
+            //     ...state,//原状态
+            //     isFetching: true,
+            //     didInvalidate: false
+            // }
+            newState.data.invenListHushi.isFetching = true;
+            return newState;
         case 'InventoryListHushi-data': //列表
             newState.data.invenListHushi.result.list = action.data.result.list;
-            newState.data.invenListHushi.result.total = action.data.result.page.totalResult;//page?reason
-            newState.isFetching = false;
+            newState.data.invenListHushi.result.page = action.data.result.page;//page?reason
+            newState.data.invenListHushi.isFetching = false;
+            return newState;
+        case 'InventoryListHushiDetails-data': //详情
+            newState.data.invenListHushiDetails.result = action.data.result.data;
+            return newState;
+        //旧版
+        case 'REQUEST_OLD_INVENTORY_LIST_HUSHI_DATA':
+            // return {
+            //     ...state,//原状态
+            //     isFetching: true,
+            //     didInvalidate: false
+            // }
+            newState.data.oldinvenListHushi.isFetching = true;
+            return newState;
+        case 'old_InventoryListHushi-data': //列表 旧版反恐
+            newState.data.oldinvenListHushi.result.list = action.data.result.list;
+            newState.data.oldinvenListHushi.result.page = action.data.result.page;//page?reason
+            newState.data.oldinvenListHushi.isFetching = false;
+            return newState;
+        case 'old_InventoryListHushiDetails-data': //详情
+            newState.data.oldinvenListHushiDetails.result = action.data.result.data;
             return newState;
 
         default:
@@ -265,7 +344,7 @@ const InventoryManagement = (state = initialState, action) => {
                 if (sessionStorage.getItem('allowMenus') !== undefined && sessionStorage.getItem('allowMenus') !== null && sessionStorage.getItem('allowMenus') !== '') {
                     //盘查管理菜单
                     let inventoryManagementMenus = state.uiData.menus;
-                    console.log('inventoryManagementMenus',inventoryManagementMenus);
+                    console.log('inventoryManagementMenus', inventoryManagementMenus);
                     inventoryManagementMenus = filterMenu(inventoryManagementMenus);//权限判断菜单
                     state.uiData.menus = inventoryManagementMenus;
                 }

@@ -26,12 +26,12 @@ global.configUrl = {
     //serverUrl: "/data-service",
     //serverUrl: "http://172.19.12.137:8888",//shd 服务地址
     //http://172.19.1.145:7000 测试部接口地址
-   serverUrl: "http://172.19.12.213:8088/data-service",
+   serverUrl: "http://172.19.12.102:8800",
    //  serverUrl: "http://172.19.12.102:8888",
   //客户区域
   clientArea: '黑龙江',
   //PKI登录是否开启
   pkiLoginIsOpen: false,
   //版本号
-    versionNumber:'2.0.0.10',
+  versionNumber:'2.0.0.10',
 }

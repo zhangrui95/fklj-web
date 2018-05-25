@@ -289,12 +289,13 @@ export function postThreeTaskListHushiData(creds) {
     }
 }
 // 根据待办 超期 已完成的id 获取信息
-export function postThreeTaskListHushiByIdData(creds) {
+export function postThreeTaskListHushiByIdData(creds,goback) {
     let path = '/data/getSubtaskById';
     return dispatch => {
         dispatch({ type: "REQUEST_THREE_TASK_LIST_HUSHI_BYID_DATA" });
         post(api + path, creds).then((json) => {
             dispatch({ type: 'Three_TaskListHushi-data-byid', data: json });
+            goback();
         }).catch((e) => {
             dispatch({ type: 'Three_TaskListHushi-error-byid', message: e.toString() })
         });
@@ -349,11 +350,12 @@ export function postWeiguankongData(creds) {
 }
 
 // 编辑查看时盘查对象字典项
-export function postPersonListForTaskData(creds) {
+export function postPersonListForTaskData(creds, goback) {
     let path = '/data/getControlPersonListForTaskPersonal';
     return dispatch => {
         post(api + path, creds).then((json) => {
             dispatch({ type: 'Task_PersonListForTaskHushi-data', data: json });
+            goback()
         }).catch((e) => {
             dispatch({ type: 'Task_PersonListForTaskHushi-error', message: e.toString() })
         });

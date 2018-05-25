@@ -39,6 +39,7 @@ import {
     postAirportCoordMapData,
     postHomeControlPeson_hushi_Data,//呼市反恐 管控人员
     postPoliceStation_hushi_Data,//呼市反恐 派出所统计
+    postHaveBeenchecked_hushi_Data,//已完成任务 最新盘查
 } from "../actions/Home"
 import {
     monthFormat,
@@ -50,7 +51,8 @@ import {
     getMondayTime,
     getLastDay,
     Compare,
-    geoCoordMap
+    geoCoordMap,
+    getMyDate
 } from '../utils/';
 import {
     Spin,
@@ -1001,7 +1003,7 @@ class ActiveDataStatistics extends Component {
             entityOrField: true,
             pd: {
             },
-            showCount: 10
+            showCount: 6
         }
         store.dispatch(postPoliceStation_hushi_Data(param));
     }
@@ -1074,7 +1076,7 @@ class ActiveDataStatistics extends Component {
                     entityOrField: true,
                     pd: {
                     },
-                    showCount: 10
+                    showCount: 6
                 }
                 store.dispatch(postPoliceStation_hushi_Data(creds));
             },
@@ -1117,15 +1119,10 @@ class Personnel extends Component {
         let personType = this.props.personType;
         var myDate = new Date();
         let NowYEAR = myDate.getFullYear();
-        let creds = {
-            pd: {
-                code: this.props.code
-                // beginTime: NowYEAR + '-01' + '-01',
-                // endTime: NowYEAR + '-12' + '-31',
-            },
-            showCount: 6
+        let param = {
+            pd: {}
         }
-        store.dispatch(postPersonnelListData(creds, personType));
+        store.dispatch(postHaveBeenchecked_hushi_Data(param));
         // this.Marquee();
     }
     //子组件时候
@@ -1191,6 +1188,8 @@ class Personnel extends Component {
 
             )
         }
+        // 已完成任务
+        let data = store.getState().Home.data.haveBeenCheckedData.result;
 
         return (
             <div>
@@ -1206,7 +1205,7 @@ class Personnel extends Component {
                     {/*内容*/}
 
                     <div>
-                        {isNull === true ?
+                        {/* {isNull === true ?
                             <div style={{ marginTop: "40px", }}>
                                 <p style={{ fontSize: "20px", color: "#fff", textAlign: "center" }}>暂无任务</p>
                             </div>
@@ -1216,8 +1215,8 @@ class Personnel extends Component {
                                 {zmdDiv}
                             </Carousel>
 
-                        }
-
+                        } */}
+                        <PersonnelLst personIndex={data} />
                     </div>
 
                 </div>
@@ -1234,26 +1233,28 @@ class PersonnelLst extends Component {
             <div style={{ marginTop: "10px", height: "200", padding: "0 16px" }}>
                 {/*<Link to={toElectronicArchivesUrl}>*/}
                 <div >
-                    {personIndex.zpurl !== '' ? <img src={personIndex.zpurl} alt="" style={{ width: "16%", height: "auto", float: "left", marginTop: 15 }} /> :
-                        <img src='../images/zanwu.png' alt="" style={{ width: "auto", height: "55%", float: "left", marginTop: 15 }} />
+                    {personIndex ? personIndex.zpurl !== '' ? <img src={personIndex.zpurl} alt="" style={{ width: "16%", height: "auto", float: "left", marginTop: 15 }} /> :
+                        <img src='../images/zanwu.png' alt="" style={{ width: "auto", height: "55%", float: "left", marginTop: 15 }} /> : <img src='../images/zanwu.png' alt="" style={{ width: "auto", height: "55%", float: "left", marginTop: 15 }} />
                     }
                     <div style={{ float: "left", marginLeft: "5%", marginTop: 20, width: '60%' }}>
                         <p style={{
                             fontSize: 14, color: "#fff", width: '98%', overflow: 'hidden',
                             textOverflow: 'ellipsis', whiteSpace: 'nowrap',
                         }}
-                            title={personIndex.name === '' ? '暂无姓名' : personIndex.name}
+                            title={personIndex ? personIndex.name === '' ? '暂无姓名' : personIndex.name : '暂无姓名'}
                         >
-                            {personIndex.name === '' ? '暂无姓名' : personIndex.name}<Tag style={{ marginLeft: '16px', color: '#f6c094', background: 'none' }} color="volcano">暂住</Tag>
+                            {personIndex ? personIndex.name === '' ? '暂无姓名' : personIndex.name : '暂无姓名'}<Tag style={{ marginLeft: '16px', color: '#f6c094', background: 'none' }} color="volcano">
+                                {personIndex ? personIndex.address_type ? personIndex.address_type === 0 ? '常住' : personIndex.address_type === 1 ? "暂住" : '流动' : '暂无居住类型' : '暂无居住类型'}
+                            </Tag>
                         </p>
-                        <p style={{ fontSize: 14, color: "#fff" }}>{personIndex.idcard}</p>
-                        <p style={{ fontSize: 14, color: "#fff" }}>{personIndex.address}</p>
+                        <p style={{ fontSize: 14, color: "#fff" }}>{personIndex ? personIndex.idcard : ''}</p>
+                        <p style={{ fontSize: 14, color: "#fff" }}>{personIndex ? personIndex.now_address : ''}</p>
                     </div>
                     <div style={clear}></div>
                 </div>
                 <div style={{ color: '#f89448', marginTop: '16px' }}>
-                    <div>由 玉泉区分局兴隆巷派出所张建军 盘查</div>
-                    <div>2018年01月23日 12点34分</div>
+                    <div>由 {personIndex ? personIndex.police_unit : '派出所'}{personIndex ? personIndex.police_name : '警员'} 盘查</div>
+                    <div>{personIndex ? getMyDate(personIndex.checktime / 1000) : ''}</div>
                 </div>
                 {/*</Link>*/}
             </div>
