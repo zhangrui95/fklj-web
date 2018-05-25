@@ -75,7 +75,8 @@ export function loginUser(creds) {
                         }
                     })
                     if(fk&&hs) {
-                        browserHistory.push('/Transfer');
+                        // browserHistory.push('/Transfer');//反恐和呼市反恐过度页面
+                        browserHistory.push('/Home');
                         message.success('提示：登录成功!');
                     } else if(fk&&!hs) {
                         browserHistory.push('/Homes');
