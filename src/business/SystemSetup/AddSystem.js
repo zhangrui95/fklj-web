@@ -84,7 +84,7 @@ export  class AddSystem extends Component{
                             {...formItemLayout}
                             label="失控时间设置"
                         >
-                            <Select onChange={this.timeChange}>
+                            <Select placeholder="请选择失控时间" onChange={this.timeChange}>
                                 <Option key="1">离开责任区24小时</Option>
                                 <Option key="2">离开责任区48小时</Option>
                                 <Option key="3">离开责任区72小时</Option>

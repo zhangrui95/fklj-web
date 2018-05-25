@@ -779,7 +779,7 @@ class Tree extends Component {
                 border: this.props.bordercolor,
             },
         };
-        return <TreeSelect {...tProps} />;
+        return <TreeSelect placeholder="请选择区域" {...tProps} />;
 
     }
 }
@@ -938,11 +938,11 @@ const SearchArea = React.createClass({
         return (
             <div className="marLeft40 fl z_searchDiv">
                 <label htmlFor="" className="font14">姓名：</label>
-                <Input style={{ width: "111px", margin: "0 10px 0 0" }} type="text" id='police_name' placeholder='' value={police_name} onChange={this.handleNameChange} />
+                <Input style={{ width: "130px", margin: "0 10px 0 0" }} type="text" id='police_name' placeholder='请输入姓名' value={police_name} onChange={this.handleNameChange} />
                 <label htmlFor="" className="font14">更新时间：</label>
-                <DatePicker format={dateFormat} allowClear={false} style={{ marginRight: "10px" }} value={beginDateValue} placeholder="" onChange={this.handleBeginDeteClick} />
+                <DatePicker format={dateFormat} allowClear={false} style={{ marginRight: "10px" }} value={beginDateValue} placeholder="请选择日期" onChange={this.handleBeginDeteClick} />
                 <span className="font14" style={{ margin: "0 10px 0 0" }}>至</span>
-                <DatePicker format={dateFormat} allowClear={false} style={{ marginRight: "10px" }} value={endDateValue} placeholder="" onChange={this.handleEndDeteClick} />
+                <DatePicker format={dateFormat} allowClear={false} style={{ marginRight: "10px" }} value={endDateValue} placeholder="请选择日期" onChange={this.handleEndDeteClick} />
                 <label htmlFor="" className="font14">区域：</label>
                 <Tree treeData={this.props.provinceTreeList} citycodeChange={this.citycodeChange} style={{ margin: "0 10px 0 0" }} />
                 <ShallowBlueBtn width="82" text="查询" margin="0 10px 0 10px" onClick={this.handleClick} />

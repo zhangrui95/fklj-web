@@ -901,7 +901,7 @@ class Tree extends Component{
                 width: 280,
             },
         };
-        return <TreeSelect {...tProps} />;
+        return <TreeSelect placeholder="请选择数据字典" {...tProps} />;
         
     }
 }
@@ -1054,11 +1054,11 @@ const SearchArea = React.createClass({
         return (
             <div className="marLeft40 fl z_searchDiv">
                 <label htmlFor="" className="font14" style={{marginRight:10}}>数据字典：</label>
-                <Tree   treeData={this.props.codeTreeList} citycodeChange={this.citycodeChange} handleClick={this.handleClick} ref='tree'/>
+                <Tree treeData={this.props.codeTreeList} citycodeChange={this.citycodeChange} handleClick={this.handleClick} ref='tree'/>
                 <label htmlFor="" className="font14" style={{marginLeft:10}}>更新时间：</label>
-                <DatePicker  format={dateFormat} allowClear={false} style={{marginRight:"10px"}} value={beginDateValue} placeholder="" onChange={this.handleBeginDeteClick}/>
+                <DatePicker  format={dateFormat} allowClear={false} style={{marginRight:"10px"}} value={beginDateValue} placeholder="请选择日期" onChange={this.handleBeginDeteClick}/>
                 <span className="font14" style={{margin:"0 10px 0 0"}}>至</span>
-                <DatePicker  format={dateFormat} allowClear={false} style={{marginRight:"10px"}} value={endDateValue} placeholder="" onChange={this.handleEndDeteClick}/>
+                <DatePicker  format={dateFormat} allowClear={false} style={{marginRight:"10px"}} value={endDateValue} placeholder="请选择日期" onChange={this.handleEndDeteClick}/>
                 <ShallowBlueBtn width="82" text="查询" margin="0 10px 0 0px" onClick={this.handleClick} />
                 <ShallowBlueBtn  width="82" text="创建" margin="0 10px 0 0" onClick={this.props.handleClickAdd} />
                 <DeepRedBtn  margin="0 10px 0 0" width="82" text="清除" onClick={this.clear} />

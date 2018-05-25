@@ -809,13 +809,13 @@ const SearchArea = React.createClass({
             return (
                 <div className="marLeft40 fl z_searchDiv">
                 <label htmlFor="" className="font14">名称：</label>
-                <Input style={{width:'111px',marginRight:"10px"}} margin="0 10px 0 0"  type="text"  id='name' placeholder=''  value={name}  onChange={this.handleNameChange} />
+                <Input style={{width:'130px',marginRight:"10px"}} margin="0 10px 0 0"  type="text"  id='name' placeholder='请输入名称'  value={name}  onChange={this.handleNameChange} />
                 <label htmlFor="" className="font14">更新时间：</label>
                 {/*<Input width="125px" margin="0 10px 0 0" type="date" id='begindate' value={begindate}  callbackParent={this.onChildChanged}/>*/}
-               <DatePicker  format={dateFormat} allowClear={false} style={{marginRight:"10px"}} value={beginDateValue}  placeholder='' onChange={this.handleBeginDeteClick}/>
+               <DatePicker  format={dateFormat} allowClear={false} style={{marginRight:"10px"}} value={beginDateValue}  placeholder='请选择日期' onChange={this.handleBeginDeteClick}/>
                 <span className="font14" style={{margin:"0 10px 0 0"}}>至</span>
                 {/*<Input width="125px" margin="0 10px 0 0" type="date" id='enddate' value={enddate} callbackParent={this.onChildChanged}/>*/}
-                <DatePicker  format={dateFormat} allowClear={false} style={{marginRight:"10px"}} value={endDateValue}  placeholder='' onChange={this.handleEndDeteClick}/>
+                <DatePicker  format={dateFormat} allowClear={false} style={{marginRight:"10px"}} value={endDateValue}  placeholder='请选择日期' onChange={this.handleEndDeteClick}/>
                 <ShallowBlueBtn width="82" text="查询" margin="0 10px 0 0" onClick={this.handleClick} />
                 <ShallowBlueBtn  width="82" text="创建" onClick={this.props.addShowModal} margin="0 10px 0 0"/>
                 <DeepRedBtn  margin="0 10px 0 0" width="82" text="清除" onClick={this.clear} />

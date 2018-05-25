@@ -600,7 +600,7 @@ const SearchArea = React.createClass({
             return (
                 <div className="marLeft40 fl z_searchDiv">
                 <label htmlFor="" className="font14">城市：</label>
-                <Input style={{width:"111px",margin:"0 10px 0 0"}}   type="text"  id='highRiskAreaList_cityName' placeholder=''  value={highRiskAreaList_cityName}  onChange={this.handleNameChange} />
+                <Input style={{width:"130px",margin:"0 10px 0 0"}}   type="text"  id='highRiskAreaList_cityName' placeholder=''  value={highRiskAreaList_cityName}  onChange={this.handleNameChange} />
                 <label htmlFor="" className="font14">创建时间：</label>
                <DatePicker  format={dateFormat} allowClear={false} style={{marginRight:"10px"}} value={beginDateValue} placeholder="" onChange={this.handleBeginDeteClick}/>
                 <span className="font14" style={{margin:"0 10px 0 0"}}>至</span>
