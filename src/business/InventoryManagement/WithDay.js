@@ -384,7 +384,7 @@ export class WithDay extends Component {
                     phone: item.phone,
                     taskname: item.taskname,
                     police_name: item.police_name,
-                    checktime: getMyDate(item.checktime / 1000),
+                    checktime:item.checktime? getMyDate(item.checktime / 1000):'',
 
                 });
             }
@@ -569,7 +569,7 @@ export class WithDay extends Component {
                                     <Col span={12}>
                                         <Row style={{ padding: '32px' }}>
                                             <Col span={4} style={{ color: "#fff" }}>照片：</Col>
-                                            <Col span={20}><img src={obj ? obj.zpurl ? obj.zpurl : "../../images/zanwu.png" : ''} style={{ width: '130px', height: '160px' }} /></Col>
+                                            <Col span={20}><img src={obj ? obj.zpurl ? obj.zpurl : "/images/zanwu.png" : "/images/zanwu.png"} style={{ width: '130px', height: '160px' }} /></Col>
                                         </Row>
                                         <FormItem
                                             {...formItemLayout}

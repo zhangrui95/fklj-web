@@ -1,19 +1,30 @@
- // 盘查管理-周期任务-按天
+// 盘查管理-旧版反恐利剑
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { mainReducer } from "../../reducers/reducers";
 import { StylePage, ShallowBlueBtn, Pag, InterrogationDetailsItem, Tabs } from "../generalPurposeModule";
 import { store } from '../../index.js';
 import * as constants from "../../utils/Constants";
-import { monthFormat, dateFormat, serverUrl } from '../../utils/';
-import { Spin, Table, message, Input, Modal, Button, Form, Icon, Row, Col, Select, DatePicker, Tag, Divider } from 'antd';
+import { monthFormat, dateFormat, serverUrl, getMyDate } from '../../utils/';
+import { Spin, Table, message, Input, Modal, Button, Form, Icon, Row, Col, Select, DatePicker, Tag, Divider, Radio } from 'antd';
 import { BannerAnimImg } from '../../components/BannerAnim';
-import { postInterrogationDetailsUsersData} from "../../actions/InterrogationDetails";
+import { postInterrogationDetailsUsersData } from "../../actions/InterrogationDetails";
 import { SwordData } from "../InterrogationDetails/SwordData";
 import { changeTab } from "../../actions/actions";
 import {
-    postInventoryListHushiData, postInventoryListHushiDetailsData
+    postOldInventoryListHushiData, postOldInventoryListHushiDetailsData
 } from "../../actions/InventoryManagement";
+import {
+    api
+} from '../../actions/actions';
+import {
+    post,
+    get,
+    put
+} from "../../actions/request";
+import {
+    Link
+} from "react-router";
 import moment from 'moment';
 moment.locale('zh-cn');
 
@@ -26,7 +37,7 @@ const sliderdyHeader = {
 const FormItem = Form.Item;
 const Option = Select.Option;
 const { TextArea } = Input;
-
+const RadioGroup = Radio.Group;
 //分页配置文件
 const pagination = {
     size: 'small',
@@ -63,6 +74,14 @@ const formText = {
         sm: { span: 21 },
     },
 };
+const mStyle = {
+    fontSize: "14px",
+    color: "#fff",
+    marginRight: "20px",
+    width: "104px",
+    float: "left",
+    textAlign: "right"
+}
 
 export class OldWithDay extends Component {
     constructor(props) { //初始化nowPage为1
@@ -79,14 +98,8 @@ export class OldWithDay extends Component {
             enddate: '',
             begindate: '',
             subtask_name: '',
-            address_type: '',
             police_name: '',
             key: '',
-            data: [
-                { key: 1, serial: 1, cardId: '230106196201222121', label: '张三', zrdw: '呼伦浩特市XX单位', time: '2018-04-10', police: '警员001', tag: '人员通过' },
-                { key: 2, serial: 2, cardId: '230106196201222121', label: '张三', zrdw: '呼伦浩特市XX单位', time: '2018-04-10', police: '警员001', tag: '人员通过' },
-                { key: 3, serial: 3, cardId: '230106196201222121', label: '张三', zrdw: '呼伦浩特市XX单位', time: '2018-04-10', police: '警员001', tag: '人员通过' },
-            ],
             record: null,
             pagination: pagination,
             loading: false,
@@ -104,26 +117,25 @@ export class OldWithDay extends Component {
             ModalKey: 0,
             oldVisibles: false,
             oldpersonInfo: '',
-            testData: { "police_code": "080003", "police_idcard": "230382198011010010", "address": "", "police_unitcode": "410000000000", "nation": "", "checktime": "2018-03-22 10:53:19", "police_area": "", "sex": "男", "birth": "1980-01-01", "tagscode": "", "tags": "", "recordId": "23038219801101001020180322105307964", "police_unit": "河南省公安厅", "zpurl": "", "idcard": "350125198001010075", "name": "", "check_exception": 0, "imei": "", "personId": "b829a02b16c84f0ebddbb6cb935516d2", "collectNumber": 0, "police_name": "测试用户一", "cid": "HYX315000136" },
+            personId: '',
+            recordId: '',
         };
-        this.pageChange = this.pageChange.bind(this);
+        // this.pageChange = this.pageChange.bind(this);
     }
     componentDidMount() {
         let params = {
             currentPage: 1,
             pd: {
                 idcard: '',
-                subtask_name: '',
+                police_unit: '',
                 name: "",
-                address_type: '',
                 police_name: '',
                 endtime: '',
                 starttime: '',
-                cycle:0,
             },
             showCount: 10
         }
-        store.dispatch(postInventoryListHushiData(params));
+        store.dispatch(postOldInventoryListHushiData(params));
     }
     editShowModal = (record) => {
         this.setState({
@@ -131,6 +143,10 @@ export class OldWithDay extends Component {
             personInfo: record,
             modalType: 'edit'
         });
+        let creds = {
+            idcard: record.idcard
+        }
+        store.dispatch(postOldInventoryListHushiDetailsData(creds));
     }
     addShowModal = (record) => {
         this.setState({
@@ -146,21 +162,23 @@ export class OldWithDay extends Component {
     }
     // 原反恐利剑 点击详情函数
     oldDetailsShowModal = (record) => {
-        this.setState({
-            oldVisibles: true,
-            oldpersonInfo: record,
-            modalType: 'edit'
-        });
         let creds = {
             currentPage: 1,
             entityOrField: true,
             pd: {
-                recordId: 'b829a02b16c84f0ebddbb6cb935516d2',
-                personId: '23038219801101001020180322105307964',
+                recordId: record.record_id,
+                personId: record.person_id,
             },
             showCount: constants.pageSize
         }
-        this.props.dispatch(postInterrogationDetailsUsersData(creds));
+        store.dispatch(postOldInventoryListHushiDetailsData(creds));
+        this.setState({
+            oldVisibles: true,
+            oldpersonInfo: record,
+            modalType: 'edit',
+            recordId: record.record_id,
+            personId: record.person_id,
+        });
     }
     // 原反恐利剑 取消
     handleOldCancel = () => {
@@ -169,119 +187,6 @@ export class OldWithDay extends Component {
             modalKey: this.state.modalKey + 1
         });
     }
-    handleDelete = () => {
-        if (this.state.selectedRowsId.length === 0) {
-            message.error('请选择要删除的项！');
-            return;
-        }
-
-        let crads = {
-            // id: this.state.selectedRowsId,
-            // userName: sessionStorage.getItem('userName') || ''
-
-            pd: {
-                id: this.state.selectedRowsId,
-            },
-
-        };
-        let params = {
-            currentPage: this.state.nowPage,
-            pd: {
-                beginTime: this.state.begindate,
-                endTime: this.state.enddate,
-                name: this.state.name,
-                pid: "199"
-            },
-            showCount: 10
-        }
-        // store.dispatch(DeleteHorrorSoftwareData(crads,params));
-
-        this.setState({
-            selectedRowsId: [],
-            // nowPage: 1
-        });
-
-    }
-    saveModel = (e) => {
-        // this.handleCancel();
-        e.preventDefault();
-        this.props.form.validateFields((err, values) => {
-            let userItem = JSON.parse(sessionStorage.getItem('user'));
-            if (!err) {
-                if (this.state.modalType === "edit") {
-                    // values.id = this.state.personInfo.key;//让表单数据带上id  后台好进行操作
-                    // console.log('this.state.personInfo',this.state.personInfo);
-                    // console.log('values.id',values.id);
-                    // let creds = {
-                    //     pd:{
-                    //         name:values.label,
-                    //         iconUrl:values.iconUrl?values.iconUrl:this.state.avatarSrc,
-                    //         id:values.id.toString(),
-                    //         optuser:userItem.user.idcard,
-                    //         createuser:userItem.user.idcard,
-                    //         remark:values.remark?values.remark:'',
-                    //         status:values.status?values.status:'1',
-                    //         code:values.value?values.value:'',
-                    //         level:'2',
-                    //         pid:'199'
-                    //     },//传参 把后台需要的参数传过去
-                    // }
-                    // let params = {
-                    //     currentPage: 1,
-                    //     pd: {
-                    //         beginTime: this.state.begindate,
-                    //         endTime: this.state.enddate,
-                    //         name: this.state.name,
-                    //         pid:"199"
-                    //     },
-                    //     showCount: 10
-                    // }
-                    // store.dispatch(updateHorrorSoftwareData(creds,params));
-                } else if (this.state.modalType === "add") {
-                    let data = this.state.data;
-                    let len = this.state.data.length - 1;
-                    let key = data[len].key + 1
-                    let value = { key: key, serial: key, value: values.value, label: values.label, updatetime: "2018-04-10" }
-                    data.push(value)
-                    this.setState({
-                        data: data,
-                    });
-                    // let creds = {//表单域不一定写了所有的字段 所以要把空值通过赋值显示
-                    //     pd:{
-                    //         name:values.label?values.label:'',
-                    //         iconUrl:values.iconUrl?values.iconUrl:'',
-                    //         menuname:"304",
-                    //         optuser:userItem.user.idcard,
-                    //         createuser:userItem.user.idcard,
-                    //         remark:values.remark?values.remark:'',
-                    //         status:values.status?values.status:'1',
-                    //         code:values.value?values.value:'',
-                    //         level:'2',
-                    //         pid:'199'
-                    //     },
-                    // }
-                    // let params = {
-                    //     currentPage: 1,
-                    //     pd: {
-                    //         beginTime: this.state.begindate,
-                    //         endTime: this.state.enddate,
-                    //         name: this.state.name,
-                    //         pid:"199"
-                    //     },
-                    //     showCount: 10
-                    // }
-                    // store.dispatch(addHorrorSoftwareData(creds,params))
-
-                }
-                this.handleCancel();
-                this.setState({
-                    nowPage: 1
-                });
-            }
-
-
-        })
-    }
     serchChange = (name, idcard, enddate, begindate, subtask_name, address_type, police_name, page) => {
         this.setState({
             name: name,
@@ -289,30 +194,8 @@ export class OldWithDay extends Component {
             enddate: enddate,
             begindate: begindate,
             subtask_name: subtask_name,
-            address_type: address_type,
-            police_name:police_name,
+            police_name: police_name,
             nowPage: page
-        });
-    }
-    pageChange(nowPage) {
-        this.state = Object.assign({}, this.state, { nowPage: nowPage });
-        // let creds = {
-        //     currentPage:nowPage,
-        //     entityOrField:true,
-        //     pd:{
-        //         beginTime:this.state.beginDate ,
-        //         endTime:this.state.endDate,
-        //         name:this.state.name,
-        //         unit:this.state.unit,
-        //         task_stauts:this.state.status,
-        //         task_type:'113003',
-        //     },
-        //     showCount: constants.pageSize
-        // }
-        // store.dispatch(fetchPatrolTaskData(creds));
-        this.setState({
-            selectedRowsId: [],
-            selectedRowKeys: [],
         });
     }
     initEntity = () => {
@@ -352,33 +235,38 @@ export class OldWithDay extends Component {
         }
     }
     render() {
+        console.log('this.sta', this.state.nowPage)
         const { getFieldDecorator } = this.props.form;
         let nowPage = this.state.nowPage;
-        let isFetching = store.getState().ControlPersonnel.isFetching;
-        let data = store.getState().InventoryManagement.data.invenListHushi.result.list;
-        let obj = store.getState().InventoryManagement.data.invenListHushiDetails.result;
-        let page = store.getState().InventoryManagement.data.invenListHushi.result.page;
+        let isFetching = store.getState().InventoryManagement.data.oldinvenListHushi.isFetching;
+        let data = store.getState().InventoryManagement.data.oldinvenListHushi.result.list;
+        let obj = store.getState().InventoryManagement.data.oldinvenListHushi.result;
+        let page = store.getState().InventoryManagement.data.oldinvenListHushi.result.page;
         let dataList = [];
-        let recordNumber = parseInt((nowPage - 1) * 10);
-        for (let i = 0; i < data.length; i++) {
-            let item = data[i];
-            let serial = recordNumber + i + 1;
-            dataList.push({
-                serial: serial,
-                name: item.name,
-                idcard: item.idcard,
-                sex: item.sex,
-                age: item.age,
-                address_type: item.address_type,
-                now_address: item.now_address,
-                phone: item.phone,
-                subtask_name: item.subtask_name,
-                police: item.police,
-                checktime: item.checktime,
-                id: item.id,
 
-            });
+        let recordNumber = parseInt((nowPage - 1) * 10);
+        console.log('nowPage', this.state.nowPage);
+        if (data) {
+            for (let i = 0; i < data.length; i++) {
+                let item = data[i];
+                let serial = recordNumber + i + 1;
+                dataList.push({
+                    serial: serial,
+                    name: item.name,
+                    idcard: item.idcard,
+                    sex: item.sex,
+                    age: item.age,
+                    nation: item.nation,
+                    address: item.address,
+                    phone: item.phone,
+                    police_unit: item.police_unit,
+                    police_name: item.police_name,
+                    checktime: item.checktime ? getMyDate(item.checktime / 1000) : '',
+
+                });
+            }
         }
+        console.log('dataList*****', dataList);
         const columns = [{
             title: '序号',
             dataIndex: 'serial',
@@ -395,21 +283,23 @@ export class OldWithDay extends Component {
         }, {
             title: '年龄',
             dataIndex: 'age',
-        }, {
-            title: '居住类型',
-            dataIndex: 'address_type',
-        }, {
-            title: '现居住地址',
-            dataIndex: 'now_address',
+        }
+            , {
+            title: '民族',
+            dataIndex: 'nation',
+        }
+            , {
+            title: '户籍地址',
+            dataIndex: 'address',
         }, {
             title: '联系电话',
             dataIndex: 'phone',
         }, {
-            title: '隶属任务',
-            dataIndex: 'subtask_name',
+            title: '所属机构',
+            dataIndex: 'police_unit',
         }, {
             title: '盘查警员',
-            dataIndex: 'police',
+            dataIndex: 'police_name',
         }, {
             title: '盘查时间',
             dataIndex: 'checktime',
@@ -439,23 +329,26 @@ export class OldWithDay extends Component {
             }),
         };
         let imgArray = [];
-        // if (paint_real) {
-        //     let imgObj = JSON.parse(paint_real.value);
-        //     var imgObjText = imgObj.text;
-        let arrayImg = ["../../images/zanwu.png", "../../images/zanwu.png", "../../images/zanwu.png"];
-        if (arrayImg && arrayImg.length > 0) {
-            for (let i = 0; i < arrayImg.length; i++) {
-                imgArray.push(
-                    <img src={arrayImg[i]} key={i} alt="" style={{ width: '100px', height: '120px', margin: '5px' }}
-                        onClick={handleImgClick => this.handleImgClick(arrayImg, arrayImg[i], i)} />
-                );
+        if (obj) {
+            if (obj.paint) {
+                let arrayImg = JSON.parse(obj.paint.paint_photo_path);
+                var imgObjText = obj.paint.text;
+                // let arrayImg = ["../../images/zanwu.png", "../../images/zanwu.png", "../../images/zanwu.png"];
+                if (arrayImg && arrayImg.length > 0) {
+                    for (let i = 0; i < arrayImg.length; i++) {
+                        imgArray.push(
+                            <img src={arrayImg[i]} key={i} alt="" style={{ width: '100px', height: '120px', margin: '5px' }}
+                                onClick={handleImgClick => this.handleImgClick(arrayImg, arrayImg[i], i)} />
+                        );
+                    }
+                } else {
+                    imgArray.push(
+                        <div style={{ fontSize: 16, color: '#fff', width: '100%', textAlign: "center" }}>暂无写实照片</div>
+                    );
+                }
             }
-        } else {
-            imgArray.push(
-                <div style={{ fontSize: 16, color: '#fff', width: '100%', textAlign: "center" }}>暂无写实照片</div>
-            );
         }
-        // }
+
         let tabs = store.getState().InterrogationDetailsUsers.uiData.tabs;
         let isSelectTab, content;
         //查找被选中的标签
@@ -485,17 +378,15 @@ export class OldWithDay extends Component {
                     currentPage: page,
                     pd: {
                         idcard: idcard,
-                        subtask_name: subtask_name,
+                        police_unit: subtask_name,
                         name: name,
-                        address_type: address_type,
                         police_name: police_name,
                         endtime: enddate,
                         starttime: begindate,
-                        cycle:0,
                     },
                     showCount: 10
                 }
-                store.dispatch(postInventoryListHushiData(params));
+                store.dispatch(postOldInventoryListHushiData(params));
             },
             current: page.currentPage,
             total: page.totalResult,
@@ -529,228 +420,168 @@ export class OldWithDay extends Component {
                             <Spin size="large" />
                         </div> :
                         <div style={{ padding: "0 15px" }}>
-                            <Table locale={{ emptyText: '暂无数据' }} columns={columns} dataSource={this.state.data} bordered pagination={pagination} />
+                            <Table locale={{ emptyText: '暂无数据' }} columns={columns} dataSource={dataList} bordered pagination={pagination} />
                         </div>}
                     <div className="clear"></div>
                 </div>
                 {/*分页*/}
                 {/* <Pag pageSize={10} nowPage={nowPage} totalRecord={10} pageChange={this.pageChange} /> */}
                 {
-                    this.state.visible ?
+                    this.state.oldVisibles ?
                         <Modal
-                            width={900}
+                            width="60%"
                             style={{ top: '20px' }}
                             title="详情"
-                            visible={this.state.visible}
-                            onCancel={this.handleCancel}
+                            visible={this.state.oldVisibles}
+                            onCancel={this.handleOldCancel}
                             footer={null}
                             key={this.state.modalKey}
                         >
-                            <Form onSubmit={this.saveModel}>
+                            <div>
+                                {/* <InterrogationDetailsItem interrogationDetailsUser={this.state.testData} />
+                                <div>
+                                    <div style={{ marginTop: "20px" }}>
+                                        <Tabs tabs={tabs} handleTabClick={this.handleTabClick} />
+                                        <div style={{ clear: "both" }}></div>
+                                    </div>
+                                    {content}
+                                </div> */}
                                 <Row>
-                                    <Col span={24} style={{ fontSize: '16px', color: "#fff" }}>人员信息</Col>
-                                    <Col span={12}>
-                                        <Row style={{ padding: '32px' }}>
-                                            <Col span={4} style={{ color: "#fff" }}>照片：</Col>
-                                            <Col span={20}><img src={obj ? obj.zpurl ? obj.zpurl : "../../images/zanwu.png" : ''} style={{ width: '130px', height: '160px' }} /></Col>
-                                        </Row>
-                                        <FormItem
-                                            {...formItemLayout}
-                                            label="身份证号"
-                                            style={{ marginBottom: '5px' }}
-                                        >
-                                            {getFieldDecorator('idcard', {
-                                                initialValue: obj ? obj.idcard ? obj.idcard : '' : '',
-                                            })(
-                                                <Input disabled />
-                                            )}
-                                        </FormItem>
-                                        <FormItem
-                                            {...formItemLayout}
-                                            label="姓名"
-                                            style={{ marginBottom: '5px' }}
-                                        >
-                                            {getFieldDecorator('name', {
-                                                initialValue: obj ? obj.name ? obj.name : '' : '',
-                                            })(
-                                                <Input disabled />
-                                            )}
-                                        </FormItem>
-                                        <FormItem
-                                            {...formItemLayout}
-                                            label="性别"
-                                            style={{ marginBottom: '5px' }}
-                                        >
-                                            {getFieldDecorator('sex', {
-                                                initialValue: obj ? obj.sex ? obj.sex : '' : '',
-                                            })(
-                                                <Input disabled />
-                                            )}
-                                        </FormItem>
-                                        <FormItem
-                                            {...formItemLayout}
-                                            label="年龄"
-                                            style={{ marginBottom: '5px' }}
-                                        >
-                                            {getFieldDecorator('age', {
-                                                initialValue: obj ? obj.age ? obj.age : '' : '',
-                                            })(
-                                                <Input disabled />
-                                            )}
-                                        </FormItem>
-                                        <FormItem
-                                            {...formItemLayout}
-                                            label="民族"
-                                            style={{ marginBottom: '5px' }}
-                                        >
-                                            {getFieldDecorator('nation', {
-                                                initialValue: obj ? obj.nation ? obj.nation : '' : '',
-                                            })(
-                                                <Input disabled />
-                                            )}
-                                        </FormItem>
-
-                                        <FormItem
-                                            {...formItemLayout}
-                                            label="户籍地址"
-                                            style={{ marginBottom: '5px' }}
-                                        >
-                                            {getFieldDecorator('address', {
-                                                initialValue: obj ? obj.address ? obj.address : '' : '',
-                                            })(
-                                                <Input disabled />
-                                            )}
-                                        </FormItem>
+                                    <Col span={4}>
+                                        <img src="/images/zanwu.png" />
                                     </Col>
-                                    <Col span={12}>
-                                        <FormItem
-                                            {...formItemLayout}
-                                            label="居住类型"
-                                            style={{ marginBottom: '5px' }}
-                                        >
-                                            {getFieldDecorator('address_type', {
-                                                initialValue: obj ? obj.address_type ? obj.address_type : '' : '',
-                                            })(
-                                                <Input disabled />
-                                            )}
-                                        </FormItem>
-                                        <FormItem
-                                            {...formItemLayout}
-                                            label="现居住地址"
-                                            style={{ marginBottom: '5px' }}
-                                        >
-                                            {getFieldDecorator('now_address', {
-                                                initialValue: obj ? obj.now_address ? obj.now_address : '' : '',
-                                            })(
-                                                <Input disabled />
-                                            )}
-                                        </FormItem>
-                                        <FormItem
-                                            {...formItemLayout}
-                                            label="工作地址"
-                                            style={{ marginBottom: '5px' }}
-                                        >
-                                            {getFieldDecorator('workAddress', {
-                                                initialValue: this.state.personInfo.workAddress,
-                                            })(
-                                                <Input disabled />
-                                            )}
-                                        </FormItem>
-                                        <FormItem
-                                            {...formItemLayout}
-                                            label="联系电话"
-                                            style={{ marginBottom: '5px' }}
-                                        >
-                                            {getFieldDecorator('phone', {
-                                                initialValue: obj ? obj.phone ? obj.phone : '' : '',
-                                            })(
-                                                <Input disabled />
-                                            )}
-                                        </FormItem>
-                                        <FormItem
-                                            {...formItemLayout}
-                                            label="隶属任务"
-                                            style={{ marginBottom: '5px' }}
-                                        >
-                                            {getFieldDecorator('subordinationTask', {
-                                                initialValue: obj ? obj.idcard ? obj.idcard : '' : '',
-                                            })(
-                                                <Input disabled />
-                                            )}
-                                        </FormItem>
-                                        <FormItem
-                                            {...formItemLayout}
-                                            label="盘查警员"
-                                            style={{ marginBottom: '5px' }}
-                                        >
-                                            {getFieldDecorator('police', {
-                                                initialValue: obj ? obj.idcard ? obj.idcard : '' : '',
-                                            })(
-                                                <Input disabled />
-                                            )}
-                                        </FormItem>
-                                        <FormItem
-                                            {...formItemLayout}
-                                            label="任务周期"
-                                            style={{ marginBottom: '5px' }}
-                                        >
-                                            {getFieldDecorator('taskCycle', {
-                                                initialValue: obj ? obj.idcard ? obj.idcard : '' : '',
-                                            })(
-                                                <Input disabled />
-                                            )}
-                                        </FormItem>
-                                        <FormItem
-                                            {...formItemLayout}
-                                            label="人员来源"
-                                            style={{ marginBottom: '5px' }}
-                                        >
-                                            {getFieldDecorator('personnelSource', {
-                                                initialValue: obj ? obj.idcard ? obj.idcard : '' : '',
-                                            })(
-                                                <Input disabled />
-                                            )}
-                                        </FormItem>
-                                        <FormItem
-                                            {...formItemLayout}
-                                            label="人员属性"
-                                            style={{ marginBottom: '5px' }}
-                                        >
-                                            {getFieldDecorator('personnelAttribute', {
-                                                initialValue: obj ? obj.idcard ? obj.idcard : '' : '',
-                                            })(
-                                                <Input disabled />
-                                            )}
-                                        </FormItem>
-                                        <FormItem
-                                            {...formItemLayout}
-                                            label="是否有车"
-                                            style={{ marginBottom: '5px' }}
-                                        >
-                                            {getFieldDecorator('isCar', {
-                                                initialValue: obj ? obj.idcard ? obj.idcard : '' : '',
-                                            })(
-                                                <Input disabled />
-                                            )}
-                                        </FormItem>
-                                        <FormItem
-                                            {...formItemLayout}
-                                            label="盘查时间"
-                                            style={{ marginBottom: '5px' }}
-                                        >
-                                            {getFieldDecorator('value', {
-                                                initialValue: obj ? obj.idcard ? obj.idcard : '' : '',
-                                            })(
-                                                <Input disabled />
-                                            )}
-                                        </FormItem>
+                                    <Col span={19}>
+                                        <Row style={{ marginBottom: '10px' }}>
+                                            <Col span={10}>
+                                                姓名：张莹
+                                            </Col>
+                                            <Col span={10}>
+                                                身份证号：230826199307161425
+                                            </Col>
+                                        </Row>
+                                        <Row style={{ marginBottom: '10px' }}>
+                                            <Col span={5}>
+                                                性别：女
+                                            </Col>
+                                            <Col span={5}>
+                                                民族：汉
+                                            </Col>
+                                            <Col span={10}>
+                                                出生：1993-07-16
+                                            </Col>
+                                        </Row>
+                                        <Row style={{ marginBottom: '10px' }}>
+                                            <Col span={24}>
+                                                住址：黑龙江省佳木斯市桦川县东河乡东安村
+                                            </Col>
+
+                                        </Row>
+                                        <Row>
+
+                                        </Row>
 
                                     </Col>
                                 </Row>
-                                <Divider style={{ background: 'rgb(29, 40, 81)', height: '2px', margin: '18px 0' }} />
+                                <hr style={{ background: '#0c5f93', height: '1px', border: 'none', margin: '24px 0' }} />
                                 <Row>
-                                    <Col span={24} style={{ fontSize: '16px', color: "#fff" }}>写实详情</Col>
-                                    <Row style={{ padding: '32px' }}>
+                                    <p style={{ fontSize: '16px' }}>特征盘查信息</p>
+                                    <Col span={24}>
+                                        特征描述：留大胡子
+                                    </Col>
+                                </Row>
+                                <hr style={{ background: '#0c5f93', height: '1px', border: 'none', margin: '24px 0' }} />
+                                <Row>
+                                    <p style={{ fontSize: '16px' }}>基础信息</p>
+                                    <Row style={{ marginBottom: '10px' }}>
+                                        <Col span={8}>
+                                            人员属性：
+                                        </Col>
+                                        <Col span={8}>
+                                            人员状态：
+                                        </Col>
+                                        <Col span={8}>
+                                            到达方式：
+                                        </Col>
+                                    </Row>
+                                    <Row style={{ marginBottom: '10px' }}>
+                                        <Col span={8}>
+                                            住所类型：
+                                        </Col>
+                                        <Col span={8}>
+                                            人员类型：
+                                        </Col>
+                                    </Row>
+                                </Row>
+                                <hr style={{ background: '#0c5f93', height: '1px', border: 'none', margin: '24px 0' }} />
+                                <Row>
+                                    <p style={{ fontSize: '16px' }}>流入地信息</p>
+                                    <Row style={{ marginBottom: '10px' }}>
+                                        <Col span={8}>
+                                            从何处来：留大胡子
+                                        </Col>
+                                        <Col span={8}>
+                                            到何处去：留大胡子
+                                        </Col>
+                                        <Col span={8}>
+                                            联络员：留大胡子
+                                        </Col>
+                                    </Row>
+                                    <Row style={{ marginBottom: '10px' }}>
+                                        <Col span={8}>
+                                            出行方式：留大胡子
+                                        </Col>
+                                        <Col span={8}>
+                                            出行目的：留大胡子
+                                        </Col>
+                                        <Col span={8}>
+                                            出行日期：2018-05-24
+                                        </Col>
+                                    </Row>
+                                    <Row style={{ marginBottom: '10px' }}>
+                                        <Col span={8}>
+                                            投奔人：留大胡子
+                                        </Col>
+                                        <Col span={16}>
+                                            其他信息：留大胡子
+                                        </Col>
+                                    </Row>
+                                </Row>
+                                <hr style={{ background: '#0c5f93', height: '1px', border: 'none', margin: '24px 0' }} />
+                                <Row>
+                                    <p style={{ fontSize: '16px' }}>手机信息</p>
+                                    <Table locale={{ emptyText: '暂无数据' }} columns={columns} dataSource={dataList} bordered pagination={pagination} />
+                                </Row>
+                                <hr style={{ background: '#0c5f93', height: '1px', border: 'none', margin: '24px 0' }} />
+                                <Row>
+                                    <p style={{ fontSize: '16px' }}>联通信息</p>
+                                    <Table locale={{ emptyText: '暂无数据' }} columns={columns} dataSource={dataList} bordered pagination={pagination} />
+                                </Row>
+                                <hr style={{ background: '#0c5f93', height: '1px', border: 'none', margin: '24px 0' }} />
+                                <Row>
+                                    <p style={{ fontSize: '16px' }}>背景核查</p>
+                                    <Row style={{ marginBottom: '10px' }}>
+                                        <Col span={24}>
+                                            核查方式：留大胡子
+                                        </Col>
+                                    </Row>
+                                    <Row style={{ marginBottom: '10px' }}>
+                                        <Col span={12}>
+                                            户籍警局：留大胡子
+                                        </Col>
+                                        <Col span={12}>
+                                            户籍地联系人：留大胡子
+                                        </Col>
+                                    </Row>
+                                    <Row style={{ marginBottom: '10px' }}>
+                                        <Col span={24}>
+                                            核查类型：留大胡子
+                                        </Col>
+                                    </Row>
+                                </Row>
+                                <hr style={{ background: '#0c5f93', height: '1px', border: 'none', margin: '24px 0' }} />
+                                <Row>
+                                    <p style={{ fontSize: '16px' }}>写实信息</p>
+                                    <Row style={{ padding: '32px 32px 0 32px' }}>
                                         <Col span={24}>
                                             {imgArray}
                                             <Modal
@@ -764,42 +595,19 @@ export class OldWithDay extends Component {
                                             </Modal>
                                         </Col>
                                         <Col span={24}>
-                                            <FormItem
-                                                {...formText}
-                                                label="详情"
-                                            >
-                                                {getFieldDecorator('value', {
-                                                    initialValue: this.state.personInfo.content
-                                                })(
-                                                    <TextArea rows={2} disabled />
-                                                )}
-                                            </FormItem>
+                                            写实文字：
                                         </Col>
                                     </Row>
                                 </Row>
-                            </Form>
-                        </Modal> : ''
-                }
-                {
-                    this.state.oldVisibles ?
-                        <Modal
-                            width="60%"
-                            style={{ top: '20px' }}
-                            title="详情"
-                            visible={this.state.oldVisibles}
-                            onCancel={this.handleOldCancel}
-                            footer={null}
-                            key={this.state.modalKey}
-                        >
-                            <div>
-                                <InterrogationDetailsItem interrogationDetailsUser={this.state.testData} />
-                                <div>
-                                    <div style={{ marginTop: "20px" }}>
-                                        <Tabs tabs={tabs} handleTabClick={this.handleTabClick} />
-                                        <div style={{ clear: "both" }}></div>
-                                    </div>
-                                    {content}
-                                </div>
+                                <hr style={{ background: '#0c5f93', height: '1px', border: 'none', margin: '24px 0' }} />
+                                <Row>
+                                    <p style={{ fontSize: '16px' }}>租房信息</p>
+                                    <Row>
+                                        <Col span={24}>
+                                            核查类型：留大胡子
+                                        </Col>
+                                    </Row>
+                                </Row>
                             </div>
                         </Modal> : ''
                 }
@@ -818,29 +626,26 @@ const SearchArea = React.createClass({
             enddate: '',
             begindate: '',
             subtask_name: '',
-            address_type: '',
             police_name: ''
         };
     },
     handleClick: function () { //点击查询
         let page = 1;
-        let { name, idcard, enddate, begindate, subtask_name, address_type, police_name } = this.state;
+        let { name, idcard, enddate, begindate, subtask_name, police_name } = this.state;
         let params = {
             currentPage: 1,
             pd: {
                 idcard: idcard,
-                subtask_name: subtask_name,
+                police_unit: subtask_name,
                 name: name,
-                address_type: address_type,
                 police_name: police_name,
                 endtime: enddate,
                 starttime: begindate,
-                cycle:0,
             },
             showCount: 10
         }
-        store.dispatch(postInventoryListHushiData(params));
-        this.props.serchChange(name, idcard, enddate, begindate, subtask_name, address_type, police_name, page);
+        store.dispatch(postOldInventoryListHushiData(params));
+        this.props.serchChange(name, idcard, enddate, begindate, subtask_name, police_name, page);
     },
     init: function () {
         let page = 1;
@@ -850,31 +655,28 @@ const SearchArea = React.createClass({
             enddate: '',
             begindate: '',
             subtask_name: '',
-            address_type: '',
             police_name: '',
         });
         let params = {
             currentPage: 1,
             pd: {
                 idcard: '',
-                subtask_name: '',
+                police_unit: '',
                 name: '',
-                address_type: '',
                 police_name: '',
                 endtime: '',
                 starttime: '',
-                cycle:0,
             },
             showCount: 10
         }
-        store.dispatch(postInventoryListHushiData(params));
+        store.dispatch(postOldInventoryListHushiData(params));
         this.props.serchChange('', '', '', '', '', '', page);
     },
-    componentWillReceiveProps: function (nextProps) {
-        if (this.props.type !== nextProps.type) {
-            this.init();
-        }
-    },
+    // componentWillReceiveProps: function (nextProps) {
+    //     if (this.props.type !== nextProps.type) {
+    //         this.init();
+    //     }
+    // },
     handleSfzhClick: function (e) {
         this.setState({
             idcard: e.target.value,
@@ -890,14 +692,14 @@ const SearchArea = React.createClass({
             police_name: e.target.value,
         });
     },
-    handleaddressTypeClick:function(value){
+    handleaddressTypeClick: function (value) {
         this.setState({
             address_type: value
         });
     },
-    handleSubtaskNameClick:function(e){
+    handleSubtaskNameClick: function (e) {
         this.setState({
-            subtask_name:e.target.value
+            subtask_name: e.target.value
         });
     },
     handleBeginDeteClick: function (date, dateString) {
@@ -921,7 +723,7 @@ const SearchArea = React.createClass({
             tagsSelect: value
         });
     },
-    
+
     onOkBegin: function (e) {
         let beginDate = this.state.beginDate;
         if (e === undefined) {
@@ -984,20 +786,20 @@ const SearchArea = React.createClass({
             <div>
                 <div className="marLeft40 z_searchDiv">
                     <label htmlFor="" className="font14">姓名：</label>
-                    <Input style={{ width: '130px', marginRight: "10px" }} type="text" id='name' placeholder='请输入姓名' value={name} onChange={this.handleNameClick} />
+                    <Input style={{ width: '180px', marginRight: "10px" }} type="text" id='name' placeholder='请输入姓名' value={name} onChange={this.handleNameClick} />
                     <label htmlFor="" className="font14">身份证号：</label>
                     <Input style={{ width: '230px', marginRight: "10px" }} type="text" id='sfzh' placeholder='请输入身份证号' value={idcard} onChange={this.handleSfzhClick} />
-                    <label htmlFor="" className="font14">居住类型：</label>
+                    {/* <label htmlFor="" className="font14">居住类型：</label>
                     <Select style={{ width: "10%", margin: "0 10px 0 0" }} value={address_type} onChange={this.handleaddressTypeClick} notFoundContent='暂无'>
                         <Option value=''>全部</Option>
                         <Option value={0}>常住</Option>
-                        <Option value={1}>流动</Option>
-                        <Option value={2}>暂住</Option>
-                    </Select>
-                    <label htmlFor="" className="font14">隶属任务：</label>
-                    <Input value={subtask_name} style={{ width: '130px', marginRight: "10px" }} type="text" id='subtask_name' placeholder='请输入隶属任务名称' onChange={this.handleSubtaskNameClick}/>
+                        <Option value={1}>暂住</Option>
+                        <Option value={2}>流动</Option>
+                    </Select> */}
+                    <label htmlFor="" className="font14">所属机构：</label>
+                    <Input value={subtask_name} style={{ width: '230px', marginRight: "10px" }} type="text" id='subtask_name' placeholder='请输入所属机构名称' onChange={this.handleSubtaskNameClick} />
                     <label htmlFor="" className="font14">盘查警员：</label>
-                    <Input style={{ width: '130px', marginRight: "10px" }} type="text" id='police_name' placeholder='请输入警员姓名' value={police_name} onChange={this.handlePoliceNameClick} />
+                    <Input style={{ width: '230px', marginRight: "10px" }} type="text" id='police_name' placeholder='请输入警员姓名' value={police_name} onChange={this.handlePoliceNameClick} />
                 </div>
                 <div style={{ marginLeft: "2%", marginTop: "20px" }}>
                     <label htmlFor="" className="font14">起止时间：</label>
@@ -1012,5 +814,711 @@ const SearchArea = React.createClass({
         );
     }
 })
+const paginationSmall = {
+    size: 'small',
+    pageSize: constants.recordPageSize,
+    showTotal(total) {
+        return `合计 ${total} 条记录`;
+    },
+    itemRender(current, type, originalElement) {
+        if (type === 'prev') {
+            return <a>上一页</a>;
+        } else if (type === 'next') {
+            return <a>下一页</a>;
+        }
+        return originalElement;
+    }
+};
+// 手机信息
+class MobileDataTable extends Component {
+    state = {
+        visible: false,
+        record: null,
+        data: [],
+        pagination: paginationSmall,
+        loading: false,
+    };
+    handleTableChange = (pagination, filters, sorter) => {
+        const pager = {
+            ...this.state.pagination
+        };
+        pager.current = pagination.current;
+        this.setState({
+            pagination: pager,
+        });
+        this.fetch({ //点击下一页的时候调取的参数
+            currentPage: pagination.current,
+            entityOrField: true,
+            pd: {
+                recordId: this.props.recordId,
+                personId: this.props.personId
+            },
+            showCount: pagination.pageSize
+        });
+    }
+    //params第一次掉的参数，是第一页，它也会判断是否在掉fetch的时候传参  没传就执行默认的这个第一页
+    fetch = (params = {
+        "currentPage": 1,
+        "entityOrField": true,
+        pd: {
+            recordId: this.props.recordId,
+            personId: this.props.personId
+        },
+        "showCount": constants.recordPageSize
+    }) => {
+        post(api + '/data/getPhoneOs', params).then((data) => {
+            const pagination = {
+                ...this.state.pagination
+            };
+            pagination.total = data.result.page.totalResult;
+            this.setState({
+                loading: false,
+                data: data.result.list,
+                pagination,
+            });
+        }).catch((e) => { });
+    }
+    componentDidMount() {
+        this.fetch();
+
+    }
+    showModal = (record) => {
+        this.setState({
+            visible: true,
+            record: record
+        });
+    }
+    handleCancel = () => {
+        this.setState({
+            visible: false
+        });
+    }
+    handleOk = () => {
+        this.setState({
+            visible: false
+        });
+    }
+    render() {
+        //to={'/PhoneDetails/'+this.state.record.phoneId}
+        const columns = [{
+            title: '手机号',
+            dataIndex: 'phoneNumber',
+        }, {
+            title: 'IMEI',
+            dataIndex: 'imei',
+        }, {
+            title: '型号',
+            dataIndex: 'product',
+        }, {
+            title: '系统',
+            dataIndex: 'os',
+            render: (text, record) => (
+                <span title={text} style={{ cursor: "pointer" }}>
+                    {
+                        text.length <= 75 ?
+                            text.slice(0, 74) : text.slice(0, 74) + "..."
+
+                    }
+                </span>
+            )
+        }, {
+            title: '操作',
+            key: 'action',
+            // width: 30,
+            render: (text, record) => (
+                <span>
+                    {/* <Link to={'/PhoneDetails/' + record.phoneId}>
+                        <span style={{ cursor: 'pointer', color: '#fff' }}>详情</span>
+                    </Link> */}
+                </span>
+            ),
+
+        }];
+        return (
+            <div>
+                <Table columns={columns}
+                    rowKey={record => record.registered}
+                    dataSource={this.state.data}
+                    pagination={this.state.pagination}
+                    loading={this.state.loading}
+                    bordered
+                    onChange={this.handleTableChange}
+                    locale={{ emptyText: '暂无数据' }}
+                />
+                <Modal
+                    visible={this.state.visible}
+                    title="手机型号信息"
+                    onCancel={this.handleCancel}
+                    onOk={this.handleOk}
+                    closable={true}
+                    style={{ maxHeight: 650, overflow: "auto" }}
+                    footer={null}
+                >
+                    <div style={{ marginBottom: "10px" }}>
+                        <label style={mStyle} htmlFor="">手机号：</label>
+                        <Input style={{ width: '60%' }} value={this.state.record !== null ? this.state.record.phoneNumber : ''} readOnly="readOnly" />
+                    </div>
+                    <div style={{ marginBottom: "10px" }}>
+                        <label style={mStyle} htmlFor="">系统：</label>
+                        <TextArea width="60%" height='120px' value={this.state.record !== null ? this.state.record.os : ''} readOnly="readOnly" />
+                    </div>
+                    <div style={{ marginBottom: "10px" }}>
+                        <label style={mStyle} htmlFor="">型号：</label>
+                        <Input style={{ width: '60%' }} value={this.state.record !== null ? this.state.record.product : ''} readOnly="readOnly" />
+                    </div>
+                    <div style={{ marginBottom: "10px" }}>
+                        <label style={mStyle} htmlFor="">IMEI：</label>
+                        <Input style={{ width: '60%' }} value={this.state.record !== null ? this.state.record.imei : ''} readOnly="readOnly" />
+                    </div>
+
+                </Modal>
+            </div>
+        );
+    }
+};
+//盘查数据的通话记录数据
+class CallLogTable extends Component {
+    state = {
+        visible: false,
+        record: null,
+        data: [],
+        pagination: paginationSmall,
+        loading: false,
+    };
+    handleTableChange = (pagination, filters, sorter) => { //下一页方法
+        console.log('pagination',pagination);
+        const pager = {...this.state.pagination
+        };
+        pager.current = pagination.current;
+        console.info('pager', pager);
+        this.setState({
+            pagination: pager,
+        });
+        this.fetch({ //点击下一页的时候调取的参数
+            currentPage: pagination.current,
+            entityOrField: true,
+            pd: {
+                // recordId: this.props.recordId, 
+                // personId: this.props.personId,
+                phoneId: this.props.phoneId
+            },
+            showCount: pagination.pageSize
+        });
+    }
+    fetch = (params = {
+        "currentPage": 1,
+        "entityOrField": true,
+        pd: {
+            phoneId: this.props.phoneId
+        },
+        "showCount": constants.recordPageSize
+    }) => {
+        post(api + '/data/getContactinfoPhone', params).then((data) => {
+            const pagination = {...this.state.pagination
+            };
+            pagination.total = data.result.page.totalResult;
+            this.setState({
+                loading: false,
+                data: data.result.list,
+                pagination,
+            });
+        }).catch((e) => {});
+    }
+    componentDidMount() {
+        this.fetch();
+    }
+    showModal = (record) => {
+        console.info(record);
+        this.setState({
+            visible: true,
+            record: record
+        });
+    }
+    handleCancel = () => {
+        this.setState({
+            visible: false
+        });
+    }
+    handleOk = () => {
+        this.setState({
+            visible: false
+        });
+    }
+    render() {
+        const columns = [{
+            title: '主叫号码',
+            dataIndex: 'callingNumber',
+        }, {
+            title: '被叫号码',
+            dataIndex: 'calldeNumber',
+        }, {
+            title: '呼叫时间',
+            dataIndex: 'time',
+        }, {
+            title: '是主/被叫',
+            dataIndex: 'type',
+        }, {
+            title: '通话时长(秒)',
+            dataIndex: 'voicelen',
+        }, {
+            title: '操作',
+            key: 'action',
+            // width: 30,
+            render: (text, record) => (
+                <span>
+                        <span onClick={(e)=>this.showModal(record)} style={{cursor:'pointer'}}>详情</span>
+                </span>
+            ),
+
+        }];
+        return (
+            <div>
+                <Table columns={columns}
+                       rowKey={record => record.registered}
+                       dataSource={this.state.data}
+                       pagination={this.state.pagination}
+                       loading={this.state.loading}
+                       bordered
+                       onChange={this.handleTableChange}
+                       locale={{emptyText:'暂无数据'}}
+                />
+                <Modal
+                    visible={this.state.visible}
+                    title="通话记录信息"
+                    onCancel={this.handleCancel}
+                    onOk={this.handleOk}
+                    closable={true}
+                    style={{maxHeight:650,overflow:"auto"}}
+                    footer={null}
+                >
+                <div style={{marginBottom:"10px"}}>
+                        <label style={mStyle} htmlFor="">主叫号码：</label>
+                        <Input style={{width:'60%'}}  value={this.state.record!==null?this.state.record.callingNumber:''} readOnly="readOnly"/>
+                    </div>
+                    <div style={{marginBottom:"10px"}}>
+                        <label style={mStyle} htmlFor="">被叫号码：</label>
+                        <Input style={{width:'60%'}}  value={this.state.record!==null?this.state.record.calldeNumber:''} readOnly="readOnly"/>
+                    </div>
+                    <div style={{marginBottom:"10px"}}>
+                        <label style={mStyle} htmlFor="">呼叫时间：</label>
+                        <Input style={{width:'60%'}}  value={this.state.record!==null?this.state.record.time:''} readOnly="readOnly"/>
+                    </div>
+                    <div style={{marginBottom:"10px"}}>
+                        <label style={mStyle} htmlFor="">是主/被叫：</label>
+                        <Input style={{width:'60%'}}  value={this.state.record!==null?this.state.record.type:''} readOnly="readOnly"/>
+                    </div>
+                    <div style={{marginBottom:"10px"}}>
+                        <label style={mStyle} htmlFor="">通话时长：</label>
+                        <Input style={{width:'60%'}}  value={this.state.record!==null?this.state.record.voicelen:''} readOnly="readOnly"/>
+                    </div>
+                    
+                </Modal>
+            </div>
+        );
+    }
+};
+
+//短信记录
+class MessageTable extends Component {
+    state = {
+        visible: false,
+        record: null,
+        data: [],
+        pagination: paginationSmall,
+        loading: false,
+    };
+    handleTableChange = (pagination, filters, sorter) => {
+        const pager = {...this.state.pagination
+        };
+        pager.current = pagination.current;
+        console.info('pager', pager);
+        this.setState({
+            pagination: pager,
+        });
+        this.fetch({ //点击下一页的时候调取的参数
+            currentPage: pagination.current,
+            entityOrField: true,
+            pd: {
+                phoneId: this.props.phoneId
+            },
+            showCount: pagination.pageSize
+        });
+    }
+    fetch = (params = {
+        "currentPage": 1,
+        "entityOrField": true,
+        pd: {
+            phoneId: this.props.phoneId
+        },
+        "showCount": constants.recordPageSize
+    }) => {
+        post(api + '/data/getSmsRecordlistPage', params).then((data) => {
+            console.info('data', data);
+            const pagination = {...this.state.pagination
+            };
+            pagination.total = data.result.page.totalResult;
+            this.setState({
+                loading: false,
+                data: data.result.list,
+                pagination,
+            });
+        }).catch((e) => {});
+    }
+    componentDidMount() {
+        this.fetch();
+    }
+    showModal = (record) => {
+        console.info(record);
+        this.setState({
+            visible: true,
+            record: record
+        });
+    }
+    handleCancel = () => {
+        this.setState({
+            visible: false
+        });
+    }
+    handleOk = () => {
+        this.setState({
+            visible: false
+        });
+    }
+    render() {
+        const columns = [{
+            title: '来往号码',
+            dataIndex: 'callno',
+        }, {
+            title: '短信内容',
+            dataIndex: 'content',
+            render: (text, record) => (
+                <span title={text} style={{cursor:"pointer"}}>
+                    {
+                        text.length <= 30?
+                        text.slice(0,29):text.slice(0,29)+"..."
+
+                    }
+                </span>
+            )
+        }, {
+            title: '发送时间',
+            dataIndex: 'time',
+        }, {
+            title: '操作',
+            key: 'action',
+            // width: 30,
+            render: (text, record) => (
+                <span>
+                        <span onClick={(e)=>this.showModal(record)} style={{cursor:'pointer'}}>详情</span>
+                </span>
+            ),
+
+        }];
+        return (
+            <div>
+                <Table columns={columns}
+                       rowKey={record => record.registered}
+                       dataSource={this.state.data}
+                       pagination={this.state.pagination}
+                       loading={this.state.loading}
+                       bordered
+                       onChange={this.handleTableChange}
+                       locale={{emptyText:'暂无数据'}}
+                />
+                <Modal
+                    visible={this.state.visible}
+                    title="短信记录信息"
+                    onCancel={this.handleCancel}
+                    onOk={this.handleOk}
+                    closable={true}
+                    style={{maxHeight:650,overflow:"auto"}}
+                    footer={null}
+                >
+                <div style={{marginBottom:"10px"}}>
+                        <label style={mStyle} htmlFor="">来往号码：</label>
+                        <Input style={{width:'60%'}}  value={this.state.record!==null?this.state.record.callno:''} readOnly="readOnly"/>
+                    </div>
+                    <div style={{marginBottom:"10px"}}>
+                        <label style={mStyle} htmlFor="">短信内容：</label>
+                        <TextArea width="60%"  height='120px'  value={this.state.record!==null?this.state.record.content:''} readOnly="readOnly"/>
+                    </div>
+                    <div style={{marginBottom:"10px"}}>
+                        <label style={mStyle} htmlFor="">发送时间：</label>
+                        <Input style={{width:'60%'}}  value={this.state.record!==null?this.state.record.time:''} readOnly="readOnly"/>
+                    </div>
+                    
+                </Modal>
+            </div>
+        );
+    }
+};
+
+//盘查数据的安装软件记
+class InstallationSoftwareTable extends Component {
+    state = {
+        visible: false,
+        record: null,
+        data: [],
+        pagination: paginationSmall,
+        loading: false,
+    };
+    handleTableChange = (pagination, filters, sorter) => {
+        const pager = {...this.state.pagination
+        };
+        pager.current = pagination.current;
+        console.info('pager', pager);
+        this.setState({
+            pagination: pager,
+        });
+        this.fetch({ //点击下一页的时候调取的参数
+            currentPage: pagination.current,
+            entityOrField: true,
+            pd: {
+                phoneId: this.props.phoneId
+            },
+            showCount: pagination.pageSize
+        });
+    }
+    fetch = (params = {
+        "currentPage": 1,
+        "entityOrField": true,
+        pd: {
+            phoneId: this.props.phoneId
+        },
+        "showCount": constants.recordPageSize
+    }) => {
+        post(api + '/data/getPhoneApplistPage', params).then((data) => {
+            console.info('data', data);
+            const pagination = {...this.state.pagination
+            };
+            pagination.total = data.result.page.totalResult;
+            this.setState({
+                loading: false,
+                data: data.result.list,
+                pagination,
+            });
+        }).catch((e) => {});
+    }
+    componentDidMount() {
+        this.fetch();
+    }
+    showModal = (record) => {
+        console.info(record);
+        this.setState({
+            visible: true,
+            record: record
+        });
+    }
+    handleCancel = () => {
+        this.setState({
+            visible: false
+        });
+    }
+    handleOk = () => {
+        this.setState({
+            visible: false
+        });
+    }
+    render() {
+        const columns = [{
+            title: '软件名称',
+            dataIndex: 'name',
+        }, {
+            title: '安装包名称',
+            dataIndex: 'pkg',
+        }, {
+            title: '版本号',
+            dataIndex: 'version',
+        }, {
+            title: '操作',
+            key: 'action',
+            // width: 30,
+            render: (text, record) => (
+                <span>
+                        <span onClick={(e)=>this.showModal(record)} style={{cursor:'pointer'}}>详情</span>
+                </span>
+            ),
+
+        }];
+        return (
+            <div>
+                <Table columns={columns}
+                       rowKey={record => record.registered}
+                       dataSource={this.state.data}
+                       pagination={this.state.pagination}
+                       loading={this.state.loading}
+                       bordered
+                       onChange={this.handleTableChange}
+                       locale={{emptyText:'暂无数据'}}
+                />
+                <Modal
+                    visible={this.state.visible}
+                    title="安装软件记录信息"
+                    onCancel={this.handleCancel}
+                    onOk={this.handleOk}
+                    closable={true}
+                    style={{maxHeight:650,overflow:"auto"}}
+                    footer={null}
+                >
+                <div style={{marginBottom:"10px"}}>
+                        <label style={mStyle} htmlFor="">软件名称：</label>
+                        <Input style={{width:'60%'}}  value={this.state.record!==null?this.state.record.name:''} readOnly="readOnly"/>
+                    </div>
+                    <div style={{marginBottom:"10px"}}>
+                        <label style={mStyle} htmlFor="">安装包名称：</label>
+                        <Input style={{width:'60%'}}  value={this.state.record!==null?this.state.record.pkg:''} readOnly="readOnly"/>
+                    </div>
+                    <div style={{marginBottom:"10px"}}>
+                        <label style={mStyle} htmlFor="">版本号：</label>
+                        <Input style={{width:'60%'}}  value={this.state.record!==null?this.state.record.version:''} readOnly="readOnly"/>
+                    </div>
+                    
+                </Modal>
+            </div>
+        );
+    }
+};
+// 网上联通信息
+class OnlineTable extends Component {
+    state = {
+        visible: false,
+        record: null,
+        data: [],
+        pagination: paginationSmall,
+        loading: false,
+    };
+    handleTableChange = (pagination, filters, sorter) => { //下一页方法
+        console.log('pagination',pagination);
+        const pager = {...this.state.pagination
+        };
+        pager.current = pagination.current;
+        console.info('pager', pager);
+        this.setState({
+            pagination: pager,
+        });
+        this.fetch({ //点击下一页的时候调取的参数
+            currentPage: pagination.current,
+            entityOrField: true,
+            pd: {
+                // recordId: this.props.recordId, 
+                // personId: this.props.personId,
+                phoneId: this.props.phoneId
+            },
+            showCount: pagination.pageSize
+        });
+    }
+    fetch = (params = {
+        "currentPage": 1,
+        "entityOrField": true,
+        pd: {
+            phoneId: this.props.phoneId
+        },
+        "showCount": constants.recordPageSize
+    }) => {
+        post(api + '/data/getContactinfoPhone', params).then((data) => {
+            const pagination = {...this.state.pagination
+            };
+            pagination.total = data.result.page.totalResult;
+            this.setState({
+                loading: false,
+                data: data.result.list,
+                pagination,
+            });
+        }).catch((e) => {});
+    }
+    componentDidMount() {
+        this.fetch();
+    }
+    showModal = (record) => {
+        console.info(record);
+        this.setState({
+            visible: true,
+            record: record
+        });
+    }
+    handleCancel = () => {
+        this.setState({
+            visible: false
+        });
+    }
+    handleOk = () => {
+        this.setState({
+            visible: false
+        });
+    }
+    render() {
+        const columns = [{
+            title: '主叫号码',
+            dataIndex: 'callingNumber',
+        }, {
+            title: '被叫号码',
+            dataIndex: 'calldeNumber',
+        }, {
+            title: '呼叫时间',
+            dataIndex: 'time',
+        }, {
+            title: '是主/被叫',
+            dataIndex: 'type',
+        }, {
+            title: '通话时长(秒)',
+            dataIndex: 'voicelen',
+        }, {
+            title: '操作',
+            key: 'action',
+            // width: 30,
+            render: (text, record) => (
+                <span>
+                        <span onClick={(e)=>this.showModal(record)} style={{cursor:'pointer'}}>详情</span>
+                </span>
+            ),
+
+        }];
+        return (
+            <div>
+                <Table columns={columns}
+                       rowKey={record => record.registered}
+                       dataSource={this.state.data}
+                       pagination={this.state.pagination}
+                       loading={this.state.loading}
+                       bordered
+                       onChange={this.handleTableChange}
+                       locale={{emptyText:'暂无数据'}}
+                />
+                <Modal
+                    visible={this.state.visible}
+                    title="通话记录信息"
+                    onCancel={this.handleCancel}
+                    onOk={this.handleOk}
+                    closable={true}
+                    style={{maxHeight:650,overflow:"auto"}}
+                    footer={null}
+                >
+                <div style={{marginBottom:"10px"}}>
+                        <label style={mStyle} htmlFor="">主叫号码：</label>
+                        <Input style={{width:'60%'}}  value={this.state.record!==null?this.state.record.callingNumber:''} readOnly="readOnly"/>
+                    </div>
+                    <div style={{marginBottom:"10px"}}>
+                        <label style={mStyle} htmlFor="">被叫号码：</label>
+                        <Input style={{width:'60%'}}  value={this.state.record!==null?this.state.record.calldeNumber:''} readOnly="readOnly"/>
+                    </div>
+                    <div style={{marginBottom:"10px"}}>
+                        <label style={mStyle} htmlFor="">呼叫时间：</label>
+                        <Input style={{width:'60%'}}  value={this.state.record!==null?this.state.record.time:''} readOnly="readOnly"/>
+                    </div>
+                    <div style={{marginBottom:"10px"}}>
+                        <label style={mStyle} htmlFor="">是主/被叫：</label>
+                        <Input style={{width:'60%'}}  value={this.state.record!==null?this.state.record.type:''} readOnly="readOnly"/>
+                    </div>
+                    <div style={{marginBottom:"10px"}}>
+                        <label style={mStyle} htmlFor="">通话时长：</label>
+                        <Input style={{width:'60%'}}  value={this.state.record!==null?this.state.record.voicelen:''} readOnly="readOnly"/>
+                    </div>
+                    
+                </Modal>
+            </div>
+        );
+    }
+};
+
 OldWithDay = Form.create()(OldWithDay);
 export default connect(mainReducer)(OldWithDay);

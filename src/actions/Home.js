@@ -427,7 +427,7 @@ export function receivedPoliceStation_hushi_Error(message) {
 export const HAVEBEENCHECKED_HUSHI_DATA = 'haveBeenchecked_hushi_data';
 export const HAVEBEENCHECKED_HUSHI_ERROR = 'haveBeenchecked_hushi_error';
 export function postHaveBeenchecked_hushi_Data(creds) {
-    let path = '/data/getQianStatistics';
+    let path = '/data/getNewExamine';
     return dispatch => {
         dispatch({ type: "REQUEST_HAVEBEENCHECKED_HUSHI_REPORT" });
         post(api + path, creds).then((json) => {

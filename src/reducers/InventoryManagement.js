@@ -126,6 +126,26 @@ const initialState = { //盘查管理
             result: {
             }
         },
+        // 呼市反恐 旧版反恐
+        oldinvenListHushi: {//盘查列表展示
+            reason: {
+                "code": "",
+                "text": ""
+            },
+            result: {
+                page: {},
+                list: [],
+            },
+            isFetching: true
+        },
+        oldinvenListHushiDetails: {//盘查详情
+            reason: {
+                "code": "",
+                "text": ""
+            },
+            result: {
+            }
+        },
     },
     uiData: {
         menus: [
@@ -175,14 +195,6 @@ const initialState = { //盘查管理
                         isShow: true,
                         code: ""
                     },
-                    {
-                        id: '1022',
-                        menuName: '旧版按周',
-                        search: 'type=zqrw&state=2',
-                        isSelect: false,
-                        isShow: true,
-                        code: ""
-                    }
                 ]
             }
         ]
@@ -264,7 +276,7 @@ const InventoryManagement = (state = initialState, action) => {
                 newState.uiData.menus[0].isOpen = true;
             }
             return newState;
-            case INVENTORYMANAGEMENT_HUSHI_OLDZQRW: //呼市-旧版周期任务
+        case INVENTORYMANAGEMENT_HUSHI_OLDZQRW: //呼市-旧版周期任务
             if (newState.uiData.menus[1].isOpen === true) {
                 newState.uiData.menus[1].isOpen = false;
             } else {
@@ -306,6 +318,23 @@ const InventoryManagement = (state = initialState, action) => {
             return newState;
         case 'InventoryListHushiDetails-data': //详情
             newState.data.invenListHushiDetails.result = action.data.result.data;
+            return newState;
+        //旧版
+        case 'REQUEST_OLD_INVENTORY_LIST_HUSHI_DATA':
+            // return {
+            //     ...state,//原状态
+            //     isFetching: true,
+            //     didInvalidate: false
+            // }
+            newState.data.oldinvenListHushi.isFetching = true;
+            return newState;
+        case 'old_InventoryListHushi-data': //列表 旧版反恐
+            newState.data.oldinvenListHushi.result.list = action.data.result.list;
+            newState.data.oldinvenListHushi.result.page = action.data.result.page;//page?reason
+            newState.data.oldinvenListHushi.isFetching = false;
+            return newState;
+        case 'old_InventoryListHushiDetails-data': //详情
+            newState.data.oldinvenListHushiDetails.result = action.data.result.data;
             return newState;
 
         default:

@@ -380,7 +380,7 @@ export class WithWeek extends Component {
                     phone: item.phone,
                     taskname: item.taskname,
                     police_name: item.police_name,
-                    checktime: getMyDate(item.checktime / 1000),
+                    checktime: item.checktime ? getMyDate(item.checktime / 1000) : '',
 
                 });
             }
@@ -564,7 +564,7 @@ export class WithWeek extends Component {
                                     <Col span={12}>
                                         <Row style={{ padding: '32px' }}>
                                             <Col span={4} style={{ color: "#fff" }}>照片：</Col>
-                                            <Col span={20}><img src={obj ? obj.zpurl ? obj.zpurl : "../../images/zanwu.png" : ''} style={{ width: '130px', height: '160px' }} /></Col>
+                                            <Col span={20}><img src={obj ? obj.zpurl ? obj.zpurl : "/images/zanwu.png" : "/images/zanwu.png"} style={{ width: '130px', height: '160px' }} /></Col>
                                         </Row>
                                         <FormItem
                                             {...formItemLayout}
@@ -689,8 +689,8 @@ export class WithWeek extends Component {
                                             label="隶属任务"
                                             style={{ marginBottom: '5px' }}
                                         >
-                                            {getFieldDecorator('subordinationTask', {
-                                                initialValue: obj ? obj.idcard ? obj.idcard : '' : '',
+                                            {getFieldDecorator('taskname', {
+                                                initialValue: obj ? obj.taskname ? obj.taskname : '' : '',
                                             })(
                                                 <Input disabled />
                                             )}
@@ -714,11 +714,7 @@ export class WithWeek extends Component {
                                             {getFieldDecorator('cycle', {
                                                 initialValue: obj ? obj.cycle ? obj.cycle : '' : '',
                                             })(
-                                                <Select disabled>
-                                                    <Option value={0}>常住</Option>
-                                                    <Option value={1}>暂住</Option>
-                                                    <Option value={2}>流动</Option>
-                                                </Select>
+                                                <Input disabled />
                                             )}
                                         </FormItem>
                                         <FormItem

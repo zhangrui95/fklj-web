@@ -172,7 +172,6 @@ const initialState = {
                 "text": ""
             },
             result: {
-                list: []
             },
             isFetching: true,
         }
@@ -277,7 +276,7 @@ const Home = (state = initialState, action) => {
             newState.data.haveBeenCheckedData.isFetching = true;
             return newState;
         case Homes.HAVEBEENCHECKED_HUSHI_DATA: //已盘查任务
-            newState.data.haveBeenCheckedData.result.list = action.data.result.list;
+            newState.data.haveBeenCheckedData.result = action.data.result;
             newState.data.haveBeenCheckedData.isFetching = false;
             return newState;
         default:

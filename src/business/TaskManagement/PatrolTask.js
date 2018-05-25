@@ -200,7 +200,7 @@ export class PatrolTask extends Component {
         let creds = {
             id: record.id,
         }
-        store.dispatch(postPersonListForTaskData(creds,this.goback));
+        store.dispatch(postPersonListForTaskData(creds, this.goback));
         this.byidtaskquery(record.id);
         // this.weiguankongQuery();
     }
@@ -212,7 +212,7 @@ export class PatrolTask extends Component {
             modalType: 'edit',
             RadioValue: '',
             disabled: true
-        });   
+        });
     }
     addShowModal = (record) => {
         this.setState({
@@ -546,7 +546,7 @@ export class PatrolTask extends Component {
         let data = store.getState().TaskManagement.data.taskListHushi.result.list;
         let page = store.getState().TaskManagement.data.taskListHushi.result.page;
         let childrendata = store.getState().TaskManagement.data.childrentaskListHushi.result.list;
-        let childrenTotal = store.getState().TaskManagement.data.childrentaskListHushi.result.total;
+        let childrenpage = store.getState().TaskManagement.data.childrentaskListHushi.result.page;
         let look = this.state.look
         let recordNumber = parseInt((nowPage - 1) * 10);
         let dataList = [];
@@ -715,7 +715,7 @@ export class PatrolTask extends Component {
             return;
         }
         const treeList = [{ "children": [{ "label": "张三", "value": "4103000000001", "key": "4103000000001" }, { "label": "李四", "value": "4103000000002", "key": "4103000000002" }, { "label": "王二", "value": "4103000000003", "key": "4103000000003" }], "label": "全部", "value": "410000000000", "key": "410000000000" }];
-        // 子任务列表的名称查询
+        // 任务 分页
         const pagination = {
             onChange: (page) => {
                 this.setState({
@@ -740,7 +740,40 @@ export class PatrolTask extends Component {
             current: page.currentPage,
             total: page.totalResult,
             pageSize: page.showCount,
-            showQuickJumper: true,
+
+        }
+        // 子任务 分页
+        const childrenpagination = {
+            size: 'small',
+            showTotal(total) {
+                return `合计 ${total} 条记录`;
+            },
+            itemRender(current, type, originalElement) {
+                if (type === 'prev') {
+                    return <a>上一页</a>;
+                } else if (type === 'next') {
+                    return <a>下一页</a>;
+                }
+                return originalElement;
+            },
+            onChange: (page) => {
+                this.setState({
+                    childrennowpage: page,
+                });
+                let { childrenid } = this.state;
+                let creds = {
+                    currentPage: page,
+                    pd: {
+                        id: childrenid
+                    },
+                    showCount: 10
+
+                }
+                store.dispatch(postChildrenTaskListHushiData(creds));
+            },
+            current: childrenpage.currentPage,
+            total: childrenpage.childrenTotal,
+            pageSize: childrenpage.showCount,
 
         }
 
@@ -1194,13 +1227,13 @@ export class PatrolTask extends Component {
                                 // expandIconAsCell={false}
                                 rowKey={(record) => record.id}
                                 expandedRowRender={(record) => this.expandedRowRender(record)}
-                                pagination={false}
+                                pagination={childrenpagination}
                             />}
                         <div className="clear"></div>
-                        {childrenDataList.length > 0 ?
+                        {/* {childrenDataList.length > 0 ?
                             <Pagination size="small" total={childrenTotal} current={this.state.childrennowpage} pageSize={10} /> :
                             ''
-                        }
+                        } */}
 
                     </Modal> : ''
                 }
