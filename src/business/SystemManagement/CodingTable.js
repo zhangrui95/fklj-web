@@ -901,7 +901,7 @@ class Tree extends Component{
                 width: 280,
             },
         };
-        return <TreeSelect {...tProps} />;
+        return <TreeSelect placeholder="请选择数据字典" {...tProps} />;
         
     }
 }
@@ -938,53 +938,37 @@ const SearchArea = React.createClass({
         });
     },
     handleClick: function() { //点击查询
-   
-        // var search='';
-        // if(police_name!==''&&police_name!==undefined){
-        //     search+='softName='+police_name+'&';
-        // }
-        // if(placeOfOriginPersonList_idNumber!==''&&placeOfOriginPersonList_idNumber!==undefined){
-        //     search+='inNumber='+placeOfOriginPersonList_idNumber+'&';
-        // }
-        // if(dateBegin!==''&&dateBegin!==undefined){
-        //     search+='datebegin='+dateBegin+'&';
-        // }
-        // if(dateEnd!==''&&dateEnd!==undefined){
-        //     search+='deteend='+dateEnd+'&';
-        // }
-        let codeTableData = this.props.codeTable;
-        if(codeTableData !== undefined ||codeTableData!== null||codeTableData!== ''){
-            // let keyvalue = '0';
-            // let levelvalue= '1';
-            for(var i=0;i<codeTableData.length;i++){
-                var codeTableList = codeTableData[i];
-                console.log('codeTableList.value',codeTableList.value);
-                if(codeTableList.value === this.state.selectcitycode){
-                //    let keyvalue = codeTableList.key;
-                //    let  levelvalue = codeTableList.level;
-                    this.setState({
-                        keyvalue:codeTableList.key,
-                        levelvalue:codeTableList.level
-                    })
+        if ( this.state.dateBegin!= "" && this.state.dateEnd!= "" && this.state.dateBegin > this.state.dateEnd) {
+            message.error('提示：开始时间不能大于结束时间！');
+            return;
+        } else {
+            let codeTableData = this.props.codeTable;
+            if(codeTableData !== undefined ||codeTableData!== null||codeTableData!== ''){
+                for(var i=0;i<codeTableData.length;i++){
+                    var codeTableList = codeTableData[i];
+                    console.log('codeTableList.value',codeTableList.value);
+                    if(codeTableList.value === this.state.selectcitycode){
+                        this.setState({
+                            keyvalue:codeTableList.key,
+                            levelvalue:codeTableList.level
+                        })
+                    }
                 }
-
+                let creds = {
+                    currentPage: 1,
+                    entityOrField: true,
+                    pd: {
+                        beginTime: this.state.dateBegin,
+                        endTime: this.state.dateEnd,
+                        pid:this.state.keyvalue?this.state.keyvalue.toString():'',
+                    },
+                    showCount: 10
+                }
+                store.dispatch(postCodeTableData(creds));
+                this.props.serchChange(
+                    this.state.dateBegin, this.state.dateEnd,this.state.keyvalue)
             }
-           
-            let creds = {
-                currentPage: 1,
-                entityOrField: true,
-                pd: {
-                    beginTime: this.state.dateBegin,
-                    endTime: this.state.dateEnd,
-                    pid:this.state.keyvalue?this.state.keyvalue.toString():'',
-                },
-                showCount: 10
-            }
-            store.dispatch(postCodeTableData(creds));
-        this.props.serchChange(
-            this.state.dateBegin, this.state.dateEnd,this.state.keyvalue)
         }
-            
     },
     showModal: function() {
         this.setState({
@@ -1054,11 +1038,11 @@ const SearchArea = React.createClass({
         return (
             <div className="marLeft40 fl z_searchDiv">
                 <label htmlFor="" className="font14" style={{marginRight:10}}>数据字典：</label>
-                <Tree   treeData={this.props.codeTreeList} citycodeChange={this.citycodeChange} handleClick={this.handleClick} ref='tree'/>
+                <Tree treeData={this.props.codeTreeList} citycodeChange={this.citycodeChange} handleClick={this.handleClick} ref='tree'/>
                 <label htmlFor="" className="font14" style={{marginLeft:10}}>更新时间：</label>
-                <DatePicker  format={dateFormat} allowClear={false} style={{marginRight:"10px"}} value={beginDateValue} placeholder="" onChange={this.handleBeginDeteClick}/>
+                <DatePicker  format={dateFormat} allowClear={false} style={{marginRight:"10px"}} value={beginDateValue} placeholder="请选择日期" onChange={this.handleBeginDeteClick}/>
                 <span className="font14" style={{margin:"0 10px 0 0"}}>至</span>
-                <DatePicker  format={dateFormat} allowClear={false} style={{marginRight:"10px"}} value={endDateValue} placeholder="" onChange={this.handleEndDeteClick}/>
+                <DatePicker  format={dateFormat} allowClear={false} style={{marginRight:"10px"}} value={endDateValue} placeholder="请选择日期" onChange={this.handleEndDeteClick}/>
                 <ShallowBlueBtn width="82" text="查询" margin="0 10px 0 0px" onClick={this.handleClick} />
                 <ShallowBlueBtn  width="82" text="创建" margin="0 10px 0 0" onClick={this.props.handleClickAdd} />
                 <DeepRedBtn  margin="0 10px 0 0" width="82" text="清除" onClick={this.clear} />

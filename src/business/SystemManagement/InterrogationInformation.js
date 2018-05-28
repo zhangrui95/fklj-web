@@ -732,21 +732,26 @@ const SearchArea = React.createClass({
             InterrogationInformation_status: value
         });
     },
-    handleClick: function() { //点击查询 
-        let creds = {
-            currentPage: 1,
-            entityOrField: true,
-            pd: {
-                beginTime: this.state.InterrogationInformation_dateBegin,
-                endTime: this.state.InterrogationInformation_dateEnd,
-                name: this.state.name,
-                pid:"198"
-            },
-            showCount: 10
+    handleClick: function() { //点击查询
+        if ( this.state.InterrogationInformation_dateBegin!= "" && this.state.InterrogationInformation_dateEnd!= "" && this.state.InterrogationInformation_dateBegin > this.state.InterrogationInformation_dateEnd) {
+            message.error('提示：开始时间不能大于结束时间！');
+            return;
+        } else {
+            let creds = {
+                currentPage: 1,
+                entityOrField: true,
+                pd: {
+                    beginTime: this.state.InterrogationInformation_dateBegin,
+                    endTime: this.state.InterrogationInformation_dateEnd,
+                    name: this.state.name,
+                    pid:"198"
+                },
+                showCount: 10
+            }
+            store.dispatch(PostInterrogationInformationData(creds));
+            this.props.serchChange(
+                this.state.name, this.state.InterrogationInformation_dateBegin, this.state.InterrogationInformation_dateEnd)
         }
-        store.dispatch(PostInterrogationInformationData(creds));
-        this.props.serchChange(
-            this.state.name, this.state.InterrogationInformation_dateBegin, this.state.InterrogationInformation_dateEnd)
     },
     handleClickClear: function() { //点击创建
         store.dispatch(changeShade('block'));
@@ -791,11 +796,11 @@ const SearchArea = React.createClass({
         return (
             <div className="marLeft40 fl z_searchDiv">
                 <label htmlFor="" className="font14">名称：</label>
-                <Input   style={{width:"111px",margin:"0 10px 0 0"}} type="text"  id='name' placeholder=''  value={name}  onChange={this.handleNameChange} />
+                <Input   style={{width:"130px",margin:"0 10px 0 0"}} type="text"  id='name' placeholder='请输入名称'  value={name}  onChange={this.handleNameChange} />
                 <label htmlFor="" className="font14">更新时间：</label>
-                <DatePicker  format={dateFormat} allowClear={false} style={{marginRight:"10px"}} value={beginDateValue} placeholder='' onChange={this.handleBeginDeteClick}/>
+                <DatePicker  format={dateFormat} allowClear={false} style={{marginRight:"10px"}} value={beginDateValue} placeholder='请选择日期' onChange={this.handleBeginDeteClick}/>
                 <span className="font14" style={{margin:"0 10px 0 0"}}>至</span>
-                <DatePicker  format={dateFormat} allowClear={false} style={{marginRight:"10px"}} value={endDateValue} placeholder='' onChange={this.handleEndDeteClick}/>
+                <DatePicker  format={dateFormat} allowClear={false} style={{marginRight:"10px"}} value={endDateValue} placeholder='请选择日期' onChange={this.handleEndDeteClick}/>
                 <ShallowBlueBtn width="82" text="查询" margin="0 10px 0 0" onClick={this.handleClick} />
                 {/*<ShallowBlueBtn  width="82" text="创建" onClick={this.handleClickClear} margin="0 10px 0 0"/>*/}
                  {/* <Button style={{margin:'0 10px 0 0px',width:"80px"}} onClick={this.props.addShowModal} className="btn_ok">

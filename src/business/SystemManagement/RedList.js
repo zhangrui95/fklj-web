@@ -433,7 +433,7 @@ const SearchArea = React.createClass({
     },
     clickSearch: function () { //点击查询
         if (this.state.redList_endTime < this.state.redList_beginTime) {
-            message.error('开始时间不能大于结束时间');
+            message.error('提示：开始时间不能大于结束时间！');
             return false;
         }
         let creds = {
@@ -511,7 +511,7 @@ const SearchArea = React.createClass({
         return (
             <div className="marLeft40 fl z_searchDiv">
                 <label htmlFor="" className="font14">姓名：</label>
-                <Input style={{width: "111px", margin: "0 10px 0 0"}} type="text" id='blackList_softName' placeholder=''
+                <Input style={{width: "130px", margin: "0 10px 0 0"}} type="text" id='blackList_softName' placeholder=''
                        value={this.state.redList_name} onChange={this.handleNameChange}/>
                 <label htmlFor="" className="font14">身份证号</label>
                 <Input style={{width: "202px", margin: "0 10px 0 0"}} type="text" id='blackList_idcard' placeholder=''
