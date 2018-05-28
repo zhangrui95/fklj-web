@@ -60,7 +60,7 @@ import {
     Table,
     Tag
 } from 'antd';
-
+import Websocket from './WebSocket/index';
 import '../resources/main.less';
 import '../resources/slider.less';
 import * as constants from "../utils/Constants";
@@ -275,6 +275,14 @@ class Home extends Component {
 
 
     }
+    handleData(data) {
+        console.log('data===>', data)
+        // let result = JSON.parse(data);
+        // that.setState({
+        //     data: result,
+        //     show: true
+        // });
+    }
     render() {
         let mapType = this.state.mapType;
         let distributeMapData = store.getState().Home.data.distributeMapData.result.list;
@@ -313,6 +321,7 @@ class Home extends Component {
                             {/*活动统计*/}
                             <ActiveDataStatistics dateSet={dateSet} />
                             {/*</div>*/}
+                            <Websocket url='ws://172.19.12.213:8888/myHandler' onMessage={this.handleData} />
                         </div>
 
                     </div>

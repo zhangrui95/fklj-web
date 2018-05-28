@@ -206,4 +206,15 @@ export function postOldInventoryListHushiDetailsData(creds) {
         });
     }
 }
+// 原版反恐利剑 数据落库  点击详情需要展示的数据
+export function postOldInventoryLuokuData(creds) {
+    let path = '/data/getOldExamineManageDetails';
+    return dispatch => {
+        post(api + path, creds).then((json) => {
+            dispatch({ type: 'old_InventoryLuoku-data', data: json });
+        }).catch((e) => {
+            dispatch({ type: 'old_InventoryLuoku-error', message: e.toString() })
+        });
+    }
+}
 

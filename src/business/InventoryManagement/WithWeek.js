@@ -745,28 +745,11 @@ export class WithWeek extends Component {
                                             style={{ marginBottom: '5px' }}
                                         >
                                             {getFieldDecorator('carstatus', {
-                                                initialValue: obj ? obj.carstatus ? obj.carstatus : '' : '',
+                                                initialValue: obj ? obj.carstatus ? obj.carstatus === true && obj.carnumber ? `有车  ${obj.carnumber}` : '暂无' : '' : '',
                                             })(
-                                                <RadioGroup disabled style={{ color: '#fff' }}>
-                                                    <Radio value={false}>无车</Radio>
-                                                    <Radio value={true}>有车</Radio>
-                                                </RadioGroup>
+                                                <Input disabled />
                                             )}
                                         </FormItem>
-                                        {obj ? obj.carstatus ?
-                                            <FormItem
-                                                {...formItemLayout}
-                                                label="车牌号"
-                                                style={{ marginBottom: '5px' }}
-                                            >
-                                                {getFieldDecorator('carnumber', {
-                                                    initialValue: obj ? obj.carnumber ? obj.carnumber : '' : '',
-                                                })(
-                                                    <Input disabled />
-                                                )}
-                                            </FormItem>
-                                            : '' : ''
-                                        }
                                         <FormItem
                                             {...formItemLayout}
                                             label="盘查时间"

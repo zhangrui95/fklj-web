@@ -12,7 +12,7 @@ import { postInterrogationDetailsUsersData } from "../../actions/InterrogationDe
 import { SwordData } from "../InterrogationDetails/SwordData";
 import { changeTab } from "../../actions/actions";
 import {
-    postOldInventoryListHushiData, postOldInventoryListHushiDetailsData
+    postOldInventoryListHushiData, postOldInventoryListHushiDetailsData, postOldInventoryLuokuData
 } from "../../actions/InventoryManagement";
 import {
     api
@@ -166,12 +166,12 @@ export class OldWithDay extends Component {
             currentPage: 1,
             entityOrField: true,
             pd: {
-                recordId: record.record_id,
-                personId: record.person_id,
+                record_id: record.record_id,
+                person_id: record.person_id,
             },
             showCount: constants.pageSize
         }
-        store.dispatch(postOldInventoryListHushiDetailsData(creds));
+        store.dispatch(postOldInventoryLuokuData(creds));
         this.setState({
             oldVisibles: true,
             oldpersonInfo: record,
@@ -187,7 +187,7 @@ export class OldWithDay extends Component {
             modalKey: this.state.modalKey + 1
         });
     }
-    serchChange = (name, idcard, enddate, begindate, subtask_name, address_type, police_name, page) => {
+    serchChange = (name, idcard, enddate, begindate, subtask_name, police_name, page) => {
         this.setState({
             name: name,
             idcard: idcard,
@@ -242,8 +242,56 @@ export class OldWithDay extends Component {
         let data = store.getState().InventoryManagement.data.oldinvenListHushi.result.list;
         let obj = store.getState().InventoryManagement.data.oldinvenListHushi.result;
         let page = store.getState().InventoryManagement.data.oldinvenListHushi.result.page;
-        let dataList = [];
+        let luokeData = store.getState().InventoryManagement.data.oldinvenLuoku.result;
+        console.log('luokeData', luokeData);
+        let baseInfo = luokeData.baseInfo;//人员基本信息
+        let recordPerson = luokeData.recordPerson;//人员信息及标签
+        let domicileInfo = luokeData.domicileInfo;//背景核查
+        let paintRealInfo = luokeData.paintRealInfo;//写实信息
+        let examinaTerrorismflow = luokeData.examinaTerrorismflow;//流入地信息
+        let scrutinyInfo = luokeData.scrutinyInfo;//特征核查
+        // 特征盘查 数组
+        let scrutinyInfoList = [];
+        console.log('scrutinyInfo', scrutinyInfo);
+        if (scrutinyInfo && scrutinyInfo.length > 0) {
+            // let scrutinyInfoArr = JSON.stringify(scrutinyInfo).split(',');
+            // for (let i = 0; i < scrutinyInfoArr.length; i++) {
+            //     scrutinyInfoList.push(
+            //         <span>{scrutinyInfoArr[i]}</span>
+            //     );
+            // }
+            for (let i = 0; i < scrutinyInfo.length; i++) {
+                scrutinyInfoList.push(
+                    <span style={{ marginRight: '10px' }}>{scrutinyInfo[i]}</span>
+                );
+            }
+        }
 
+        // 标签
+        let tags = luokeData.recordPerson ? luokeData.recordPerson.tags : [];
+        let greenTag = [];
+        let redTag = [];
+        if (tags.length > 0) {
+            let tagsArr = tags.split(',');
+
+            for (let i = 0; i < tagsArr.length; i++) {
+                let tagsList = tagsArr[i];
+                let judgeTag = tagsList.split('-')[1];
+                let textTag = tagsList.split('-')[0];
+                if (judgeTag === "111001") {
+                    redTag.push(
+                        <Tag color="red" style={{ marginTop: "10px" }}>{textTag}</Tag>
+                    );
+                } else if (judgeTag === "111002") {
+                    greenTag.push(
+                        <Tag color="green" style={{ marginTop: "10px" }}>{textTag}</Tag>
+                    );
+                }
+            }
+        } else {
+
+        }
+        let dataList = [];
         let recordNumber = parseInt((nowPage - 1) * 10);
         console.log('nowPage', this.state.nowPage);
         if (data) {
@@ -262,6 +310,8 @@ export class OldWithDay extends Component {
                     police_unit: item.police_unit,
                     police_name: item.police_name,
                     checktime: item.checktime ? getMyDate(item.checktime / 1000) : '',
+                    person_id: item.person_id,
+                    record_id: item.record_id,
 
                 });
             }
@@ -329,10 +379,10 @@ export class OldWithDay extends Component {
             }),
         };
         let imgArray = [];
-        if (obj) {
-            if (obj.paint) {
-                let arrayImg = JSON.parse(obj.paint.paint_photo_path);
-                var imgObjText = obj.paint.text;
+        if (paintRealInfo) {
+            if (paintRealInfo.paint_photo_path) {
+                let arrayImg = JSON.parse(paintRealInfo.paint_photo_path);
+                var imgObjText = paintRealInfo.text;
                 // let arrayImg = ["../../images/zanwu.png", "../../images/zanwu.png", "../../images/zanwu.png"];
                 if (arrayImg && arrayImg.length > 0) {
                     for (let i = 0; i < arrayImg.length; i++) {
@@ -347,6 +397,10 @@ export class OldWithDay extends Component {
                     );
                 }
             }
+        } else {
+            imgArray.push(
+                <div style={{ fontSize: 16, color: '#fff', width: '100%', textAlign: "center" }}>暂无写实照片</div>
+            );
         }
 
         let tabs = store.getState().InterrogationDetailsUsers.uiData.tabs;
@@ -429,7 +483,7 @@ export class OldWithDay extends Component {
                 {
                     this.state.oldVisibles ?
                         <Modal
-                            width="60%"
+                            width="80%"
                             style={{ top: '20px' }}
                             title="详情"
                             visible={this.state.oldVisibles}
@@ -448,36 +502,35 @@ export class OldWithDay extends Component {
                                 </div> */}
                                 <Row>
                                     <Col span={4}>
-                                        <img src="/images/zanwu.png" />
+                                        <img src={recordPerson ? recordPerson.zpurl ? recordPerson.zpurl : "/images/zanwu.png" : '/images/zanwu.png'} />
                                     </Col>
                                     <Col span={19}>
                                         <Row style={{ marginBottom: '10px' }}>
                                             <Col span={10}>
-                                                姓名：张莹
+                                                姓名：{recordPerson ? recordPerson.name : ''}
                                             </Col>
                                             <Col span={10}>
-                                                身份证号：230826199307161425
+                                                身份证号：{recordPerson ? recordPerson.idcard : ''}
                                             </Col>
                                         </Row>
                                         <Row style={{ marginBottom: '10px' }}>
                                             <Col span={5}>
-                                                性别：女
+                                                性别：{recordPerson ? recordPerson.sex : ''}
                                             </Col>
                                             <Col span={5}>
-                                                民族：汉
+                                                民族：{recordPerson ? recordPerson.nation : ''}
                                             </Col>
                                             <Col span={10}>
-                                                出生：1993-07-16
+                                                出生：{recordPerson ? recordPerson.birth : ''}
                                             </Col>
                                         </Row>
                                         <Row style={{ marginBottom: '10px' }}>
                                             <Col span={24}>
-                                                住址：黑龙江省佳木斯市桦川县东河乡东安村
+                                                住址：{recordPerson ? recordPerson.address : ''}
                                             </Col>
-
                                         </Row>
                                         <Row>
-
+                                            {redTag}{greenTag}
                                         </Row>
 
                                     </Col>
@@ -486,7 +539,7 @@ export class OldWithDay extends Component {
                                 <Row>
                                     <p style={{ fontSize: '16px' }}>特征盘查信息</p>
                                     <Col span={24}>
-                                        特征描述：留大胡子
+                                        特征描述：{scrutinyInfoList}
                                     </Col>
                                 </Row>
                                 <hr style={{ background: '#0c5f93', height: '1px', border: 'none', margin: '24px 0' }} />
@@ -494,21 +547,21 @@ export class OldWithDay extends Component {
                                     <p style={{ fontSize: '16px' }}>基础信息</p>
                                     <Row style={{ marginBottom: '10px' }}>
                                         <Col span={8}>
-                                            人员属性：
+                                            人员属性：{baseInfo ? baseInfo.attribute : ''}
                                         </Col>
                                         <Col span={8}>
-                                            人员状态：
+                                            人员状态：{baseInfo ? baseInfo.state : ''}
                                         </Col>
                                         <Col span={8}>
-                                            到达方式：
+                                            到达方式：{baseInfo ? baseInfo.to_type : ''}
                                         </Col>
                                     </Row>
                                     <Row style={{ marginBottom: '10px' }}>
                                         <Col span={8}>
-                                            住所类型：
+                                            住所类型：{baseInfo ? baseInfo.residence_type : ''}
                                         </Col>
                                         <Col span={8}>
-                                            人员类型：
+                                            人员类型：{baseInfo ? baseInfo.type : ''}
                                         </Col>
                                     </Row>
                                 </Row>
@@ -517,71 +570,74 @@ export class OldWithDay extends Component {
                                     <p style={{ fontSize: '16px' }}>流入地信息</p>
                                     <Row style={{ marginBottom: '10px' }}>
                                         <Col span={8}>
-                                            从何处来：留大胡子
+                                            从何处来：{examinaTerrorismflow ? examinaTerrorismflow.fromCity : ''}
                                         </Col>
                                         <Col span={8}>
-                                            到何处去：留大胡子
+                                            到何处去：{examinaTerrorismflow ? examinaTerrorismflow.toCity : ''}
                                         </Col>
                                         <Col span={8}>
-                                            联络员：留大胡子
-                                        </Col>
-                                    </Row>
-                                    <Row style={{ marginBottom: '10px' }}>
-                                        <Col span={8}>
-                                            出行方式：留大胡子
-                                        </Col>
-                                        <Col span={8}>
-                                            出行目的：留大胡子
-                                        </Col>
-                                        <Col span={8}>
-                                            出行日期：2018-05-24
+                                            联络员：{examinaTerrorismflow ? examinaTerrorismflow.liaisonname : ''}
                                         </Col>
                                     </Row>
                                     <Row style={{ marginBottom: '10px' }}>
                                         <Col span={8}>
-                                            投奔人：留大胡子
+                                            出行方式：{examinaTerrorismflow ? examinaTerrorismflow.tripmode : ''}
+                                        </Col>
+                                        <Col span={8}>
+                                            出行目的：{examinaTerrorismflow ? examinaTerrorismflow.trippurp : ''}
+                                        </Col>
+                                        <Col span={8}>
+                                            出行日期：{examinaTerrorismflow ? getMyDate(examinaTerrorismflow.traveldate / 1000) : ''}
+                                        </Col>
+                                    </Row>
+                                    <Row style={{ marginBottom: '10px' }}>
+                                        <Col span={8}>
+                                            投奔人：{examinaTerrorismflow ? examinaTerrorismflow.visitorname : '暂无'}，电话号码{examinaTerrorismflow ? examinaTerrorismflow.visitortel : ''}
                                         </Col>
                                         <Col span={16}>
-                                            其他信息：留大胡子
+                                            其他信息：座位号{examinaTerrorismflow ? examinaTerrorismflow.seatnumber : '暂无'}，
+                                            车厢号{examinaTerrorismflow ? examinaTerrorismflow.carriagenumber : '暂无'}
+                                            ，司机电话号{examinaTerrorismflow ? examinaTerrorismflow.drivertel : '暂无'}，
+                                            车牌号{examinaTerrorismflow ? examinaTerrorismflow.trainnumber : '暂无'}
                                         </Col>
                                     </Row>
                                 </Row>
                                 <hr style={{ background: '#0c5f93', height: '1px', border: 'none', margin: '24px 0' }} />
                                 <Row>
                                     <p style={{ fontSize: '16px' }}>手机信息</p>
-                                    <Table locale={{ emptyText: '暂无数据' }} columns={columns} dataSource={dataList} bordered pagination={pagination} />
+                                    <MobileDataTable personId={this.state.personId} recordId={this.state.recordId} />
                                 </Row>
                                 <hr style={{ background: '#0c5f93', height: '1px', border: 'none', margin: '24px 0' }} />
                                 <Row>
                                     <p style={{ fontSize: '16px' }}>联通信息</p>
-                                    <Table locale={{ emptyText: '暂无数据' }} columns={columns} dataSource={dataList} bordered pagination={pagination} />
+                                    <OnlineTable personId={this.state.personId} recordId={this.state.recordId} />
                                 </Row>
                                 <hr style={{ background: '#0c5f93', height: '1px', border: 'none', margin: '24px 0' }} />
                                 <Row>
                                     <p style={{ fontSize: '16px' }}>背景核查</p>
                                     <Row style={{ marginBottom: '10px' }}>
                                         <Col span={24}>
-                                            核查方式：留大胡子
+                                            核查方式：{domicileInfo ? domicileInfo.checked_type : ''}
                                         </Col>
                                     </Row>
                                     <Row style={{ marginBottom: '10px' }}>
                                         <Col span={12}>
-                                            户籍警局：留大胡子
+                                            户籍警局：{domicileInfo ? domicileInfo.station : ''}
                                         </Col>
                                         <Col span={12}>
-                                            户籍地联系人：留大胡子
+                                            户籍地联系人：{domicileInfo ? domicileInfo.station_person : ''}
                                         </Col>
                                     </Row>
                                     <Row style={{ marginBottom: '10px' }}>
                                         <Col span={24}>
-                                            核查类型：留大胡子
+                                            核查类型：{domicileInfo ? domicileInfo.checked_mark : ''}
                                         </Col>
                                     </Row>
                                 </Row>
                                 <hr style={{ background: '#0c5f93', height: '1px', border: 'none', margin: '24px 0' }} />
                                 <Row>
                                     <p style={{ fontSize: '16px' }}>写实信息</p>
-                                    <Row style={{ padding: '32px 32px 0 32px' }}>
+                                    <Row >
                                         <Col span={24}>
                                             {imgArray}
                                             <Modal
@@ -590,16 +646,18 @@ export class OldWithDay extends Component {
                                                 onCancel={this.handleCancels}
                                                 footer={false}
                                                 wrapClassName='zoomImg'
+                                                style={{ height: '85%' }}
                                             >
                                                 <BannerAnimImg arrayImg={this.state.arrayImg} currentImg={this.state.currentImg} index={this.state.index} />
                                             </Modal>
                                         </Col>
                                         <Col span={24}>
-                                            写实文字：
+                                            <p style={{ marginBottom: '16px' }}>写实文字：</p>
+                                            <TextArea rows={2} disabled style={{ resize: 'none' }} value={imgObjText} />
                                         </Col>
                                     </Row>
                                 </Row>
-                                <hr style={{ background: '#0c5f93', height: '1px', border: 'none', margin: '24px 0' }} />
+                                {/* <hr style={{ background: '#0c5f93', height: '1px', border: 'none', margin: '24px 0' }} />
                                 <Row>
                                     <p style={{ fontSize: '16px' }}>租房信息</p>
                                     <Row>
@@ -607,7 +665,7 @@ export class OldWithDay extends Component {
                                             核查类型：留大胡子
                                         </Col>
                                     </Row>
-                                </Row>
+                                </Row> */}
                             </div>
                         </Modal> : ''
                 }
@@ -850,8 +908,8 @@ class MobileDataTable extends Component {
             currentPage: pagination.current,
             entityOrField: true,
             pd: {
-                recordId: this.props.recordId,
-                personId: this.props.personId
+                record_id: this.props.recordId,
+                person_id: this.props.personId
             },
             showCount: pagination.pageSize
         });
@@ -861,12 +919,12 @@ class MobileDataTable extends Component {
         "currentPage": 1,
         "entityOrField": true,
         pd: {
-            recordId: this.props.recordId,
-            personId: this.props.personId
+            record_id: this.props.recordId,
+            person_id: this.props.personId
         },
         "showCount": constants.recordPageSize
     }) => {
-        post(api + '/data/getPhoneOs', params).then((data) => {
+        post(api + '/data/getOldExaminePhoneBasicData', params).then((data) => {
             const pagination = {
                 ...this.state.pagination
             };
@@ -902,34 +960,35 @@ class MobileDataTable extends Component {
         //to={'/PhoneDetails/'+this.state.record.phoneId}
         const columns = [{
             title: '手机号',
-            dataIndex: 'phoneNumber',
+            dataIndex: 'msisdn',
+            width: 150
         }, {
             title: 'IMEI',
             dataIndex: 'imei',
+            width: 150
         }, {
             title: '型号',
             dataIndex: 'product',
+            width: 80
         }, {
             title: '系统',
             dataIndex: 'os',
-            render: (text, record) => (
-                <span title={text} style={{ cursor: "pointer" }}>
-                    {
-                        text.length <= 75 ?
-                            text.slice(0, 74) : text.slice(0, 74) + "..."
+            // render: (text, record) => (
+            //     <span title={text} style={{ cursor: "pointer" }}>
+            //         {
+            //             text.length <= 75 ?
+            //                 text.slice(0, 74) : text.slice(0, 74) + "..."
 
-                    }
-                </span>
-            )
+            //         }
+            //     </span>
+            // )
         }, {
             title: '操作',
             key: 'action',
-            // width: 30,
+            width: 35,
             render: (text, record) => (
-                <span>
-                    {/* <Link to={'/PhoneDetails/' + record.phoneId}>
-                        <span style={{ cursor: 'pointer', color: '#fff' }}>详情</span>
-                    </Link> */}
+                <span onClick={() => this.showModal(record)} style={{ cursor: 'pointer' }}>
+                    详情
                 </span>
             ),
 
@@ -951,10 +1010,11 @@ class MobileDataTable extends Component {
                     onCancel={this.handleCancel}
                     onOk={this.handleOk}
                     closable={true}
-                    style={{ maxHeight: 650, overflow: "auto" }}
+                    // style={{ width:'95%' }}
+                    width="80%"
                     footer={null}
                 >
-                    <div style={{ marginBottom: "10px" }}>
+                    {/* <div style={{ marginBottom: "10px" }}>
                         <label style={mStyle} htmlFor="">手机号：</label>
                         <Input style={{ width: '60%' }} value={this.state.record !== null ? this.state.record.phoneNumber : ''} readOnly="readOnly" />
                     </div>
@@ -969,6 +1029,20 @@ class MobileDataTable extends Component {
                     <div style={{ marginBottom: "10px" }}>
                         <label style={mStyle} htmlFor="">IMEI：</label>
                         <Input style={{ width: '60%' }} value={this.state.record !== null ? this.state.record.imei : ''} readOnly="readOnly" />
+                    </div> */}
+                    <div>
+                        <div>
+                            <p style={{ fontSize: '16px' }}>通话记录信息</p>
+                            <CallLogTable phoneId={this.state.record ? this.state.record.phone_id : ''} personId={this.props.personId} recordId={this.props.recordId} />
+                        </div>
+                        <div>
+                            <p style={{ fontSize: '16px' }}>短信记录信息</p>
+                            <MessageTable phoneId={this.state.record ? this.state.record.phone_id : ''} personId={this.props.personId} recordId={this.props.recordId} />
+                        </div>
+                        <div>
+                            <p style={{ fontSize: '16px' }}>安装软件记录信息</p>
+                            <InstallationSoftwareTable phoneId={this.state.record ? this.state.record.phone_id : ''} personId={this.props.personId} recordId={this.props.recordId} />
+                        </div>
                     </div>
 
                 </Modal>
@@ -986,8 +1060,9 @@ class CallLogTable extends Component {
         loading: false,
     };
     handleTableChange = (pagination, filters, sorter) => { //下一页方法
-        console.log('pagination',pagination);
-        const pager = {...this.state.pagination
+        console.log('pagination', pagination);
+        const pager = {
+            ...this.state.pagination
         };
         pager.current = pagination.current;
         console.info('pager', pager);
@@ -998,8 +1073,8 @@ class CallLogTable extends Component {
             currentPage: pagination.current,
             entityOrField: true,
             pd: {
-                // recordId: this.props.recordId, 
-                // personId: this.props.personId,
+                record_id: this.props.recordId,
+                person_id: this.props.personId,
                 phoneId: this.props.phoneId
             },
             showCount: pagination.pageSize
@@ -1009,20 +1084,23 @@ class CallLogTable extends Component {
         "currentPage": 1,
         "entityOrField": true,
         pd: {
+            record_id: this.props.recordId,
+            person_id: this.props.personId,
             phoneId: this.props.phoneId
         },
         "showCount": constants.recordPageSize
     }) => {
-        post(api + '/data/getContactinfoPhone', params).then((data) => {
-            const pagination = {...this.state.pagination
+        post(api + '/data/getPhoneCallInfolistPage', params).then((data) => {
+            const pagination = {
+                ...this.state.pagination
             };
             pagination.total = data.result.page.totalResult;
             this.setState({
                 loading: false,
-                data: data.result.list,
+                data: data.result.data.cannInfo,
                 pagination,
             });
-        }).catch((e) => {});
+        }).catch((e) => { });
     }
     componentDidMount() {
         this.fetch();
@@ -1047,10 +1125,10 @@ class CallLogTable extends Component {
     render() {
         const columns = [{
             title: '主叫号码',
-            dataIndex: 'callingNumber',
+            dataIndex: 'callingnumber',
         }, {
             title: '被叫号码',
-            dataIndex: 'calldeNumber',
+            dataIndex: 'calldenumber',
         }, {
             title: '呼叫时间',
             dataIndex: 'time',
@@ -1066,7 +1144,7 @@ class CallLogTable extends Component {
             // width: 30,
             render: (text, record) => (
                 <span>
-                        <span onClick={(e)=>this.showModal(record)} style={{cursor:'pointer'}}>详情</span>
+                    <span onClick={(e) => this.showModal(record)} style={{ cursor: 'pointer' }}>详情</span>
                 </span>
             ),
 
@@ -1074,13 +1152,13 @@ class CallLogTable extends Component {
         return (
             <div>
                 <Table columns={columns}
-                       rowKey={record => record.registered}
-                       dataSource={this.state.data}
-                       pagination={this.state.pagination}
-                       loading={this.state.loading}
-                       bordered
-                       onChange={this.handleTableChange}
-                       locale={{emptyText:'暂无数据'}}
+                    rowKey={record => record.registered}
+                    dataSource={this.state.data}
+                    pagination={this.state.pagination}
+                    loading={this.state.loading}
+                    bordered
+                    onChange={this.handleTableChange}
+                    locale={{ emptyText: '暂无数据' }}
                 />
                 <Modal
                     visible={this.state.visible}
@@ -1088,30 +1166,30 @@ class CallLogTable extends Component {
                     onCancel={this.handleCancel}
                     onOk={this.handleOk}
                     closable={true}
-                    style={{maxHeight:650,overflow:"auto"}}
+                    style={{ maxHeight: 650, overflow: "auto" }}
                     footer={null}
                 >
-                <div style={{marginBottom:"10px"}}>
+                    <div style={{ marginBottom: "10px" }}>
                         <label style={mStyle} htmlFor="">主叫号码：</label>
-                        <Input style={{width:'60%'}}  value={this.state.record!==null?this.state.record.callingNumber:''} readOnly="readOnly"/>
+                        <Input style={{ width: '60%' }} value={this.state.record ? this.state.record.callingnumber : ''} disabled />
                     </div>
-                    <div style={{marginBottom:"10px"}}>
+                    <div style={{ marginBottom: "10px" }}>
                         <label style={mStyle} htmlFor="">被叫号码：</label>
-                        <Input style={{width:'60%'}}  value={this.state.record!==null?this.state.record.calldeNumber:''} readOnly="readOnly"/>
+                        <Input style={{ width: '60%' }} value={this.state.record ? this.state.record.calldenumber : ''} disabled />
                     </div>
-                    <div style={{marginBottom:"10px"}}>
+                    <div style={{ marginBottom: "10px" }}>
                         <label style={mStyle} htmlFor="">呼叫时间：</label>
-                        <Input style={{width:'60%'}}  value={this.state.record!==null?this.state.record.time:''} readOnly="readOnly"/>
+                        <Input style={{ width: '60%' }} value={this.state.record ? this.state.record.time : ''} disabled />
                     </div>
-                    <div style={{marginBottom:"10px"}}>
+                    <div style={{ marginBottom: "10px" }}>
                         <label style={mStyle} htmlFor="">是主/被叫：</label>
-                        <Input style={{width:'60%'}}  value={this.state.record!==null?this.state.record.type:''} readOnly="readOnly"/>
+                        <Input style={{ width: '60%' }} value={this.state.record ? this.state.record.type : ''} disabled />
                     </div>
-                    <div style={{marginBottom:"10px"}}>
+                    <div style={{ marginBottom: "10px" }}>
                         <label style={mStyle} htmlFor="">通话时长：</label>
-                        <Input style={{width:'60%'}}  value={this.state.record!==null?this.state.record.voicelen:''} readOnly="readOnly"/>
+                        <Input style={{ width: '60%' }} value={this.state.record ? this.state.record.voicelen : ''} disabled />
                     </div>
-                    
+
                 </Modal>
             </div>
         );
@@ -1128,7 +1206,8 @@ class MessageTable extends Component {
         loading: false,
     };
     handleTableChange = (pagination, filters, sorter) => {
-        const pager = {...this.state.pagination
+        const pager = {
+            ...this.state.pagination
         };
         pager.current = pagination.current;
         console.info('pager', pager);
@@ -1139,6 +1218,8 @@ class MessageTable extends Component {
             currentPage: pagination.current,
             entityOrField: true,
             pd: {
+                record_id: this.props.recordId,
+                person_id: this.props.personId,
                 phoneId: this.props.phoneId
             },
             showCount: pagination.pageSize
@@ -1148,21 +1229,24 @@ class MessageTable extends Component {
         "currentPage": 1,
         "entityOrField": true,
         pd: {
+            record_id: this.props.recordId,
+            person_id: this.props.personId,
             phoneId: this.props.phoneId
         },
         "showCount": constants.recordPageSize
     }) => {
-        post(api + '/data/getSmsRecordlistPage', params).then((data) => {
+        post(api + '/data/getPhoneSmsRecordlistPage', params).then((data) => {
             console.info('data', data);
-            const pagination = {...this.state.pagination
+            const pagination = {
+                ...this.state.pagination
             };
             pagination.total = data.result.page.totalResult;
             this.setState({
                 loading: false,
-                data: data.result.list,
+                data: data.result.data.SmsRecordInfo,
                 pagination,
             });
-        }).catch((e) => {});
+        }).catch((e) => { });
     }
     componentDidMount() {
         this.fetch();
@@ -1192,10 +1276,10 @@ class MessageTable extends Component {
             title: '短信内容',
             dataIndex: 'content',
             render: (text, record) => (
-                <span title={text} style={{cursor:"pointer"}}>
+                <span title={text} style={{ cursor: "pointer" }}>
                     {
-                        text.length <= 30?
-                        text.slice(0,29):text.slice(0,29)+"..."
+                        text.length <= 30 ?
+                            text.slice(0, 29) : text.slice(0, 29) + "..."
 
                     }
                 </span>
@@ -1203,27 +1287,33 @@ class MessageTable extends Component {
         }, {
             title: '发送时间',
             dataIndex: 'time',
+            render: (text, record) => (
+                <span>
+                    <span>{record ? getMyDate(record.time / 1000) : ''}</span>
+                </span>
+            )
         }, {
             title: '操作',
             key: 'action',
             // width: 30,
             render: (text, record) => (
                 <span>
-                        <span onClick={(e)=>this.showModal(record)} style={{cursor:'pointer'}}>详情</span>
+                    <span onClick={(e) => this.showModal(record)} style={{ cursor: 'pointer' }}>详情</span>
                 </span>
             ),
 
         }];
+        let timevalue = this.state.record ? moment(getMyDate(this.state.record.time / 1000), 'YYYY-MM-DD HH:mm:ss') : '';
         return (
             <div>
                 <Table columns={columns}
-                       rowKey={record => record.registered}
-                       dataSource={this.state.data}
-                       pagination={this.state.pagination}
-                       loading={this.state.loading}
-                       bordered
-                       onChange={this.handleTableChange}
-                       locale={{emptyText:'暂无数据'}}
+                    rowKey={record => record.registered}
+                    dataSource={this.state.data}
+                    pagination={this.state.pagination}
+                    loading={this.state.loading}
+                    bordered
+                    onChange={this.handleTableChange}
+                    locale={{ emptyText: '暂无数据' }}
                 />
                 <Modal
                     visible={this.state.visible}
@@ -1231,22 +1321,22 @@ class MessageTable extends Component {
                     onCancel={this.handleCancel}
                     onOk={this.handleOk}
                     closable={true}
-                    style={{maxHeight:650,overflow:"auto"}}
+                    style={{ maxHeight: 650, overflow: "auto" }}
                     footer={null}
                 >
-                <div style={{marginBottom:"10px"}}>
+                    <div style={{ marginBottom: "10px" }}>
                         <label style={mStyle} htmlFor="">来往号码：</label>
-                        <Input style={{width:'60%'}}  value={this.state.record!==null?this.state.record.callno:''} readOnly="readOnly"/>
+                        <Input style={{ width: '60%' }} value={this.state.record ? this.state.record.callno : ''} disabled />
                     </div>
-                    <div style={{marginBottom:"10px"}}>
+                    <div style={{ marginBottom: "10px" }}>
                         <label style={mStyle} htmlFor="">短信内容：</label>
-                        <TextArea width="60%"  height='120px'  value={this.state.record!==null?this.state.record.content:''} readOnly="readOnly"/>
+                        <TextArea style={{ width: '60%', height: '120px', resize: 'none' }} autosize={true} value={this.state.record ? this.state.record.content : ''} disabled />
                     </div>
-                    <div style={{marginBottom:"10px"}}>
+                    <div style={{ marginBottom: "10px" }}>
                         <label style={mStyle} htmlFor="">发送时间：</label>
-                        <Input style={{width:'60%'}}  value={this.state.record!==null?this.state.record.time:''} readOnly="readOnly"/>
+                        <DatePicker showTime placeholder="" value={timevalue} format="YYYY-MM-DD HH:mm:ss" allowClear={false} style={{ width: '60%' }} disabled />
                     </div>
-                    
+
                 </Modal>
             </div>
         );
@@ -1263,7 +1353,8 @@ class InstallationSoftwareTable extends Component {
         loading: false,
     };
     handleTableChange = (pagination, filters, sorter) => {
-        const pager = {...this.state.pagination
+        const pager = {
+            ...this.state.pagination
         };
         pager.current = pagination.current;
         console.info('pager', pager);
@@ -1274,6 +1365,8 @@ class InstallationSoftwareTable extends Component {
             currentPage: pagination.current,
             entityOrField: true,
             pd: {
+                record_id: this.props.recordId,
+                person_id: this.props.personId,
                 phoneId: this.props.phoneId
             },
             showCount: pagination.pageSize
@@ -1283,21 +1376,24 @@ class InstallationSoftwareTable extends Component {
         "currentPage": 1,
         "entityOrField": true,
         pd: {
+            record_id: this.props.recordId,
+            person_id: this.props.personId,
             phoneId: this.props.phoneId
         },
         "showCount": constants.recordPageSize
     }) => {
-        post(api + '/data/getPhoneApplistPage', params).then((data) => {
+        post(api + '/data/getPhoneAppDatalistPage', params).then((data) => {
             console.info('data', data);
-            const pagination = {...this.state.pagination
+            const pagination = {
+                ...this.state.pagination
             };
             pagination.total = data.result.page.totalResult;
             this.setState({
                 loading: false,
-                data: data.result.list,
+                data: data.result.data.appInfo,
                 pagination,
             });
-        }).catch((e) => {});
+        }).catch((e) => { });
     }
     componentDidMount() {
         this.fetch();
@@ -1335,7 +1431,7 @@ class InstallationSoftwareTable extends Component {
             // width: 30,
             render: (text, record) => (
                 <span>
-                        <span onClick={(e)=>this.showModal(record)} style={{cursor:'pointer'}}>详情</span>
+                    <span onClick={(e) => this.showModal(record)} style={{ cursor: 'pointer' }}>详情</span>
                 </span>
             ),
 
@@ -1343,13 +1439,13 @@ class InstallationSoftwareTable extends Component {
         return (
             <div>
                 <Table columns={columns}
-                       rowKey={record => record.registered}
-                       dataSource={this.state.data}
-                       pagination={this.state.pagination}
-                       loading={this.state.loading}
-                       bordered
-                       onChange={this.handleTableChange}
-                       locale={{emptyText:'暂无数据'}}
+                    rowKey={record => record.registered}
+                    dataSource={this.state.data}
+                    pagination={this.state.pagination}
+                    loading={this.state.loading}
+                    bordered
+                    onChange={this.handleTableChange}
+                    locale={{ emptyText: '暂无数据' }}
                 />
                 <Modal
                     visible={this.state.visible}
@@ -1357,22 +1453,22 @@ class InstallationSoftwareTable extends Component {
                     onCancel={this.handleCancel}
                     onOk={this.handleOk}
                     closable={true}
-                    style={{maxHeight:650,overflow:"auto"}}
+                    style={{ maxHeight: 650, overflow: "auto" }}
                     footer={null}
                 >
-                <div style={{marginBottom:"10px"}}>
+                    <div style={{ marginBottom: "10px" }}>
                         <label style={mStyle} htmlFor="">软件名称：</label>
-                        <Input style={{width:'60%'}}  value={this.state.record!==null?this.state.record.name:''} readOnly="readOnly"/>
+                        <Input style={{ width: '60%' }} value={this.state.record ? this.state.record.name : ''} disabled />
                     </div>
-                    <div style={{marginBottom:"10px"}}>
+                    <div style={{ marginBottom: "10px" }}>
                         <label style={mStyle} htmlFor="">安装包名称：</label>
-                        <Input style={{width:'60%'}}  value={this.state.record!==null?this.state.record.pkg:''} readOnly="readOnly"/>
+                        <Input style={{ width: '60%' }} value={this.state.record ? this.state.record.pkg : ''} disabled />
                     </div>
-                    <div style={{marginBottom:"10px"}}>
+                    <div style={{ marginBottom: "10px" }}>
                         <label style={mStyle} htmlFor="">版本号：</label>
-                        <Input style={{width:'60%'}}  value={this.state.record!==null?this.state.record.version:''} readOnly="readOnly"/>
+                        <Input style={{ width: '60%' }} value={this.state.record ? this.state.record.version : ''} disabled />
                     </div>
-                    
+
                 </Modal>
             </div>
         );
@@ -1388,8 +1484,9 @@ class OnlineTable extends Component {
         loading: false,
     };
     handleTableChange = (pagination, filters, sorter) => { //下一页方法
-        console.log('pagination',pagination);
-        const pager = {...this.state.pagination
+        console.log('pagination', pagination);
+        const pager = {
+            ...this.state.pagination
         };
         pager.current = pagination.current;
         console.info('pager', pager);
@@ -1400,9 +1497,8 @@ class OnlineTable extends Component {
             currentPage: pagination.current,
             entityOrField: true,
             pd: {
-                // recordId: this.props.recordId, 
-                // personId: this.props.personId,
-                phoneId: this.props.phoneId
+                record_id: this.props.recordId,
+                person_id: this.props.personId,
             },
             showCount: pagination.pageSize
         });
@@ -1411,12 +1507,14 @@ class OnlineTable extends Component {
         "currentPage": 1,
         "entityOrField": true,
         pd: {
-            phoneId: this.props.phoneId
+            record_id: this.props.recordId,
+            person_id: this.props.personId,
         },
         "showCount": constants.recordPageSize
     }) => {
-        post(api + '/data/getContactinfoPhone', params).then((data) => {
-            const pagination = {...this.state.pagination
+        post(api + '/data/getOldExamineContactManage', params).then((data) => {
+            const pagination = {
+                ...this.state.pagination
             };
             pagination.total = data.result.page.totalResult;
             this.setState({
@@ -1424,7 +1522,7 @@ class OnlineTable extends Component {
                 data: data.result.list,
                 pagination,
             });
-        }).catch((e) => {});
+        }).catch((e) => { });
     }
     componentDidMount() {
         this.fetch();
@@ -1448,27 +1546,29 @@ class OnlineTable extends Component {
     }
     render() {
         const columns = [{
-            title: '主叫号码',
-            dataIndex: 'callingNumber',
+            title: '类别编码',
+            dataIndex: 'code',
         }, {
-            title: '被叫号码',
-            dataIndex: 'calldeNumber',
+            title: '号码',
+            dataIndex: 'number',
         }, {
-            title: '呼叫时间',
-            dataIndex: 'time',
+            title: '照片',
+            dataIndex: 'photo',
+            render: (text, record) => (
+                <span>
+                    <img src={record.photo ? record.photo : '/images/zanwu.png'} />
+                </span>
+            ),
         }, {
-            title: '是主/被叫',
-            dataIndex: 'type',
-        }, {
-            title: '通话时长(秒)',
-            dataIndex: 'voicelen',
+            title: '类别',
+            dataIndex: 'text',
         }, {
             title: '操作',
             key: 'action',
             // width: 30,
             render: (text, record) => (
                 <span>
-                        <span onClick={(e)=>this.showModal(record)} style={{cursor:'pointer'}}>详情</span>
+                    <span onClick={(e) => this.showModal(record)} style={{ cursor: 'pointer' }}>详情</span>
                 </span>
             ),
 
@@ -1476,44 +1576,41 @@ class OnlineTable extends Component {
         return (
             <div>
                 <Table columns={columns}
-                       rowKey={record => record.registered}
-                       dataSource={this.state.data}
-                       pagination={this.state.pagination}
-                       loading={this.state.loading}
-                       bordered
-                       onChange={this.handleTableChange}
-                       locale={{emptyText:'暂无数据'}}
+                    rowKey={record => record.registered}
+                    dataSource={this.state.data}
+                    pagination={this.state.pagination}
+                    loading={this.state.loading}
+                    bordered
+                    onChange={this.handleTableChange}
+                    locale={{ emptyText: '暂无数据' }}
                 />
                 <Modal
                     visible={this.state.visible}
-                    title="通话记录信息"
+                    title="联通信息"
                     onCancel={this.handleCancel}
                     onOk={this.handleOk}
                     closable={true}
-                    style={{maxHeight:650,overflow:"auto"}}
+                    style={{ maxHeight: 650, overflow: "auto" }}
                     footer={null}
                 >
-                <div style={{marginBottom:"10px"}}>
-                        <label style={mStyle} htmlFor="">主叫号码：</label>
-                        <Input style={{width:'60%'}}  value={this.state.record!==null?this.state.record.callingNumber:''} readOnly="readOnly"/>
+                    <div style={{ marginBottom: "10px" }}>
+                        <label style={mStyle} htmlFor="">类别编码：</label>
+                        <Input style={{ width: '60%' }} value={this.state.record ? this.state.record.code : ''} readOnly="readOnly" />
                     </div>
-                    <div style={{marginBottom:"10px"}}>
-                        <label style={mStyle} htmlFor="">被叫号码：</label>
-                        <Input style={{width:'60%'}}  value={this.state.record!==null?this.state.record.calldeNumber:''} readOnly="readOnly"/>
+                    <div style={{ marginBottom: "10px" }}>
+                        <label style={mStyle} htmlFor="">号码：</label>
+                        <Input style={{ width: '60%' }} value={this.state.record ? this.state.record.number : ''} readOnly="readOnly" />
                     </div>
-                    <div style={{marginBottom:"10px"}}>
-                        <label style={mStyle} htmlFor="">呼叫时间：</label>
-                        <Input style={{width:'60%'}}  value={this.state.record!==null?this.state.record.time:''} readOnly="readOnly"/>
+                    <div style={{ marginBottom: "10px" }}>
+                        <label style={mStyle} htmlFor="">照片：</label>
+                        <img src={this.state.record ? this.state.record.photo : '/images/zanwu.png'} style={{ width: '80px' }} />
                     </div>
-                    <div style={{marginBottom:"10px"}}>
-                        <label style={mStyle} htmlFor="">是主/被叫：</label>
-                        <Input style={{width:'60%'}}  value={this.state.record!==null?this.state.record.type:''} readOnly="readOnly"/>
+                    <div style={{ marginBottom: "10px" }}>
+                        <label style={mStyle} htmlFor="">类别：</label>
+                        <Input style={{ width: '60%' }} value={this.state.record ? this.state.record.text : ''} readOnly="readOnly" />
                     </div>
-                    <div style={{marginBottom:"10px"}}>
-                        <label style={mStyle} htmlFor="">通话时长：</label>
-                        <Input style={{width:'60%'}}  value={this.state.record!==null?this.state.record.voicelen:''} readOnly="readOnly"/>
-                    </div>
-                    
+
+
                 </Modal>
             </div>
         );
