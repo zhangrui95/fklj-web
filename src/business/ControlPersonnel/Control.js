@@ -619,7 +619,7 @@ export  class Control extends Component{
                                     label="是否有车"
                                 >
                                     {getFieldDecorator('car', {
-                                        initialValue: this.state.modalType === 'edit' ? (detail.carstatus ? '有车，'+detail.carnumber : '暂无') : '',
+                                        initialValue: this.state.modalType === 'edit' ? (detail.carstatus ? '有，'+detail.carnumber : '无') : '',
                                     })(
                                         <Input disabled/>
                                     )}
