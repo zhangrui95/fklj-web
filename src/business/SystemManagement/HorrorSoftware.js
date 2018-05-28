@@ -753,24 +753,19 @@ const SearchArea = React.createClass({
                 this.state.nameClear, this.state.begindateClear, this.state.enddateClear)
         },
         handleClick: function() { //点击查询
-            if ( this.state.begindate!= "" && this.state.enddate!= "" && this.state.begindate > this.state.enddate) {
-                message.error('提示：开始时间不能大于结束时间！');
-                return;
-            } else {
-                let creds = {
-                    currentPage: 1,
-                    entityOrField: true,
-                    pd: {
-                        beginTime: this.state.begindate,
-                        endTime: this.state.enddate,
-                        name: this.state.name,
-                        pid:"199"
-                    },
-                    showCount: 10
-                }
-                store.dispatch(PostHorrorSoftwareData(creds));
-                this.props.serchChange(this.state.name, this.state.begindate, this.state.enddate)
+            let creds = {
+                currentPage: 1,
+                entityOrField: true,
+                pd: {
+                    beginTime: this.state.begindate,
+                    endTime: this.state.enddate,
+                    name: this.state.name,
+                    pid:"199"
+                },
+                showCount: 10
             }
+            store.dispatch(PostHorrorSoftwareData(creds));
+            this.props.serchChange(this.state.name, this.state.begindate, this.state.enddate)
         },
         handleClickClear: function() { //点击创建
             store.dispatch(changeShade('block'));
@@ -808,8 +803,10 @@ const SearchArea = React.createClass({
             if (enddate === '') {} else {
                 endDateValue = moment(enddate, dateFormat);
             }
-
-           
+            if ( this.state.begindate!= "" && this.state.enddate!= "" && this.state.begindate > this.state.enddate) {
+                message.error('提示：开始时间不能大于结束时间！');
+                return;
+            }
             return (
                 <div className="marLeft40 fl z_searchDiv">
                 <label htmlFor="" className="font14">名称：</label>

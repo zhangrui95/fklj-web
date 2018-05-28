@@ -591,6 +591,10 @@ const SearchArea = React.createClass({
             if (highRiskAreaList_dateEnd === '') {} else {
                 endDateValue = moment(highRiskAreaList_dateEnd, dateFormat);
             }
+            if ( this.state.highRiskAreaList_dateBegin!= "" && this.state.highRiskAreaList_dateEnd!= "" && this.state.highRiskAreaList_dateBegin > this.state.highRiskAreaList_dateEnd) {
+                message.error('提示：开始时间不能大于结束时间！');
+                return;
+            }
             return (
                 <div className="marLeft40 fl z_searchDiv">
                 <label htmlFor="" className="font14">城市：</label>

@@ -102,16 +102,11 @@ class PopulationStatistics extends Component {
             startTimeSet: this.state.beginDate,
             endTimeSet: this.state.endDate,
         });
-        if ( this.state.beginDate!= "" && this.state.endDate != "" && this.state.beginDate > this.state.endDate) {
-            message.error('提示：开始时间不能大于结束时间！');
-            return;
-        }else{
-            let creds = {startTime: this.state.beginDate, endTime: this.state.endDate,}
-            store.dispatch(getControlPersonList(creds));
-            store.dispatch(getControlPersonalListGroupByAddressType(creds));
-            store.dispatch(getControlPersonalListGroupBySource(creds));
-            store.dispatch(getControlPersonCountForX3(creds));
-        }
+        let creds = {startTime: this.state.beginDate, endTime: this.state.endDate,}
+        store.dispatch(getControlPersonList(creds));
+        store.dispatch(getControlPersonalListGroupByAddressType(creds));
+        store.dispatch(getControlPersonalListGroupBySource(creds));
+        store.dispatch(getControlPersonCountForX3(creds));
     }
     inits = () => {
         this.setState({
@@ -161,6 +156,10 @@ class PopulationStatistics extends Component {
             endPicker = (
                 <DatePicker placeholder="请选择日期" onChange={this.handleEndDeteClick} format={dateFormat} allowClear={false} style={{marginRight:"10px"}} value={endDateValue}/>
             )
+        }
+        if ( this.state.beginDate!= "" && this.state.endDate != "" && this.state.beginDate > this.state.endDate) {
+            message.error('提示：开始时间不能大于结束时间！');
+            return;
         }
         return (
 

@@ -918,7 +918,10 @@ const SearchArea = React.createClass({
         if (placeOfOriginPersonList_dateEnd === '') {} else {
             endDateValue = moment(placeOfOriginPersonList_dateEnd, dateFormat);
         }
-
+        if ( this.state.placeOfOriginPersonList_dateBegin!= "" && this.state.placeOfOriginPersonList_dateEnd!= "" && this.state.placeOfOriginPersonList_dateBegin > this.state.placeOfOriginPersonList_dateEnd) {
+            message.error('提示：开始时间不能大于结束时间！');
+            return;
+        }
         return (
             <div className="marLeft40 fl z_searchDiv">
                 <label htmlFor="" className="font14">姓名：</label>

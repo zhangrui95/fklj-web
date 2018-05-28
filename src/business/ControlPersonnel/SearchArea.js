@@ -79,30 +79,23 @@ export  class SearchArea extends Component{
     handleClick = (props) =>  { //点击查询
         let controlType = this.props.controlType;
         let {name,cardId,status,Tosk,begindate,enddate} = this.state;
-        if ( begindate!= "" && enddate!= "" && begindate > enddate) {
-            message.error('提示：开始时间不能大于结束时间！');
-            return;
-        }else{
-            let creds = ''
-            if(controlType === 'GK_WGK'){
-                creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),taskname:Tosk, beginTime:begindate,endTime:enddate,control_type:0},showCount:10,currentPage:1}
-            }else if(controlType === 'GK_YGK'){
-                creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),taskname:Tosk, beginTime:begindate,endTime:enddate,control_type:1},showCount:10,currentPage:1}
-            }else if(controlType === 'GK_LKZRQ'){
-                creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),taskname:Tosk, beginTime:begindate,endTime:enddate,control_type:2},showCount:10,currentPage:1}
-            }else if(controlType === 'GK_SK'){
-                creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),taskname:Tosk, beginTime:begindate,endTime:enddate,control_type:3},showCount:10,currentPage:1}
-            } else if(controlType === 'LY_DR'){
-                creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),taskname:Tosk, beginTime:begindate,endTime:enddate,source:"901006"},showCount:10,currentPage:1}
-            } else if(controlType === 'LY_XZ'){
-                creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),taskname:Tosk, beginTime:begindate,endTime:enddate,source:"901001"},showCount:10,currentPage:1}
-            } else {
-                creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),taskname:Tosk, beginTime:begindate,endTime:enddate},showCount:10,currentPage:1}
-            }
-            store.dispatch(getControlPersonList(creds))
+        let creds = ''
+        if(controlType === 'GK_WGK'){
+            creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),taskname:Tosk, beginTime:begindate,endTime:enddate,control_type:0},showCount:10,currentPage:1}
+        }else if(controlType === 'GK_YGK'){
+            creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),taskname:Tosk, beginTime:begindate,endTime:enddate,control_type:1},showCount:10,currentPage:1}
+        }else if(controlType === 'GK_LKZRQ'){
+            creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),taskname:Tosk, beginTime:begindate,endTime:enddate,control_type:2},showCount:10,currentPage:1}
+        }else if(controlType === 'GK_SK'){
+            creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),taskname:Tosk, beginTime:begindate,endTime:enddate,control_type:3},showCount:10,currentPage:1}
+        } else if(controlType === 'LY_DR'){
+            creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),taskname:Tosk, beginTime:begindate,endTime:enddate,source:"901006"},showCount:10,currentPage:1}
+        } else if(controlType === 'LY_XZ'){
+            creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),taskname:Tosk, beginTime:begindate,endTime:enddate,source:"901001"},showCount:10,currentPage:1}
+        } else {
+            creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),taskname:Tosk, beginTime:begindate,endTime:enddate},showCount:10,currentPage:1}
         }
-        this.props.getSearch(name, cardId, status, Tosk, begindate, enddate);
-        this.props.changeSelection([],1);
+        store.dispatch(getControlPersonList(creds))
     }
     init = () => {
         this.setState({
@@ -522,6 +515,10 @@ export  class SearchArea extends Component{
         let endDateValue = '';
         if (enddate === '') {} else {
             endDateValue = moment(enddate, dateFormat);
+        }
+        if (beginDateValue != "" && endDateValue != "" && beginDateValue > endDateValue) {
+            message.error('提示：开始时间不能大于结束时间！');
+            return;
         }
         let zdyStyle = {width:"110px", marginRight:"10px",display:'none'}
         let userItem = JSON.parse(sessionStorage.getItem('user'));

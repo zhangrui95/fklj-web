@@ -1034,7 +1034,10 @@ const SearchArea = React.createClass({
         if (dateEnd === '') {} else {
             endDateValue = moment(dateEnd, dateFormat);
         }
-
+        if ( this.state.dateBegin!= "" && this.state.dateEnd!= "" && this.state.dateBegin > this.state.dateEnd) {
+            message.error('提示：开始时间不能大于结束时间！');
+            return;
+        }
         return (
             <div className="marLeft40 fl z_searchDiv">
                 <label htmlFor="" className="font14" style={{marginRight:10}}>数据字典：</label>
