@@ -431,33 +431,25 @@ const SearchArea = React.createClass({
             whiteList_idNumber = this.state.whiteList_idNumber;
             whiteList_dateBegin = this.state.whiteList_dateBegin;
             whiteList_dateEnd = this.state.whiteList_dateEnd;
-            // var search='';
-            // if(whiteList_softName!==''&&whiteList_softName!==undefined){
-            //     search+='softName='+whiteList_softName+'&';
-            // }
-            // if(whiteList_idNumber!==''&&whiteList_idNumber!==undefined){
-            //     search+='inNumber='+whiteList_idNumber+'&';
-            // }
-            // if(whiteList_dateBegin!==''&&whiteList_dateBegin!==undefined){
-            //     search+='datebegin='+whiteList_dateBegin+'&';
-            // }
-            // if(whiteList_dateEnd!==''&&whiteList_dateEnd!==undefined){
-            //     search+='deteend='+whiteList_dateEnd+'&';
-            // }
-            let creds = {
-                currentPage: 1,
-                entityOrField: true,
-                pd: {
-                    beginTime: this.state.whiteList_dateBegin,
-                    endTime: this.state.whiteList_dateEnd,
-                    whiteList_softName: this.state.whiteList_softName,
-                    whiteList_idNumber: this.state.whiteList_idNumber,
-                },
-                showCount: constants.pageSize
+            if ( this.state.whiteList_dateBegin!= "" && this.state.whiteList_dateEnd!= "" && this.state.whiteList_dateBegin > this.state.whiteList_dateEnd) {
+                message.error('提示：开始时间不能大于结束时间！');
+                return;
+            } else {
+                let creds = {
+                    currentPage: 1,
+                    entityOrField: true,
+                    pd: {
+                        beginTime: this.state.whiteList_dateBegin,
+                        endTime: this.state.whiteList_dateEnd,
+                        whiteList_softName: this.state.whiteList_softName,
+                        whiteList_idNumber: this.state.whiteList_idNumber,
+                    },
+                    showCount: constants.pageSize
+                }
+                store.dispatch(PostWhiteListData(creds));
+                this.props.serchChange(
+                    this.state.whiteList_softName, this.state.whiteList_idNumber, this.state.whiteList_dateBegin, this.state.whiteList_dateEnd)
             }
-            store.dispatch(PostWhiteListData(creds));
-            this.props.serchChange(
-                this.state.whiteList_softName, this.state.whiteList_idNumber, this.state.whiteList_dateBegin, this.state.whiteList_dateEnd)
         },
         handleClickClear: function() { //点击创建
             store.dispatch(changeShade('block'));

@@ -113,7 +113,7 @@ export  class AddSystem extends Component{
                         >
                             <Select placeholder="请选择默认周期" onChange={this.cycleChange}>
                                 <Option key="0">按天</Option>
-                                <Option key="1">按月</Option>
+                                <Option key="1">按周</Option>
                             </Select>
                         </FormItem>
                     </Form>

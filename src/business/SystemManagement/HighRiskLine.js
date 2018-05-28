@@ -536,30 +536,24 @@ const SearchArea = React.createClass({
             highRiskAreaList_cityName = this.state.highRiskAreaList_cityName;
             highRiskAreaList_dateBegin = this.state.highRiskAreaList_dateBegin;
             highRiskAreaList_dateEnd = this.state.highRiskAreaList_dateEnd;
-            // var search='';
-            // if(highRiskAreaList_cityName!==''&&highRiskAreaList_cityName!==undefined){
-            //     search+='cityName='+highRiskAreaList_cityName+'&';
-            // }
-            // if(highRiskAreaList_dateBegin!==''&&highRiskAreaList_dateBegin!==undefined){
-            //     search+='datebegin='+highRiskAreaList_dateBegin+'&';
-            // }
-            // if(highRiskAreaList_dateEnd!==''&&highRiskAreaList_dateEnd!==undefined){
-            //     search+='deteend='+highRiskAreaList_dateEnd+'&';
-            // }
-            // store.dispatch(fetchhighRiskAreaListData('/gethighRiskAreaList',search));
-            let creds = {
-                currentPage: 1,
-                entityOrField: true,
-                pd: {
-                    beginTime: this.state.highRiskAreaList_dateBegin,
-                    endTime: this.state.highRiskAreaList_dateEnd,
-                    highRiskAreaList_cityName: this.state.highRiskAreaList_cityName,
-                },
-                showCount: 10
+            if ( this.state.highRiskAreaList_dateBegin!= "" && this.state.highRiskAreaList_dateEnd!= "" && this.state.highRiskAreaList_dateBegin > this.state.highRiskAreaList_dateEnd) {
+                message.error('提示：开始时间不能大于结束时间！');
+                return;
+            } else {
+                let creds = {
+                    currentPage: 1,
+                    entityOrField: true,
+                    pd: {
+                        beginTime: this.state.highRiskAreaList_dateBegin,
+                        endTime: this.state.highRiskAreaList_dateEnd,
+                        highRiskAreaList_cityName: this.state.highRiskAreaList_cityName,
+                    },
+                    showCount: 10
+                }
+                store.dispatch(PostHighRiskLineData(creds));
+                this.props.serchChange(
+                    this.state.highRiskAreaList_cityName, this.state.highRiskAreaList_dateBegin, this.state.highRiskAreaList_dateEnd, )
             }
-            store.dispatch(PostHighRiskLineData(creds));
-            this.props.serchChange(
-                this.state.highRiskAreaList_cityName, this.state.highRiskAreaList_dateBegin, this.state.highRiskAreaList_dateEnd, )
         },
         handleClickClear: function() { //点击创建
             store.dispatch(changeShade('block'));

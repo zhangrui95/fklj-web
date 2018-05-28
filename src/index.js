@@ -18,7 +18,6 @@ import InterrogationRecord from "./business/InterrogationRecord";
 import InterrogationDetails from "./business/InterrogationDetails";
 import ElectronicArchives from "./business/ElectronicArchives";
 import SystemManagement from "./business/SystemManagement";
-import SystemSetup from "./business/SystemSetup";
 import AreaManagement from "./business/AreaManagement";
 import TaskManagement from "./business/TaskManagement";
 import ControlPersonnel from "./business/ControlPersonnel";
@@ -79,7 +78,6 @@ class Index extends Component{
                             <Route exact path="/IntelligentRetrieval" component={IntelligentRetrieval} onEnter={this.requireAuth} />
                             <Route exact path="/PersonalCenter" component={PersonalCenter} onEnter={this.requireAuth} />
                             <Route exact path="/SystemManagement" component={SystemManagement} onEnter={this.requireAuth} />
-                            <Route exact path="/SystemSetup" component={SystemSetup} onEnter={this.requireAuth} />
                             <Route exact path="/AreaManagement" component={AreaManagement} onEnter={this.requireAuth} />
                             <Route exact path="/TaskManagement" component={TaskManagement} onEnter={this.requireAuth} />
                             <Route exact path="/AuditReport/:idcard/:personId" component={AuditReport}  onEnter={this.requireAuth}/>

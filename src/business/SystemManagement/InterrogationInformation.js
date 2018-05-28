@@ -732,21 +732,26 @@ const SearchArea = React.createClass({
             InterrogationInformation_status: value
         });
     },
-    handleClick: function() { //点击查询 
-        let creds = {
-            currentPage: 1,
-            entityOrField: true,
-            pd: {
-                beginTime: this.state.InterrogationInformation_dateBegin,
-                endTime: this.state.InterrogationInformation_dateEnd,
-                name: this.state.name,
-                pid:"198"
-            },
-            showCount: 10
+    handleClick: function() { //点击查询
+        if ( this.state.InterrogationInformation_dateBegin!= "" && this.state.InterrogationInformation_dateEnd!= "" && this.state.InterrogationInformation_dateBegin > this.state.InterrogationInformation_dateEnd) {
+            message.error('提示：开始时间不能大于结束时间！');
+            return;
+        } else {
+            let creds = {
+                currentPage: 1,
+                entityOrField: true,
+                pd: {
+                    beginTime: this.state.InterrogationInformation_dateBegin,
+                    endTime: this.state.InterrogationInformation_dateEnd,
+                    name: this.state.name,
+                    pid:"198"
+                },
+                showCount: 10
+            }
+            store.dispatch(PostInterrogationInformationData(creds));
+            this.props.serchChange(
+                this.state.name, this.state.InterrogationInformation_dateBegin, this.state.InterrogationInformation_dateEnd)
         }
-        store.dispatch(PostInterrogationInformationData(creds));
-        this.props.serchChange(
-            this.state.name, this.state.InterrogationInformation_dateBegin, this.state.InterrogationInformation_dateEnd)
     },
     handleClickClear: function() { //点击创建
         store.dispatch(changeShade('block'));

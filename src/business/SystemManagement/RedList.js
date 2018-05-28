@@ -433,7 +433,7 @@ const SearchArea = React.createClass({
     },
     clickSearch: function () { //点击查询
         if (this.state.redList_endTime < this.state.redList_beginTime) {
-            message.error('开始时间不能大于结束时间');
+            message.error('提示：开始时间不能大于结束时间！');
             return false;
         }
         let creds = {

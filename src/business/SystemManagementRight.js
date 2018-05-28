@@ -21,7 +21,7 @@ import  {PlaceOfInfluxPerson}  from "./SystemManagement/PlaceOfInfluxPerson";
 import  {HighRiskLine}  from "./SystemManagement/HighRiskLine";
 import  {RedList} from "./SystemManagement/RedList";
 import  {CodingTable} from "./SystemManagement/CodingTable";
-import {AddSystem}  from "../business/SystemSetup/AddSystem";
+import {AddSystem}  from "./SystemManagement/AddSystem";
 
 
 import {store} from '../index.js';

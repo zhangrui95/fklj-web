@@ -823,23 +823,28 @@ const SearchArea = React.createClass({
         police_name = this.state.police_name;
         placeOfInfluxPersonList_dateBegin = this.state.placeOfInfluxPersonList_dateBegin;
         placeOfInfluxPersonList_dateEnd = this.state.placeOfInfluxPersonList_dateEnd;
-        let creds = {
-            currentPage: 1,
-            entityOrField: true,
-            pd: {
-                beginTime: this.state.placeOfInfluxPersonList_dateBegin,
-                endTime: this.state.placeOfInfluxPersonList_dateEnd,
-                policename: this.state.police_name,
-                citycode: this.state.selectcitycode,
-                type: '1'
-            },
-            showCount: 10
+        if ( this.state.placeOfInfluxPersonList_dateBegin!= "" && this.state.placeOfInfluxPersonList_dateEnd!= "" && this.state.placeOfInfluxPersonList_dateBegin > this.state.placeOfInfluxPersonList_dateEnd) {
+            message.error('提示：开始时间不能大于结束时间！');
+            return;
+        } else {
+            let creds = {
+                currentPage: 1,
+                entityOrField: true,
+                pd: {
+                    beginTime: this.state.placeOfInfluxPersonList_dateBegin,
+                    endTime: this.state.placeOfInfluxPersonList_dateEnd,
+                    policename: this.state.police_name,
+                    citycode: this.state.selectcitycode,
+                    type: '1'
+                },
+                showCount: 10
+            }
+            store.dispatch(PostPlaceOfInfluxPersonData(creds));
+            console.log('this.state.selectcitycode chaxun',this.state.selectcitycode);
+            this.props.serchChange(
+                this.state.police_name,
+                this.state.placeOfInfluxPersonList_dateBegin, this.state.placeOfInfluxPersonList_dateEnd, this.state.selectcitycode)
         }
-        store.dispatch(PostPlaceOfInfluxPersonData(creds));
-        console.log('this.state.selectcitycode chaxun',this.state.selectcitycode);
-        this.props.serchChange(
-            this.state.police_name,
-            this.state.placeOfInfluxPersonList_dateBegin, this.state.placeOfInfluxPersonList_dateEnd, this.state.selectcitycode)
     },
     clear:function(){
         let nameClear = this.state.police_name;

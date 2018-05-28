@@ -820,35 +820,27 @@ const SearchArea = React.createClass({
         police_name = this.state.police_name;
         placeOfOriginPersonList_dateBegin = this.state.placeOfOriginPersonList_dateBegin;
         placeOfOriginPersonList_dateEnd = this.state.placeOfOriginPersonList_dateEnd;
-        // var search='';
-        // if(police_name!==''&&police_name!==undefined){
-        //     search+='softName='+police_name+'&';
-        // }
-        // if(placeOfOriginPersonList_idNumber!==''&&placeOfOriginPersonList_idNumber!==undefined){
-        //     search+='inNumber='+placeOfOriginPersonList_idNumber+'&';
-        // }
-        // if(placeOfOriginPersonList_dateBegin!==''&&placeOfOriginPersonList_dateBegin!==undefined){
-        //     search+='datebegin='+placeOfOriginPersonList_dateBegin+'&';
-        // }
-        // if(placeOfOriginPersonList_dateEnd!==''&&placeOfOriginPersonList_dateEnd!==undefined){
-        //     search+='deteend='+placeOfOriginPersonList_dateEnd+'&';
-        // }
-        let creds = {
-            currentPage: 1,
-            entityOrField: true,
-            pd: {
-                beginTime: this.state.placeOfOriginPersonList_dateBegin,
-                endTime: this.state.placeOfOriginPersonList_dateEnd,
-                policename: this.state.police_name,
-                citycode:this.state.selectcitycode,
-                type:'0'
-            },
-            showCount: 10
+        if ( this.state.placeOfOriginPersonList_dateBegin!= "" && this.state.placeOfOriginPersonList_dateEnd!= "" && this.state.placeOfOriginPersonList_dateBegin > this.state.placeOfOriginPersonList_dateEnd) {
+            message.error('提示：开始时间不能大于结束时间！');
+            return;
+        } else {
+            let creds = {
+                currentPage: 1,
+                entityOrField: true,
+                pd: {
+                    beginTime: this.state.placeOfOriginPersonList_dateBegin,
+                    endTime: this.state.placeOfOriginPersonList_dateEnd,
+                    policename: this.state.police_name,
+                    citycode:this.state.selectcitycode,
+                    type:'0'
+                },
+                showCount: 10
+            }
+            store.dispatch(PostPlaceOfOriginPersonData(creds));
+            this.props.serchChange(
+                this.state.police_name,
+                this.state.placeOfOriginPersonList_dateBegin, this.state.placeOfOriginPersonList_dateEnd,this.state.selectcitycode)
         }
-        store.dispatch(PostPlaceOfOriginPersonData(creds));
-        this.props.serchChange(
-            this.state.police_name,
-            this.state.placeOfOriginPersonList_dateBegin, this.state.placeOfOriginPersonList_dateEnd,this.state.selectcitycode)
     },
     clear:function(){
         let nameClear = this.state.police_name;
