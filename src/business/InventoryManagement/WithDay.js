@@ -288,7 +288,7 @@ export class WithDay extends Component {
         })
     }
     serchChange = (name, idcard, enddate, begindate, subtask_name, address_type, police_name, page) => {
-        console.log('***ddds',page)
+        console.log('***ddds', page)
         this.setState({
             name: name,
             idcard: idcard,
@@ -358,7 +358,7 @@ export class WithDay extends Component {
         }
     }
     render() {
-        console.log('this.sta',this.state.nowPage)
+        console.log('this.sta', this.state.nowPage)
         const { getFieldDecorator } = this.props.form;
         let nowPage = this.state.nowPage;
         let isFetching = store.getState().InventoryManagement.data.invenListHushi.isFetching;
@@ -366,9 +366,9 @@ export class WithDay extends Component {
         let obj = store.getState().InventoryManagement.data.invenListHushiDetails.result;
         let page = store.getState().InventoryManagement.data.invenListHushi.result.page;
         let dataList = [];
-        
+
         let recordNumber = parseInt((nowPage - 1) * 10);
-        console.log('nowPage',this.state.nowPage);
+        console.log('nowPage', this.state.nowPage);
         if (data) {
             for (let i = 0; i < data.length; i++) {
                 let item = data[i];
@@ -384,7 +384,7 @@ export class WithDay extends Component {
                     phone: item.phone,
                     taskname: item.taskname,
                     police_name: item.police_name,
-                    checktime:item.checktime? getMyDate(item.checktime / 1000):'',
+                    checktime: item.checktime ? getMyDate(item.checktime / 1000) : '',
 
                 });
             }
@@ -453,26 +453,26 @@ export class WithDay extends Component {
             }),
         };
         let imgArray = [];
-        if(obj){
-          if (obj.paint) {
-            let arrayImg = JSON.parse(obj.paint.paint_photo_path);
-            var imgObjText = obj.paint.text;
-            // let arrayImg = ["../../images/zanwu.png", "../../images/zanwu.png", "../../images/zanwu.png"];
-            if (arrayImg && arrayImg.length > 0) {
-                for (let i = 0; i < arrayImg.length; i++) {
+        if (obj) {
+            if (obj.paint) {
+                let arrayImg = JSON.parse(obj.paint.paint_photo_path);
+                var imgObjText = obj.paint.text;
+                // let arrayImg = ["../../images/zanwu.png", "../../images/zanwu.png", "../../images/zanwu.png"];
+                if (arrayImg && arrayImg.length > 0) {
+                    for (let i = 0; i < arrayImg.length; i++) {
+                        imgArray.push(
+                            <img src={arrayImg[i]} key={i} alt="" style={{ width: '100px', height: '120px', margin: '5px' }}
+                                onClick={handleImgClick => this.handleImgClick(arrayImg, arrayImg[i], i)} />
+                        );
+                    }
+                } else {
                     imgArray.push(
-                        <img src={arrayImg[i]} key={i} alt="" style={{ width: '100px', height: '120px', margin: '5px' }}
-                            onClick={handleImgClick => this.handleImgClick(arrayImg, arrayImg[i], i)} />
+                        <div style={{ fontSize: 16, color: '#fff', width: '100%', textAlign: "center" }}>暂无写实照片</div>
                     );
                 }
-            } else {
-                imgArray.push(
-                    <div style={{ fontSize: 16, color: '#fff', width: '100%', textAlign: "center" }}>暂无写实照片</div>
-                );
             }
-        }  
         }
-        
+
         let tabs = store.getState().InterrogationDetailsUsers.uiData.tabs;
         let isSelectTab, content;
         //查找被选中的标签
@@ -749,28 +749,11 @@ export class WithDay extends Component {
                                             style={{ marginBottom: '5px' }}
                                         >
                                             {getFieldDecorator('carstatus', {
-                                                initialValue: obj ? obj.carstatus ? obj.carstatus : '' : '',
+                                                initialValue: obj ? obj.carstatus ? obj.carstatus === true && obj.carnumber ? `有车  ${obj.carnumber}` : '暂无' : '' : '',
                                             })(
-                                                <RadioGroup disabled style={{ color: '#fff' }}>
-                                                    <Radio value={false}>无车</Radio>
-                                                    <Radio value={true}>有车</Radio>
-                                                </RadioGroup>
+                                                <Input disabled />
                                             )}
                                         </FormItem>
-                                        {obj?obj.carstatus ?
-                                            <FormItem
-                                                {...formItemLayout}
-                                                label="车牌号"
-                                                style={{ marginBottom: '5px' }}
-                                            >
-                                                {getFieldDecorator('carnumber', {
-                                                    initialValue: obj ? obj.carnumber ? obj.carnumber : '' : '',
-                                                })(
-                                                    <Input disabled />
-                                                )}
-                                            </FormItem>
-                                            : '':''
-                                        }
                                         <FormItem
                                             {...formItemLayout}
                                             label="盘查时间"
@@ -809,7 +792,7 @@ export class WithDay extends Component {
                                                 {getFieldDecorator('paintText', {
                                                     initialValue: obj ? obj.paint ? obj.paint.text : '' : ''
                                                 })(
-                                                    <TextArea rows={2} disabled style={{resize: 'none'}}/>
+                                                    <TextArea rows={2} disabled style={{ resize: 'none' }} />
                                                 )}
                                             </FormItem>
                                         </Col>
@@ -906,7 +889,7 @@ const SearchArea = React.createClass({
             showCount: 10
         }
         store.dispatch(postInventoryListHushiData(params));
-        this.props.serchChange('', '', '', '', '', '','', page);
+        this.props.serchChange('', '', '', '', '', '', '', page);
     },
     // componentWillReceiveProps: function (nextProps) {
     //     if (this.props.type !== nextProps.type) {

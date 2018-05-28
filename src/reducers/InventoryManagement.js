@@ -146,6 +146,14 @@ const initialState = { //盘查管理
             result: {
             }
         },
+        oldinvenLuoku: {//原版反恐利剑 数据落库  点击详情的时候展示
+            reason: {
+                "code": "",
+                "text": ""
+            },
+            result: {
+            }
+        },
     },
     uiData: {
         menus: [
@@ -179,23 +187,23 @@ const initialState = { //盘查管理
             },
             {
                 id: '102',
-                menuName: '旧版本任务',
+                menuName: '其他任务',
                 isOpen: false,
                 search: 'type=pcgl',
-                haveSon: true,
+                haveSon: false,
                 isSelect: false,
                 isShow: false,
                 code: "",
-                sonMenu: [
-                    {
-                        id: '1021',
-                        menuName: '旧版按天',
-                        search: 'type=zqrw&state=1',
-                        isSelect: false,
-                        isShow: true,
-                        code: ""
-                    },
-                ]
+                // sonMenu: [
+                //     {
+                //         id: '1021',
+                //         menuName: '旧版按天',
+                //         search: 'type=zqrw&state=1',
+                //         isSelect: false,
+                //         isShow: true,
+                //         code: ""
+                //     },
+                // ]
             }
         ]
     }
@@ -336,7 +344,9 @@ const InventoryManagement = (state = initialState, action) => {
         case 'old_InventoryListHushiDetails-data': //详情
             newState.data.oldinvenListHushiDetails.result = action.data.result.data;
             return newState;
-
+        case 'old_InventoryLuoku-data': //原版反恐利剑 数据落库 点击详情时展示
+            newState.data.oldinvenLuoku.result = action.data.result.data; 
+            return newState;
         default:
             if (store !== undefined) {
                 return store.getState().InventoryManagement;

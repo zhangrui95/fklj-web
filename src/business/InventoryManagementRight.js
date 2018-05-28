@@ -46,10 +46,7 @@ class InventoryManagementRight extends Component {
             case constants.INVENTORYMANAGEMENT_HUSHI_MODULE_AZ://按周
                 content = <WithWeek />
                 break
-            case constants.INVENTORYMANAGEMENT_HUSHI_OLD_MODULE_AT://旧版按天
-                content = <OldWithDay />
-                break
-            case constants.INVENTORYMANAGEMENT_HUSHI_OLD_MODULE_AZ://旧版按周
+            case constants.INVENTORYMANAGEMENT_OLD_HUSHI_MODULE_Qt://旧版其他任务
                 content = <OldWithDay />
                 break
             default:

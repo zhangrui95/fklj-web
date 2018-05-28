@@ -344,9 +344,10 @@ export function changeMenu(menu, type, moduleName) {//改变目录状态
         if (type === 'openAndClose') {
             if (menu.id === '101') {
                 return { type: INVENTORYMANAGEMENT_HUSHI_ZQRW }
-            }else if (menu.id === '102') {
-                return { type: INVENTORYMANAGEMENT_HUSHI_OLDZQRW }
-            } 
+            }
+            // else if (menu.id === '102') {
+            //     return { type: INVENTORYMANAGEMENT_HUSHI_OLDZQRW }
+            // } 
         } else if (type === 'getData') {//点击目录
             return { type: INVENTORYMANAGEMENT_HUSHI_CURRENT, menu: menu };
         }
