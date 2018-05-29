@@ -301,7 +301,7 @@ const initialState = { //系统管理
                   },
                 {
                     id: '111',
-                    menuName: '失控时间及周期设置',
+                    menuName: '动态管控设置',
                     haveSon: false,
                     isOpen: true,
                     search: 'type=rwgl',
