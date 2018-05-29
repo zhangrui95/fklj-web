@@ -169,7 +169,7 @@ const initialState = {
                 sonMenu: [
                     {
                         id: '1001',
-                        menuName: '拟来呼人员',
+                        menuName: '流入人员',
                         search: 'type=gzry&state=1',
                         isSelect: false,
                         isShow: false,
