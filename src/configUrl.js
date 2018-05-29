@@ -8,7 +8,7 @@ const Interface = {//服务器
   test: 'http://172.19.1.145:7000',
   fxdl: '/data-service',
   lsfxdl: '/data-service-wwhc',
-  MXD: 'http://172.19.12.102:8800',//慕兴达
+  MXD: 'http://172.19.12.102:8888',//慕兴达
   ZZH: 'http://172.19.12.213:8088/data-service',//张泽恒
 };
 const securityCenter = {//安全中心
