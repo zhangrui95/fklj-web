@@ -93,7 +93,7 @@ export class RedList extends Component {
             visible: true,
             personInfo: data,
             modalType: 'edit',
-            avatarSrc: data.iconUrl
+            avatarSrc: data.iconurl
         });
     }
 
@@ -129,7 +129,7 @@ export class RedList extends Component {
                         name: values.name,
                         idcard: values.idcard,
                         remark: values.remark,
-                        iconUrl: values.iconUrl,
+                        iconurl: values.iconurl,
                         work: '',
                         post: '',
                         person_id: ''
@@ -242,7 +242,7 @@ export class RedList extends Component {
                 key: i,
                 serial: serial,
                 name: redData.name,
-                iconUrl: redData.iconUrl,
+                iconurl: redData.iconurl,
                 remark: redData.remark,
                 id: redData.id,
             });
@@ -273,9 +273,9 @@ export class RedList extends Component {
          {
              title: '头像',
              render: (text, record) => {
-                 if(text.iconUrl) {
+                 if(text.iconurl) {
                      return (
-                         <img src={text.iconUrl} style={{width: "30px", height: "30px"}}/>
+                         <img src={text.iconurl} style={{width: "30px", height: "30px"}}/>
                      )
                  }
 
@@ -369,7 +369,7 @@ export class RedList extends Component {
                         </FormItem>
                         <FormItem
                             {...formItemLayout} label={'头像'} hasFeedback>
-                            {getFieldDecorator('iconUrl', {
+                            {getFieldDecorator('iconurl', {
                                 getValueFromEvent: this.normFile
                             })(
                                 <Upload className="avatar-uploader" name="file" showUploadList={false}

@@ -88,10 +88,10 @@ handleOk = () => {
             let creds={
                 pd:{
                     name:values.label?values.label:this.state.personInfo.label,
-                    iconUrl:values.iconUrl?values.iconUrl:this.state.personInfo.iconUrl,
+                    iconurl:values.iconurl?values.iconurl:this.state.personInfo.iconurl,
                     id:values.id.toString()?values.id.toString():'',
                     optuser:userItem.user.idcard,
-                    createuser:userItem.user.idcard,
+                    createuser:userItem.user.name,
                     remark:values.remark.toString(),
                     status:values.status?values.status:'1',
                     code:values.value?values.value:'',
@@ -171,7 +171,7 @@ handleOk = () => {
                // key: i,
                serial: serial,
                 label: exceptionParameterReminderData.label,
-                iconUrl: exceptionParameterReminderData.iconUrl,
+                iconurl: exceptionParameterReminderData.iconurl,
                 key: exceptionParameterReminderData.key,
                 status:exceptionParameterReminderData.status,
                 optuser: exceptionParameterReminderData.optuser,

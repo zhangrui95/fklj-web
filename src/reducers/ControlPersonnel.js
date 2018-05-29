@@ -86,37 +86,9 @@ const initialState = {
     uiData: {
         menus: [
             {
-                id: '101',
-                menuName: '关注人员',
-                haveSon: true,
-                isOpen: true,
-                search: 'type=rwgl',
-                isSelect: false,
-                code: "gkry_gzry_page",
-                isShow: false,
-                sonMenu: [
-                    {
-                        id: '1001',
-                        menuName: '拟来呼人员',
-                        search: 'type=gzry&state=1',
-                        isSelect: true,
-                        isShow: false,
-                        code: "gkry_gzry_nlhry_page"
-                    },
-                    {
-                        id: '1002',
-                        menuName: '治安来源',
-                        search: 'type=gzry&state=2',
-                        isSelect: false,
-                        isShow: false,
-                        code: "gkry_gzry_zaly_page"
-                    }
-                ]
-            },
-            {
                 id: '102',
                 menuName: '管控人员',
-                isOpen: false,
+                isOpen: true,
                 search: 'type=rwgl',
                 haveSon: true,
                 isSelect: false,
@@ -127,7 +99,7 @@ const initialState = {
                         id: '1003',
                         menuName: '未管控',
                         search: 'type=gzry&state=1',
-                        isSelect: false,
+                        isSelect: true,
                         isShow: true,
                         code: ""
                     },
@@ -184,7 +156,35 @@ const initialState = {
                         code: ""
                     }
                 ]
-            }
+            },
+            {
+                id: '101',
+                menuName: '关注人员',
+                haveSon: true,
+                isOpen: false,
+                search: 'type=rwgl',
+                isSelect: false,
+                code: "gkry_gzry_page",
+                isShow: false,
+                sonMenu: [
+                    {
+                        id: '1001',
+                        menuName: '拟来呼人员',
+                        search: 'type=gzry&state=1',
+                        isSelect: false,
+                        isShow: false,
+                        code: "gkry_gzry_nlhry_page"
+                    },
+                    {
+                        id: '1002',
+                        menuName: '治安来源',
+                        search: 'type=gzry&state=2',
+                        isSelect: false,
+                        isShow: false,
+                        code: "gkry_gzry_zaly_page"
+                    }
+                ]
+            },
         ]
     },
     isFetching:false
@@ -222,24 +222,24 @@ const ControlPersonnel =(state = initialState, action) =>{
             newState.uiData.menus[0].sonMenu[0].isSelect = true;
             return newState;
         case CONTROLPERSONNEL_TYPE:
+            if(newState.uiData.menus[2].isOpen===true){
+                newState.uiData.menus[2].isOpen=false;
+            }else{
+                newState.uiData.menus[2].isOpen=true;
+            }
+            return newState;
+        case CONTROLPERSONNEL_Person:
             if(newState.uiData.menus[0].isOpen===true){
                 newState.uiData.menus[0].isOpen=false;
             }else{
                 newState.uiData.menus[0].isOpen=true;
             }
             return newState;
-        case CONTROLPERSONNEL_Person:
+        case CONTROLPERSONNEL_AddOrOut:
             if(newState.uiData.menus[1].isOpen===true){
                 newState.uiData.menus[1].isOpen=false;
             }else{
                 newState.uiData.menus[1].isOpen=true;
-            }
-            return newState;
-        case CONTROLPERSONNEL_AddOrOut:
-            if(newState.uiData.menus[2].isOpen===true){
-                newState.uiData.menus[2].isOpen=false;
-            }else{
-                newState.uiData.menus[2].isOpen=true;
             }
             return newState;
         case CONTROL_PERSONNEL_CURRENT:

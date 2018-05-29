@@ -58,7 +58,7 @@ export function receivedHorrorSoftwareError(message) {
 
 //保存涉恐软件  增加
 export function addHorrorSoftwareData(creds,params) {
-    let path = "/data/savecodeall"
+    let path = "/data/InsertSysCode"
     return dispatch => {
         post(api + path, creds).then((json) => {
             if (json.reason === null) {
@@ -81,7 +81,7 @@ export function updateHorrorSoftwareData(creds,params) {
             if (json.reason === null) {
                 let creds = params
                 store.dispatch(PostHorrorSoftwareData(creds));
-                
+                message.success('保存成功！');
             }else{
                 message.error(json.reason.text);
             }
@@ -94,9 +94,10 @@ export function updateHorrorSoftwareData(creds,params) {
 //删除涉恐软件
 export function DeleteHorrorSoftwareData(creds,params) {
     return dispatch => {
-        post(api + "/data/delecodeall",creds).then((json) => {
+        post(api + "/data/DeleteSysCode",creds).then((json) => {
            let creds = params;
             store.dispatch(PostHorrorSoftwareData(creds));
+            message.success('删除成功！');
         }).catch((e) => {
         });
         ;
@@ -141,7 +142,7 @@ export function receivedInterrogationInformationError(message) {
 
 //添加人工盘查
 export function addInterrogationInformationData(creds,params) {
-    let path = "/data/savecodeall";
+    let path = "/data/InsertSysCode";
     return dispatch => {
         post(api + path, creds).then((json) => {
             if (json.reason === null) {
@@ -181,7 +182,7 @@ export function saveIntrrrogationList(creds,params) {
 export function DeleteInterrogationInformationData(creds,params) {
 
     return dispatch => {
-        post(api + "/data/delecodeall",creds).then((json) => {
+        post(api + "/data/DeleteSysCode",creds).then((json) => {
            let creds = params
             message.success('删除成功！');
              store.dispatch(PostInterrogationInformationData(creds));
@@ -691,13 +692,13 @@ export function receivedPlaceOfOriginPersonError(message) {
 
 //保存原籍地
 export function addPlaceOfOriginPersonData(creds,params) {
-     let path = '/data/savedomicilepolice';
+     let path = '/data/InsertDomicilePolice';
     return dispatch => {
         post(api + path, creds).then((json) => {
             if (json.reason === null) {
                 let creds = params
                 store.dispatch(PostPlaceOfOriginPersonData(creds));
-                
+                message.success('保存成功！');
             }else{
                 message.error(json.reason.text);
             }
@@ -707,13 +708,13 @@ export function addPlaceOfOriginPersonData(creds,params) {
     }
 }
 export function updatePlaceOfOriginPersonData(creds,params) {
-    let path = '/data/updatedomicilepolice';
+    let path = '/data/UpdateDomicilePolice';
     return dispatch => {
         post(api + path, creds).then((json) => {
             if (json.reason === null) {
                 let creds = params
                 store.dispatch(PostPlaceOfOriginPersonData(creds));
-               
+                message.success('保存成功！');
             }else{
                 message.error(json.reason.text);
             }
@@ -727,9 +728,10 @@ export function updatePlaceOfOriginPersonData(creds,params) {
 export function DeletePlaceOfOriginPersonData(creds,params) {
 
     return dispatch => {
-        post(api + "/data/DelBatchdomicilepolice",creds).then((json) => {
+        post(api + "/data/DeleteDomicilePolice",creds).then((json) => {
            let creds = params
             store.dispatch(PostPlaceOfOriginPersonData(creds));
+            message.success('删除成功！');
         }).catch((e) => {
         });
         ;
@@ -775,13 +777,13 @@ export function receivedPlaceOfInfluxPersonError(message) {
 
 //保存流入地
 export function addPlaceOfInfluxPersonData(creds,params) {
-    let path = '/data/savedomicilepolice';
+    let path = '/data/InsertDomicilePolice';
     return dispatch => {
         post(api + path, creds).then((json) => {
             if (json.reason === null) {
                 let creds = params
                 store.dispatch(PostPlaceOfInfluxPersonData(creds));
-                
+                message.success('保存成功！');
             }else{
                 message.error(json.reason.text);
             }
@@ -791,13 +793,13 @@ export function addPlaceOfInfluxPersonData(creds,params) {
     }
 }
 export function updatePlaceOfInfluxPersonData(creds,params) {
-    let path = '/data/updatedomicilepolice';
+    let path = '/data/UpdateDomicilePolice';
     return dispatch => {
         post(api + path, creds).then((json) => {
             if (json.reason === null) {
                 let creds = params
                 store.dispatch(PostPlaceOfInfluxPersonData(creds));
-                
+                message.success('保存成功！');
             }else{
                 message.error(json.reason.text);
             }
@@ -811,9 +813,10 @@ export function updatePlaceOfInfluxPersonData(creds,params) {
 export function DeletePlaceOfInfluxPersonData(creds,params) {
 
     return dispatch => {
-        post(api + "/data/DelBatchdomicilepolice",creds).then((json) => {
+        post(api + "/data/DeleteDomicilePolice",creds).then((json) => {
            let creds = params
             store.dispatch(PostPlaceOfInfluxPersonData(creds));
+            message.success('删除成功！');
         }).catch((e) => {
         });
         ;
@@ -1100,13 +1103,14 @@ export function receivedCodeTableError(message) {
 
 //保存
 export function addpostCodeTableData(creds,params) {
-    let path = '/data/savecodeall';
+    let path = '/data/InsertSysCode';
     return dispatch => {
         post(api + path, creds).then((json) => {
             if (json.reason === null) {
                 let creds = params
                 store.dispatch(postCodeTableData(creds));
                 store.dispatch(postCodeData('0'));
+                message.success('保存成功！');
             }else{
                 message.error(json.reason.text);
             }
@@ -1122,7 +1126,7 @@ export function updatepostCodeTableData(creds,params) {
             if (json.reason === null) {
                 let creds = params;
                 store.dispatch(postCodeTableData(creds));
-                
+                message.success('保存成功！');
             }else{
                 message.error(json.reason.text);
             }
@@ -1136,7 +1140,7 @@ export function updatepostCodeTableData(creds,params) {
 export function DeletepostCodeTableData(creds) {
 
     return dispatch => {
-        post(api + "/data/delecodeall",creds).then((json) => {
+        post(api + "/data/DeleteSysCode",creds).then((json) => {
            let creds = {
                 currentPage:1,
                 entityOrField:true,
@@ -1152,4 +1156,24 @@ export function DeletepostCodeTableData(creds) {
         ;
     }
 }
-
+//获取失控时间及周期
+export function getControlTimeCycle(creds) {
+    return dispatch => {
+        post(api + "/data/getControlTimeCycle",creds).then((json) => {
+            dispatch( {type: 'getControlTimeCycle_succeed',data: json} );
+        }).catch((e)=>{
+            dispatch({type: 'getControlTimeCycle_error',message: e.toString()} )
+        });
+    }
+}
+//修改失控时间及周期
+export function UpdateControlTimeCycle(creds) {
+    return dispatch => {
+        post(api + "/data/UpdateControlTimeCycle",creds).then((json) => {
+            dispatch( {type: 'UpdateControlTimeCycle_succeed',data: json} );
+            message.success('保存成功！');
+        }).catch((e)=>{
+            dispatch({type: 'UpdateControlTimeCycle_error',message: e.toString()} )
+        });
+    }
+}

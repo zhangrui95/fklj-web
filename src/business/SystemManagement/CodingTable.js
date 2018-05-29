@@ -266,7 +266,7 @@ handleDelete = () => {
                 visible: true,
                 personInfo: record,
                 modalType: 'edit',
-                avatarSrc: record.iconUrl
+                avatarSrc: record.iconurl
             });
         }
     addShowModal = (record) => {
@@ -346,34 +346,24 @@ handleDelete = () => {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             let userItem = JSON.parse(sessionStorage.getItem('user'));
-            console.log('values',values);
             if(!err){
                 if(this.state.modalType === "edit"){
-                    values.id = this.state.personInfo.key;//让表单数据带上id  后台好进行操作
-                    values.pid = this.state.personInfo.pid;
-                    values.level = this.state.personInfo.level,
-                    values.status = this.state.personInfo.status
-                    if(values.status ==='是'){
-                        values.status = '1'
-                    }else{
-                        values.status = '0'
-                    }
-                    console.log('this.state.personInfo.pid',this.state.personInfo.pid);
+                    values.id = this.state.personInfo.key.toString();//让表单数据带上id  后台好进行操作
+                    values.pid = this.state.personInfo.pid.toString();
+                    values.level = this.state.personInfo.level.toString();
                         let creds = {
-                           
                             pd:{
                                 name:values.label,
-                                iconUrl:values.iconUrl?values.iconUrl:this.state.avatarSrc,
-                                id:values.id.toString(),
+                                iconurl:values.iconurl?values.iconurl:this.state.avatarSrc,
+                                id:values.id,
                                 optuser:userItem.user.idcard,
-                                createuser:userItem.user.idcard,
+                                createuser:userItem.user.name,
                                 remark:values.remark?values.remark:'',
-                                status:values.status?values.status:'1',
+                                status:values.status?(values.status==="是"?'1':(values.status==="否"?'0':values.status)):'1',
                                 code:values.value?values.value:'',
-                                pid:values.pid.toString()?values.pid.toString():'0',
-                                level:values.level?values.level.toString():'1'
+                                pid:values.pid?values.pid:'0',
+                                level:values.level?values.level:'1'
                             },//传参 把后台需要的参数传过去
-                           
                         }
                         let params = {
                             currentPage:1,
@@ -411,10 +401,10 @@ handleDelete = () => {
                             
                              pd:{
                                  name:values.label?values.label:'', 
-                                 iconUrl:values.iconUrl?values.iconUrl:'',
+                                 iconurl:values.iconurl?values.iconurl:'',
                                  menuname:"0",
                                  optuser:userItem.user.idcard,
-                                 createuser:userItem.user.idcard,
+                                 createuser:userItem.user.name,
                                  remark:values.remark?values.remark:'',
                                  code:values.value?values.value:'',
                                  pid:this.state.keyvalue.toString() === ''?'0':this.state.keyvalue.toString(),
@@ -443,7 +433,7 @@ handleDelete = () => {
                            
                     //         pd:{
                     //             name:values.label?values.label:'', 
-                    //             iconUrl:values.iconUrl?values.iconUrl:'',
+                    //             iconurl:values.iconurl?values.iconurl:'',
                     //             menuname:"0",
                     //             optuser:userItem.user.idcard,
                     //             createuser:userItem.user.idcard,
@@ -469,7 +459,7 @@ handleDelete = () => {
                            
                     //         pd:{
                     //             name:values.label?values.label:'', 
-                    //             iconUrl:values.iconUrl?values.iconUrl:'',
+                    //             iconurl:values.iconurl?values.iconurl:'',
                     //             menuname:this.state.selectcitycode,
                     //             optuser:userItem.user.idcard,
                     //             createuser:userItem.user.idcard,
@@ -510,8 +500,6 @@ handleDelete = () => {
         });
     }
        render(){
-           console.log('this.state.imgtext',this.state.imgtext);
-        console.log('keyvalue',this.state.keyvalue);
         let obj =  store.getState().SystemManagement.data.codeTableist.result.list;
         let nowPage = this.state.nowPage;
         let totalRecord = store.getState().SystemManagement.data.codeTableist.result.total;
@@ -530,7 +518,7 @@ handleDelete = () => {
             title: '图标',
             render: (text, record) => (
                 <span>
-                {text.iconUrl !== ''?<img src={text.iconUrl} style={{width:"30px",height:"30px"}} onClick={(e)=>this.zoomclickModel(text)}/>:''} 
+                {text.iconurl !== ''?<img src={text.iconurl} style={{width:"30px",height:"30px"}} onClick={(e)=>this.zoomclickModel(text)}/>:''} 
                 </span>
             ),
         }, {
@@ -578,7 +566,7 @@ handleDelete = () => {
                // key: i,
                 serial: serial,
                 label: objList.label,
-                iconUrl: objList.iconUrl,
+                iconurl: objList.iconurl,
                 remark: objList.remark,
                 source: objList.source,
                 optuser: objList.optuser,
@@ -731,7 +719,7 @@ handleDelete = () => {
                             <FormItem
                                 {...formItemLayout} label={'图片'} hasFeedback>
 
-                                {getFieldDecorator('iconUrl', {
+                                {getFieldDecorator('iconurl', {
                                     getValueFromEvent: this.normFile
                                 })(
                                     <Upload className="avatar-uploader" name="file" 
@@ -810,8 +798,8 @@ handleDelete = () => {
                         footer={null}
                         style={{textAlign:'center',}}
                         >
-                        <img src={this.state.imgtext.iconUrl} style={{width:"80%"}}/>
-                    </Modal>      
+                        <img src={this.state.imgtext.iconurl} style={{width:"80%"}}/>
+                    </Modal>
                 </div>
             </div>
            );

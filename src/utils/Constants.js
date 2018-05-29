@@ -47,7 +47,7 @@ export const CONTROLPERSONNEL_MODULE_GK_SK = '失控';
 export const CONTROLPERSONNEL_MODULE_DR = '后台导入';
 export const CONTROLPERSONNEL_MODULE_XZ = '前端新增';
 //系统设置模块（呼市）
-export const SYSREMSETUP_MODULE_TIME = '失控时间设置';
+export const SYSREMSETUP_MODULE_TIME = '失控时间及周期设置';
 // export const SYSREMSETUP_MODULE_Add = '添加到任务';
 // export const SYSREMSETUP_MODULE_Choice = '选择责任单位';
 //智能检索模块
