@@ -325,7 +325,7 @@ export class PlaceOfInfluxPerson extends Component {
                             telbak: values.tel_bak ? values.tel_bak : '',
                             areacode: this.state.citycode === '' ? this.state.personInfo.area_code : this.state.citycode,
                             id: values.id.toString(),
-                            createuser: userItem.user.idcard,
+                            createuser: userItem.user.name,
                             unitname: values.unit_name ? values.unit_name : '',
 
                         },
@@ -359,16 +359,16 @@ export class PlaceOfInfluxPerson extends Component {
                     
                     
                     let creds = {
-                        police_name: values.police_name ? values.police_name : '',
-                        policepost: values.policepost ? values.policepost : '',
-                        tel: values.tel ? values.tel : '',
-                        tel_bak: values.tel_bak ? values.tel_bak : '',
-                        unit_code: this.state.citycode,
-                        createuser: userItem.user.idcard,
-                        unit_name: values.unit_name ? values.unit_name : '',
-                        type: "1"
-
-
+                        pd: {
+                            police_name: values.police_name ? values.police_name : '',
+                            policepost: values.policepost ? values.policepost : '',
+                            tel: values.tel ? values.tel : '',
+                            tel_bak: values.tel_bak ? values.tel_bak : '',
+                            unit_code: this.state.citycode,
+                            createuser: userItem.user.name,
+                            unit_name: values.unit_name ? values.unit_name : '',
+                            type: "1"
+                        }
                     }
                     let params = {
                         currentPage: 1,
@@ -775,7 +775,7 @@ class Tree extends Component {
             loadData: this.load,
             searchPlaceholder: 'Please select',
             style: {
-                width: 283,
+                width: 274,
                 border: this.props.bordercolor,
             },
         };

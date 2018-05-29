@@ -178,7 +178,7 @@ export class InterrogationInformation extends Component {
                 visible: true,
                 personInfo: record,
                 modalType: 'edit',
-                avatarSrc: record.iconUrl,
+                avatarSrc: record.iconurl,
                 docurlSrc:record.remark
             });
         }
@@ -315,10 +315,10 @@ export class InterrogationInformation extends Component {
                                 pd: {
                                     remark:values.remark? values.remark:this.state.docurlSrc,
                                     name:values.label,
-                                    iconUrl:values.iconUrl? values.iconUrl:this.state.avatarSrc,
+                                    iconurl:values.iconurl? values.iconurl:this.state.avatarSrc,
                                     id:values.id.toString(),
                                     optuser:userItem.user.idcard,
-                                    createuser:userItem.user.idcard,
+                                    createuser:userItem.user.name,
                                     status:values.status?values.status:'1',
                                     code:values.value?values.value:'',
                                     level:'2',
@@ -343,10 +343,10 @@ export class InterrogationInformation extends Component {
                             pd:{
                                  name:values.label,
                                 remark:values.remark?values.remark:'',
-                                iconUrl:values.iconUrl?values.iconUrl:'',
+                                iconurl:values.iconurl?values.iconurl:'',
                                 menuname:"303",
                                 optuser:userItem.user.idcard,
-                                createuser:userItem.user.idcard,
+                                createuser:userItem.user.name,
                                 status:values.status?values.status:'1',
                                 code:values.value?values.value:'',
                                 level:'2',
@@ -408,7 +408,7 @@ export class InterrogationInformation extends Component {
             title: '图标',
             render: (text, record) => (
                 <span>
-                {text.iconUrl !== ''?<img src={text.iconUrl} style={{width:"30px",height:"30px"}} onClick={(e)=>this.zoomclickModel(text)}/>:''} 
+                {text.iconurl !== ''?<img src={text.iconurl} style={{width:"30px",height:"30px"}} onClick={(e)=>this.zoomclickModel(text)}/>:''}
                 </span>
             ),
         }, {
@@ -438,7 +438,7 @@ export class InterrogationInformation extends Component {
                 serial: serial,
                 label: interrogationInformation.label,
                 remark: interrogationInformation.remark,
-                iconUrl: interrogationInformation.iconUrl,
+                iconurl: interrogationInformation.iconurl,
                 key: interrogationInformation.key,
                 status:interrogationInformation.status,
                 optuser: interrogationInformation.optuser,
@@ -602,7 +602,7 @@ export class InterrogationInformation extends Component {
                             label="图片"
                             //hasFeedback
                             >
-                            {getFieldDecorator('iconUrl', {
+                            {getFieldDecorator('iconurl', {
                                     getValueFromEvent: this.normFile
                                 })(
                                     <Upload className="avatar-uploader" name="file" 
@@ -639,7 +639,7 @@ export class InterrogationInformation extends Component {
                         footer={null}
                         style={{textAlign:'center',}}
                         >
-                        <img src={this.state.imgtext.iconUrl} style={{width:"80%"}}/>
+                        <img src={this.state.imgtext.iconurl} style={{width:"80%"}}/>
                 </Modal> 
             </div>
 

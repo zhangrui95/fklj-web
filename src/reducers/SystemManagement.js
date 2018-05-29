@@ -178,6 +178,19 @@ const initialState = { //系统管理
               list: [],
             }
         },
+        getControlTimeCycle:{
+            reason: {
+            },
+            result: {
+                defaulttaskcycle: '',
+                outofcontroltime: '',
+            }
+        },
+        UpdateControlTimeCycle:{
+            reason: {
+            },
+            result:true
+        }
     },
         uiData: {
             menus: [
@@ -288,7 +301,7 @@ const initialState = { //系统管理
                   },
                 {
                     id: '111',
-                    menuName: '失控时间设置',
+                    menuName: '失控时间及周期设置',
                     haveSon: false,
                     isOpen: true,
                     search: 'type=rwgl',
@@ -486,7 +499,12 @@ const SystemManagement = (state=initialState, action) => {
             newState.data.redList.result.total = action.data.result.page.totalResult;
             newState.isFetching = false;
             return newState;
-
+        case 'getControlTimeCycle_succeed':
+            newState.data.getControlTimeCycle.result = action.data.result;
+            return newState;
+        case 'UpdateControlTimeCycle_succeed':
+            newState.data.UpdateControlTimeCycle.result = action.data.result;
+            return newState;
         default:
             if(store !== undefined ){
                 return store.getState().SystemManagement;

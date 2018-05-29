@@ -279,7 +279,7 @@ export class HorrorSoftware extends Component {
                 visible: true,
                 personInfo: record,
                 modalType: 'edit',
-                avatarSrc: record.iconUrl
+                avatarSrc: record.iconurl
             });
         }
     addShowModal = (record) => {
@@ -371,10 +371,10 @@ export class HorrorSoftware extends Component {
                             let creds = {
                                 pd:{
                                     name:values.label,
-                                    iconUrl:values.iconUrl?values.iconUrl:this.state.avatarSrc,
+                                    iconurl:values.iconurl?values.iconurl:this.state.avatarSrc,
                                     id:values.id.toString(),
                                     optuser:userItem.user.idcard,
-                                    createuser:userItem.user.idcard,
+                                    createuser:userItem.user.name,
                                     remark:values.remark?values.remark:'',
                                     status:values.status?values.status:'1',
                                     code:values.value?values.value:'',
@@ -397,10 +397,10 @@ export class HorrorSoftware extends Component {
                         let creds = {//表单域不一定写了所有的字段 所以要把空值通过赋值显示
                             pd:{
                                 name:values.label?values.label:'', 
-                                iconUrl:values.iconUrl?values.iconUrl:'',
+                                iconurl:values.iconurl?values.iconurl:'',
                                 menuname:"304",
                                 optuser:userItem.user.idcard,
-                                createuser:userItem.user.idcard,
+                                createuser:userItem.user.name,
                                 remark:values.remark?values.remark:'',
                                 status:values.status?values.status:'1',
                                 code:values.value?values.value:'',
@@ -465,7 +465,7 @@ export class HorrorSoftware extends Component {
             title: '图标',
             render: (text, record) => (
                 <span>
-               {text.iconUrl !== ''?<img src={text.iconUrl} style={{width:"30px",height:"30px"}} onClick={(e)=>this.zoomclickModel(text)}/>:''} 
+               {text.iconurl !== ''?<img src={text.iconurl} style={{width:"30px",height:"30px"}} onClick={(e)=>this.zoomclickModel(text)}/>:''}
                </span>
             ),
         }, {
@@ -490,7 +490,7 @@ export class HorrorSoftware extends Component {
                // key: i,
                 serial: serial,
                 label: horrorSoftware.label,
-                iconUrl: horrorSoftware.iconUrl,
+                iconurl: horrorSoftware.iconurl,
                 key: horrorSoftware.key,
                 status:HorrorSoftware.status,
                 optuser: HorrorSoftware.optuser,
@@ -630,7 +630,7 @@ export class HorrorSoftware extends Component {
                                 //hasFeedback
                                 >
 
-                                {getFieldDecorator('iconUrl', {
+                                {getFieldDecorator('iconurl', {
                                     getValueFromEvent: this.normFile
                                 })(
                                     <Upload className="avatar-uploader" name="file" 
@@ -667,7 +667,7 @@ export class HorrorSoftware extends Component {
                         footer={null}
                         style={{textAlign:'center',}}
                         >
-                        <img src={this.state.imgtext.iconUrl} style={{width:"80%"}}/>
+                        <img src={this.state.imgtext.iconurl} style={{width:"80%"}}/>
                 </Modal> 
             </div>
 
