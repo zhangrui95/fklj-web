@@ -9,10 +9,11 @@ global.configUrl = {
     //天津  http://20.3.2.31:8100
     //重庆  http://10.158.35.98:8100
     //测试主机  http://172.19.1.140:8100   http://172.19.4.4:7070
-    securityCenterUrl: "http://172.19.1.145:8100",//平时测试接口
-    securityCenterUrls: "http://172.19.12.165:8080",//跳转安全中心
-    loginUrl: "http://172.19.12.165:8080",//登陆地址
-    serverUrls:"http://172.19.12.213:8088/data-service",
+    // securityCenterUrl: "http://172.19.1.145:8100",//平时测试接口
+    securityCenterUrl: "http://172.19.12.165:8080",//平时测试接口
+    // securityCenterUrls: "http://172.19.12.165:8080",//跳转安全中心
+    // loginUrl: "http://172.19.12.165:8080",//登陆地址
+    // serverUrls:"http://172.19.12.213:8088/data-service",
     // loginUrl: "http://172.19.12.249:8100",//登陆地址
     //   securityCenterUrl: "http://172.19.12.249:8200",//平时测试接口
     //   loginUrl: "http://172.19.12.249:8100",
@@ -32,7 +33,7 @@ global.configUrl = {
   //PKI登录是否开启
   pkiLoginIsOpen: false,
   // 首页 拟来某地区展示图的配置文字
-  configureRegionText:'拟来呼人员',
+  configureRegionText:'流入人员',
   //版本号
-  versionNumber:'1.0.0.1 演示版',
+  versionNumber:'1.0.0.2 演示版',
 }
