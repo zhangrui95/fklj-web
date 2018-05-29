@@ -1,25 +1,29 @@
+const Interface = {//服务器
+  luoyang: 'http://10.58.45.4:8100',
+  jiamusi: 'http://10.116.1.215:8100',
+  tianjin: 'http://20.3.2.31:8100',
+  chongqing: 'http://10.158.35.98:8100',
+  ceshizuji1: 'http://172.19.1.140:8100',
+  ceshizuji2: 'http://172.19.4.4:7070',
+  test: 'http://172.19.1.145:7000',
+  fxdl: '/data-service',
+  lsfxdl: '/data-service-wwhc',
+  MXD: 'http://172.19.12.102:8800',//慕兴达
+  ZZH: 'http://172.19.12.213:8088/data-service',//张泽恒
+};
+const securityCenter = {//安全中心
+  test: 'http://172.19.1.145:8100',
+  ZX: 'http://172.19.12.165:8080',//张旭接口
+  pingshiTest: 'http://172.19.12.249:8200',
+};
+
+
 global.configUrl = {
   //系统名称
   sysName: '反恐利剑信息化作战系统',
 
-  Interface: {//服务器
-    luoyang: 'http://10.58.45.4:8100',
-    jiamusi: 'http://10.116.1.215:8100',
-    tianjin: 'http://20.3.2.31:8100',
-    chongqing: 'http://10.158.35.98:8100',
-    ceshizuji1: 'http://172.19.1.140:8100',
-    ceshizuji2: 'http://172.19.4.4:7070',
-    test: 'http://172.19.1.145:7000',
-    fxdl: '/data-service',
-    lsfxdl: '/data-service-wwhc',
-    MXD: 'http://172.19.12.102:8800',//慕兴达
-    ZZH: 'http://172.19.12.213:8088/data-service',//张泽恒
-  },
-  securityCenter: {//安全中心
-    test: 'http://172.19.1.145:8100',
-    ZX: 'http://172.19.12.165:8080',//张旭接口
-    pingshiTest: 'http://172.19.12.249:8200',
-  },
+
+
   securityCenterUrl: securityCenter.ZX,
   serverUrl: Interface.MXD,
   //客户区域
