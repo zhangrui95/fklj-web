@@ -10,6 +10,7 @@ const Interface = {//服务器
   lsfxdl: '/data-service-wwhc',
   MXD: 'http://172.19.12.102:8800',//慕兴达
   ZZH: 'http://172.19.12.213:8088/data-service',//张泽恒
+  pingshiTest:'http://172.19.12.249:8888'
 };
 const securityCenter = {//安全中心
   test: 'http://172.19.1.145:8100',
@@ -24,8 +25,8 @@ global.configUrl = {
 
 
 
-  securityCenterUrl: securityCenter.ZX,
-  serverUrl: Interface.MXD,
+  securityCenterUrl: securityCenter.pingshiTest,
+  serverUrl: Interface.pingshiTest,
   //客户区域
   clientArea: '黑龙江',
   //PKI登录是否开启
