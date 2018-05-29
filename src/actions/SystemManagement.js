@@ -36,7 +36,7 @@ export function getHorrorSoftwareData(path, search = '') {
 }
 
 export function PostHorrorSoftwareData(creds) {
-    let path  = '/data/selectcodeall';
+    let path  = '/data/SelectSysCode';
     return dispatch => {
         dispatch({type: "REQUEST_HORRORSOFTWARE_SYSTEM"});
         post(api + path, creds).then((json) => {
@@ -75,7 +75,7 @@ export function addHorrorSoftwareData(creds,params) {
     }
 }
 export function updateHorrorSoftwareData(creds,params) {
-    let path = "/data/updatecodeall"
+    let path = "/data/UpdateSysCode"
     return dispatch => {
         post(api + path, creds).then((json) => {
             if (json.reason === null) {
@@ -119,7 +119,7 @@ export function fetchInterrogationInformationData(path) {
 }
 
 export function PostInterrogationInformationData(creds) {
-    let path  = '/data/selectcodeall';
+    let path  = '/data/SelectSysCode';
     return dispatch => {
         dispatch({type: "REQUEST_INTERROGATIONINFORMATION_SYSTEM"});
         post(api + path, creds).then((json) => {
@@ -160,7 +160,7 @@ export function addInterrogationInformationData(creds,params) {
 
 //修改人工盘查
 export function saveIntrrrogationList(creds,params) {
-    let path = "/data/updatecodeall";
+    let path = "/data/UpdateSysCode";
     return dispatch => {
         post(api + path, creds).then((json) => {
             if (json.reason === null) {
@@ -219,7 +219,7 @@ export function getExceptionParameterReminderData(path, search = '') {
 }
 
 export function postExceptionParameterReminderData(creds) {
-    let path = '/data/selectcodeall'
+    let path = '/data/SelectSysCode'
     return dispatch => {
         post(api + path , creds).then((json) => {
             dispatch(receivedExceptionParameterReminderData(json));
@@ -239,7 +239,7 @@ export function receivedExceptionParameterReminderError(message) {
 
 //保存异常提醒参数
 export function saveExceptionParameterReminderData(creds) {
-    let path = "/data/updatecodeall";
+    let path = "/data/UpdateSysCode";
     return dispatch => {
         post(api + path,creds).then((json) => {
             if(json.reason === null){
@@ -669,7 +669,7 @@ export function fetchPlaceOfOriginPersonData(path, search = '') {
 
 export function PostPlaceOfOriginPersonData(creds) {
 
-    let path  = '/data/getdomicilepolicelistPage';
+    let path  = '/data/getDomicilePolicelistPage';
     return dispatch => {
         dispatch({type: "REQUEST_PLACEOFORIGINPERSON_SYSTEM"});
         post(api + path, creds).then((json) => {
@@ -753,7 +753,7 @@ export function fetchPlaceOfInfluxPersonData(path, search = '') {
 }
 
 export function PostPlaceOfInfluxPersonData(creds) {
-    let path  = '/data/getdomicilepolicelistPage';
+    let path  = '/data/getDomicilePolicelistPage';
     return dispatch => {
         dispatch({type: "REQUEST_PLACEOFINFLUXPERSON_SYSTEM"});
         post(api + path, creds).then((json) => {
@@ -831,7 +831,7 @@ export function receiveRedListError(message) {
 }
 
 export function GetRedList(creds) {
-    const path = '/data/selectcodeall'
+    const path = '/data/SelectSysCode'
     return dispatch => {
         dispatch({type: "REQUEST_REDLIST_SYSTEM"});
         post(api + path, creds).then((json) => {
@@ -893,7 +893,7 @@ export const PLACE_PROVINCE_DATA = 'place_province_data';
 export const PLACE_PROVINCE_ERROR = 'place_province_error';
 //获取省份集合
 export function postPlaceProvinceData(id) {
-    let path = '/data/getprovince';
+    let path = '/data/getProvince';
     let creds={
         currentPage:1,
         entityOrField:true,
@@ -980,7 +980,7 @@ export function delRedList(creds) {
 //             }]
 //         }
     
-//         let path = '/data/getprovince';
+//         let path = '/data/getProvince';
 //         console.log('id',id);
 //         let creds={
 //            // nr:nr,
@@ -1030,7 +1030,7 @@ export const CODE_DATA = 'code_data';
 export const CODE_ERROR = 'code_error';
 //获取编码
 export function postCodeData(id) {
-    let path = '/data/selectcodeall';
+    let path = '/data/SelectSysCode';
     let creds={
         currentPage:1,
         entityOrField:true,
@@ -1072,7 +1072,7 @@ export const CODE_TABLE_DATA = 'code_table_data';
 export const CODE_TABLE_ERROR = 'code_table_error';
 //获取编码
 export function postCodeTableData(creds) {
-    let path = '/data/selectcodeall';
+    let path = '/data/SelectSysCode';
     
     return dispatch => {
         dispatch({type: "REQUEST_CODELIST_SYSTEM"});
@@ -1116,7 +1116,7 @@ export function addpostCodeTableData(creds,params) {
     }
 }
 export function updatepostCodeTableData(creds,params) {
-    let path = '/data/updatecodeall';
+    let path = '/data/UpdateSysCode';
     return dispatch => {
         post(api + path, creds).then((json) => {
             if (json.reason === null) {

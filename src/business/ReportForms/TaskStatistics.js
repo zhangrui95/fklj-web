@@ -87,15 +87,10 @@ class TaskStatistics extends Component {
             startTimeSet: this.state.beginDate,
             endTimeSet: this.state.endDate,
         });
-        if ( this.state.beginDate!= "" && this.state.endDate != "" && this.state.beginDate > this.state.endDate) {
-            message.error('提示：开始时间不能大于结束时间！');
-            return;
-        }else{
-            let creds = {startTime: this.state.beginDate, endTime: this.state.endDate,}
-            store.dispatch(getSubtaskListGroupByType(creds));
-            store.dispatch(getSubtaskListGroupByCycle(creds));
-            store.dispatch(getSubtaskCount(creds));
-        }
+        let creds = {startTime: this.state.beginDate, endTime: this.state.endDate,}
+        store.dispatch(getSubtaskListGroupByType(creds));
+        store.dispatch(getSubtaskListGroupByCycle(creds));
+        store.dispatch(getSubtaskCount(creds));
     }
 
     componentDidMount() {
@@ -151,6 +146,10 @@ class TaskStatistics extends Component {
         let endDateValue = '';
         if (end === '') {} else {
             endDateValue = moment(end, dateFormat);
+        }
+        if ( this.state.beginDate!= "" && this.state.endDate != "" && this.state.beginDate > this.state.endDate) {
+            message.error('提示：开始时间不能大于结束时间！');
+            return;
         }
         return (
             <div className="sliderWrap" style={{borderBottom: "0", height: 'auto'}}>

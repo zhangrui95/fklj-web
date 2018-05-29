@@ -116,19 +116,19 @@ class SystemManagementRight extends Component{
                 break
 
             case constants.SYSTEMMANAGEMENT_MENU_PLACEOFORIGINPERSON:
-                content = <PlaceOfOriginPerson  />
+                content = <PlaceOfOriginPerson />
                 break
             case constants.SYSTEMMANAGEMENT_MENU_PLACEOFINFLUXPERSON:
-                content = <PlaceOfInfluxPerson  />
+                content = <PlaceOfInfluxPerson />
                 break
             case constants.SYSTEMMANAGEMENT_MENU_REDLIST:
-              content = <RedList  redList={redList}/>
+              content = <RedList redList={redList} />
               break
               case constants.SYSTEMMANAGEMENT_MENU_CODE:
-              content = <CodingTable codeTable={codeTable}/>
+              content = <CodingTable codeTable={codeTable} />
               break
             case constants.SYSREMSETUP_MODULE_TIME:
-                content = <AddSystem/>
+                content = <AddSystem />
                 break
             default:
                 break

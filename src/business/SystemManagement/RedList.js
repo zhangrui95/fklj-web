@@ -506,8 +506,10 @@ const SearchArea = React.createClass({
                             placeholder='' onChange={this.handleEndDeteClick}/>
             );
         }
-
-
+        if (this.state.redList_endTime < this.state.redList_beginTime) {
+            message.error('提示：开始时间不能大于结束时间！');
+            return false;
+        }
         return (
             <div className="marLeft40 fl z_searchDiv">
                 <label htmlFor="" className="font14">姓名：</label>

@@ -431,25 +431,21 @@ const SearchArea = React.createClass({
             whiteList_idNumber = this.state.whiteList_idNumber;
             whiteList_dateBegin = this.state.whiteList_dateBegin;
             whiteList_dateEnd = this.state.whiteList_dateEnd;
-            if ( this.state.whiteList_dateBegin!= "" && this.state.whiteList_dateEnd!= "" && this.state.whiteList_dateBegin > this.state.whiteList_dateEnd) {
-                message.error('提示：开始时间不能大于结束时间！');
-                return;
-            } else {
-                let creds = {
-                    currentPage: 1,
-                    entityOrField: true,
-                    pd: {
-                        beginTime: this.state.whiteList_dateBegin,
-                        endTime: this.state.whiteList_dateEnd,
-                        whiteList_softName: this.state.whiteList_softName,
-                        whiteList_idNumber: this.state.whiteList_idNumber,
-                    },
-                    showCount: constants.pageSize
-                }
-                store.dispatch(PostWhiteListData(creds));
-                this.props.serchChange(
-                    this.state.whiteList_softName, this.state.whiteList_idNumber, this.state.whiteList_dateBegin, this.state.whiteList_dateEnd)
+            let creds = {
+                currentPage: 1,
+                entityOrField: true,
+                pd: {
+                    beginTime: this.state.whiteList_dateBegin,
+                    endTime: this.state.whiteList_dateEnd,
+                    whiteList_softName: this.state.whiteList_softName,
+                    whiteList_idNumber: this.state.whiteList_idNumber,
+                },
+                showCount: constants.pageSize
             }
+            store.dispatch(PostWhiteListData(creds));
+            this.props.serchChange(
+                this.state.whiteList_softName, this.state.whiteList_idNumber, this.state.whiteList_dateBegin, this.state.whiteList_dateEnd)
+
         },
         handleClickClear: function() { //点击创建
             store.dispatch(changeShade('block'));
@@ -487,6 +483,10 @@ const SearchArea = React.createClass({
             let endDateValue = '';
             if (whiteList_dateEnd === '') {} else {
                 endDateValue = moment(whiteList_dateEnd, dateFormat);
+            }
+            if ( this.state.whiteList_dateBegin!= "" && this.state.whiteList_dateEnd!= "" && this.state.whiteList_dateBegin > this.state.whiteList_dateEnd) {
+                message.error('提示：开始时间不能大于结束时间！');
+                return;
             }
             return (
                 <div className="marLeft40 fl z_searchDiv">

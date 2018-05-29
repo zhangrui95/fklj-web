@@ -733,25 +733,20 @@ const SearchArea = React.createClass({
         });
     },
     handleClick: function() { //点击查询
-        if ( this.state.InterrogationInformation_dateBegin!= "" && this.state.InterrogationInformation_dateEnd!= "" && this.state.InterrogationInformation_dateBegin > this.state.InterrogationInformation_dateEnd) {
-            message.error('提示：开始时间不能大于结束时间！');
-            return;
-        } else {
-            let creds = {
-                currentPage: 1,
-                entityOrField: true,
-                pd: {
-                    beginTime: this.state.InterrogationInformation_dateBegin,
-                    endTime: this.state.InterrogationInformation_dateEnd,
-                    name: this.state.name,
-                    pid:"198"
-                },
-                showCount: 10
-            }
-            store.dispatch(PostInterrogationInformationData(creds));
-            this.props.serchChange(
-                this.state.name, this.state.InterrogationInformation_dateBegin, this.state.InterrogationInformation_dateEnd)
+        let creds = {
+            currentPage: 1,
+            entityOrField: true,
+            pd: {
+                beginTime: this.state.InterrogationInformation_dateBegin,
+                endTime: this.state.InterrogationInformation_dateEnd,
+                name: this.state.name,
+                pid:"198"
+            },
+            showCount: 10
         }
+        store.dispatch(PostInterrogationInformationData(creds));
+        this.props.serchChange(
+            this.state.name, this.state.InterrogationInformation_dateBegin, this.state.InterrogationInformation_dateEnd)
     },
     handleClickClear: function() { //点击创建
         store.dispatch(changeShade('block'));
@@ -790,9 +785,10 @@ const SearchArea = React.createClass({
         if (InterrogationInformation_dateEnd === '') {} else {
             endDateValue = moment(InterrogationInformation_dateEnd, dateFormat);
         }
-
-       
-        
+        if ( this.state.InterrogationInformation_dateBegin!= "" && this.state.InterrogationInformation_dateEnd!= "" && this.state.InterrogationInformation_dateBegin > this.state.InterrogationInformation_dateEnd) {
+            message.error('提示：开始时间不能大于结束时间！');
+            return;
+        }
         return (
             <div className="marLeft40 fl z_searchDiv">
                 <label htmlFor="" className="font14">名称：</label>
