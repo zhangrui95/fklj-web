@@ -502,7 +502,7 @@ export class OldWithDay extends Component {
                                 </div> */}
                                 <Row>
                                     <Col span={4}>
-                                        <img src={recordPerson ? recordPerson.zpurl ? recordPerson.zpurl : "/images/zanwu.png" : '/images/zanwu.png'} />
+                                        <img src={recordPerson ? recordPerson.zpurl ? recordPerson.zpurl : "/images/zanwu.png" : ''} style={{width:'130px',height:'160px'}}/>
                                     </Col>
                                     <Col span={19}>
                                         <Row style={{ marginBottom: '10px' }}>
@@ -857,7 +857,7 @@ const SearchArea = React.createClass({
                     <label htmlFor="" className="font14">所属机构：</label>
                     <Input value={subtask_name} style={{ width: '230px', marginRight: "10px" }} type="text" id='subtask_name' placeholder='请输入所属机构名称' onChange={this.handleSubtaskNameClick} />
                     <label htmlFor="" className="font14">盘查警员：</label>
-                    <Input style={{ width: '230px', marginRight: "10px" }} type="text" id='police_name' placeholder='请输入警员姓名' value={police_name} onChange={this.handlePoliceNameClick} />
+                    <Input style={{ width: '230px', marginRight: "10px" }} type="text" id='police_name' placeholder='请输入盘查警员姓名' value={police_name} onChange={this.handlePoliceNameClick} />
                 </div>
                 <div style={{ marginLeft: "2%", marginTop: "20px" }}>
                     <label htmlFor="" className="font14">起止时间：</label>

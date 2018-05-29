@@ -187,7 +187,7 @@ const initialState = { //盘查管理
             },
             {
                 id: '102',
-                menuName: '其他任务',
+                menuName: '其他',
                 isOpen: false,
                 search: 'type=pcgl',
                 haveSon: false,

@@ -740,6 +740,7 @@ export class PatrolTask extends Component {
             current: page.currentPage,
             total: page.totalResult,
             pageSize: page.showCount,
+            showQuickJumper: true,
 
         }
         // 子任务 分页

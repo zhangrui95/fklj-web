@@ -282,6 +282,10 @@ class Home extends Component {
         //     data: result,
         //     show: true
         // });
+        let param = {
+            pd: {}
+        }
+        store.dispatch(postHaveBeenchecked_hushi_Data(param));
     }
     render() {
         let mapType = this.state.mapType;
@@ -321,7 +325,7 @@ class Home extends Component {
                             {/*活动统计*/}
                             <ActiveDataStatistics dateSet={dateSet} />
                             {/*</div>*/}
-                            <Websocket url='ws://172.19.12.213:8888/myHandler' onMessage={this.handleData} />
+                            <Websocket url='ws://172.19.12.102:8800/myHandler' onMessage={this.handleData} />
                         </div>
 
                     </div>
@@ -344,7 +348,6 @@ class ChinaMap extends Component {
     }
 
     mapCity = (e) => {
-        console.log(e)
         if (e.name.length > 0) {
             this.setState({
                 mapType: e.name.toString(),
@@ -719,7 +722,7 @@ class TaskStatistics extends Component {
         // if (taskStatisticsList.length > 0) {
         //     data = [taskStatisticsList[5].value, taskStatisticsList[4].value, taskStatisticsList[3].value, taskStatisticsList[2].value, taskStatisticsList[1].value, taskStatisticsList[0].value];
         // }
-        data = [7, 17, 27, 3, 12, 9]
+        // data = [7, 17, 27, 3, 12, 9]
         var sourcesOption = {
             color: ['#F88A6F'],
             textStyle: {
@@ -793,12 +796,12 @@ class TaskStatistics extends Component {
 
             <div style={{ position: "absolute", top: "15px", left: "15px", width: "25%", height: "50%", }}>
                 {/*隐藏的按钮状态*/}
-                <DeepBlueBtnY width="25px" text="拟来呼人员" borderRight="2px solid #0C1CD8" borderLeft="0" borderTop="0" display={isShowBtn} onClick={this.BtnClick} />
+                <DeepBlueBtnY width="25px" text={global.configUrl.configureRegionText} borderRight="2px solid #0C1CD8" borderLeft="0" borderTop="0" display={isShowBtn} onClick={this.BtnClick} />
                 <div style={{ padding: "10px 15px", background: "rgba(25,41,85,0.5)", display: isShowDiv, height: '99.9%' }}>
 
                     {/*标题*/}
                     <div>
-                        <p style={titleP}>拟来呼人员</p>
+                        <p style={titleP}>{global.configUrl.configureRegionText}</p>
                         <img src="/images/guanbi.png" alt="" style={{ float: "right", marginLeft: "20px", cursor: "pointer" }} onClick={this.chartsClick} />
                         <div style={clear}></div>
                     </div>
@@ -819,7 +822,7 @@ class TaskStatistics extends Component {
                                 {/*<Link to='/DynamicControl'>*/}
                                 <p style={p25}>
                                     {/*<span>{inventoryTotalData}</span>*/}
-                                    <span>108</span>
+                                    <span>0</span>
                                 </p>
                                 {/*</Link>*/}
                             </div>
@@ -869,8 +872,9 @@ class PopulationStatistics extends Component {
 
 
         // let isFetching = store.getState().Home.data.populationData.isFetching;
-        let isFetching = false;
+        // let isFetching = false;
         let homecontrolpersonhushiDataList = store.getState().Home.data.homecontrolpersonhushiData.result.list;
+        let isFetching = store.getState().Home.data.homecontrolpersonhushiData.isFetching;
         let dataList = [];
         for (let i = 0; i < homecontrolpersonhushiDataList.length; i++) {
             let item = homecontrolpersonhushiDataList[i];
@@ -950,12 +954,12 @@ class PopulationStatistics extends Component {
         let isShowDiv = this.state.isShowDiv;
         let queryType = this.state.queryType;
         let type = 'follow';
-        // let isFetching = store.getState().Home.data.populationData.isFetching;
+
         return (
 
             <div style={{ position: "absolute", bottom: "15px", left: "15px", width: "25%", height: "40%" }}>
                 <DeepBlueBtnY width="25px" text="管控人员" borderRight="2px solid #0C1CD8" borderLeft="0" borderTop="0" display={isShowBtn} onClick={this.BtnClick} />
-                <div style={{ padding: "10px 15px", background: "rgba(25,41,85,0.5)", position: "relative", display: isShowDiv, height: "99.9%" }}>
+                <div style={{ padding: "10px 15px", background: "rgba(25,41,85,0.5)", position: "relative", display: isShowDiv, height: "99.9%", position: 'relative' }}>
 
                     {/*标题*/}
                     <div>
@@ -1096,7 +1100,7 @@ class ActiveDataStatistics extends Component {
         return (
             <div style={{ position: "absolute", top: "15px", right: "15px", width: "25%", height: "50%", minHeight: '340px' }}>
                 <DeepBlueBtnY width="25px" text="派出所任务统计" borderLeft="2px solid #0C1CD8" borderRight="0" borderTop="0" float="right" display={isShowBtn} onClick={this.BtnClick} />
-                <div style={{ padding: "10px 15px", background: "rgba(25,41,85,0.5)", display: isShowDiv, height: '99.9%' }}>
+                <div style={{ padding: "10px 15px", background: "rgba(25,41,85,0.5)", display: isShowDiv, height: '99.9%', position: 'relative' }}>
                     {/*标题*/}
                     <div>
                         <img src="/images/guanbi.png" alt="" style={{ float: "left", marginRight: "20px" }} onClick={this.chartsClick} />
@@ -1104,7 +1108,13 @@ class ActiveDataStatistics extends Component {
                         <div style={clear}></div>
                     </div>
                     <div className="home-table" style={{ padding: "0 15px" }}>
-                        <Table locale={{ emptyText: '暂无数据' }} columns={columns} dataSource={dataList} size="small" pagination={pagination} />
+                        {isFetching ?
+                            <div style={{ textAlign: "center", position: "absolute", left: "45%", top: "50%" }}>
+                                <Spin size="large" />
+                            </div> :
+                            <Table locale={{ emptyText: '暂无数据' }} columns={columns} dataSource={dataList} size="small" pagination={pagination} />
+                        }
+
                     </div>
                 </div>
             </div>
@@ -1176,12 +1186,10 @@ class Personnel extends Component {
         let isShowDiv = this.state.isShowDiv;
         let personType = this.props.personType;
         let personnelList = [];
-        let isFetching;
         if (personType === "ypcrw") {
             //alert(111);
             // personnelList = store.getState().Home.data.personnelKeyList.result.list;
             personnelList = [{ address: "玉泉区兴隆巷1012单元104", birth: "1987-11-21 00:00:00", check_exception: 0, gzzt: 0, idcard: "450102198711210265", name: "流出人员", nation: "汉族", personId: "6bb9b08102434a9f8511440382b19679", recordId: "23012419800101005520180125150933078", sex: "女", visibale: 1, zpurl: "" }, { address: "玉泉区兴隆巷1012单元104", birth: "1987-11-21 00:00:00", check_exception: 0, gzzt: 0, idcard: "450102198711210265", name: "流出人员", nation: "汉族", personId: "6bb9b08102434a9f8511440382b19679", recordId: "23012419800101005520180125150933078", sex: "女", visibale: 1, zpurl: "" }, { address: "玉泉区兴隆巷1012单元104", birth: "1987-11-21 00:00:00", check_exception: 0, gzzt: 0, idcard: "450102198711210265", name: "流出人员", nation: "汉族", personId: "6bb9b08102434a9f8511440382b19679", recordId: "23012419800101005520180125150933078", sex: "女", visibale: 1, zpurl: "" }];
-            isFetching = store.getState().Home.data.personnelKeyList.isFetching;
         }
         let Lists = [];
         let isNull = true;
@@ -1199,11 +1207,11 @@ class Personnel extends Component {
         }
         // 已完成任务
         let data = store.getState().Home.data.haveBeenCheckedData.result;
-
+        let isFetching = store.getState().Home.data.haveBeenCheckedData.isFetching;
         return (
             <div>
                 <DeepBlueBtnY width="25" text={this.props.text} borderLeft="2px solid #0C1CD8" borderRight="0" borderTop="0" float="right" display={isShowBtn} onClick={this.BtnClick} />
-                <div style={{ padding: "10px 10px", background: "rgba(25,41,85,0.5)", height: "100%", display: isShowDiv }}>
+                <div style={{ padding: "10px 10px", background: "rgba(25,41,85,0.5)", height: "100%", display: isShowDiv,position:'relative' }}>
                     {/*标题*/}
                     <div style={{ borderBottom: "1px solid #585c77" }}>
                         <img src="/images/guanbi.png" alt="" style={{ float: 'left', marginRight: "20px" }} onClick={this.chartsClick} />
@@ -1225,7 +1233,13 @@ class Personnel extends Component {
                             </Carousel>
 
                         } */}
-                        <PersonnelLst personIndex={data} />
+                        {isFetching ?
+                            <div style={{ textAlign: "center", position: "absolute", left: "45%", top: "50%" }}>
+                                <Spin size="large" />
+                            </div> :
+                            <PersonnelLst personIndex={data} />
+                        }
+
                     </div>
 
                 </div>
@@ -1242,10 +1256,11 @@ class PersonnelLst extends Component {
             <div style={{ marginTop: "10px", height: "200", padding: "0 16px" }}>
                 {/*<Link to={toElectronicArchivesUrl}>*/}
                 <div >
-                    {personIndex ? personIndex.zpurl !== '' ? <img src={personIndex.zpurl} alt="" style={{ width: "16%", height: "auto", float: "left", marginTop: 15 }} /> :
-                        <img src='../images/zanwu.png' alt="" style={{ width: "auto", height: "55%", float: "left", marginTop: 15 }} /> : <img src='../images/zanwu.png' alt="" style={{ width: "auto", height: "55%", float: "left", marginTop: 15 }} />
+                    {personIndex ? personIndex.zpurl !== '' ? <img src={personIndex.zpurl} alt="" style={{ width: "80px", height: "110px", float: "left", marginTop: 15 }} /> :
+                        <img src='../images/zanwu.png' alt="" style={{ width: "80px", height: "110px", float: "left", marginTop: 15 }} /> :
+                        <img src='../images/zanwu.png' alt="" style={{ width: "80px", height: "110px", float: "left", marginTop: 15 }} />
                     }
-                    <div style={{ float: "left", marginLeft: "5%", marginTop: 20, width: '60%' }}>
+                    <div style={{ float: "left", marginLeft: "5%", marginTop: 20, }}>
                         <p style={{
                             fontSize: 14, color: "#fff", width: '98%', overflow: 'hidden',
                             textOverflow: 'ellipsis', whiteSpace: 'nowrap',
@@ -1262,7 +1277,7 @@ class PersonnelLst extends Component {
                     <div style={clear}></div>
                 </div>
                 <div style={{ color: '#f89448', marginTop: '16px' }}>
-                    <div>由 {personIndex ? personIndex.police_unit : '派出所'}{personIndex ? personIndex.police_name : '警员'} 盘查</div>
+                    <div>由 {personIndex ? personIndex.police_unit : '派出所'}，{personIndex ? personIndex.police_name : '警员'} 盘查</div>
                     <div>{personIndex ? getMyDate(personIndex.checktime / 1000) : ''}</div>
                 </div>
                 {/*</Link>*/}

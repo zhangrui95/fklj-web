@@ -31,6 +31,8 @@ global.configUrl = {
   clientArea: '黑龙江',
   //PKI登录是否开启
   pkiLoginIsOpen: false,
+  // 首页 拟来某地区展示图的配置文字
+  configureRegionText:'拟来呼人员',
   //版本号
   versionNumber:'2.0.0.10',
 }
