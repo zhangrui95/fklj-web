@@ -38,7 +38,7 @@ export const DYNAMICCONTROL_MODULE = 'dynamiccontrol_module';
 export const AREAMANAGEMENT_MODULE = '卡点管理';
 //卡点管理模块
 export const CONTROLPERSONNEL_MODULE = '管控人员';
-export const CONTROLPERSONNEL_MODULE_GZ_NLHRY = '拟来呼人员';
+export const CONTROLPERSONNEL_MODULE_GZ_NLHRY = '流入人员';
 export const CONTROLPERSONNEL_MODULE_GZ_ZALY = '治安来源';
 export const CONTROLPERSONNEL_MODULE_GK_WGK = '未管控';
 export const CONTROLPERSONNEL_MODULE_GK_YGK = '已管控';
