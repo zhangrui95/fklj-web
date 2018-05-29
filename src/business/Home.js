@@ -865,7 +865,18 @@ class PopulationStatistics extends Component {
             store.dispatch(postConcernTotalData(creds));
         }
     }
-
+    chartsClick = () => {
+        this.setState({
+            isShowBtn: "block",
+            isShowDiv: "none"
+        });
+    }
+    BtnClick = () => {
+        this.setState({
+            isShowBtn: "none",
+            isShowDiv: "block"
+        });
+    }
     render() {
         // let populationDataList = store.getState().Home.data.populationData.result.list;
         // let populationDataList = [{name: "流动人员", value: 18},{name: "常住人员", value: 5},{name: "暂住人员", value:60}];
@@ -1211,7 +1222,7 @@ class Personnel extends Component {
         return (
             <div>
                 <DeepBlueBtnY width="25" text={this.props.text} borderLeft="2px solid #0C1CD8" borderRight="0" borderTop="0" float="right" display={isShowBtn} onClick={this.BtnClick} />
-                <div style={{ padding: "10px 10px", background: "rgba(25,41,85,0.5)", height: "100%", display: isShowDiv,position:'relative' }}>
+                <div style={{ padding: "10px 10px", background: "rgba(25,41,85,0.5)", height: "100%", display: isShowDiv, position: 'relative' }}>
                     {/*标题*/}
                     <div style={{ borderBottom: "1px solid #585c77" }}>
                         <img src="/images/guanbi.png" alt="" style={{ float: 'left', marginRight: "20px" }} onClick={this.chartsClick} />
