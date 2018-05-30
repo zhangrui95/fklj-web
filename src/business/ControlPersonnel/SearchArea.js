@@ -627,134 +627,138 @@ export  class SearchArea extends Component{
         )
         return (
             <div className="marLeft40 fl z_searchDiv">
-                <label htmlFor="" className="font14">身份证号：</label>
-                <Input style={{width:'230px',marginRight:"10px"}} type="text"  id='name' placeholder='请输入身份证号'  value={cardId} onChange={this.handleCardChange}/>
-                <label htmlFor="" className="font14">姓名：</label>
-                <Input style={{width:'130px',marginRight:"10px"}} type="text"  id='name' placeholder='请输入人员姓名'  value={name}  onChange={this.handleNameChange}/>
-                <label htmlFor="" className="font14">居住类型：</label>
-                <Select value={status} style={{ width: 100 ,marginRight:"10px" }} onChange={this.statusChange} notFoundContent='暂无'>
-                    <Option value="">全部</Option>
-                    <Option value="0">常住</Option>
-                    <Option value="1">暂住</Option>
-                    <Option value="2">流动</Option>
-                </Select>
-                {ToskSearch}
-                <label htmlFor="" className="font14">更新时间：</label>
-                <DatePicker format={dateFormat} allowClear={false} style={{marginRight:"10px",width:'130px'}} value={beginDateValue} placeholder="请选择日期" onChange={this.handleBeginDeteClick}/>
-                <span className="font14" style={{margin:"0 10px 0 0"}}>至</span>
-                <DatePicker format={dateFormat} allowClear={false} style={{marginRight:"10px",width:'130px'}} placeholder="请选择日期"  value={endDateValue} onChange={this.handleEndDeteClick}/>
-                <ShallowBlueBtn width="80px" text="查询" margin="0 10px 0 0" onClick={this.handleClick} />
-                <ShallowBlueBtn width="80px" text="重置" margin="0 10px 0 0" onClick={this.inits} />
-                <div>
+                <span style={{float:'left',marginTop:'10px'}}>
+                    <label htmlFor="" className="font14">身份证号：</label>
+                    <Input style={{width:'230px',marginRight:"10px"}} type="text"  id='name' placeholder='请输入身份证号'  value={cardId} onChange={this.handleCardChange}/>
+                    <label htmlFor="" className="font14">姓名：</label>
+                    <Input style={{width:'130px',marginRight:"10px"}} type="text"  id='name' placeholder='请输入人员姓名'  value={name}  onChange={this.handleNameChange}/>
+                    <label htmlFor="" className="font14">居住类型：</label>
+                    <Select value={status} style={{ width: 100 ,marginRight:"10px" }} onChange={this.statusChange} notFoundContent='暂无'>
+                        <Option value="">全部</Option>
+                        <Option value="0">常住</Option>
+                        <Option value="1">暂住</Option>
+                        <Option value="2">流动</Option>
+                    </Select>
+                    {ToskSearch}
+                </span>
+                <span style={{float:'left',marginTop:'10px'}}>
+                    <label htmlFor="" className="font14">更新时间：</label>
+                    <DatePicker format={dateFormat} allowClear={false} style={{marginRight:"10px",width:'130px'}} value={beginDateValue} placeholder="请选择日期" onChange={this.handleBeginDeteClick}/>
+                    <span className="font14" style={{margin:"0 10px 0 0"}}>至</span>
+                    <DatePicker format={dateFormat} allowClear={false} style={{marginRight:"10px",width:'130px'}} placeholder="请选择日期"  value={endDateValue} onChange={this.handleEndDeteClick}/>
+                    <ShallowBlueBtn width="80px" text="查询" margin="0 10px 0 0" onClick={this.handleClick} />
+                    <ShallowBlueBtn width="80px" text="重置" margin="0 10px 0 0" onClick={this.inits} />
+                </span>
+                <div style={{width:'100%',float:'left'}}>
                     {btns}
-                    <Modal style={{top:"20%"}}
-                           title={this.state.ModalTitle}
-                           visible={this.state.addModal}
-                           footer={null}
-                           onCancel={this.hideModal}
-                           width={600}
-                           maskClosable={false}
-                    >
-                        <div style={{margin:'0 0 16px 0'}}>
-                            <Select style={{width:'450px',marginRight:"10px"}} placeholder='请选择任务' value={this.state.ToskId} onChange={this.getSelectTosk} showSearch={true}  filterOption={false} onSearch={this.getSelectSearch}>
-                                {children}
-                            </Select>
-                            <ShallowBlueBtn width="80px" text="确定" margin="0 0 0 10px" onClick={this.choiceTask} />
-                            {/*<ShallowBlueBtn width="80px" text="取消" onClick={this.hideModal} />*/}
-                        </div>
-                    </Modal>
-                    <Modal style={{top:"38%"}}
-                           title="提示"
-                           visible={this.state.prompt}
-                           footer={null}
-                           maskClosable={false}
-                           closable={false}
-                    >
-                        <p style={{fontSize:"16px",}}>{this.state.promptText}</p>
-                        <p style={{marginTop:"20px",textAlign:"center"}}>
-                            <Button style={{margin:'0 20px 0 0 ',width:"80px"}} onClick={this.state.prompType==='export'? this.exportModal:this.downloadModal} className="btn_ok">
-                                确定
-                            </Button>
-                            <Button style={{margin:'',width:"80px"}} onClick={this.hideModal} className="btn_delete">
-                                取消
-                            </Button>
-                        </p>
-
-                    </Modal>
-                    <Modal style={{top:"20%"}}
-                           title="自定义字段"
-                           visible={this.state.zdyModal}
-                           footer={null}
-                           className="ModalList"
-                           onCancel={this.hideModal}
-                           maskClosable={false}
-                    >
-                        <Table className={newWord.length < 1 ? 'noneDiv': 'activeDiv'} columns={list} dataSource={newWord} bordered  pagination={false} showHeader={false} />
-                        <p style={{marginTop:"20px",textAlign:"center"}}>
-                            <Button style={{margin:'0 15px 0 0 ',width:'100%',fontSize:'30px',lineHeight:'0'}} onClick={() => this.addNewsWord('add')} className="btn_ok">
-                                +
-                            </Button>
-                        </p>
-                    </Modal>
-                    <Modal style={{top:"38%"}}
-                           title="自定义字段"
-                           visible={this.state.zdyModals}
-                           footer={null}
-                           onCancel={this.hideModals}
-                           maskClosable={false}
-                    >
-                        <Form>
-                            <FormItem
-                                {...formItemLayout}
-                                label="字段名称"
-                            >
-                                <Input value={wordName} onChange={this.changeWordName}/>
-                            </FormItem>
-                            <FormItem
-                                {...formItemLayout}
-                                label="字段类型"
-                            >
-                                <Select value={wordType} onChange={this.getSelects}>
-                                    <Option value="0">文本</Option>
-                                    <Option value="1">下拉框</Option>
-                                </Select>
-                            </FormItem>
-                            <FormItem
-                                {...formItemLayout}
-                                label="下拉值"
-                                style={showInput}
-                            >
-                                <Input value={OptionWords} onChange={this.getOptions}/>
-                            </FormItem>
-                        </Form>
-                        <p style={{marginTop:"20px",textAlign:"center"}}>
-                            <Button htmlType="submit" onClick={this.saveNewWord} className="btn_ok">
-                                保存
-                            </Button>
-                            <Button style={showDel} onClick={this.getDelete} className="btn_delete">
-                                删除
-                            </Button>
-                        </p>
-                    </Modal>
-                    <Modal style={{top:"38%"}}
-                           title="提示"
-                           visible={this.state.visible}
-                           footer={null}
-                           maskClosable={false}
-                           closable={false}
-                    >
-                        <p style={{fontSize:"16px",}}>是否确定删除该自定义字段？</p>
-                        <p style={{marginTop:"20px",textAlign:"center"}}>
-                            <Button style={{margin:'0 20px 0 0 ',width:"80px"}} onClick={this.hideModalOk} className="btn_ok">
-                                确定
-                            </Button>
-                            <Button style={{margin:'',width:"80px"}} onClick={this.hideDel} className="btn_delete">
-                                取消
-                            </Button>
-                        </p>
-                    </Modal>
                     <div className="clear"></div>
                 </div>
+                <Modal style={{top:"20%"}}
+                       title={this.state.ModalTitle}
+                       visible={this.state.addModal}
+                       footer={null}
+                       onCancel={this.hideModal}
+                       width={600}
+                       maskClosable={false}
+                >
+                    <div style={{margin:'0 0 16px 0'}}>
+                        <Select style={{width:'450px',marginRight:"10px"}} placeholder='请选择任务' value={this.state.ToskId} onChange={this.getSelectTosk} showSearch={true}  filterOption={false} onSearch={this.getSelectSearch}>
+                            {children}
+                        </Select>
+                        <ShallowBlueBtn width="80px" text="确定" margin="0 0 0 10px" onClick={this.choiceTask} />
+                        {/*<ShallowBlueBtn width="80px" text="取消" onClick={this.hideModal} />*/}
+                    </div>
+                </Modal>
+                <Modal style={{top:"38%"}}
+                       title="提示"
+                       visible={this.state.prompt}
+                       footer={null}
+                       maskClosable={false}
+                       closable={false}
+                >
+                    <p style={{fontSize:"16px",}}>{this.state.promptText}</p>
+                    <p style={{marginTop:"20px",textAlign:"center"}}>
+                        <Button style={{margin:'0 20px 0 0 ',width:"80px"}} onClick={this.state.prompType==='export'? this.exportModal:this.downloadModal} className="btn_ok">
+                            确定
+                        </Button>
+                        <Button style={{margin:'',width:"80px"}} onClick={this.hideModal} className="btn_delete">
+                            取消
+                        </Button>
+                    </p>
+
+                </Modal>
+                <Modal style={{top:"20%"}}
+                       title="自定义字段"
+                       visible={this.state.zdyModal}
+                       footer={null}
+                       className="ModalList"
+                       onCancel={this.hideModal}
+                       maskClosable={false}
+                >
+                    <Table className={newWord.length < 1 ? 'noneDiv': 'activeDiv'} columns={list} dataSource={newWord} bordered  pagination={false} showHeader={false} />
+                    <p style={{marginTop:"20px",textAlign:"center"}}>
+                        <Button style={{margin:'0 15px 0 0 ',width:'100%',fontSize:'30px',lineHeight:'0'}} onClick={() => this.addNewsWord('add')} className="btn_ok">
+                            +
+                        </Button>
+                    </p>
+                </Modal>
+                <Modal style={{top:"38%"}}
+                       title="自定义字段"
+                       visible={this.state.zdyModals}
+                       footer={null}
+                       onCancel={this.hideModals}
+                       maskClosable={false}
+                >
+                    <Form>
+                        <FormItem
+                            {...formItemLayout}
+                            label="字段名称"
+                        >
+                            <Input value={wordName} onChange={this.changeWordName}/>
+                        </FormItem>
+                        <FormItem
+                            {...formItemLayout}
+                            label="字段类型"
+                        >
+                            <Select value={wordType} onChange={this.getSelects}>
+                                <Option value="0">文本</Option>
+                                <Option value="1">下拉框</Option>
+                            </Select>
+                        </FormItem>
+                        <FormItem
+                            {...formItemLayout}
+                            label="下拉值"
+                            style={showInput}
+                        >
+                            <Input value={OptionWords} onChange={this.getOptions}/>
+                        </FormItem>
+                    </Form>
+                    <p style={{marginTop:"20px",textAlign:"center"}}>
+                        <Button htmlType="submit" onClick={this.saveNewWord} className="btn_ok">
+                            保存
+                        </Button>
+                        <Button style={showDel} onClick={this.getDelete} className="btn_delete">
+                            删除
+                        </Button>
+                    </p>
+                </Modal>
+                <Modal style={{top:"38%"}}
+                       title="提示"
+                       visible={this.state.visible}
+                       footer={null}
+                       maskClosable={false}
+                       closable={false}
+                >
+                    <p style={{fontSize:"16px",}}>是否确定删除该自定义字段？</p>
+                    <p style={{marginTop:"20px",textAlign:"center"}}>
+                        <Button style={{margin:'0 20px 0 0 ',width:"80px"}} onClick={this.hideModalOk} className="btn_ok">
+                            确定
+                        </Button>
+                        <Button style={{margin:'',width:"80px"}} onClick={this.hideDel} className="btn_delete">
+                            取消
+                        </Button>
+                    </p>
+                </Modal>
             </div>
         );
     }

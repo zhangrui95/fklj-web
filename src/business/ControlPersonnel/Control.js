@@ -19,7 +19,7 @@ moment.locale('zh-cn');
 // 样式
 const sliderdyHeader = {
     borderBottom: "1px solid #0C5F93",
-    padding: "18px 0",
+    padding: "8px 0 18px",
     overflow: "hidden"
 }
 const FormItem = Form.Item;
@@ -206,7 +206,7 @@ export  class Control extends Component{
         },{
             title: '姓名',
             dataIndex: 'label',
-            width:80,
+            width:90,
         },{
             title: '性别',
             dataIndex: 'sex',
@@ -265,7 +265,7 @@ export  class Control extends Component{
         },{
             title: '姓名',
             dataIndex: 'label',
-            width:80,
+            width:90,
         },{
             title: '性别',
             dataIndex: 'sex',
