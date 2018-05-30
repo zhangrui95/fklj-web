@@ -25,8 +25,8 @@ global.configUrl = {
 
 
 
-  securityCenterUrl: securityCenter.pingshiTest,
-  serverUrl: Interface.pingshiTest,
+  securityCenterUrl: securityCenter.ZX,
+  serverUrl: Interface.ZZH,
   //客户区域
   clientArea: '黑龙江',
   //PKI登录是否开启
