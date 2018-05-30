@@ -82,7 +82,7 @@ export  class AddSystem extends Component{
                     zdyValue:!(result.outofcontroltime === 24||result.outofcontroltime === 48||result.outofcontroltime === 72) ? result.outofcontroltime : ''
                 })
             }
-        },0)
+        },200)
     }
     timeChange = (e) => {
         if(e === '0'){
