@@ -27,7 +27,8 @@ import {
 import {
     Form,
     Input,
-    Select
+    Select,
+    Spin
 } from 'antd';
 import {
     getControlTimeCycle,
@@ -68,27 +69,32 @@ export  class AddSystem extends Component{
             zdyValue:''
         };
     }
-    componentWillMount() {
+    componentDidMount() {
         store.dispatch(getControlTimeCycle({}))
         setTimeout(()=>{
-            let result = store.getState().SystemManagement.data.getControlTimeCycle.result;
-            this.setState({
-                timeValue: (result.outofcontroltime === 24||result.outofcontroltime === 48||result.outofcontroltime === 72) ? result.outofcontroltime.toString() : '0',
-                HourStyle:(result.outofcontroltime === 24||result.outofcontroltime === 48||result.outofcontroltime === 72) ? "noneDiv" : "activeDiv",
-                cycle:result.defaulttaskcycle
-            })
+            let loading = store.getState().SystemManagement.data.getControlTimeCycle.loading
+            if(!loading){
+                let result = store.getState().SystemManagement.data.getControlTimeCycle.result;
+                this.setState({
+                    timeValue: (result.outofcontroltime === 24||result.outofcontroltime === 48||result.outofcontroltime === 72) ? result.outofcontroltime.toString() : '0',
+                    HourStyle:(result.outofcontroltime === 24||result.outofcontroltime === 48||result.outofcontroltime === 72) ? "noneDiv" : "activeDiv",
+                    cycle:result.defaulttaskcycle,
+                    zdyValue:!(result.outofcontroltime === 24||result.outofcontroltime === 48||result.outofcontroltime === 72) ? result.outofcontroltime : ''
+                })
+            }
         },0)
     }
     timeChange = (e) => {
         if(e === '0'){
             this.setState({
                 HourStyle: "activeDiv",
-                timeValue: e
+                timeValue: e,
             })
         } else {
             this.setState({
                 HourStyle: "noneDiv",
-                timeValue: e
+                timeValue: e,
+                zdyValue:''
             })
         }
     }
@@ -110,6 +116,7 @@ export  class AddSystem extends Component{
             core = {defaulttaskcycle:this.state.cycle.toString(),outofcontroltime:this.state.zdyValue}
         }
         store.dispatch(UpdateControlTimeCycle(core))
+        store.dispatch(getControlTimeCycle({}))
     }
     render() {
         let result = store.getState().SystemManagement.data.getControlTimeCycle.result;
@@ -135,7 +142,7 @@ export  class AddSystem extends Component{
                                 style={{width:'100px', float:'left'}}
                                 {...formItem}
                             >
-                                <Input value={!(result.outofcontroltime === 24||result.outofcontroltime === 48||result.outofcontroltime === 72) ? result.outofcontroltime : this.state.zdyValue} onChange={this.zdyInput}/>
+                                <Input value={this.state.zdyValue} onChange={this.zdyInput}/>
                             </FormItem>
                             <span style={{color:'#fff', float:'left',lineHeight:'40px'}}>小时</span>
                         </div>
@@ -151,6 +158,9 @@ export  class AddSystem extends Component{
                         </FormItem>
                     </Form>
                     <ShallowBlueBtn width="80px" text="确定" margin="5px 10px" onClick={this.getSave}/>
+                </div>
+                <div className="spin-loading-box">
+                    <Spin size="large" spinning={store.getState().SystemManagement.data.getControlTimeCycle.loading}/>
                 </div>
             </div>
         )

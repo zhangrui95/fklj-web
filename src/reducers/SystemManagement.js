@@ -184,7 +184,8 @@ const initialState = { //系统管理
             result: {
                 defaulttaskcycle: '',
                 outofcontroltime: '',
-            }
+            },
+            loading:false
         },
         UpdateControlTimeCycle:{
             reason: {
@@ -499,8 +500,12 @@ const SystemManagement = (state=initialState, action) => {
             newState.data.redList.result.total = action.data.result.page.totalResult;
             newState.isFetching = false;
             return newState;
+        case 'TimeCycle_Loading':
+            newState.data.getControlTimeCycle.loading = true;
+            return newState;
         case 'getControlTimeCycle_succeed':
             newState.data.getControlTimeCycle.result = action.data.result;
+            newState.data.getControlTimeCycle.loading = false;
             return newState;
         case 'UpdateControlTimeCycle_succeed':
             newState.data.UpdateControlTimeCycle.result = action.data.result;

@@ -1159,6 +1159,7 @@ export function DeletepostCodeTableData(creds) {
 //获取失控时间及周期
 export function getControlTimeCycle(creds) {
     return dispatch => {
+        dispatch({type: "TimeCycle_Loading"});
         post(api + "/data/getControlTimeCycle",creds).then((json) => {
             dispatch( {type: 'getControlTimeCycle_succeed',data: json} );
         }).catch((e)=>{
