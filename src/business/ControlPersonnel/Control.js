@@ -8,8 +8,8 @@ import {StylePage, ShallowBlueBtn} from "../generalPurposeModule";
 import {store} from '../../index.js';
 import * as constants from "../../utils/Constants";
 import {serverUrls, getLocalTime} from '../../utils/index';
-import {monthFormat, dateFormat, serverUrl} from '../../utils/';
-import {Spin, Table, Input, Modal, Form, Row, Col, Select} from 'antd';
+import {monthFormat, dateFormat, serverUrl,getMyDate} from '../../utils/';
+import {Spin, Table, Input, Modal, Form, Row, Col, Select, DatePicker} from 'antd';
 import {SearchArea} from './SearchArea'
 import {getControlPersonList, getControlDetail,getCustomFiledList} from "../../actions/ControlPersonnel";
 import moment from 'moment';
@@ -629,11 +629,10 @@ export  class Control extends Component{
                                     label="更新时间"
                                 >
                                     {getFieldDecorator('time', {
-                                        initialValue:this.state.modalType === 'edit' ? getLocalTime(detail.updatetime) : '',
+                                        initialValue:this.state.modalType === 'edit' ? moment(getMyDate(detail.updatetime / 1000), 'YYYY-MM-DD HH:mm:ss') : '',
                                     })(
-                                        //<DatePicker placeholder="" allowClear={false} style={{width:"190px"}} disabled/>
-                                        <Input disabled/>
-                                    )}
+                                        <DatePicker showTime placeholder="" format="YYYY-MM-DD HH:mm:ss" allowClear={false} style={{ width: '283px' }} disabled />
+                                        )}
                                 </FormItem>
                             </Col>
                             {newFormList}
