@@ -289,13 +289,17 @@ export function postThreeTaskListHushiData(creds) {
     }
 }
 // 根据待办 超期 已完成的id 获取信息
-export function postThreeTaskListHushiByIdData(creds,goback) {
+export function postThreeTaskListHushiByIdData(creds, goback) {
     let path = '/data/getSubtaskById';
     return dispatch => {
         dispatch({ type: "REQUEST_THREE_TASK_LIST_HUSHI_BYID_DATA" });
         post(api + path, creds).then((json) => {
             dispatch({ type: 'Three_TaskListHushi-data-byid', data: json });
-            goback();
+            if (json.reason === null) {
+                goback();
+            } else {
+                message.error(`提示：${json.reason.text}`);
+            }
         }).catch((e) => {
             dispatch({ type: 'Three_TaskListHushi-error-byid', message: e.toString() })
         });
