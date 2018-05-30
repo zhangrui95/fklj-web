@@ -202,7 +202,7 @@ export  class Control extends Component{
         },{
             title: '身份证号',
             dataIndex: 'cardId',
-            width:150,
+            width:160,
         },{
             title: '姓名',
             dataIndex: 'label',
@@ -261,7 +261,7 @@ export  class Control extends Component{
         },{
             title: '身份证号',
             dataIndex: 'cardId',
-            width:150,
+            width:160,
         },{
             title: '姓名',
             dataIndex: 'label',
@@ -269,18 +269,16 @@ export  class Control extends Component{
         },{
             title: '性别',
             dataIndex: 'sex',
-            width:50,
         },{
             title: '年龄',
             dataIndex: 'age',
-            width:50,
         },{
             title: '居住类型',
             dataIndex: 'state',
         },{
             title: '现居住地址',
             dataIndex: 'address',
-            width:180,
+            width:350
         },{
             title: '联系电话',
             dataIndex: 'phone',
