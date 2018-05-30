@@ -298,7 +298,7 @@ export function postThreeTaskListHushiByIdData(creds, goback) {
             if (json.reason === null) {
                 goback();
             } else {
-                message.error(`提示：${json.reason.text}`);
+                message.error(`提示：${json.reason.text}`,1);
             }
         }).catch((e) => {
             dispatch({ type: 'Three_TaskListHushi-error-byid', message: e.toString() })

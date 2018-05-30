@@ -467,15 +467,17 @@ export class PatrolTask extends Component {
                 taskswitch: "1",
                 updateuser: user.user.name
             }
+            let { name, category, enddate, begindate, cycle, personname } = this.state;
             let params = {
-                currentPage: this.state.nowPage,
+                currentPage: 1,
+                entityOrField: true,
                 pd: {
-                    category: '',
-                    cycle: '',
-                    name: "",
-                    personname: '',
-                    starttime: '',
-                    endtime: '',
+                    name: name,
+                    starttime: begindate,
+                    endtime: enddate,
+                    category: category,
+                    cycle: cycle,
+                    personname: personname,
                 },
                 showCount: 10
             }
@@ -486,20 +488,25 @@ export class PatrolTask extends Component {
                 taskswitch: "0",
                 updateuser: user.user.name
             }
+            let {  name, category, enddate, begindate, cycle, personname } = this.state;
             let params = {
-                currentPage: this.state.nowPage,
+                currentPage: 1,
+                entityOrField: true,
                 pd: {
-                    category: '',
-                    cycle: '',
-                    name: "",
-                    personname: '',
-                    starttime: '',
-                    endtime: '',
+                    name: name,
+                    starttime: begindate,
+                    endtime: enddate,
+                    category: category,
+                    cycle: cycle,
+                    personname: personname,
                 },
                 showCount: 10
             }
             store.dispatch(editTaskHushiData(creds, params))
         }
+        this.setState({
+            nowPage:1
+        });
     }
     // 子任务名称查询变换函数
     childrennameChange = (e) => {
@@ -818,6 +825,7 @@ export class PatrolTask extends Component {
                     onCancel={this.handleCancel}
                     footer={null}
                     key={this.state.modalKey}
+                    maskClosable={false}
                 >
                     <Form onSubmit={this.saveModel}>
                         <Row className="formItemLeft">
@@ -974,10 +982,11 @@ export class PatrolTask extends Component {
                 </Modal>
                 {this.state.updateVisible ?
                     <Modal width={800}
-                        title="任务编辑"
+                        title="任务详情"
                         visible={this.state.updateVisible}
                         onCancel={this.handleCancel}
                         footer={null}
+                        maskClosable={false}
                     // key={this.state.modalKey}
                     >
                         <Form onSubmit={this.saveModel}>
@@ -1208,31 +1217,32 @@ export class PatrolTask extends Component {
                         onCancel={this.handleCancel}
                         width={750}
                         style={{ position: "relative" }}
+                        maskClosable={false}
                     >
-                    <div style={{position:'relative'}}>
-                        <div style={{ margin: '0 0 16px 0' }}>
-                            <Input style={{ width: '520px', marginRight: "10px" }} value={this.state.childrenname} onChange={this.childrennameChange} type="text" id='chirdenname' placeholder='请输入任务名称' />
-                            <ShallowBlueBtn width="80px" text="查询" margin="0 10px 0 0" onClick={this.handleChidernQuery} />
-                            <ShallowBlueBtn width="80px" text="重置" onClick={this.handleChidernClear} />
-                        </div>
-                        {childrenIsFetching === true ?
-                            <div style={{ textAlign: "center", position: "absolute", left: "45%", top: "50%" }}>
-                                <Spin size="large" />
-                            </div> :
-                            <Table locale={{ emptyText: '暂无数据' }}
-                                columns={colu}
-                                // expandedRowKeys={this.state.expandKeys}
-                                dataSource={childrenDataList}
-                                bordered
-                                // onExpandedRowsChange={this.RowsChange}
-                                // expandRowByClick={true}
-                                // expandIconAsCell={false}
-                                rowKey={(record) => record.id}
-                                expandedRowRender={(record) => this.expandedRowRender(record)}
-                                pagination={childrenpagination}
-                            />}
-                        <div className="clear"></div>
-                        {/* {childrenDataList.length > 0 ?
+                        <div style={{ position: 'relative' }}>
+                            <div style={{ margin: '0 0 16px 0' }}>
+                                <Input style={{ width: '520px', marginRight: "10px" }} value={this.state.childrenname} onChange={this.childrennameChange} type="text" id='chirdenname' placeholder='请输入任务名称' />
+                                <ShallowBlueBtn width="80px" text="查询" margin="0 10px 0 0" onClick={this.handleChidernQuery} />
+                                <ShallowBlueBtn width="80px" text="重置" onClick={this.handleChidernClear} />
+                            </div>
+                            {childrenIsFetching === true ?
+                                <div style={{ textAlign: "center", position: "absolute", left: "45%", top: "50%" }}>
+                                    <Spin size="large" />
+                                </div> :
+                                <Table locale={{ emptyText: '暂无数据' }}
+                                    columns={colu}
+                                    // expandedRowKeys={this.state.expandKeys}
+                                    dataSource={childrenDataList}
+                                    bordered
+                                    // onExpandedRowsChange={this.RowsChange}
+                                    // expandRowByClick={true}
+                                    // expandIconAsCell={false}
+                                    rowKey={(record) => record.id}
+                                    expandedRowRender={(record) => this.expandedRowRender(record)}
+                                    pagination={childrenpagination}
+                                />}
+                            <div className="clear"></div>
+                            {/* {childrenDataList.length > 0 ?
                             <Pagination size="small" total={childrenTotal} current={this.state.childrennowpage} pageSize={10} /> :
                             ''
                         } */}
@@ -1414,7 +1424,7 @@ const SearchArea = React.createClass({
                     <Option value=''>全部</Option>
                     {this.props.checkObjOption}
                 </Select> */}
-                <Input style={{ width: '25%', marginRight: "10px" }} type="text" id='personname' placeholder='请输入盘查对象名称' value={personname} onChange={this.personnameChange} />
+                <Input style={{ width: '25%', marginRight: "10px" }} type="text" id='personname' placeholder='请输入盘查对象姓名' value={personname} onChange={this.personnameChange} />
 
                 <div style={{ marginTop: '10px' }}>
                     <label htmlFor="" className="font14">任务时间：</label>

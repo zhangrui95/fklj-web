@@ -8,6 +8,7 @@ import {
     INVENTORYMANAGEMENT_HUSHI_ZQRW,
     INVENTORYMANAGEMENT_HUSHI_OLDZQRW,
     INVENTORYMANAGEMENT_HUSHI_CURRENT,
+    INVENTORYMANAGEMENT_MENU_INIT
 } from "../actions/actions";
 import { store } from '../index.js';
 import { filterMenu } from '../utils/index';
@@ -266,7 +267,7 @@ const InventoryManagement = (state = initialState, action) => {
         //             return newState;
         //
 
-        case NVENTORYMANAGEMENT_MENU_HUSHI_INIT://初始化菜单
+        case INVENTORYMANAGEMENT_MENU_INIT://初始化菜单
             for (let x in newState.uiData.menus) {
                 newState.uiData.menus[x].isSelect = false;
                 for (let i in newState.uiData.menus[x].sonMenu) {

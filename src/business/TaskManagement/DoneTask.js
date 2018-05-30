@@ -484,6 +484,8 @@ export class DoneTask extends Component {
                     onCancel={this.handleCancel}
                     footer={null}
                     key={this.state.modalKey}
+                    maskClosable={false}
+                    maskClosable={false}
                 >
                     <Form onSubmit={this.saveModel}>
                         <Row className="formItemLeft">
@@ -942,7 +944,7 @@ const SearchArea = React.createClass({
                     <Option value="2">按月</Option>
                 </Select>
                 <label htmlFor="" className="font14">盘查对象：</label>
-                <Input style={{ width: '25%', marginRight: "10px" }} type="text" id='personname' placeholder='请输入盘查对象名称' value={personname} onChange={this.personnameChange} />
+                <Input style={{ width: '25%', marginRight: "10px" }} type="text" id='personname' placeholder='请输入盘查对象姓名' value={personname} onChange={this.personnameChange} />
                 <div style={{ marginTop: '10px' }}>
                     <label htmlFor="" className="font14">任务时间：</label>
                     <DatePicker placeholder="请选择日期" format={dateFormat} allowClear={false} style={{ marginRight: "10px" }} value={beginDateValue} defaultValue="" onChange={this.handleBeginDeteClick} />

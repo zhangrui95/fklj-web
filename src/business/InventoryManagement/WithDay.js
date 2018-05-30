@@ -471,6 +471,10 @@ export class WithDay extends Component {
                     );
                 }
             }
+        } else {
+            imgArray.push(
+                <div style={{ fontSize: 16, color: '#fff', width: '100%', textAlign: "center" }}>暂无写实照片</div>
+            );
         }
 
         let tabs = store.getState().InterrogationDetailsUsers.uiData.tabs;
@@ -562,6 +566,7 @@ export class WithDay extends Component {
                             onCancel={this.handleCancel}
                             footer={null}
                             key={this.state.modalKey}
+                            maskClosable={false}
                         >
                             <Form onSubmit={this.saveModel}>
                                 <Row>
@@ -635,7 +640,7 @@ export class WithDay extends Component {
                                             {getFieldDecorator('address', {
                                                 initialValue: obj ? obj.address ? obj.address : '' : '',
                                             })(
-                                                <Input disabled title={obj.address}/>
+                                                <Input disabled title={obj.address} />
                                             )}
                                         </FormItem>
                                     </Col>
@@ -663,7 +668,7 @@ export class WithDay extends Component {
                                             {getFieldDecorator('now_address', {
                                                 initialValue: obj ? obj.now_address ? obj.now_address : '' : '',
                                             })(
-                                                <Input disabled title={obj.now_address}/>
+                                                <Input disabled title={obj.now_address} />
                                             )}
                                         </FormItem>
                                         <FormItem
@@ -674,7 +679,7 @@ export class WithDay extends Component {
                                             {getFieldDecorator('work_address', {
                                                 initialValue: obj ? obj.work_address ? obj.work_address : '' : '',
                                             })(
-                                                <Input disabled title={obj.work_address}/>
+                                                <Input disabled title={obj.work_address} />
                                             )}
                                         </FormItem>
                                         <FormItem
@@ -696,7 +701,7 @@ export class WithDay extends Component {
                                             {getFieldDecorator('taskname', {
                                                 initialValue: obj ? obj.taskname ? obj.taskname : '' : '',
                                             })(
-                                                <Input disabled title={obj.taskname}/>
+                                                <Input disabled title={obj.taskname} />
                                             )}
                                         </FormItem>
                                         <FormItem
@@ -760,9 +765,9 @@ export class WithDay extends Component {
                                             style={{ marginBottom: '5px' }}
                                         >
                                             {getFieldDecorator('checktime', {
-                                                initialValue: obj ? obj.checktime ? obj.checktime : '' : '',
+                                                initialValue: obj ? obj.checktime ? moment(getMyDate(obj.checktime / 1000), 'YYYY-MM-DD HH:mm:ss') : '' : '',
                                             })(
-                                                <Input disabled />
+                                                <DatePicker showTime placeholder="" format="YYYY-MM-DD HH:mm:ss" allowClear={false} style={{width:'247.91px'}} disabled />
                                             )}
                                         </FormItem>
 
@@ -780,6 +785,7 @@ export class WithDay extends Component {
                                                 onCancel={this.handleCancels}
                                                 footer={false}
                                                 wrapClassName='zoomImg'
+                                                maskClosable={false}
                                             >
                                                 <BannerAnimImg arrayImg={this.state.arrayImg} currentImg={this.state.currentImg} index={this.state.index} />
                                             </Modal>
@@ -811,6 +817,7 @@ export class WithDay extends Component {
                             onCancel={this.handleOldCancel}
                             footer={null}
                             key={this.state.modalKey}
+                            maskClosable={false}
                         >
                             <div>
                                 <InterrogationDetailsItem interrogationDetailsUser={this.state.testData} />
@@ -1004,8 +1011,8 @@ const SearchArea = React.createClass({
         return (
             <div>
                 <div className="marLeft40 z_searchDiv">
-                    <label htmlFor="" className="font14">人员名称：</label>
-                    <Input style={{ width: '180px', marginRight: "10px" }} type="text" id='name' placeholder='请输入姓名' value={name} onChange={this.handleNameClick} />
+                    <label htmlFor="" className="font14">人员姓名：</label>
+                    <Input style={{ width: '180px', marginRight: "10px" }} type="text" id='name' placeholder='请输入人员姓名' value={name} onChange={this.handleNameClick} />
                     <label htmlFor="" className="font14">身份证号：</label>
                     <Input style={{ width: '230px', marginRight: "10px" }} type="text" id='sfzh' placeholder='请输入身份证号' value={idcard} onChange={this.handleSfzhClick} />
                     <label htmlFor="" className="font14">居住类型：</label>
@@ -1018,7 +1025,7 @@ const SearchArea = React.createClass({
                     <label htmlFor="" className="font14">隶属任务：</label>
                     <Input value={subtask_name} style={{ width: '180px', marginRight: "10px" }} type="text" id='subtask_name' placeholder='请输入隶属任务名称' onChange={this.handleSubtaskNameClick} />
                     <label htmlFor="" className="font14">盘查警员：</label>
-                    <Input style={{ width: '130px', marginRight: "10px" }} type="text" id='police_name' placeholder='请输入警员姓名' value={police_name} onChange={this.handlePoliceNameClick} />
+                    <Input style={{ width: '150px', marginRight: "10px" }} type="text" id='police_name' placeholder='请输入盘查警员姓名' value={police_name} onChange={this.handlePoliceNameClick} />
                 </div>
                 <div style={{ marginLeft: "2%", marginTop: "20px" }}>
                     <label htmlFor="" className="font14">起止时间：</label>

@@ -325,7 +325,7 @@ class Home extends Component {
                             {/*活动统计*/}
                             <ActiveDataStatistics dateSet={dateSet} />
                             {/*</div>*/}
-                            <Websocket url='ws://172.19.12.102:8800/myHandler' onMessage={this.handleData} />
+                            <Websocket url={global.configUrl.messageQueue} onMessage={this.handleData} />
                         </div>
 
                     </div>

@@ -490,6 +490,7 @@ export class OldWithDay extends Component {
                             onCancel={this.handleOldCancel}
                             footer={null}
                             key={this.state.modalKey}
+                            maskClosable={false}
                         >
                             <div>
                                 {/* <InterrogationDetailsItem interrogationDetailsUser={this.state.testData} />
@@ -502,7 +503,7 @@ export class OldWithDay extends Component {
                                 </div> */}
                                 <Row>
                                     <Col span={4}>
-                                        <img src={recordPerson ? recordPerson.zpurl ? recordPerson.zpurl : "/images/zanwu.png" : ''} style={{ width: '130px', height: '160px' }} />
+                                        <img src={recordPerson ? recordPerson.zpurl : "/images/zanwu.png" } style={{ width: '130px', height: '160px' }} />
                                     </Col>
                                     <Col span={19}>
                                         <Row style={{ marginBottom: '10px' }}>
@@ -636,7 +637,7 @@ export class OldWithDay extends Component {
                                 </Row>
                                 <hr style={{ background: '#0c5f93', height: '1px', border: 'none', margin: '24px 0' }} />
                                 <Row>
-                                    <p style={{ fontSize: '16px' }}>写实信息</p>
+                                    <p style={{ fontSize: '16px' }}>写实详情</p>
                                     <Row >
                                         <Col span={24}>
                                             {imgArray}
@@ -647,13 +648,20 @@ export class OldWithDay extends Component {
                                                 footer={false}
                                                 wrapClassName='zoomImg'
                                                 style={{ height: '85%' }}
+                                                maskClosable={false}
                                             >
                                                 <BannerAnimImg arrayImg={this.state.arrayImg} currentImg={this.state.currentImg} index={this.state.index} />
                                             </Modal>
                                         </Col>
                                         <Col span={24}>
-                                            <p style={{ marginBottom: '16px' }}>写实文字：</p>
-                                            <TextArea rows={2} disabled style={{ resize: 'none' }} value={imgObjText} />
+                                            <Row style={{marginTop:'8px'}}>
+                                                <Col span={2} style={{textAlign:'right'}}>
+                                                    <p style={{ marginBottom: '14px' }}>详情：</p>
+                                                </Col>
+                                                <Col span={22}>
+                                                    <TextArea rows={2} disabled style={{ resize: 'none' }} value={imgObjText} />
+                                                </Col>
+                                            </Row>
                                         </Col>
                                     </Row>
                                 </Row>
@@ -843,8 +851,8 @@ const SearchArea = React.createClass({
         return (
             <div>
                 <div className="marLeft40 z_searchDiv">
-                    <label htmlFor="" className="font14">人员名称：</label>
-                    <Input style={{ width: '180px', marginRight: "10px" }} type="text" id='name' placeholder='请输入姓名' value={name} onChange={this.handleNameClick} />
+                    <label htmlFor="" className="font14">人员姓名：</label>
+                    <Input style={{ width: '180px', marginRight: "10px" }} type="text" id='name' placeholder='请输入人员姓名' value={name} onChange={this.handleNameClick} />
                     <label htmlFor="" className="font14">身份证号：</label>
                     <Input style={{ width: '230px', marginRight: "10px" }} type="text" id='sfzh' placeholder='请输入身份证号' value={idcard} onChange={this.handleSfzhClick} />
                     {/* <label htmlFor="" className="font14">居住类型：</label>
@@ -1014,6 +1022,7 @@ class MobileDataTable extends Component {
                     width="80%"
                     footer={null}
                     style={{ top: '20px' }}
+                    maskClosable={false}
                 >
                     {/* <div style={{ marginBottom: "10px" }}>
                         <label style={mStyle} htmlFor="">手机号：</label>
@@ -1150,6 +1159,9 @@ class CallLogTable extends Component {
             ),
 
         }];
+        let timevalue = this.state.record ? moment(this.state.record.time, 'YYYY-MM-DD HH:mm:ss') : '';
+        console.log('this.state.record.time',this.state.record);
+        console.log('timevalue',timevalue);
         return (
             <div>
                 <Table columns={columns}
@@ -1169,6 +1181,7 @@ class CallLogTable extends Component {
                     closable={true}
                     style={{ maxHeight: 650, overflow: "auto" }}
                     footer={null}
+                    maskClosable={false}
                 >
                     <div style={{ marginBottom: "10px" }}>
                         <label style={mStyle} htmlFor="">主叫号码：</label>
@@ -1180,7 +1193,7 @@ class CallLogTable extends Component {
                     </div>
                     <div style={{ marginBottom: "10px" }}>
                         <label style={mStyle} htmlFor="">呼叫时间：</label>
-                        <Input style={{ width: '60%' }} value={this.state.record ? this.state.record.time : ''} disabled />
+                        <DatePicker showTime placeholder="" value={timevalue} format="YYYY-MM-DD HH:mm:ss" allowClear={false} style={{ width: '60%' }} disabled />
                     </div>
                     <div style={{ marginBottom: "10px" }}>
                         <label style={mStyle} htmlFor="">是主/被叫：</label>
@@ -1305,6 +1318,7 @@ class MessageTable extends Component {
 
         }];
         let timevalue = this.state.record ? moment(getMyDate(this.state.record.time / 1000), 'YYYY-MM-DD HH:mm:ss') : '';
+        console.log('timevalue##',timevalue);
         return (
             <div>
                 <Table columns={columns}
@@ -1324,6 +1338,7 @@ class MessageTable extends Component {
                     closable={true}
                     style={{ maxHeight: 650, overflow: "auto" }}
                     footer={null}
+                    maskClosable={false}
                 >
                     <div style={{ marginBottom: "10px" }}>
                         <label style={mStyle} htmlFor="">来往号码：</label>
@@ -1456,6 +1471,7 @@ class InstallationSoftwareTable extends Component {
                     closable={true}
                     style={{ maxHeight: 650, overflow: "auto" }}
                     footer={null}
+                    maskClosable={false}
                 >
                     <div style={{ marginBottom: "10px" }}>
                         <label style={mStyle} htmlFor="">软件名称：</label>
@@ -1593,6 +1609,7 @@ class OnlineTable extends Component {
                     closable={true}
                     style={{ maxHeight: 650, overflow: "auto" }}
                     footer={null}
+                    maskClosable={false}
                 >
                     <div style={{ marginBottom: "10px" }}>
                         <label style={mStyle} htmlFor="">类别编码：</label>
