@@ -81,7 +81,7 @@ export const INVENTORYMANAGEMENT_HUSHI_MODULE_AT = '按天';
 //设置周期任务-按周(呼市)
 export const INVENTORYMANAGEMENT_HUSHI_MODULE_AZ = '按周';
 // 旧版盘查管理 其他任务
-export const INVENTORYMANAGEMENT_OLD_HUSHI_MODULE_Qt= '其他任务';
+export const INVENTORYMANAGEMENT_OLD_HUSHI_MODULE_Qt= '其他';
 // 设置旧版周期任务-按天(呼市)
 // export const INVENTORYMANAGEMENT_HUSHI_OLD_MODULE_AT = '旧版按天';
 // //设置旧版周期任务-按周(呼市)
