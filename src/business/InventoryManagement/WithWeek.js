@@ -1000,8 +1000,8 @@ const SearchArea = React.createClass({
         return (
             <div>
                 <div className="marLeft40 z_searchDiv">
-                    <label htmlFor="" className="font14">姓名：</label>
-                    <Input style={{ width: '130px', marginRight: "10px" }} type="text" id='name' placeholder='请输入姓名' value={name} onChange={this.handleNameClick} />
+                    <label htmlFor="" className="font14">人员名称：</label>
+                    <Input style={{ width: '180px', marginRight: "10px" }} type="text" id='name' placeholder='请输入姓名' value={name} onChange={this.handleNameClick} />
                     <label htmlFor="" className="font14">身份证号：</label>
                     <Input style={{ width: '230px', marginRight: "10px" }} type="text" id='sfzh' placeholder='请输入身份证号' value={idcard} onChange={this.handleSfzhClick} />
                     <label htmlFor="" className="font14">居住类型：</label>
@@ -1012,7 +1012,7 @@ const SearchArea = React.createClass({
                         <Option value={2}>流动</Option>
                     </Select>
                     <label htmlFor="" className="font14">隶属任务：</label>
-                    <Input value={subtask_name} style={{ width: '130px', marginRight: "10px" }} type="text" id='subtask_name' placeholder='请输入隶属任务名称' onChange={this.handleSubtaskNameClick} />
+                    <Input value={subtask_name} style={{ width: '180px', marginRight: "10px" }} type="text" id='subtask_name' placeholder='请输入隶属任务名称' onChange={this.handleSubtaskNameClick} />
                     <label htmlFor="" className="font14">盘查警员：</label>
                     <Input style={{ width: '130px', marginRight: "10px" }} type="text" id='police_name' placeholder='请输入警员姓名' value={police_name} onChange={this.handlePoliceNameClick} />
                 </div>

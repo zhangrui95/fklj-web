@@ -987,7 +987,7 @@ class PopulationStatistics extends Component {
                             <div>
                                 <EchartsReact
                                     option={liveOption}
-                                    style={{ height: '90%', width: '100%' }}
+                                    style={{ height: '90%', width: '100%',position:'absolute',top:'-5px' }}
                                 />
                             </div>
                             {/*关注人员总数*/}

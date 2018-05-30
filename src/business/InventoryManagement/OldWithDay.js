@@ -502,7 +502,7 @@ export class OldWithDay extends Component {
                                 </div> */}
                                 <Row>
                                     <Col span={4}>
-                                        <img src={recordPerson ? recordPerson.zpurl ? recordPerson.zpurl : "/images/zanwu.png" : ''} style={{width:'130px',height:'160px'}}/>
+                                        <img src={recordPerson ? recordPerson.zpurl ? recordPerson.zpurl : "/images/zanwu.png" : ''} style={{ width: '130px', height: '160px' }} />
                                     </Col>
                                     <Col span={19}>
                                         <Row style={{ marginBottom: '10px' }}>
@@ -521,7 +521,7 @@ export class OldWithDay extends Component {
                                                 民族：{recordPerson ? recordPerson.nation : ''}
                                             </Col>
                                             <Col span={10}>
-                                                出生：{recordPerson ? recordPerson.birth : ''}
+                                                出生日期：{recordPerson ? recordPerson.birth : ''}
                                             </Col>
                                         </Row>
                                         <Row style={{ marginBottom: '10px' }}>
@@ -621,16 +621,16 @@ export class OldWithDay extends Component {
                                         </Col>
                                     </Row>
                                     <Row style={{ marginBottom: '10px' }}>
+                                        <Col span={24}>
+                                            核查类型：{domicileInfo ? domicileInfo.checked_mark : ''}
+                                        </Col>
+                                    </Row>
+                                    <Row style={{ marginBottom: '10px' }}>
                                         <Col span={12}>
                                             户籍警局：{domicileInfo ? domicileInfo.station : ''}
                                         </Col>
                                         <Col span={12}>
                                             户籍地联系人：{domicileInfo ? domicileInfo.station_person : ''}
-                                        </Col>
-                                    </Row>
-                                    <Row style={{ marginBottom: '10px' }}>
-                                        <Col span={24}>
-                                            核查类型：{domicileInfo ? domicileInfo.checked_mark : ''}
                                         </Col>
                                     </Row>
                                 </Row>
@@ -843,7 +843,7 @@ const SearchArea = React.createClass({
         return (
             <div>
                 <div className="marLeft40 z_searchDiv">
-                    <label htmlFor="" className="font14">姓名：</label>
+                    <label htmlFor="" className="font14">人员名称：</label>
                     <Input style={{ width: '180px', marginRight: "10px" }} type="text" id='name' placeholder='请输入姓名' value={name} onChange={this.handleNameClick} />
                     <label htmlFor="" className="font14">身份证号：</label>
                     <Input style={{ width: '230px', marginRight: "10px" }} type="text" id='sfzh' placeholder='请输入身份证号' value={idcard} onChange={this.handleSfzhClick} />
@@ -1013,6 +1013,7 @@ class MobileDataTable extends Component {
                     // style={{ width:'95%' }}
                     width="80%"
                     footer={null}
+                    style={{ top: '20px' }}
                 >
                     {/* <div style={{ marginBottom: "10px" }}>
                         <label style={mStyle} htmlFor="">手机号：</label>

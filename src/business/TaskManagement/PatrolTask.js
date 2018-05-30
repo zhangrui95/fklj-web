@@ -1209,6 +1209,7 @@ export class PatrolTask extends Component {
                         width={750}
                         style={{ position: "relative" }}
                     >
+                    <div style={{position:'relative'}}>
                         <div style={{ margin: '0 0 16px 0' }}>
                             <Input style={{ width: '520px', marginRight: "10px" }} value={this.state.childrenname} onChange={this.childrennameChange} type="text" id='chirdenname' placeholder='请输入任务名称' />
                             <ShallowBlueBtn width="80px" text="查询" margin="0 10px 0 0" onClick={this.handleChidernQuery} />
@@ -1235,6 +1236,7 @@ export class PatrolTask extends Component {
                             <Pagination size="small" total={childrenTotal} current={this.state.childrennowpage} pageSize={10} /> :
                             ''
                         } */}
+                        </div>
 
                     </Modal> : ''
                 }
