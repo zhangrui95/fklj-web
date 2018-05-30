@@ -96,6 +96,8 @@ export  class SearchArea extends Component{
             creds = {pd:{name:name, idcard:cardId, address_type: parseInt(status),taskname:Tosk, beginTime:begindate,endTime:enddate},showCount:10,currentPage:1}
         }
         store.dispatch(getControlPersonList(creds))
+        this.props.getSearch(name, cardId, status, Tosk, begindate, enddate);
+        this.props.changeSelection([],1);
     }
     init = () => {
         this.setState({
