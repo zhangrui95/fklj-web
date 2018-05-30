@@ -592,7 +592,7 @@ export class OldWithDay extends Component {
                                     </Row>
                                     <Row style={{ marginBottom: '10px' }}>
                                         <Col span={8}>
-                                            投奔人：{examinaTerrorismflow ? examinaTerrorismflow.visitorname : '暂无'}，电话号码{examinaTerrorismflow ? examinaTerrorismflow.visitortel : ''}
+                                            投奔人：{examinaTerrorismflow ? examinaTerrorismflow.visitorname : '暂无'}，电话号码{examinaTerrorismflow ? examinaTerrorismflow.visitortel : '暂无'}
                                         </Col>
                                         <Col span={16}>
                                             其他信息：座位号{examinaTerrorismflow ? examinaTerrorismflow.seatnumber : '暂无'}，

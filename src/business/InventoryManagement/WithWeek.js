@@ -630,7 +630,7 @@ export class WithWeek extends Component {
                                             {getFieldDecorator('address', {
                                                 initialValue: obj ? obj.address ? obj.address : '' : '',
                                             })(
-                                                <Input disabled />
+                                                <Input disabled title={obj.address}/>
                                             )}
                                         </FormItem>
                                     </Col>
@@ -659,7 +659,7 @@ export class WithWeek extends Component {
                                             {getFieldDecorator('now_address', {
                                                 initialValue: obj ? obj.now_address ? obj.now_address : '' : '',
                                             })(
-                                                <Input disabled />
+                                                <Input disabled title={obj.now_address}/>
                                             )}
                                         </FormItem>
                                         <FormItem
@@ -670,7 +670,7 @@ export class WithWeek extends Component {
                                             {getFieldDecorator('work_address', {
                                                 initialValue: obj ? obj.work_address ? obj.work_address : '' : '',
                                             })(
-                                                <Input disabled />
+                                                <Input disabled title={obj.work_address}/>
                                             )}
                                         </FormItem>
                                         <FormItem
@@ -692,7 +692,7 @@ export class WithWeek extends Component {
                                             {getFieldDecorator('taskname', {
                                                 initialValue: obj ? obj.taskname ? obj.taskname : '' : '',
                                             })(
-                                                <Input disabled />
+                                                <Input disabled title={obj.taskname}/>
                                             )}
                                         </FormItem>
                                         <FormItem
