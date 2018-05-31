@@ -15,7 +15,7 @@ export const developmentMode = developmentModeList.standard;
 
 //安全中心地址         czp 172.19.12.232:8081
 export  const  securityCenterUrl = global.configUrl.securityCenterUrl;
-export  const  securityCenterUrls = global.configUrl.securityCenterUrl;
+export  const  securityCenterUrls = global.configUrl.securityCenterUrls;
 export  const serverUrls = global.configUrl.serverUrl;
 
 
