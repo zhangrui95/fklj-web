@@ -661,7 +661,7 @@ class AirportCoordComponent extends Component {
     }
 };
 
-//任务数据统计
+//拟来呼人员
 class TaskStatistics extends Component {
     constructor(props) {
         super(props);
@@ -673,33 +673,33 @@ class TaskStatistics extends Component {
     }
     componentDidMount() {
         //当前传过来的类型
-        let queryType = this.props.queryType;
-        let search = 'type=' + queryType;
-        var myDate = new Date();
-        let NowYEAR = myDate.getFullYear();
-        let creds = {
-            entityOrField: true,
-            pd: {
-                beginTime: NowYEAR + '-01' + '-01',
-                endTime: NowYEAR + '-12' + '-31',
-            },
-        }
-        store.dispatch(postTaskStatisticsData(creds));
+        // let queryType = this.props.queryType;
+        // let search = 'type=' + queryType;
+        // var myDate = new Date();
+        // let NowYEAR = myDate.getFullYear();
+        // let creds = {
+        //     entityOrField: true,
+        //     pd: {
+        //         beginTime: NowYEAR + '-01' + '-01',
+        //         endTime: NowYEAR + '-12' + '-31',
+        //     },
+        // }
+        // store.dispatch(postTaskStatisticsData(creds));
         //盘查人数总和
-        store.dispatch(postInventoryTotalData(creds));
+        // store.dispatch(postInventoryTotalData(creds));
     }
     //接收到新的propos state 后进行渲染之前调用
     componentWillReceiveProps(nextProps) {
         let isTrue = Compare(this.props.dateSet, nextProps.dateSet);
         if (isTrue === false) {
-            let creds = {
-                pd: {
-                    beginTime: nextProps.dateSet.beginTimeSet,
-                    endTime: nextProps.dateSet.endTimeSet,
-                },
-            }
-            store.dispatch(postTaskStatisticsData(creds));
-            store.dispatch(postInventoryTotalData(creds));
+            // let creds = {
+            //     pd: {
+            //         beginTime: nextProps.dateSet.beginTimeSet,
+            //         endTime: nextProps.dateSet.endTimeSet,
+            //     },
+            // }
+            // store.dispatch(postTaskStatisticsData(creds));
+            // store.dispatch(postInventoryTotalData(creds));
         }
     }
 
@@ -987,7 +987,7 @@ class PopulationStatistics extends Component {
                             <div>
                                 <EchartsReact
                                     option={liveOption}
-                                    style={{ height: '90%', width: '100%',position:'absolute',top:'-5px' }}
+                                    style={{ height: '87%', width: '89%',position:'absolute',top:8 }}
                                 />
                             </div>
                             {/*关注人员总数*/}
@@ -1114,7 +1114,7 @@ class ActiveDataStatistics extends Component {
                 <div style={{ padding: "10px 15px", background: "rgba(25,41,85,0.5)", display: isShowDiv, height: '99.9%', position: 'relative' }}>
                     {/*标题*/}
                     <div>
-                        <img src="/images/guanbi.png" alt="" style={{ float: "left", marginRight: "20px" }} onClick={this.chartsClick} />
+                        <img src="/images/guanbi.png" alt="" style={{ float: "left", marginRight: "20px", cursor: "pointer" }} onClick={this.chartsClick} />
                         <p style={titleP}>派出所任务统计</p>
                         <div style={clear}></div>
                     </div>
@@ -1225,7 +1225,7 @@ class Personnel extends Component {
                 <div style={{ padding: "10px 10px", background: "rgba(25,41,85,0.5)", height: "100%", display: isShowDiv, position: 'relative' }}>
                     {/*标题*/}
                     <div style={{ borderBottom: "1px solid #585c77" }}>
-                        <img src="/images/guanbi.png" alt="" style={{ float: 'left', marginRight: "20px" }} onClick={this.chartsClick} />
+                        <img src="/images/guanbi.png" alt="" style={{ float: 'left', marginRight: "20px", cursor: "pointer" }} onClick={this.chartsClick} />
                         <p style={titleP}>{this.props.text}</p>
                         {/*<span style={{float:"right",color:"#cacaca",}}>更多>></span>*/}
                         <div style={clear}></div>
