@@ -25,7 +25,7 @@ export function getControlDetail(creds) {
         });
     }
 }
-//导出
+//未管控导出
 export function getControlExport(creds) {
     let path  = serverUrls + '/data/ControlPersonalExport';
     return dispatch => {
@@ -33,6 +33,17 @@ export function getControlExport(creds) {
             dispatch( {type: 'Export_Succeed',data: json} );
         }).catch((e)=>{
             dispatch({type: 'Export__error',message: e.toString()} )
+        });
+    }
+}
+//已管控，离开责任区，失控导出
+export function getControlExport2(creds) {
+    let path  = serverUrls + '/data/ControlPersonalExport2';
+    return dispatch => {
+        post(path,creds).then((json) => {
+            dispatch( {type: 'Export2_Succeed',data: json} );
+        }).catch((e)=>{
+            dispatch({type: 'Export2_error',message: e.toString()} )
         });
     }
 }

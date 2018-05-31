@@ -209,10 +209,6 @@ export class PlaceOfOriginPerson extends Component {
     }
          //删除按钮点击
     handleDelete = () => {
-            if (this.state.selectedRowsId.length === 0) {
-                message.error('请选择要删除的项！');
-                return;
-            }
             let crads = {
                 pd: {
                     id: this.state.selectedRowsId,
@@ -498,6 +494,7 @@ export class PlaceOfOriginPerson extends Component {
                             handleDelete={this.handleDelete}
                             serchChange={this.serchChange}
                             provinceTreeList = {provinceTreeList}
+                            selectedRowsId = {this.state.selectedRowsId}
                         />
                         
                         <div className="clear"></div>
@@ -879,10 +876,14 @@ const SearchArea = React.createClass({
 
     },
     showModal: function() {
-        this.setState({
-            visible: true,
-        });
-
+        if (this.props.selectedRowsId.length === 0) {
+            message.error('请选择要删除的项！');
+            return;
+        }else{
+            this.setState({
+                visible: true,
+            });
+        }
     },
     hideModalOk: function() {
         this.setState({

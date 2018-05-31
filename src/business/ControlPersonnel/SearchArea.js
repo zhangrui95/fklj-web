@@ -5,7 +5,7 @@ import {serverUrls, getLocalTime} from '../../utils/index';
 import {monthFormat, dateFormat, serverUrl} from '../../utils/';
 import {Table, message, Input, Modal, Button, Form, Select, DatePicker,Upload} from 'antd';
 import {Regular} from '../../components/Regular'
-import {getControlPersonList,getControlExport,getControlDownload,getCustomFiledList,insertOrUpdateCustomFiled,delCustomFiled,updateTaskModelControlPerson,getTaskModelList} from "../../actions/ControlPersonnel";
+import {getControlPersonList,getControlExport,getControlExport2,getControlDownload,getCustomFiledList,insertOrUpdateCustomFiled,delCustomFiled,updateTaskModelControlPerson,getTaskModelList} from "../../actions/ControlPersonnel";
 import moment from 'moment';
 import 'moment/locale/zh-cn';
 moment.locale('zh-cn');
@@ -430,7 +430,12 @@ export  class SearchArea extends Component{
                     prompType:'export'
                 })
                 let creds = {ids:this.props.selectedRowsId.toString()}
-                store.dispatch(getControlExport(creds))
+                let controlType = this.props.controlType
+                if(controlType==='GK_WGK'){
+                    store.dispatch(getControlExport(creds))
+                }else{
+                    store.dispatch(getControlExport2(creds))
+                }
                 this.setState({
                     prompt:true,
                 })

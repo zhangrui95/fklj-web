@@ -143,10 +143,6 @@ export class InterrogationInformation extends Component {
         store.dispatch(PostInterrogationInformationData(creds));
     }
     handleDelete = () => {
-        if (this.state.selectedRowsId.length === 0) {
-            message.error('请选择要删除的项！');
-            return;
-        }
         let crads = { 
             pd: {
                 id: this.state.selectedRowsId,
@@ -492,6 +488,7 @@ export class InterrogationInformation extends Component {
                         handleDelete={this.handleDelete}
                         addShowModal={this.addShowModal}
                         serchChange={this.serchChange}
+                        selectedRowsId = {this.state.selectedRowsId}
                     />
 
                         <div className="clear"></div>
@@ -754,10 +751,14 @@ const SearchArea = React.createClass({
 
     },
     showModal: function() {
-        this.setState({
-            visible: true,
-        });
-
+        if (this.props.selectedRowsId.length === 0) {
+            message.error('请选择要删除的项！');
+            return;
+        }else{
+            this.setState({
+                visible: true,
+            });
+        }
     },
     hideModalOk: function() {
         this.setState({

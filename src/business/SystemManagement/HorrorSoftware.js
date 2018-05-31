@@ -240,11 +240,6 @@ export class HorrorSoftware extends Component {
         store.dispatch(PostHorrorSoftwareData(creds));
     }
     handleDelete = () => {
-        if (this.state.selectedRowsId.length === 0) {
-            message.error('请选择要删除的项！');
-            return;
-        }
-        
         let crads = {
             // id: this.state.selectedRowsId,
             // userName: sessionStorage.getItem('userName') || ''
@@ -542,6 +537,7 @@ export class HorrorSoftware extends Component {
                             addShowModal={this.addShowModal}
                             handleDelete={this.handleDelete}
                             serchChange={this.serchChange}
+                            selectedRowsId = {this.state.selectedRowsId}
                         />
 
                         <div className="clear"></div>
@@ -773,10 +769,14 @@ const SearchArea = React.createClass({
 
         },
         showModal: function() {
-            this.setState({
-                visible: true,
-            });
-
+            if (this.props.selectedRowsId.length === 0) {
+                message.error('请选择要删除的项！');
+                return;
+            }else{
+                this.setState({
+                    visible: true,
+                });
+            }
         },
         hideModalOk: function() {
             this.setState({

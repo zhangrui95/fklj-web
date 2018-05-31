@@ -113,12 +113,8 @@ const font14 = {
 
 function getNewTreeData(treeData, curKey) {
     let codeTempTreeList =  store.getState().SystemManagement.data.codeTempTreeList.result.list;
-   
-    console.log('TreeList===',codeTempTreeList);
     const loopTest = (data) => {
-        console.log('jiedao date',data);
         data.forEach((item) => {
-          //  console.log('(item.key).toString()',(TreeList.pid).toString()); 
             if (curKey === item.key.toString()) {//对比点击的节点和循环出来的树的id是否相同
                 item.children = codeTempTreeList;
             }
@@ -230,10 +226,6 @@ export class CodingTable extends Component {
         }
 //删除按钮点击
 handleDelete = () => {
-            if (this.state.selectedRowsId.length === 0) {
-                message.error('请选择要删除的项！');
-                return;
-            }
             let crads = {
                  currentPage: 1,
                 pd: {
@@ -270,7 +262,6 @@ handleDelete = () => {
             });
         }
     addShowModal = (record) => {
-        console.log('添加里面的',this.state.selectcitycode);
         this.setState({
             visible: true,
             modalType: 'add',
@@ -377,7 +368,6 @@ handleDelete = () => {
                     store.dispatch(updatepostCodeTableData(creds,params));
                 }else if(this.state.modalType === "add"){
                     let codeTableData = this.state.codeTable;
-                    console.log('codeTableData 判断',codeTableData);
                     if(codeTableData !== undefined ||codeTableData!== null||codeTableData!== ''){
                         // let keyvalue = '0';
                         // let levelvalue= '1';
@@ -395,8 +385,6 @@ handleDelete = () => {
                         //     }
 
                         // }
-                        console.log('this.state.keyvalue edit',this.state.keyvalue);
-                        
                         let creds = {//表单域不一定写了所有的字段 所以要把空值通过赋值显示
                             
                              pd:{
@@ -427,7 +415,6 @@ handleDelete = () => {
                     }
                    
                     //判断 传过来的是否为空
-                    console.log('add values',values);
                     // if(this.state.selectcitycode === undefined||this.state.selectcitycode === ""){
                     //     let creds = {//表单域不一定写了所有的字段 所以要把空值通过赋值显示
                            
@@ -504,7 +491,6 @@ handleDelete = () => {
         let nowPage = this.state.nowPage;
         let totalRecord = store.getState().SystemManagement.data.codeTableist.result.total;
         let isFetching = store.getState().SystemManagement.isFetching;
-        console.log('this.state.selectcode',this.state.selectcitycode);
         const columns = [{
             title: '序号',
             dataIndex: 'serial',
@@ -644,7 +630,8 @@ handleDelete = () => {
                             handleDelete={this.handleDelete}
                             serchChange={this.serchChange}
                             codeTreeList = {codeTreeList}
-                            codeTable={this.state.codeTable}
+                            codeTable={this.props.codeTable}
+                            selectedRowsId = {this.state.selectedRowsId}
                         />
                         <div className="clear"></div>
                     </div>
@@ -855,25 +842,20 @@ class Tree extends Component{
         });
     }
     onChange = (value) => {
-        
-        console.log('shu value',value);
         return new Promise((resolve) => {
             setTimeout(() => {
                     this.setState({
                         citycode:value,
                    });
-
-               console.log('this.state.citycode',this.state.citycode);
                this.props.citycodeChange(this.state.citycode);
-               this.props.handleClick();
-            },500)
+               // this.props.handleClick();
+            },200)
             
         })
        
        
    }
     render(){
-        console.log('this.state.citycode里面',this.state.citycode);
         const tProps = {
             treeData:this.state.treeData,
             value: this.state.citycode,
@@ -934,7 +916,6 @@ const SearchArea = React.createClass({
             if(codeTableData !== undefined ||codeTableData!== null||codeTableData!== ''){
                 for(var i=0;i<codeTableData.length;i++){
                     var codeTableList = codeTableData[i];
-                    console.log('codeTableList.value',codeTableList.value);
                     if(codeTableList.value === this.state.selectcitycode){
                         this.setState({
                             keyvalue:codeTableList.key,
@@ -942,27 +923,33 @@ const SearchArea = React.createClass({
                         })
                     }
                 }
-                let creds = {
-                    currentPage: 1,
-                    entityOrField: true,
-                    pd: {
-                        beginTime: this.state.dateBegin,
-                        endTime: this.state.dateEnd,
-                        pid:this.state.keyvalue?this.state.keyvalue.toString():'',
-                    },
-                    showCount: 10
-                }
-                store.dispatch(postCodeTableData(creds));
+                setTimeout(() => {
+                    let creds = {
+                        currentPage: 1,
+                        entityOrField: true,
+                        pd: {
+                            beginTime: this.state.dateBegin,
+                            endTime: this.state.dateEnd,
+                            pid:this.state.keyvalue?this.state.keyvalue.toString():'',
+                        },
+                        showCount: 10
+                    }
+                    store.dispatch(postCodeTableData(creds));
+                },200)
                 this.props.serchChange(
                     this.state.dateBegin, this.state.dateEnd,this.state.keyvalue)
             }
         }
     },
     showModal: function() {
-        this.setState({
-            visible: true,
-        });
-
+        if (this.props.selectedRowsId.length === 0) {
+            message.error('请选择要删除的项！');
+            return;
+        }else{
+            this.setState({
+                visible: true,
+            });
+        }
     },
     hideModalOk: function() {
         this.setState({
@@ -1010,7 +997,6 @@ const SearchArea = React.createClass({
             this.state.begindateClear, this.state.enddateClear, this.state.keyvalueClear)
     },
     render() {
-        console.log('查询条件',this.state.selectcitycode);
         let dateBegin = this.state.dateBegin;
         let dateEnd = this.state.dateEnd;
 
