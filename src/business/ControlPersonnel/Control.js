@@ -127,7 +127,7 @@ export  class Control extends Component{
     }
     handleExport = () => {
         let path = '';
-        if(controlType==='GK_WGK'){
+        if(this.props.controlType === 'GK_WGK'){
            path = serverUrls + store.getState().ControlPersonnel.data.getExport.result.path;
         }else{
            path = serverUrls + store.getState().ControlPersonnel.data.getExport2.result.path;
