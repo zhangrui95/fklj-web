@@ -987,7 +987,7 @@ class PopulationStatistics extends Component {
                             <div>
                                 <EchartsReact
                                     option={liveOption}
-                                    style={{ height: '87%', width: '89%',position:'absolute',top:8 }}
+                                    style={{ height: '87%', width: '89%', position: 'absolute', top: 8 }}
                                 />
                             </div>
                             {/*关注人员总数*/}
@@ -1288,8 +1288,7 @@ class PersonnelLst extends Component {
                     <div style={clear}></div>
                 </div>
                 <div style={{ color: '#f89448', marginTop: '16px' }}>
-                    <div>由 {personIndex ? personIndex.police_unit : '派出所'}，{personIndex ? personIndex.police_name : '警员'} 盘查</div>
-                    <div>{personIndex ? getMyDate(personIndex.checktime / 1000) : ''}</div>
+                    <div>由 {personIndex ? personIndex.police_unit : '派出所'}，{personIndex ? personIndex.police_name : '警员'}，于{personIndex ? getMyDate(personIndex.checktime) : ''} 盘查</div>
                 </div>
                 {/*</Link>*/}
             </div>

@@ -635,7 +635,7 @@ export class WithWeek extends Component {
                                             {getFieldDecorator('address', {
                                                 initialValue: obj ? obj.address ? obj.address : '' : '',
                                             })(
-                                                <Input disabled title={obj.address} />
+                                                <Input disabled title={obj ? obj.address ? obj.address : '' : ''} />
                                             )}
                                         </FormItem>
                                     </Col>
@@ -664,7 +664,7 @@ export class WithWeek extends Component {
                                             {getFieldDecorator('now_address', {
                                                 initialValue: obj ? obj.now_address ? obj.now_address : '' : '',
                                             })(
-                                                <Input disabled title={obj.now_address} />
+                                                <Input disabled title={obj ? obj.now_address ? obj.now_address : '' : ''} />
                                             )}
                                         </FormItem>
                                         <FormItem
@@ -675,7 +675,7 @@ export class WithWeek extends Component {
                                             {getFieldDecorator('work_address', {
                                                 initialValue: obj ? obj.work_address ? obj.work_address : '' : '',
                                             })(
-                                                <Input disabled title={obj.work_address} />
+                                                <Input disabled title={obj ? obj.work_address ? obj.work_address : '' : ''} />
                                             )}
                                         </FormItem>
                                         <FormItem
@@ -697,7 +697,7 @@ export class WithWeek extends Component {
                                             {getFieldDecorator('taskname', {
                                                 initialValue: obj ? obj.taskname ? obj.taskname : '' : '',
                                             })(
-                                                <Input disabled title={obj.taskname} />
+                                                <Input disabled title={obj ? obj.taskname ? obj.taskname : '' : ''} />
                                             )}
                                         </FormItem>
                                         <FormItem
@@ -763,7 +763,7 @@ export class WithWeek extends Component {
                                             {getFieldDecorator('checktime', {
                                                 initialValue: obj ? obj.checktime ? moment(getMyDate(obj.checktime / 1000), 'YYYY-MM-DD HH:mm:ss') : '' : '',
                                             })(
-                                                <DatePicker showTime placeholder="" format="YYYY-MM-DD HH:mm:ss" allowClear={false} style={{width:'247.91px'}} disabled />
+                                                <DatePicker showTime placeholder="" format="YYYY-MM-DD HH:mm:ss" allowClear={false} style={{ width: '247.91px' }} disabled />
                                             )}
                                         </FormItem>
 
@@ -1007,23 +1007,34 @@ const SearchArea = React.createClass({
         return (
             <div>
                 <div className="marLeft40 z_searchDiv">
-                    <label htmlFor="" className="font14">人员姓名：</label>
-                    <Input style={{ width: '180px', marginRight: "10px" }} type="text" id='name' placeholder='请输入人员姓名' value={name} onChange={this.handleNameClick} />
-                    <label htmlFor="" className="font14">身份证号：</label>
-                    <Input style={{ width: '230px', marginRight: "10px" }} type="text" id='sfzh' placeholder='请输入身份证号' value={idcard} onChange={this.handleSfzhClick} />
-                    <label htmlFor="" className="font14">居住类型：</label>
-                    <Select style={{ width: "10%", margin: "0 10px 0 0" }} value={address_type} onChange={this.handleaddressTypeClick} notFoundContent='暂无'>
-                        <Option value=''>全部</Option>
-                        <Option value={0}>常住</Option>
-                        <Option value={1}>暂住</Option>
-                        <Option value={2}>流动</Option>
-                    </Select>
-                    <label htmlFor="" className="font14">隶属任务：</label>
-                    <Input value={subtask_name} style={{ width: '180px', marginRight: "10px" }} type="text" id='subtask_name' placeholder='请输入隶属任务名称' onChange={this.handleSubtaskNameClick} />
-                    <label htmlFor="" className="font14">盘查警员：</label>
-                    <Input style={{ width: '150px', marginRight: "10px" }} type="text" id='police_name' placeholder='请输入盘查警员姓名' value={police_name} onChange={this.handlePoliceNameClick} />
+                    <div style={{ float: 'left', marginTop: '10px' }}>
+                        <label htmlFor="" className="font14">人员姓名：</label>
+                        <Input style={{ width: '180px', marginRight: "10px" }} type="text" id='name' placeholder='请输入人员姓名' value={name} onChange={this.handleNameClick} />
+                    </div>
+                    <div style={{ float: 'left', marginTop: '10px' }}>
+                        <label htmlFor="" className="font14">身份证号：</label>
+                        <Input style={{ width: '230px', marginRight: "10px" }} type="text" id='sfzh' placeholder='请输入身份证号' value={idcard} onChange={this.handleSfzhClick} />
+                    </div>
+                    <div style={{ float: 'left', marginTop: '10px' }}>
+                        <label htmlFor="" className="font14">居住类型：</label>
+                        <Select style={{ width: "100px", margin: "0 10px 0 0" }} value={address_type} onChange={this.handleaddressTypeClick} notFoundContent='暂无'>
+                            <Option value=''>全部</Option>
+                            <Option value={0}>常住</Option>
+                            <Option value={1}>暂住</Option>
+                            <Option value={2}>流动</Option>
+                        </Select>
+                    </div>
+                    <div style={{ float: 'left', marginTop: '10px' }}>
+                        <label htmlFor="" className="font14">隶属任务：</label>
+                        <Input value={subtask_name} style={{ width: '180px', marginRight: "10px" }} type="text" id='subtask_name' placeholder='请输入隶属任务名称' onChange={this.handleSubtaskNameClick} />
+                    </div>
+                    <div style={{ float: 'left', marginTop: '10px' }}>
+                        <label htmlFor="" className="font14">盘查警员：</label>
+                        <Input style={{ width: '150px', marginRight: "10px" }} type="text" id='police_name' placeholder='请输入盘查警员姓名' value={police_name} onChange={this.handlePoliceNameClick} />
+                    </div>
+                    <div style={{ clear: 'both' }}></div>
                 </div>
-                <div style={{ marginLeft: "2%", marginTop: "20px" }}>
+                <div style={{ marginLeft: "2%", marginTop: "10px" }}>
                     <label htmlFor="" className="font14">起止时间：</label>
                     <DatePicker placeholder="请选择日期" format={dateFormat} allowClear={false} style={{ marginRight: "10px" }} value={beginDateValue} defaultValue="" onChange={this.handleBeginDeteClick} />
                     <span className="font14" style={{ marginRight: "10px" }}>至</span>

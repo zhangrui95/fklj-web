@@ -722,7 +722,7 @@ export function postModifiypaddword(creds, statusFalse) {
                 sessionStorage.clear()
             } else {
                 console.log(3333);
-                message.error("提示：" + json.reason.text + "!");
+                message.error("提示：" + json.reason.text);
 
             }
         }).catch((e) => {

@@ -2,7 +2,7 @@
 import { connect } from "react-redux";
 import React, { Component, PropTypes, PureComponent } from 'react';
 import {
-    Link, 
+    Link,
 } from "react-router";
 import { goBack, push, replace } from 'react-router-redux';
 import { browserHistory } from 'react-router';
@@ -50,9 +50,9 @@ const collapseLi = {
     fontSize: 16
 };
 const collapseLi1 = {
-    width:"7%",
-    margin:"0 2%",
-    background:"#153073",
+    width: "7%",
+    margin: "0 2%",
+    background: "#153073",
     // padding:"1% 2.22%",
     // margin:"0 2%",
     fontSize: 16
@@ -193,7 +193,7 @@ class LoginIcon extends Component {
                 modalVisible: true
             });
         } else if (key === 'usermanage') {
-            let url = securityCenterUrls + "/loginToken?token="+sessionStorage.getItem('id_token') || '';
+            let url = securityCenterUrls + "/loginToken?token=" + sessionStorage.getItem('id_token') || '';
             // http://172.19.12.249:8200/user/login
             window.open(url);
         } else if (key === 'logout') {
@@ -288,11 +288,11 @@ class LoginTable extends Component {
                     oldPassword: values.oldPassword
                 });
                 if (values.confirmPassword !== values.newPassword) {
-                    message.warn('提示：确认密码和输入密码不一致');
+                    message.warn('提示：两次密码输入不一致');
                     return;
                 }
                 if (values.newPassword === values.oldPassword) {
-                    message.warn('提示：输入新密码和旧密码一致');
+                    message.warn('提示：两次密码输入一致');
                     return;
                 }
                 const creds = {
@@ -325,7 +325,7 @@ class LoginTable extends Component {
     hrefClick = () => {
         browserHistory.replace('/')
     }
-    
+
 
     render() {
         const { getFieldDecorator } = this.props.form;
@@ -353,19 +353,19 @@ class LoginTable extends Component {
                 {this.state.status ?
                     <div>
                         <Form onSubmit={this.handleSubmit} layout="inline">
-                            <FormItem labelCol={{ span: 8 }} wrapperCol={{ span: 14 }} label="旧密码" style={{ width: '90%', marginBottom: '16px' }} >
+                            <FormItem labelCol={{ span: 8 }} wrapperCol={{ span: 14 }} label="原密码" style={{ width: '90%', marginBottom: '16px' }} >
                                 {getFieldDecorator('oldPassword', {
                                     rules: [{
 
-                                        required: true, message: '请输入旧密码！',
+                                        required: true, message: '请输入原密码！',
                                     }],
                                 })(
                                     <Input
                                         size="large"
                                         //prefix={<Icon type="user" className={styles.prefixIcon} />}
                                         type="password"
-                                        placeholder="请输入旧密码"
-                                        style={{fontSize:14}}
+                                        placeholder="请输入原密码"
+                                        style={{ fontSize: 14 }}
                                     />
                                 )}
                             </FormItem>
@@ -382,24 +382,24 @@ class LoginTable extends Component {
                                         //prefix={<Icon type="lock" className={styles.prefixIcon} />}
                                         type="password"
                                         placeholder="请输入新密码！"
-                                        style={{fontSize:14}}
+                                        style={{ fontSize: 14 }}
                                     />
                                 )}
                             </FormItem>
-                            <FormItem labelCol={{ span: 8 }} wrapperCol={{ span: 14 }} label="确认新密码" style={{ width: '90%', marginBottom: '16px' }}>
+                            <FormItem labelCol={{ span: 8 }} wrapperCol={{ span: 14 }} label="确认密码" style={{ width: '90%', marginBottom: '16px' }}>
                                 {getFieldDecorator('confirmPassword', {
                                     rules: [{
                                         // pattern: this.state.pwdValidate,
                                         required: true,
-                                        message: '请输入正确的正确的6-24位数字与字母组合的确认新密码',
+                                        message: '请输入正确的正确的6-24位数字与字母组合的确认密码',
                                     }],
                                 })(
                                     <Input
                                         size="large"
                                         //prefix={<Icon type="lock" className={styles.prefixIcon} />}
                                         type="password"
-                                        placeholder="请输入确认新密码！"
-                                        style={{fontSize:14}}
+                                        placeholder="请输入确认密码！"
+                                        style={{ fontSize: 14 }}
                                     />
                                 )}
                             </FormItem>

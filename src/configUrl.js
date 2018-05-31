@@ -30,7 +30,7 @@ global.configUrl = {
 //测试打包
   // securityCenterUrl: securityCenter.fxdl,
   // serverUrl: Interface.fkww,
-  messageQueue:'ws://172.19.12.249:6100/myHandler',
+  messageQueue:'ws://172.19.12.249:7005/myHandler',
   //客户区域
   clientArea: '黑龙江',
   //PKI登录是否开启

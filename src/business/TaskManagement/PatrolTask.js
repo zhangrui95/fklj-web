@@ -244,7 +244,8 @@ export class PatrolTask extends Component {
             updateVisible: false,
             childrenModal: false,
             modalKey: this.state.modalKey + 1,
-            childrenid: ''
+            childrenid: '',
+            childrenname:''
         });
     }
     handleDelete = () => {
@@ -649,7 +650,7 @@ export class PatrolTask extends Component {
             title: '任务类别',
             dataIndex: 'category',
             render: (text, record) => (
-                <span>{record.category == 0 ? '周期' : '一次性'}</span>
+                <span>{record.category == 0 ? '周期' : ''}</span>
             ),
         }, {
             title: '任务周期',
@@ -1065,12 +1066,12 @@ export class PatrolTask extends Component {
                                                 <Select onChange={this.onChange} disabled>
                                                     <Option value=''>全部</Option>
                                                     <Option value={0}>周期</Option>
-                                                    <Option value={1}>一次性</Option>
+                                                    {/* <Option value={1}>一次性</Option> */}
                                                 </Select> :
                                                 <Select onChange={this.onChange} >
                                                     <Option value=''>全部</Option>
                                                     <Option value={0}>周期</Option>
-                                                    <Option value={1}>一次性</Option>
+                                                    {/* <Option value={1}>一次性</Option> */}
                                                 </Select>
                                         )}
                                     </FormItem>
@@ -1410,7 +1411,7 @@ const SearchArea = React.createClass({
                 <Select style={{ width: "10%", margin: "0 10px 0 0" }} value={this.state.category} onChange={this.categoryChange} notFoundContent='暂无'>
                     <Option value=''>全部</Option>
                     <Option value="0">周期</Option>
-                    <Option value="1">一次性</Option>
+                    {/* <Option value="1">一次性</Option> */}
                 </Select>
                 <label htmlFor="" className="font14">任务周期：</label>
                 <Select style={{ width: "10%", margin: "0 10px 0 0" }} value={this.state.cycle} onChange={this.cycleChange} notFoundContent='暂无'>
