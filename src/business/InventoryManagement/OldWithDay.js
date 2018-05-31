@@ -235,7 +235,6 @@ export class OldWithDay extends Component {
         }
     }
     render() {
-        console.log('this.sta', this.state.nowPage)
         const { getFieldDecorator } = this.props.form;
         let nowPage = this.state.nowPage;
         let isFetching = store.getState().InventoryManagement.data.oldinvenListHushi.isFetching;
@@ -243,16 +242,14 @@ export class OldWithDay extends Component {
         let obj = store.getState().InventoryManagement.data.oldinvenListHushi.result;
         let page = store.getState().InventoryManagement.data.oldinvenListHushi.result.page;
         let luokeData = store.getState().InventoryManagement.data.oldinvenLuoku.result;
-        console.log('luokeData', luokeData);
-        let baseInfo = luokeData.baseInfo;//人员基本信息
-        let recordPerson = luokeData.recordPerson;//人员信息及标签
-        let domicileInfo = luokeData.domicileInfo;//背景核查
-        let paintRealInfo = luokeData.paintRealInfo;//写实信息
-        let examinaTerrorismflow = luokeData.examinaTerrorismflow;//流入地信息
-        let scrutinyInfo = luokeData.scrutinyInfo;//特征核查
+        let baseInfo = luokeData.baseInfo ? luokeData.baseInfo : {};//人员基本信息
+        let recordPerson = luokeData.recordPerson ? luokeData.recordPerson : {};//人员信息及标签
+        let domicileInfo = luokeData.domicileInfo ? luokeData.domicileInfo : {};//背景核查
+        let paintRealInfo = luokeData.paintRealInfo ? luokeData.paintRealInfo : {};//写实信息
+        let examinaTerrorismflow = luokeData.examinaTerrorismflow ? luokeData.examinaTerrorismflow : {};//流入地信息
+        let scrutinyInfo = luokeData.scrutinyInfo ? luokeData.scrutinyInfo : [];//特征核查
         // 特征盘查 数组
         let scrutinyInfoList = [];
-        console.log('scrutinyInfo', scrutinyInfo);
         if (scrutinyInfo && scrutinyInfo.length > 0) {
             // let scrutinyInfoArr = JSON.stringify(scrutinyInfo).split(',');
             // for (let i = 0; i < scrutinyInfoArr.length; i++) {
@@ -293,7 +290,6 @@ export class OldWithDay extends Component {
         }
         let dataList = [];
         let recordNumber = parseInt((nowPage - 1) * 10);
-        console.log('nowPage', this.state.nowPage);
         if (data) {
             for (let i = 0; i < data.length; i++) {
                 let item = data[i];
@@ -316,7 +312,6 @@ export class OldWithDay extends Component {
                 });
             }
         }
-        console.log('dataList*****', dataList);
         const columns = [{
             title: '序号',
             dataIndex: 'serial',
@@ -448,6 +443,7 @@ export class OldWithDay extends Component {
             showQuickJumper: true,
 
         }
+        console.log('recordPerson', recordPerson);
         return (
             <div className="sliderWrap">
                 <div className="sliderItemDiv">
@@ -503,7 +499,7 @@ export class OldWithDay extends Component {
                                 </div> */}
                                 <Row>
                                     <Col span={4}>
-                                        <img src={recordPerson ? recordPerson.zpurl : "/images/zanwu.png" } style={{ width: '130px', height: '160px' }} />
+                                        <img src={recordPerson ? recordPerson.zpurl ? recordPerson.zpurl : "/images/zanwu.png" : ''} style={{ width: '130px', height: '160px' }} />
                                     </Col>
                                     <Col span={19}>
                                         <Row style={{ marginBottom: '10px' }}>
@@ -588,18 +584,19 @@ export class OldWithDay extends Component {
                                             出行目的：{examinaTerrorismflow ? examinaTerrorismflow.trippurp : ''}
                                         </Col>
                                         <Col span={8}>
-                                            出行日期：{examinaTerrorismflow ? getMyDate(examinaTerrorismflow.traveldate / 1000) : ''}
+                                            出行日期：{examinaTerrorismflow ? examinaTerrorismflow.traveldate ? getMyDate(examinaTerrorismflow.traveldate / 1000) : '' : ''}
                                         </Col>
                                     </Row>
                                     <Row style={{ marginBottom: '10px' }}>
                                         <Col span={8}>
-                                            投奔人：{examinaTerrorismflow ? examinaTerrorismflow.visitorname : '暂无'}，电话号码{examinaTerrorismflow ? examinaTerrorismflow.visitortel : '暂无'}
+                                            投奔人：{examinaTerrorismflow ? examinaTerrorismflow.visitorname ? examinaTerrorismflow.visitorname : '暂无' : '暂无'}，
+                                            电话号码&nbsp;{examinaTerrorismflow ? examinaTerrorismflow.visitortel ? examinaTerrorismflow.visitortel : '暂无' : '暂无'}
                                         </Col>
                                         <Col span={16}>
-                                            其他信息：座位号{examinaTerrorismflow ? examinaTerrorismflow.seatnumber : '暂无'}，
-                                            车厢号{examinaTerrorismflow ? examinaTerrorismflow.carriagenumber : '暂无'}
-                                            ，司机电话号{examinaTerrorismflow ? examinaTerrorismflow.drivertel : '暂无'}，
-                                            车牌号{examinaTerrorismflow ? examinaTerrorismflow.trainnumber : '暂无'}
+                                            其他信息：座位号&nbsp;{examinaTerrorismflow ? examinaTerrorismflow.seatnumber ? examinaTerrorismflow.seatnumber : '暂无' : '暂无'}，
+                                            车厢号&nbsp;{examinaTerrorismflow ? examinaTerrorismflow.carriagenumber ? examinaTerrorismflow.carriagenumber : '暂无' : '暂无'}
+                                            ，司机电话号&nbsp;{examinaTerrorismflow ? examinaTerrorismflow.drivertel ? examinaTerrorismflow.drivertel : '暂无' : '暂无'}，
+                                            车牌号&nbsp;{examinaTerrorismflow ? examinaTerrorismflow.trainnumber ? examinaTerrorismflow.trainnumber : '暂无' : '暂无'}
                                         </Col>
                                     </Row>
                                 </Row>
@@ -654,8 +651,8 @@ export class OldWithDay extends Component {
                                             </Modal>
                                         </Col>
                                         <Col span={24}>
-                                            <Row style={{marginTop:'8px'}}>
-                                                <Col span={2} style={{textAlign:'right'}}>
+                                            <Row style={{ marginTop: '8px' }}>
+                                                <Col span={2} style={{ textAlign: 'right' }}>
                                                     <p style={{ marginBottom: '14px' }}>详情：</p>
                                                 </Col>
                                                 <Col span={22}>
@@ -851,10 +848,22 @@ const SearchArea = React.createClass({
         return (
             <div>
                 <div className="marLeft40 z_searchDiv">
-                    <label htmlFor="" className="font14">人员姓名：</label>
-                    <Input style={{ width: '180px', marginRight: "10px" }} type="text" id='name' placeholder='请输入人员姓名' value={name} onChange={this.handleNameClick} />
-                    <label htmlFor="" className="font14">身份证号：</label>
-                    <Input style={{ width: '230px', marginRight: "10px" }} type="text" id='sfzh' placeholder='请输入身份证号' value={idcard} onChange={this.handleSfzhClick} />
+                    <div style={{ float: 'left' ,marginTop:'10px'}}>
+                        <label htmlFor="" className="font14">人员姓名：</label>
+                        <Input style={{ width: '180px', marginRight: "10px" }} type="text" id='name' placeholder='请输入人员姓名' value={name} onChange={this.handleNameClick} />
+                    </div>
+                    <div style={{ float: 'left' ,marginTop:'10px'}}>
+                        <label htmlFor="" className="font14">身份证号：</label>
+                        <Input style={{ width: '230px', marginRight: "10px" }} type="text" id='sfzh' placeholder='请输入身份证号' value={idcard} onChange={this.handleSfzhClick} />
+                    </div>
+                    <div style={{ float: 'left' ,marginTop:'10px'}}>
+                        <label htmlFor="" className="font14">所属机构：</label>
+                        <Input value={subtask_name} style={{ width: '230px', marginRight: "10px" }} type="text" id='subtask_name' placeholder='请输入所属机构名称' onChange={this.handleSubtaskNameClick} />
+                    </div>
+                    <div style={{ float: 'left',marginTop:'10px' }}>
+                        <label htmlFor="" className="font14">盘查警员：</label>
+                        <Input style={{ width: '230px', marginRight: "10px" }} type="text" id='police_name' placeholder='请输入盘查警员姓名' value={police_name} onChange={this.handlePoliceNameClick} />
+                    </div>
                     {/* <label htmlFor="" className="font14">居住类型：</label>
                     <Select style={{ width: "10%", margin: "0 10px 0 0" }} value={address_type} onChange={this.handleaddressTypeClick} notFoundContent='暂无'>
                         <Option value=''>全部</Option>
@@ -862,12 +871,9 @@ const SearchArea = React.createClass({
                         <Option value={1}>暂住</Option>
                         <Option value={2}>流动</Option>
                     </Select> */}
-                    <label htmlFor="" className="font14">所属机构：</label>
-                    <Input value={subtask_name} style={{ width: '230px', marginRight: "10px" }} type="text" id='subtask_name' placeholder='请输入所属机构名称' onChange={this.handleSubtaskNameClick} />
-                    <label htmlFor="" className="font14">盘查警员：</label>
-                    <Input style={{ width: '230px', marginRight: "10px" }} type="text" id='police_name' placeholder='请输入盘查警员姓名' value={police_name} onChange={this.handlePoliceNameClick} />
+                    <div style={{clear:'both'}}></div>
                 </div>
-                <div style={{ marginLeft: "2%", marginTop: "20px" }}>
+                <div style={{ marginLeft: "2%", marginTop: "10px" }}>
                     <label htmlFor="" className="font14">起止时间：</label>
                     <DatePicker placeholder="请选择日期" format={dateFormat} allowClear={false} style={{ marginRight: "10px" }} value={beginDateValue} defaultValue="" onChange={this.handleBeginDeteClick} />
                     <span className="font14" style={{ marginRight: "10px" }}>至</span>
@@ -1160,8 +1166,8 @@ class CallLogTable extends Component {
 
         }];
         let timevalue = this.state.record ? moment(this.state.record.time, 'YYYY-MM-DD HH:mm:ss') : '';
-        console.log('this.state.record.time',this.state.record);
-        console.log('timevalue',timevalue);
+        console.log('this.state.record.time', this.state.record);
+        console.log('timevalue', timevalue);
         return (
             <div>
                 <Table columns={columns}
@@ -1318,7 +1324,7 @@ class MessageTable extends Component {
 
         }];
         let timevalue = this.state.record ? moment(getMyDate(this.state.record.time / 1000), 'YYYY-MM-DD HH:mm:ss') : '';
-        console.log('timevalue##',timevalue);
+        console.log('timevalue##', timevalue);
         return (
             <div>
                 <Table columns={columns}
@@ -1479,7 +1485,7 @@ class InstallationSoftwareTable extends Component {
                     </div>
                     <div style={{ marginBottom: "10px" }}>
                         <label style={mStyle} htmlFor="">安装包名称：</label>
-                        <Input style={{ width: '60%' }} value={this.state.record ? this.state.record.pkg : ''} disabled />
+                        <TextArea style={{ width: '60%', height: '120px', resize: 'none' }} autosize={true} value={this.state.record ? this.state.record.pkg : ''} disabled />
                     </div>
                     <div style={{ marginBottom: "10px" }}>
                         <label style={mStyle} htmlFor="">版本号：</label>
