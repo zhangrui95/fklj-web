@@ -112,7 +112,7 @@ export  class AddSystem extends Component{
             if(!reg.test(e)){
                 message.error(Regular('number').msg);
                 this.setState({
-                    zdyValue: ''
+                    zdyValue: this.state.zdyValue
                 })
                 return;
             }else{
