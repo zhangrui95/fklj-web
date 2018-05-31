@@ -230,10 +230,6 @@ export class CodingTable extends Component {
         }
 //删除按钮点击
 handleDelete = () => {
-            if (this.state.selectedRowsId.length === 0) {
-                message.error('请选择要删除的项！');
-                return;
-            }
             let crads = {
                  currentPage: 1,
                 pd: {
@@ -645,6 +641,7 @@ handleDelete = () => {
                             serchChange={this.serchChange}
                             codeTreeList = {codeTreeList}
                             codeTable={this.state.codeTable}
+                            selectedRowsId = {this.state.selectedRowsId}
                         />
                         <div className="clear"></div>
                     </div>
@@ -959,10 +956,14 @@ const SearchArea = React.createClass({
         }
     },
     showModal: function() {
-        this.setState({
-            visible: true,
-        });
-
+        if (this.props.selectedRowsId.length === 0) {
+            message.error('请选择要删除的项！');
+            return;
+        }else{
+            this.setState({
+                visible: true,
+            });
+        }
     },
     hideModalOk: function() {
         this.setState({
