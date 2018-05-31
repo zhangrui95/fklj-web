@@ -1207,7 +1207,7 @@ class CallLogTable extends Component {
                     </div>
                     <div style={{ marginBottom: "10px" }}>
                         <label style={mStyle} htmlFor="">通话时长：</label>
-                        <Input style={{ width: '60%' }} value={this.state.record ? this.state.record.voicelen : ''} disabled />
+                        <Input style={{ width: '60%' }} value={this.state.record ? this.state.record.voicelen+' 秒' : ''} disabled />
                     </div>
 
                 </Modal>

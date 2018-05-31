@@ -1064,7 +1064,7 @@ class ActiveDataStatistics extends Component {
         let isShowDiv = this.state.isShowDiv;
         let isFetching = store.getState().Home.data.policeStationData.isFetching;
         let policeNowPage = this.state.policeNowPage;
-        let recordNumber = parseInt((policeNowPage - 1) * 10);
+        let recordNumber = parseInt((policeNowPage - 1) * 6);
         let dataList = [];
         for (let i = 0; i < policeStationDataList.length; i++) {
             let item = policeStationDataList[i];
