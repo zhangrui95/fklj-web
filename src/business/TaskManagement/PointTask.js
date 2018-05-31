@@ -483,6 +483,7 @@ export class PointTask extends Component {
                     footer={null}
                     key={this.state.modalKey}
                     maskClosable={false}
+                    wrapClassName="taskModalClass"
                 >
                     <Form onSubmit={this.saveModel}>
                         <Row className="formItemLeft">

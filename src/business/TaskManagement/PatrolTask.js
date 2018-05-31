@@ -146,6 +146,8 @@ export class PatrolTask extends Component {
             expandKeys: [],
             childrenid: '',
             disabled: false,
+            childrenDetailsVisible: false,
+            childrenDetailsRecord: ''
 
         };
         this.pageChange = this.pageChange.bind(this);
@@ -245,7 +247,7 @@ export class PatrolTask extends Component {
             childrenModal: false,
             modalKey: this.state.modalKey + 1,
             childrenid: '',
-            childrenname:''
+            childrenname: ''
         });
     }
     handleDelete = () => {
@@ -441,11 +443,9 @@ export class PatrolTask extends Component {
         }
     }
     expandedRowRender = (record) => {
-        console.log('record', record);
         const list = [];
         if (record.control_person) {
             let dataList = JSON.parse(record.control_person.value);
-            console.log('dataList', dataList);
             for (let i = 0; i < dataList.length; i++) {
                 let item = dataList[i];
                 list.push(
@@ -489,7 +489,7 @@ export class PatrolTask extends Component {
                 taskswitch: "0",
                 updateuser: user.user.name
             }
-            let {  name, category, enddate, begindate, cycle, personname } = this.state;
+            let { name, category, enddate, begindate, cycle, personname } = this.state;
             let params = {
                 currentPage: 1,
                 entityOrField: true,
@@ -506,7 +506,7 @@ export class PatrolTask extends Component {
             store.dispatch(editTaskHushiData(creds, params))
         }
         this.setState({
-            nowPage:1
+            nowPage: 1
         });
     }
     // 子任务名称查询变换函数
@@ -543,6 +543,20 @@ export class PatrolTask extends Component {
 
         }
         store.dispatch(postChildrenTaskListHushiData(creds));
+    }
+    // 子任务详情
+    childrenShowModal = (record) => {
+        console.log('子任务record', record);
+        this.setState({
+            childrenDetailsVisible: true,
+            childrenDetailsRecord: record
+        });
+    }
+    childrenDetailshandleCancel = () => {
+        this.setState({
+            childrenDetailsVisible: false,
+            childrenDetailsRecord: ''
+        });
     }
     render() {
         const { getFieldDecorator } = this.props.form;
@@ -587,6 +601,7 @@ export class PatrolTask extends Component {
                     type: item.type,
                     id: item.id,
                     control_person: item.control_person,
+                    endtime: getMyDate(item.endtime / 1000),
                 });
             }
         }
@@ -621,7 +636,16 @@ export class PatrolTask extends Component {
 
             }
         }
-        console.log('selectOption', selectOption);
+        const chidrentaglist = [];
+        if (this.state.childrenDetailsRecord.control_person) {
+            let dataList = JSON.parse(this.state.childrenDetailsRecord.control_person.value);
+            for (let i = 0; i < dataList.length; i++) {
+                let item = dataList[i];
+                chidrentaglist.push(
+                    <Tag color="#2db7f5" style={{ marginBottom: '8px',fontSize:'14px' }} title={item.name + " " + item.idcard}>{item.name + " " + item.idcard}</Tag>
+                );
+            }
+        }
 
         // 子任务列表
         const colu = [{
@@ -634,10 +658,21 @@ export class PatrolTask extends Component {
             title: '任务开始时间',
             dataIndex: 'createtime',
         }, {
+            title: '任务结束时间',
+            dataIndex: 'endtime',
+        }, {
             title: '任务状态',
             key: 'type',
             render: (text, record) => (
                 <span>{record.type == 0 ? '待办任务' : record.type === 1 ? '已完成任务' : '超期任务'}</span>
+            ),
+        }, {
+            title: '操作',
+            key: 'action',
+            render: (text, record) => (
+                <span>
+                    <span onClick={(e) => this.childrenShowModal(record)} style={{ cursor: 'pointer' }}>详情</span>
+                </span>
             ),
         }]
         const columns = [{
@@ -988,7 +1023,8 @@ export class PatrolTask extends Component {
                         onCancel={this.handleCancel}
                         footer={null}
                         maskClosable={false}
-                    // key={this.state.modalKey}
+                        // key={this.state.modalKey}
+                        wrapClassName="taskModalClass"
                     >
                         <Form onSubmit={this.saveModel}>
                             <Row className="formItemLeft">
@@ -1239,7 +1275,7 @@ export class PatrolTask extends Component {
                                     // expandRowByClick={true}
                                     // expandIconAsCell={false}
                                     rowKey={(record) => record.id}
-                                    expandedRowRender={(record) => this.expandedRowRender(record)}
+                                    // expandedRowRender={(record) => this.expandedRowRender(record)}
                                     pagination={childrenpagination}
                                 />}
                             <div className="clear"></div>
@@ -1247,6 +1283,97 @@ export class PatrolTask extends Component {
                             <Pagination size="small" total={childrenTotal} current={this.state.childrennowpage} pageSize={10} /> :
                             ''
                         } */}
+                            {this.state.childrenDetailsVisible ?
+                                <Modal
+                                    title="子任务列表详情"
+                                    visible={this.state.childrenDetailsVisible}
+                                    footer={null}
+                                    onCancel={this.childrenDetailshandleCancel}
+                                    width={750}
+                                    style={{ position: "relative" }}
+                                    maskClosable={false}
+                                >
+                                    <Form key='childrenDetailsForm'>
+                                        <Row className="formItemLeft">
+                                            <Col span={24}>
+                                                <FormItem
+                                                    {...formItemLayouts}
+                                                    label="任务名称"
+                                                >
+                                                    {getFieldDecorator('name', {
+                                                        initialValue: this.state.childrenDetailsRecord ? this.state.childrenDetailsRecord.name : '',
+                                                        validateFirst: true
+                                                    })(
+                                                        <Input disabled />
+                                                    )}
+                                                </FormItem>
+                                            </Col>
+                                            <Col span={12}>
+                                                <FormItem
+                                                    {...formItemLayout}
+                                                    label="盘查数量"
+                                                >
+                                                    {getFieldDecorator('endtime', {
+                                                        initialValue: this.state.childrenDetailsRecord ? moment(this.state.childrenDetailsRecord.endtime, 'YYYY-MM-DD HH:mm:ss') : '',
+                                                    })(
+                                                        <Input />
+                                                    )}
+                                                </FormItem>
+                                            </Col>
+                                            <Col span={12}>
+                                                <FormItem
+                                                    {...formItemLayout}
+                                                    label="任务状态"
+                                                >
+                                                    {getFieldDecorator('endtime', {
+                                                        initialValue: this.state.childrenDetailsRecord ? this.state.childrenDetailsRecord.type === 0 ? '待办任务' :
+                                                            this.state.childrenDetailsRecord.type === 1 ? '已完成任务' : '超期任务' : '',
+                                                    })(
+                                                        <Input />
+                                                    )}
+                                                </FormItem>
+                                            </Col>
+                                            <Col span={12}>
+                                                <FormItem
+                                                    {...formItemLayout}
+                                                    label="任务开始时间"
+                                                >
+                                                    {getFieldDecorator('createtime', {
+                                                        initialValue: this.state.childrenDetailsRecord ? moment(this.state.childrenDetailsRecord.createtime, 'YYYY-MM-DD HH:mm:ss') : '',
+                                                    })(
+                                                        <DatePicker showTime placeholder="" format="YYYY-MM-DD HH:mm:ss" allowClear={false} style={{ width: '204px' }} disabled />
+                                                    )}
+                                                </FormItem>
+                                            </Col>
+                                            <Col span={12}>
+                                                <FormItem
+                                                    {...formItemLayout}
+                                                    label="任务结束时间"
+                                                >
+                                                    {getFieldDecorator('endtime', {
+                                                        initialValue: this.state.childrenDetailsRecord ? moment(this.state.childrenDetailsRecord.endtime, 'YYYY-MM-DD HH:mm:ss') : '',
+                                                    })(
+                                                        <DatePicker showTime placeholder="" format="YYYY-MM-DD HH:mm:ss" allowClear={false} style={{ width: '204px' }} disabled />
+                                                    )}
+                                                </FormItem>
+                                            </Col>
+                                            <Col span={24}>
+                                                <div style={{ width: '16.66666667%', float: 'left', color: '#fff', textAlign: "right" }}>
+                                                    盘查对象：
+                                                </div>
+                                                <div style={{ width: '79.16666667%', float: 'left', padding: '11px 11px',fontSize:'14px', border: '1px solid #0C5F93', maxHeight: '300px', overflow: 'auto',cursor:"not-allowed" }}>
+                                                    {chidrentaglist}
+                                                </div>
+                                                <div style={{ clear: 'both' }}></div>
+                                            </Col>
+
+
+                                        </Row>
+
+                                    </Form>
+                                </Modal> : ''
+                            }
+
                         </div>
 
                     </Modal> : ''

@@ -374,7 +374,7 @@ class LoginTable extends Component {
                                     rules: [{
                                         // pattern: this.state.pwdValidate,
                                         required: true,
-                                        message: '请输入正确的6-24位数字与字母组合的新密码!',
+                                        message: '请输入新密码!',
                                     }],
                                 })(
                                     <Input
@@ -391,7 +391,7 @@ class LoginTable extends Component {
                                     rules: [{
                                         // pattern: this.state.pwdValidate,
                                         required: true,
-                                        message: '请输入正确的正确的6-24位数字与字母组合的确认密码',
+                                        message: '请输入确认密码',
                                     }],
                                 })(
                                     <Input

@@ -485,7 +485,7 @@ export class DoneTask extends Component {
                     footer={null}
                     key={this.state.modalKey}
                     maskClosable={false}
-                    maskClosable={false}
+                    wrapClassName="taskModalClass"
                 >
                     <Form onSubmit={this.saveModel}>
                         <Row className="formItemLeft">
