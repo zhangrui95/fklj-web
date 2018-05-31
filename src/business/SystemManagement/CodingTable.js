@@ -862,8 +862,8 @@ class Tree extends Component{
 
                console.log('this.state.citycode',this.state.citycode);
                this.props.citycodeChange(this.state.citycode);
-               this.props.handleClick();
-            },500)
+               // this.props.handleClick();
+            },200)
             
         })
        
@@ -939,17 +939,19 @@ const SearchArea = React.createClass({
                         })
                     }
                 }
-                let creds = {
-                    currentPage: 1,
-                    entityOrField: true,
-                    pd: {
-                        beginTime: this.state.dateBegin,
-                        endTime: this.state.dateEnd,
-                        pid:this.state.keyvalue?this.state.keyvalue.toString():'',
-                    },
-                    showCount: 10
-                }
-                store.dispatch(postCodeTableData(creds));
+                setTimeout(() => {
+                    let creds = {
+                        currentPage: 1,
+                        entityOrField: true,
+                        pd: {
+                            beginTime: this.state.dateBegin,
+                            endTime: this.state.dateEnd,
+                            pid:this.state.keyvalue?this.state.keyvalue.toString():'',
+                        },
+                        showCount: 10
+                    }
+                    store.dispatch(postCodeTableData(creds));
+                },200)
                 this.props.serchChange(
                     this.state.dateBegin, this.state.dateEnd,this.state.keyvalue)
             }
