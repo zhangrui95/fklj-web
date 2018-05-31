@@ -61,6 +61,12 @@ const initialState = {
                 path:""
             }
         },
+        getExport2:{
+            reason:"",
+            result:{
+                path:""
+            }
+        },
         Download:{
             reason:"",
             result:{
@@ -273,6 +279,9 @@ const ControlPersonnel =(state = initialState, action) =>{
             return newState;
         case 'Export_Succeed':
             newState.data.getExport = action.data;
+            return newState;
+        case 'Export2_Succeed':
+            newState.data.getExport2 = action.data;
             return newState;
         case 'Download_Succeed':
             newState.data.Download = action.data;

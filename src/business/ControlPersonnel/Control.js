@@ -126,7 +126,12 @@ export  class Control extends Component{
         });
     }
     handleExport = () => {
-        let path = serverUrls + store.getState().ControlPersonnel.data.getExport.result.path;
+        let path = '';
+        if(controlType==='GK_WGK'){
+           path = serverUrls + store.getState().ControlPersonnel.data.getExport.result.path;
+        }else{
+           path = serverUrls + store.getState().ControlPersonnel.data.getExport2.result.path;
+        }
         window.open(path);
     }
     initEntity = () =>{
