@@ -28,7 +28,9 @@ import {
     Form,
     Input,
     Select,
-    Spin
+    Spin,
+    message,
+    InputNumber
 } from 'antd';
 import {
     getControlTimeCycle,
@@ -38,6 +40,7 @@ import moment from 'moment';
 moment.locale('zh-cn');
 const FormItem = Form.Item;
 const Option = Select.Option;
+import {Regular} from '../../components/Regular'
 
 const formItemLayout = {
     labelCol: {
@@ -104,16 +107,32 @@ export  class AddSystem extends Component{
         })
     }
     zdyInput = (e) =>{
-        this.setState({
-            zdyValue: e.target.value
-        })
+        if(e!==''){
+            let reg = Regular('number').reg
+            if(!reg.test(e)){
+                message.error(Regular('number').msg);
+                this.setState({
+                    zdyValue: ''
+                })
+                return;
+            }else{
+                this.setState({
+                    zdyValue: parseInt(e)
+                })
+            }
+        }
     }
     getSave=()=>{
         let core = {}
         if(this.state.timeValue!='0'){
             core = {defaulttaskcycle:this.state.cycle.toString(),outofcontroltime:this.state.timeValue}
         }else{
-            core = {defaulttaskcycle:this.state.cycle.toString(),outofcontroltime:this.state.zdyValue}
+            if(this.state.zdyValue!==''){
+                core = {defaulttaskcycle:this.state.cycle.toString(),outofcontroltime:this.state.zdyValue}
+            }else{
+                message.error(Regular('number').msg);
+                return
+            }
         }
         store.dispatch(UpdateControlTimeCycle(core))
         store.dispatch(getControlTimeCycle({}))
@@ -142,7 +161,7 @@ export  class AddSystem extends Component{
                                 style={{width:'100px', float:'left'}}
                                 {...formItem}
                             >
-                                <Input value={this.state.zdyValue} onChange={this.zdyInput}/>
+                                <InputNumber min={0} value={this.state.zdyValue} onChange={this.zdyInput} />
                             </FormItem>
                             <span style={{color:'#fff', float:'left',lineHeight:'40px'}}>小时</span>
                         </div>
