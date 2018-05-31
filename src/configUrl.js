@@ -25,14 +25,14 @@ const securityCenter = {//安全中心
 global.configUrl = {
   //系统名称
   sysName: '反恐利剑信息化作战系统',
-  // securityCenterUrls: securityCenter.testUrl,
-  // securityCenterUrl: securityCenter.ZX,
-  // serverUrl: Interface.ZZH,
+  securityCenterUrls: securityCenter.testUrl,
+  securityCenterUrl: securityCenter.ZX,
+  serverUrl: Interface.ZZH,
   // serverUrl: 'http://172.19.12.213:7005',
   //测试打包
-  securityCenterUrls:securityCenter.testUrl,
-  securityCenterUrl: securityCenter.fxdl,
-  serverUrl: Interface.fkww,
+  // securityCenterUrls:securityCenter.testUrl,
+  // securityCenterUrl: securityCenter.fxdl,
+  // serverUrl: Interface.fkww,
   messageQueue: 'ws://172.19.12.249:7005/myHandler',
   //客户区域
   clientArea: '黑龙江',

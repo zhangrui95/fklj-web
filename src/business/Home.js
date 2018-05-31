@@ -1085,6 +1085,15 @@ class ActiveDataStatistics extends Component {
             title: '单位',
             dataIndex: 'police_unit_name',
             key: 'police_unit_name',
+            render: (text, record) => (
+                <span title={text} style={{ cursor: "pointer" }}>
+                    {
+                        text.length <= 10 ?
+                            text.slice(0, 9) : text.slice(0, 9) + "..."
+
+                    }
+                </span>
+            ),
         }, {
             title: '任务量',
             dataIndex: 'count',
