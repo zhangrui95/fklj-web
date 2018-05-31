@@ -107,7 +107,7 @@ export  class AddSystem extends Component{
         })
     }
     zdyInput = (e) =>{
-        if(e!==''){
+        if(e!=='' && e!==undefined){
             let reg = Regular('number').reg
             if(!reg.test(e)){
                 message.error(Regular('number').msg);
@@ -137,6 +137,10 @@ export  class AddSystem extends Component{
         store.dispatch(UpdateControlTimeCycle(core))
         store.dispatch(getControlTimeCycle({}))
     }
+    cs=()=>{
+        console.log('执行');
+        return
+    }
     render() {
         let result = store.getState().SystemManagement.data.getControlTimeCycle.result;
         const { getFieldDecorator } = this.props.form;
@@ -161,7 +165,7 @@ export  class AddSystem extends Component{
                                 style={{width:'100px', float:'left'}}
                                 {...formItem}
                             >
-                                <InputNumber min={0} value={this.state.zdyValue} onChange={this.zdyInput} />
+                                <InputNumber min={0} value={this.state.zdyValue} onChange={this.zdyInput} onBlur={this.cs}/>
                             </FormItem>
                             <span style={{color:'#fff', float:'left',lineHeight:'40px'}}>小时</span>
                         </div>
