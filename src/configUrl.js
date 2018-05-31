@@ -17,6 +17,7 @@ const securityCenter = {//安全中心
   test: 'http://172.19.1.145:8100',
   ZX: 'http://172.19.12.165:8080',//张旭接口
   pingshiTest: 'http://172.19.12.249:8100',
+  testUrl:'http://172.19.12.249:8200',//安全中心线上部署地址
   fxdl:'/security-service',
 };
 
@@ -24,7 +25,7 @@ const securityCenter = {//安全中心
 global.configUrl = {
   //系统名称
   sysName: '反恐利剑信息化作战系统',
-
+  securityCenterUrls:securityCenter.testUrl,
   securityCenterUrl: securityCenter.ZX,
   serverUrl: Interface.ZZH,
 //测试打包
