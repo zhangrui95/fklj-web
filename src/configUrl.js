@@ -8,30 +8,31 @@ const Interface = {//服务器
   test: 'http://172.19.1.145:7000',
   fxdl: '/data-service',
   lsfxdl: '/data-service-wwhc',
-  fkww:'/fkww-data-service',
+  fkww: '/fkww-data-service',
   MXD: 'http://172.19.12.102:8888',//慕兴达
   ZZH: 'http://172.19.12.213:8088/data-service',//张泽恒
-  pingshiTest:'http://172.19.12.249:8888'
+  pingshiTest: 'http://172.19.12.249:8888'
 };
 const securityCenter = {//安全中心
   test: 'http://172.19.1.145:8100',
   ZX: 'http://172.19.12.165:8080',//张旭接口
   pingshiTest: 'http://172.19.12.249:8100',
-  testUrl:'http://172.19.12.249:8200',//安全中心线上部署地址
-  fxdl:'/security-service',
+  testUrl: 'http://172.19.12.249:8200',//安全中心线上部署地址
+  fxdl: '/security-service',
 };
 
 
 global.configUrl = {
   //系统名称
   sysName: '反恐利剑信息化作战系统',
-  securityCenterUrls:securityCenter.testUrl,
+  securityCenterUrls: securityCenter.testUrl,
   securityCenterUrl: securityCenter.ZX,
   serverUrl: Interface.ZZH,
-//测试打包
-  // securityCenterUrl: securityCenter.fxdl,
+  //测试打包
+  //securityCenterUrls:securityCenter.testUrl,
+  //securityCenterUrl: securityCenter.fxdl,
   // serverUrl: Interface.fkww,
-  messageQueue:'ws://172.19.12.249:7005/myHandler',
+  messageQueue: 'ws://172.19.12.249:7005/myHandler',
   //客户区域
   clientArea: '黑龙江',
   //PKI登录是否开启
