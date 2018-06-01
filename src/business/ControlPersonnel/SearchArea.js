@@ -432,9 +432,9 @@ export  class SearchArea extends Component{
                 let creds = {ids:this.props.selectedRowsId.toString()}
                 let controlType = this.props.controlType
                 if(controlType==='GK_WGK'){
-                    store.dispatch(getControlExport(creds))
-                }else{
                     store.dispatch(getControlExport2(creds))
+                }else{
+                    store.dispatch(getControlExport(creds))
                 }
                 this.setState({
                     prompt:true,
