@@ -314,7 +314,7 @@ class Home extends Component {
 
                             {/*任务数据统计*/}
                             <TaskStatistics dateSet={dateSet} />
-                            <div style={{ position: "absolute", bottom: "15px", right: "15px", width: "25%", height: "40%", minHeight: "270px" }}>
+                            <div style={{ position: "absolute", bottom: "15px", right: "15px", width: "25%", height: "40%" }}>
                                 <Personnel text="最新盘查人员" personType='ypcrw' code='201001' dateSet={dateSet} />
                                 <div style={clear}></div>
                             </div>
@@ -1118,9 +1118,9 @@ class ActiveDataStatistics extends Component {
             pageSize: page.showCount,
         };
         return (
-            <div style={{ position: "absolute", top: "15px", right: "15px", width: "25%", height: "50%", minHeight: '340px' }}>
+            <div style={{ position: "absolute", top: "15px", right: "15px", width: "25%", height: "50%" }}>
                 <DeepBlueBtnY width="25px" text="责任单位" borderLeft="2px solid #0C1CD8" borderRight="0" borderTop="0" float="right" display={isShowBtn} onClick={this.BtnClick} />
-                <div style={{ padding: "10px 15px", background: "rgba(25,41,85,0.5)", display: isShowDiv, height: '99.9%', position: 'relative' }}>
+                <div style={{ padding: "10px 15px", background: "rgba(25,41,85,0.5)", display: isShowDiv, height: '99.9%', position: 'relative' , overflow:'auto'}}>
                     {/*标题*/}
                     <div>
                         <img src="/images/guanbi.png" alt="" style={{ float: "left", marginRight: "20px", cursor: "pointer" }} onClick={this.chartsClick} />
@@ -1231,7 +1231,7 @@ class Personnel extends Component {
         return (
             <div>
                 <DeepBlueBtnY width="25" text={this.props.text} borderLeft="2px solid #0C1CD8" borderRight="0" borderTop="0" float="right" display={isShowBtn} onClick={this.BtnClick} />
-                <div style={{ padding: "10px 10px", background: "rgba(25,41,85,0.5)", height: "100%", display: isShowDiv, position: 'relative' }}>
+                <div style={{ padding: "10px 10px", background: "rgba(25,41,85,0.5)", height: "100%", display: isShowDiv, position: 'relative',overflow:'auto' }}>
                     {/*标题*/}
                     <div style={{ borderBottom: "1px solid #585c77" }}>
                         <img src="/images/guanbi.png" alt="" style={{ float: 'left', marginRight: "20px", cursor: "pointer" }} onClick={this.chartsClick} />
