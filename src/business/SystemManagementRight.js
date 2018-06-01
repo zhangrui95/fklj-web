@@ -26,10 +26,16 @@ import {AddSystem}  from "./SystemManagement/AddSystem";
 
 import {store} from '../index.js';
 import  * as constants from "../utils/Constants";
-
+let menus = [];
 class SystemManagementRight extends Component{
 
     componentDidMount() {
+        this.props.SystemManagement.uiData.menus.map((menu) =>  {
+            if(menu.isShow){
+                menus.push(menu);
+            }
+        })
+        menus[0].isSelect = true;
         //this.props.dispatch(fetchHorrorSoftwareData('/getHorrorSoftware'));
         //this.props.dispatch(getHorrorSoftwareData('/getHorrorSoftware'));
         // this.props.dispatch(getExceptionParameterReminderData());
@@ -71,7 +77,6 @@ class SystemManagementRight extends Component{
         // let exceptionParameterReminder = this.props.SystemManagement.data.exceptionParameterReminder;
         let codeTable = this.props.SystemManagement.data.codeTableist.result.list
 
-        console.log('codeTable===',codeTable);
         let isSelectMenu;
         let content;
         //查找被选中菜单

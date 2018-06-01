@@ -202,8 +202,8 @@ const initialState = { //系统管理
                     search: 'type=all',
                     haveSon: false,
                     isSelect: true,
-                    code:'xtgl_skrj_page',
-                    isShow: true
+                    code:'xtsz_skrj_page',
+                    isShow: false
                 },
                 {
                     id: '102',
@@ -212,8 +212,8 @@ const initialState = { //系统管理
                     search: 'type=gzry',
                     haveSon: false,
                     isSelect: false,
-                    code:'xtgl_tzsz_page',
-                    isShow: true
+                    code:'xtsz_tzsz_page',
+                    isShow: false
                 },
                 {
                     id: '103',
@@ -222,8 +222,8 @@ const initialState = { //系统管理
                     search: 'type=ldry',
                     haveSon: false,
                     isSelect: false,
-                    code:'xtgl_ycbdgz_page',
-                    isShow: true
+                    code:'xtsz_ycbdgz_page',
+                    isShow: false
                 },
                 // {
                 //     id: '104',
@@ -269,8 +269,8 @@ const initialState = { //系统管理
                     search: 'type=ldry',
                     haveSon: false,
                     isSelect: false,
-                    code:'xtgl_yjdlxr_page',
-                    isShow: true
+                    code:'xtsz_yjdlxr_page',
+                    isShow: false
                 },
                 {
                     id: '108',
@@ -279,8 +279,8 @@ const initialState = { //系统管理
                     search: 'type=ldry',
                     haveSon: false,
                     isSelect: false,
-                    code:'xtgl_lrdlxr_page',
-                    isShow: true
+                    code:'xtsz_lrdlxr_page',
+                    isShow: false
                 },
                 // {
                 //   id: '109',
@@ -297,8 +297,8 @@ const initialState = { //系统管理
                     search: 'type=ldry',
                     haveSon: false,
                     isSelect: false,
-                    code: 'xtgl_sjzd_page',
-                    isShow: true
+                    code: 'xtsz_sjzd_page',
+                    isShow: false
                   },
                 {
                     id: '111',
@@ -307,8 +307,8 @@ const initialState = { //系统管理
                     isOpen: true,
                     search: 'type=rwgl',
                     isSelect: false,
-                    code: "",
-                    isShow: true,
+                    code: "xtsz_dtgksz_page",
+                    isShow: false,
                 }
                 
             ]
