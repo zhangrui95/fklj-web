@@ -138,8 +138,8 @@ const initialState = {
                 navigationName: '系统设置',
                 isSelect: false,
                 path: "/SystemManagement",
-                isShow: true,
-                code: 'xtgl_menu',
+                isShow: false,
+                code: 'xtsz_menu',
                 homeType: ''
             }
         ],
