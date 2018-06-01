@@ -540,7 +540,7 @@ export  class Control extends Component{
                                     )}
                                 </FormItem>
                             </Col>
-                            <Col span={12}>
+                            <Col span={12} className={controlType === 'GK_WGK'?'noneDiv':''}>
                                 <FormItem
                                     {...formItemLayout}
                                     label="工作地址"
@@ -604,7 +604,7 @@ export  class Control extends Component{
                                     )}
                                 </FormItem>
                             </Col>
-                            <Col span={12}>
+                            <Col span={12} className={controlType === 'GK_WGK'?'noneDiv':''}>
                                 <FormItem
                                     {...formItemLayout}
                                     label="人员属性"
@@ -616,7 +616,7 @@ export  class Control extends Component{
                                     )}
                                 </FormItem>
                             </Col>
-                            <Col span={12}>
+                            <Col span={12} className={controlType === 'GK_WGK'?'noneDiv':''}>
                                 <FormItem
                                     {...formItemLayout}
                                     label="是否有车"
