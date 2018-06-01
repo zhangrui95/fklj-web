@@ -42,6 +42,8 @@ export  class SearchArea extends Component{
             OptionWords:'',
             addModal: false,
             showDel:{display:'none'},
+            showSave:{display:'none'},
+            inputDisabled:false,
             prompt: false,
             promptText:'',
             prompType:'',
@@ -314,7 +316,9 @@ export  class SearchArea extends Component{
         // record.id
         if(type === 'update'){
             this.setState({
-                showDel:{margin:'0 0 0 30px'},
+                showDel:{},
+                inputDisabled:true,
+                showSave:{display:'none'},
                 wordName:record.name,
                 wordType:record.type,
                 OptionWords:record.value,
@@ -325,6 +329,8 @@ export  class SearchArea extends Component{
         }else if(type === 'add'){
             this.setState({
                 showDel:{display:'none'},
+                inputDisabled:false,
+                showSave:{},
                 wordName:'',
                 wordType:'',
                 wordId:'',
@@ -514,7 +520,7 @@ export  class SearchArea extends Component{
     }
     render() {
         const {getFieldDecorator} = this.props.form
-        let {name,cardId,status,Tosk, enddate, begindate,cycle,wordType,showInput,wordName,OptionWords,showDel} = this.state;
+        let {name,cardId,status,Tosk, enddate, begindate,cycle,wordType,showInput,wordName,OptionWords,showDel,showSave,inputDisabled} = this.state;
         let beginDateValue = '';
         if (begindate === '') {} else {
             beginDateValue = moment(begindate, dateFormat);
@@ -719,13 +725,13 @@ export  class SearchArea extends Component{
                             {...formItemLayout}
                             label="字段名称"
                         >
-                            <Input value={wordName} onChange={this.changeWordName}/>
+                            <Input value={wordName} onChange={this.changeWordName} disabled={inputDisabled}/>
                         </FormItem>
                         <FormItem
                             {...formItemLayout}
                             label="字段类型"
                         >
-                            <Select value={wordType} onChange={this.getSelects}>
+                            <Select value={wordType} onChange={this.getSelects} disabled={inputDisabled}>
                                 <Option value="0">文本</Option>
                                 <Option value="1">下拉框</Option>
                             </Select>
@@ -735,11 +741,11 @@ export  class SearchArea extends Component{
                             label="下拉值"
                             style={showInput}
                         >
-                            <Input value={OptionWords} onChange={this.getOptions}/>
+                            <Input value={OptionWords} onChange={this.getOptions} disabled={inputDisabled}/>
                         </FormItem>
                     </Form>
                     <p style={{marginTop:"20px",textAlign:"center"}}>
-                        <Button htmlType="submit" onClick={this.saveNewWord} className="btn_ok">
+                        <Button style={showSave} htmlType="submit" onClick={this.saveNewWord} className="btn_ok">
                             保存
                         </Button>
                         <Button style={showDel} onClick={this.getDelete} className="btn_delete">
