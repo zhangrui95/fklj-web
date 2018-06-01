@@ -45,8 +45,8 @@ const initialState = {
                 navigationName: '首页',
                 isSelect: true,
                 path: "/Home",
-                isShow: true,
-                code: 'home_menu',
+                isShow: false,
+                code: 'sy_menu',
                 homeType: ''
             },
             {
@@ -78,7 +78,8 @@ const initialState = {
                 navigationName: '盘查管理',
                 isSelect: true,
                 path: "/InventoryManagement",
-                isShow: true,
+                isShow: false,
+                code: 'pcgl_menu',
                 homeType: ''
             }, {
                 id: '109',
@@ -107,8 +108,8 @@ const initialState = {
                 navigationName: '数据统计',
                 isSelect: false,
                 path: "/ReportForms",
-                isShow: true,
-                code: '',
+                isShow: false,
+                code: 'sjtj_menu',
                 homeType: ''
             },
             // {
