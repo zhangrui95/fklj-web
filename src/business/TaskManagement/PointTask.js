@@ -587,7 +587,7 @@ export class PointTask extends Component {
                                     )}
                                 </FormItem>
                             </Col>
-                            <Col span={24}>
+                            <Col span={24} className="selectHeight">
                                 <FormItem
                                     {...formItemLayouts}
                                     label="盘查对象"

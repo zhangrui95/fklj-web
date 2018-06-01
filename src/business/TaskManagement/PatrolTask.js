@@ -225,7 +225,6 @@ export class PatrolTask extends Component {
     }
     // 点击展示子任务列表
     showChildren = (id) => {
-        console.log('id**', id);
         this.setState({
             childrenModal: true,
             childrenid: id
@@ -418,7 +417,6 @@ export class PatrolTask extends Component {
         }
     }
     RowsChange = (e) => {
-        console.log('look', e);
         this.setState({
             look: e,
         });
@@ -546,7 +544,6 @@ export class PatrolTask extends Component {
     }
     // 子任务详情
     childrenShowModal = (record) => {
-        console.log('子任务record', record);
         this.setState({
             childrenDetailsVisible: true,
             childrenDetailsRecord: record
@@ -563,7 +560,6 @@ export class PatrolTask extends Component {
         let nowPage = this.state.nowPage;
         let isFetching = store.getState().TaskManagement.isFetching;
         let childrenIsFetching = store.getState().TaskManagement.data.childrentaskListHushi.childrenIsFetching;
-        console.log('childrenIsFetching', childrenIsFetching);
         //let data = this.state.date;
         let data = store.getState().TaskManagement.data.taskListHushi.result.list;
         let page = store.getState().TaskManagement.data.taskListHushi.result.page;
@@ -610,11 +606,9 @@ export class PatrolTask extends Component {
 
         // 根据id查询任务信息
         let ogjByid = store.getState().TaskManagement.data.taskListHushiById.result;
-        console.log('ogjByid', ogjByid);
         // 根据未管控人员作为盘查对象 在添加的时候使用
         let weiguankongList = store.getState().TaskManagement.data.weiguankongList.result.list;
         let personListForTask = store.getState().TaskManagement.data.personListForTask.result.list;
-        console.log('personListForTask', personListForTask);
         const checkObjOption = [];
         if (personListForTask) {
             for (let i = 0; i < personListForTask.length; i++) {
@@ -644,7 +638,7 @@ export class PatrolTask extends Component {
             for (let i = 0; i < dataList.length; i++) {
                 let item = dataList[i];
                 chidrentaglist.push(
-                    <Tag color="#2db7f5" style={{ marginBottom: '8px', fontSize: '14px' }} title={item.name + " " + item.idcard}>{item.name + " " + item.idcard}</Tag>
+                    <Tag color="#2db7f5" style={{ marginTop: '3px',marginRight: '10px', fontSize: '14px' }} title={item.name + " " + item.idcard}>{item.name + " " + item.idcard}</Tag>
                 );
             }
         }
@@ -1197,7 +1191,7 @@ export class PatrolTask extends Component {
                                         )}
                                     </FormItem>
                                 </Col>
-                                <Col span={24}>
+                                <Col span={24} className="selectHeight">
                                     <FormItem
                                         {...formItemLayouts}
                                         label="盘查对象"
@@ -1297,7 +1291,7 @@ export class PatrolTask extends Component {
                                     visible={this.state.childrenDetailsVisible}
                                     footer={null}
                                     onCancel={this.childrenDetailshandleCancel}
-                                    width='60%'
+                                    width='800px'
                                     style={{ position: "relative" }}
                                     maskClosable={false}
                                 >
@@ -1349,7 +1343,7 @@ export class PatrolTask extends Component {
                                                     {getFieldDecorator('createtime', {
                                                         initialValue: this.state.childrenDetailsRecord ? moment(this.state.childrenDetailsRecord.createtime, 'YYYY-MM-DD HH:mm:ss') : '',
                                                     })(
-                                                        <DatePicker showTime placeholder="" format="YYYY-MM-DD HH:mm:ss" allowClear={false} style={{ width: '204px' }} disabled />
+                                                        <DatePicker showTime placeholder="" format="YYYY-MM-DD HH:mm:ss" style={{ width: '220px' }} allowClear={false}  disabled />
                                                     )}
                                                 </FormItem>
                                             </Col>
@@ -1361,7 +1355,7 @@ export class PatrolTask extends Component {
                                                     {getFieldDecorator('endtime', {
                                                         initialValue: this.state.childrenDetailsRecord ? moment(this.state.childrenDetailsRecord.endtime, 'YYYY-MM-DD HH:mm:ss') : '',
                                                     })(
-                                                        <DatePicker showTime placeholder="" format="YYYY-MM-DD HH:mm:ss" allowClear={false} style={{ width: '204px' }} disabled />
+                                                        <DatePicker showTime placeholder="" format="YYYY-MM-DD HH:mm:ss" style={{ width: '220px' }} allowClear={false}  disabled />
                                                     )}
                                                 </FormItem>
                                             </Col>
@@ -1369,7 +1363,7 @@ export class PatrolTask extends Component {
                                                 <div style={{ width: '16.66666667%', float: 'left', color: '#fff', textAlign: "right" }}>
                                                     盘查对象：
                                                 </div>
-                                                <div style={{ width: '79.16666667%', float: 'left', padding: '11px 11px', fontSize: '14px', border: '1px solid #0C5F93', maxHeight: '300px', overflow: 'auto', cursor: "not-allowed" }}>
+                                                <div style={{ width: '79.16666667%', float: 'left', padding: '0px 5px 5px 3px', fontSize: '14px', border: '1px solid #0C5F93', maxHeight: '300px', overflow: 'auto', cursor: "not-allowed" }}>
                                                     {chidrentaglist}
                                                 </div>
                                                 <div style={{ clear: 'both' }}></div>

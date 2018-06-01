@@ -290,7 +290,6 @@ export class DoneTask extends Component {
         let data = store.getState().TaskManagement.data.threetaskListHushi.result.list;
         let page = store.getState().TaskManagement.data.threetaskListHushi.result.page;
         let byidObj = store.getState().TaskManagement.data.threetaskListHushiById.result;
-        console.log('byidObj', byidObj);
         let dataList = [];
         for (let i = 0; i < data.length; i++) {
             let item = data[i];
@@ -589,7 +588,7 @@ export class DoneTask extends Component {
                                     )}
                                 </FormItem>
                             </Col>
-                            <Col span={24}>
+                            <Col span={24} className="selectHeight">
                                 <FormItem
                                     {...formItemLayouts}
                                     label="盘查对象"

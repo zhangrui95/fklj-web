@@ -950,7 +950,7 @@ const MenuBox = React.createClass({
                     <div className="sliderItemDiv">
                         <ul style={sliderUl}>
                             <li style={isSelect === true ? OneLevelMenuActive : OneLevelMenu} onClick={this.handleClick} ref='refMenuName'>{this.props.menu.menuName}</li>
-                            {isOpen === true ? <a onClick={this.handleChange} style={{ position: "absolute", top: "27px", right: "20px", width: 20, height: 20, cursor: "pointer" }}><img src="../images/menu_down.png" /></a> : <a onClick={this.handleChange} style={{ position: "absolute", top: "27px", right: "20px", width: 20, height: 20, cursor: "pointer" }}><img src="../images/menu_up.png" /></a>}
+                            {isOpen === true ? <a onClick={this.handleChange} style={{ position: "absolute", top: "27px", right: "20px", width: 20, height: 20, cursor: "pointer" }}><img src="../images/menu_up.png" /></a> : <a onClick={this.handleChange} style={{ position: "absolute", top: "27px", right: "20px", width: 20, height: 20, cursor: "pointer" }}><img src="../images/menu_down.png" /></a>}
                             {isOpen === true ? <SonMenuBox sonMenu={this.props.menu.sonMenu} handleMenuClick={this.props.handleMenuClick} /> : ''}
                             <div className="clear"></div>
                         </ul>

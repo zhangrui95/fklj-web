@@ -443,7 +443,6 @@ export class OldWithDay extends Component {
             showQuickJumper: true,
 
         }
-        console.log('recordPerson', recordPerson);
         return (
             <div className="sliderWrap">
                 <div className="sliderItemDiv">
@@ -1076,12 +1075,10 @@ class CallLogTable extends Component {
         loading: false,
     };
     handleTableChange = (pagination, filters, sorter) => { //下一页方法
-        console.log('pagination', pagination);
         const pager = {
             ...this.state.pagination
         };
         pager.current = pagination.current;
-        console.info('pager', pager);
         this.setState({
             pagination: pager,
         });
@@ -1122,7 +1119,6 @@ class CallLogTable extends Component {
         this.fetch();
     }
     showModal = (record) => {
-        console.info(record);
         this.setState({
             visible: true,
             record: record
@@ -1166,8 +1162,6 @@ class CallLogTable extends Component {
 
         }];
         let timevalue = this.state.record ? moment(this.state.record.time, 'YYYY-MM-DD HH:mm:ss') : '';
-        console.log('this.state.record.time', this.state.record);
-        console.log('timevalue', timevalue);
         return (
             <div>
                 <Table columns={columns}
@@ -1230,7 +1224,6 @@ class MessageTable extends Component {
             ...this.state.pagination
         };
         pager.current = pagination.current;
-        console.info('pager', pager);
         this.setState({
             pagination: pager,
         });
@@ -1256,7 +1249,6 @@ class MessageTable extends Component {
         "showCount": constants.recordPageSize
     }) => {
         post(api + '/data/getPhoneSmsRecordlistPage', params).then((data) => {
-            console.info('data', data);
             const pagination = {
                 ...this.state.pagination
             };
@@ -1272,7 +1264,6 @@ class MessageTable extends Component {
         this.fetch();
     }
     showModal = (record) => {
-        console.info(record);
         this.setState({
             visible: true,
             record: record
@@ -1324,7 +1315,6 @@ class MessageTable extends Component {
 
         }];
         let timevalue = this.state.record ? moment(getMyDate(this.state.record.time / 1000), 'YYYY-MM-DD HH:mm:ss') : '';
-        console.log('timevalue##', timevalue);
         return (
             <div>
                 <Table columns={columns}
@@ -1379,7 +1369,6 @@ class InstallationSoftwareTable extends Component {
             ...this.state.pagination
         };
         pager.current = pagination.current;
-        console.info('pager', pager);
         this.setState({
             pagination: pager,
         });
@@ -1405,7 +1394,6 @@ class InstallationSoftwareTable extends Component {
         "showCount": constants.recordPageSize
     }) => {
         post(api + '/data/getPhoneAppDatalistPage', params).then((data) => {
-            console.info('data', data);
             const pagination = {
                 ...this.state.pagination
             };
@@ -1421,7 +1409,6 @@ class InstallationSoftwareTable extends Component {
         this.fetch();
     }
     showModal = (record) => {
-        console.info(record);
         this.setState({
             visible: true,
             record: record
@@ -1507,12 +1494,10 @@ class OnlineTable extends Component {
         loading: false,
     };
     handleTableChange = (pagination, filters, sorter) => { //下一页方法
-        console.log('pagination', pagination);
         const pager = {
             ...this.state.pagination
         };
         pager.current = pagination.current;
-        console.info('pager', pager);
         this.setState({
             pagination: pager,
         });
@@ -1551,7 +1536,6 @@ class OnlineTable extends Component {
         this.fetch();
     }
     showModal = (record) => {
-        console.info(record);
         this.setState({
             visible: true,
             record: record

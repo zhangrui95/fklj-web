@@ -288,7 +288,6 @@ export class WithDay extends Component {
         })
     }
     serchChange = (name, idcard, enddate, begindate, subtask_name, address_type, police_name, page) => {
-        console.log('***ddds', page)
         this.setState({
             name: name,
             idcard: idcard,
@@ -358,7 +357,6 @@ export class WithDay extends Component {
         }
     }
     render() {
-        console.log('this.sta', this.state.nowPage)
         const { getFieldDecorator } = this.props.form;
         let nowPage = this.state.nowPage;
         let isFetching = store.getState().InventoryManagement.data.invenListHushi.isFetching;
@@ -368,7 +366,6 @@ export class WithDay extends Component {
         let dataList = [];
 
         let recordNumber = parseInt((nowPage - 1) * 10);
-        console.log('nowPage', this.state.nowPage);
         if (data) {
             for (let i = 0; i < data.length; i++) {
                 let item = data[i];
@@ -389,7 +386,6 @@ export class WithDay extends Component {
                 });
             }
         }
-        console.log('dataList*****', dataList);
         const columns = [{
             title: '序号',
             dataIndex: 'serial',
