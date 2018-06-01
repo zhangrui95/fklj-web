@@ -420,7 +420,7 @@ export  class Control extends Component{
                             <Spin size="large" />
                         </div>:
                         <div style={{padding:"0 15px"}}>
-                            <Table locale={{emptyText:'暂无数据'}} rowSelection={rowSelection} columns={controlType === 'GK_WGK' ? column : columns} dataSource={dataList} bordered pagination={pagination}/>
+                            <Table locale={{emptyText:'暂无数据'}} rowSelection={rowSelection} columns={(controlType === 'GK_WGK' || controlType === 'GK_LKZRQ' || controlType === 'GK_SK') ? column : columns} dataSource={dataList} bordered pagination={pagination}/>
                         </div>}
                     <div className="clear"></div>
                 </div>
@@ -540,7 +540,7 @@ export  class Control extends Component{
                                     )}
                                 </FormItem>
                             </Col>
-                            <Col span={12} className={controlType === 'GK_WGK'?'noneDiv':''}>
+                            <Col span={12} className='noneDiv'>
                                 <FormItem
                                     {...formItemLayout}
                                     label="工作地址"
@@ -564,7 +564,7 @@ export  class Control extends Component{
                                     )}
                                 </FormItem>
                             </Col>
-                            <Col span={12} className={controlType === 'GK_WGK'?'noneDiv':''}>
+                            <Col span={12} className={(controlType === 'GK_WGK' || controlType === 'GK_LKZRQ' || controlType === 'GK_SK')?'noneDiv':''}>
                                 <FormItem
                                     {...formItemLayout}
                                     label="隶属任务"
@@ -576,7 +576,7 @@ export  class Control extends Component{
                                     )}
                                 </FormItem>
                             </Col>
-                            <Col span={12} className={controlType === 'GK_WGK'?'noneDiv':''}>
+                            <Col span={12} className={(controlType === 'GK_WGK' || controlType === 'GK_LKZRQ' || controlType === 'GK_SK')?'noneDiv':''}>
                                 <FormItem
                                     {...formItemLayout}
                                     label="任务周期"
@@ -604,7 +604,7 @@ export  class Control extends Component{
                                     )}
                                 </FormItem>
                             </Col>
-                            <Col span={12} className={controlType === 'GK_WGK'?'noneDiv':''}>
+                            <Col span={12} className='noneDiv'>
                                 <FormItem
                                     {...formItemLayout}
                                     label="人员属性"
@@ -616,7 +616,7 @@ export  class Control extends Component{
                                     )}
                                 </FormItem>
                             </Col>
-                            <Col span={12} className={controlType === 'GK_WGK'?'noneDiv':''}>
+                            <Col span={12} className='noneDiv'>
                                 <FormItem
                                     {...formItemLayout}
                                     label="是否有车"

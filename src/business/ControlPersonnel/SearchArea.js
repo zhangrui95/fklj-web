@@ -589,10 +589,10 @@ export  class SearchArea extends Component{
                 <Button style={{width:"110px", marginRight:"10px",float:'left'}} onClick={() => this.getAddModal('add')} className="btn_ok">添加到任务</Button>
                 <div  style={{float:'left'}}>
                     <Upload {...upLoad} onChange={this.importOnChange} beforeUpload={this.beforeUpload} showUploadList={false}>
-                        <Button style={{width:"80px", marginRight:"10px"}} className="btn_ok">导入</Button>
+                        <Button style={{width:"110px", marginRight:"10px"}} className="btn_ok">导入</Button>
                     </Upload>
                 </div>
-                <Button style={{width:"80px", marginRight:"10px"}} className="btn_ok" onClick={() => this.getPrompt('export')}>导出</Button>
+                <Button style={{width:"110px", marginRight:"10px"}} className="btn_ok" onClick={() => this.getPrompt('export')}>导出</Button>
                 <Button style={{width:"110px", marginRight:"10px"}} className="btn_ok" onClick={() => this.getPrompt('download')}>模板下载</Button>
                 <Button style={zdyStyle} className="btn_ok" onClick={this.getNewWords}>自定义字段</Button>
             </div>
@@ -604,14 +604,13 @@ export  class SearchArea extends Component{
             btns = (
                 <div style={{marginTop:"15px"}}>
                     <Button style={{width:"110px", marginRight:"10px"}} onClick={() => this.getAddModal('update')} className="btn_ok">变更任务</Button>
-                    <Button style={{width:"80px", marginRight:"10px"}} className="btn_ok" onClick={() => this.getPrompt('export')}>导出</Button>
+                    <Button style={{width:"110px", marginRight:"10px"}} className="btn_ok" onClick={() => this.getPrompt('export')}>导出</Button>
                 </div>
             )
         }else if(controlType === 'GK_LKZRQ' || controlType === 'GK_SK'){
             btns = (
                 <div style={{marginTop:"15px"}}>
-                    <Button style={{width:"110px", marginRight:"10px"}} onClick={() => this.getAddModal('add')} className="btn_ok">添加到任务</Button>
-                    <Button style={{width:"80px", marginRight:"10px"}} className="btn_ok" onClick={() => this.getPrompt('export')}>导出</Button>
+                    <Button style={{width:"110px", marginRight:"10px"}} className="btn_ok" onClick={() => this.getPrompt('export')}>导出</Button>
                 </div>
             )
         }else if(controlType === 'LY_DR' || controlType === 'LY_XZ'){
@@ -629,7 +628,7 @@ export  class SearchArea extends Component{
             }
         }
         const ToskSearch = (
-            controlType==='GK_WGK' ?
+            (controlType === 'GK_WGK' || controlType === 'GK_LKZRQ' || controlType === 'GK_SK') ?
                 <span></span>:
                 <span>
                 <label htmlFor="" className="font14">隶属任务：</label>
