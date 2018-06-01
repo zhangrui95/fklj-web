@@ -315,7 +315,7 @@ class Home extends Component {
                             {/*任务数据统计*/}
                             <TaskStatistics dateSet={dateSet} />
                             <div style={{ position: "absolute", bottom: "15px", right: "15px", width: "25%", height: "40%", minHeight: "270px" }}>
-                                <Personnel text="已盘查任务" personType='ypcrw' code='201001' dateSet={dateSet} />
+                                <Personnel text="最新盘查人员" personType='ypcrw' code='201001' dateSet={dateSet} />
                                 <div style={clear}></div>
                             </div>
                             {/*总体和活动统计*/}
@@ -925,7 +925,7 @@ class PopulationStatistics extends Component {
             //     data: ['暂住人员','暂住关注人员','常住关注人员'],
 
             // },
-            color: ['#AAE8FF', '#79D9F1', '#00ACEE'],
+            color: ['#3dc7d1', '#00acee', '#f88a6f'],
             textStyle: {
                 color: "#fff"
             },
@@ -1095,7 +1095,7 @@ class ActiveDataStatistics extends Component {
                 </span>
             ),
         }, {
-            title: '任务量',
+            title: '管控人员',
             dataIndex: 'count',
             key: 'count',
         }];
@@ -1119,12 +1119,12 @@ class ActiveDataStatistics extends Component {
         };
         return (
             <div style={{ position: "absolute", top: "15px", right: "15px", width: "25%", height: "50%", minHeight: '340px' }}>
-                <DeepBlueBtnY width="25px" text="派出所任务统计" borderLeft="2px solid #0C1CD8" borderRight="0" borderTop="0" float="right" display={isShowBtn} onClick={this.BtnClick} />
+                <DeepBlueBtnY width="25px" text="责任单位" borderLeft="2px solid #0C1CD8" borderRight="0" borderTop="0" float="right" display={isShowBtn} onClick={this.BtnClick} />
                 <div style={{ padding: "10px 15px", background: "rgba(25,41,85,0.5)", display: isShowDiv, height: '99.9%', position: 'relative' }}>
                     {/*标题*/}
                     <div>
                         <img src="/images/guanbi.png" alt="" style={{ float: "left", marginRight: "20px", cursor: "pointer" }} onClick={this.chartsClick} />
-                        <p style={titleP}>派出所任务统计</p>
+                        <p style={titleP}>责任单位</p>
                         <div style={clear}></div>
                     </div>
                     <div className="home-table" style={{ padding: "0 15px" }}>
