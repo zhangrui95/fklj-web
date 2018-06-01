@@ -602,6 +602,8 @@ export class PatrolTask extends Component {
                     id: item.id,
                     control_person: item.control_person,
                     endtime: getMyDate(item.endtime / 1000),
+                    count1: item.count1,
+                    count2: item.count2,
                 });
             }
         }
@@ -642,7 +644,7 @@ export class PatrolTask extends Component {
             for (let i = 0; i < dataList.length; i++) {
                 let item = dataList[i];
                 chidrentaglist.push(
-                    <Tag color="#2db7f5" style={{ marginBottom: '8px',fontSize:'14px' }} title={item.name + " " + item.idcard}>{item.name + " " + item.idcard}</Tag>
+                    <Tag color="#2db7f5" style={{ marginBottom: '8px', fontSize: '14px' }} title={item.name + " " + item.idcard}>{item.name + " " + item.idcard}</Tag>
                 );
             }
         }
@@ -654,6 +656,12 @@ export class PatrolTask extends Component {
         }, {
             title: '任务名称',
             dataIndex: 'name',
+        }, {
+            title: '盘查对象',
+            dataIndex: 'checkObject',
+            render: (text, record) => (
+                <span>{record.count2 + '/' + record.count1}</span>
+            ),
         }, {
             title: '任务开始时间',
             dataIndex: 'createtime',
@@ -1252,7 +1260,7 @@ export class PatrolTask extends Component {
                         visible={this.state.childrenModal}
                         footer={null}
                         onCancel={this.handleCancel}
-                        width={750}
+                        width='60%'
                         style={{ position: "relative" }}
                         maskClosable={false}
                     >
@@ -1289,7 +1297,7 @@ export class PatrolTask extends Component {
                                     visible={this.state.childrenDetailsVisible}
                                     footer={null}
                                     onCancel={this.childrenDetailshandleCancel}
-                                    width={750}
+                                    width='60%'
                                     style={{ position: "relative" }}
                                     maskClosable={false}
                                 >
@@ -1311,10 +1319,10 @@ export class PatrolTask extends Component {
                                             <Col span={12}>
                                                 <FormItem
                                                     {...formItemLayout}
-                                                    label="盘查数量"
+                                                    label="盘查对象"
                                                 >
-                                                    {getFieldDecorator('endtime', {
-                                                        initialValue: this.state.childrenDetailsRecord ? moment(this.state.childrenDetailsRecord.endtime, 'YYYY-MM-DD HH:mm:ss') : '',
+                                                    {getFieldDecorator('checkObject', {
+                                                        initialValue: this.state.childrenDetailsRecord ? this.state.childrenDetailsRecord.count2 + '/ ' + this.state.childrenDetailsRecord.count1 : '',
                                                     })(
                                                         <Input />
                                                     )}
@@ -1361,7 +1369,7 @@ export class PatrolTask extends Component {
                                                 <div style={{ width: '16.66666667%', float: 'left', color: '#fff', textAlign: "right" }}>
                                                     盘查对象：
                                                 </div>
-                                                <div style={{ width: '79.16666667%', float: 'left', padding: '11px 11px',fontSize:'14px', border: '1px solid #0C5F93', maxHeight: '300px', overflow: 'auto',cursor:"not-allowed" }}>
+                                                <div style={{ width: '79.16666667%', float: 'left', padding: '11px 11px', fontSize: '14px', border: '1px solid #0C5F93', maxHeight: '300px', overflow: 'auto', cursor: "not-allowed" }}>
                                                     {chidrentaglist}
                                                 </div>
                                                 <div style={{ clear: 'both' }}></div>

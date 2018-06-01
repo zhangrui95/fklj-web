@@ -28,9 +28,10 @@ global.configUrl = {
   securityCenterUrls: securityCenter.testUrl,
   securityCenterUrl: securityCenter.pingshiTest,
   serverUrl: Interface.ZZH,
+  // serverUrl: 'http://172.19.12.213:7005',
   //测试打包
-  //securityCenterUrls:securityCenter.testUrl,
-  //securityCenterUrl: securityCenter.fxdl,
+  // securityCenterUrls:securityCenter.testUrl,
+  // securityCenterUrl: securityCenter.fxdl,
   // serverUrl: Interface.fkww,
   messageQueue: 'ws://172.19.12.249:7005/myHandler',
   //客户区域

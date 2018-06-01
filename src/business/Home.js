@@ -1064,7 +1064,7 @@ class ActiveDataStatistics extends Component {
         let isShowDiv = this.state.isShowDiv;
         let isFetching = store.getState().Home.data.policeStationData.isFetching;
         let policeNowPage = this.state.policeNowPage;
-        let recordNumber = parseInt((policeNowPage - 1) * 10);
+        let recordNumber = parseInt((policeNowPage - 1) * 6);
         let dataList = [];
         for (let i = 0; i < policeStationDataList.length; i++) {
             let item = policeStationDataList[i];
@@ -1085,6 +1085,15 @@ class ActiveDataStatistics extends Component {
             title: '单位',
             dataIndex: 'police_unit_name',
             key: 'police_unit_name',
+            render: (text, record) => (
+                <span title={text} style={{ cursor: "pointer" }}>
+                    {
+                        text.length <= 10 ?
+                            text.slice(0, 9) : text.slice(0, 9) + "..."
+
+                    }
+                </span>
+            ),
         }, {
             title: '任务量',
             dataIndex: 'count',
