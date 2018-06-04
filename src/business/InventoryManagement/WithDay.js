@@ -133,7 +133,10 @@ export class WithDay extends Component {
             modalType: 'edit'
         });
         let creds = {
-            idcard: record.idcard
+            idcard: record.idcard,
+            cycle: 0,
+            checktime: record.checktime,
+            record_id: record.id,
         }
         store.dispatch(postInventoryListHushiDetailsData(creds));
     }
@@ -288,7 +291,6 @@ export class WithDay extends Component {
         })
     }
     serchChange = (name, idcard, enddate, begindate, subtask_name, address_type, police_name, page) => {
-        console.log('***ddds', page)
         this.setState({
             name: name,
             idcard: idcard,
@@ -358,7 +360,6 @@ export class WithDay extends Component {
         }
     }
     render() {
-        console.log('this.sta', this.state.nowPage)
         const { getFieldDecorator } = this.props.form;
         let nowPage = this.state.nowPage;
         let isFetching = store.getState().InventoryManagement.data.invenListHushi.isFetching;
@@ -368,38 +369,64 @@ export class WithDay extends Component {
         let dataList = [];
 
         let recordNumber = parseInt((nowPage - 1) * 10);
-        console.log('nowPage', this.state.nowPage);
         if (data) {
             for (let i = 0; i < data.length; i++) {
                 let item = data[i];
                 let serial = recordNumber + i + 1;
                 dataList.push({
                     serial: serial,
-                    name: item.name,
-                    idcard: item.idcard,
-                    sex: item.sex,
-                    age: item.age,
-                    address_type: item.address_type,
-                    now_address: item.now_address,
-                    phone: item.phone,
-                    taskname: item.taskname,
-                    police_name: item.police_name,
+                    name: item.name ? item.name : '',
+                    idcard: item.idcard ? item.idcard : '',
+                    sex: item.sex ? item.sex : '',
+                    age: item.age ? item.age : '',
+                    address_type: item.address_type ? item.address_type : '',
+                    now_address: item.now_address ? item.now_address : '',
+                    phone: item.phone ? item.phone : '',
+                    taskname: item.taskname ? item.taskname : '',
+                    police_name: item.police_name ? item.police_name : '',
                     checktime: item.checktime ? getMyDate(item.checktime / 1000) : '',
+                    id: item.id ? item.id : ''
 
                 });
             }
         }
-        console.log('dataList*****', dataList);
+        // 标签
+        let greenTag = [];
+        let redTag = [];
+        if (obj && obj.tags) {
+            if (obj.tags.length > 0) {
+                let tagsArr = obj.tags.split(',');
+
+                for (let i = 0; i < tagsArr.length; i++) {
+                    let tagsList = tagsArr[i];
+                    let judgeTag = tagsList.split('-')[1];
+                    let textTag = tagsList.split('-')[0];
+                    if (judgeTag === "111001") {
+                        redTag.push(
+                            <Tag color="red" style={{ marginTop: "10px" }}>{textTag}</Tag>
+                        );
+                    } else if (judgeTag === "111002") {
+                        greenTag.push(
+                            <Tag color="green" style={{ marginTop: "10px" }}>{textTag}</Tag>
+                        );
+                    }
+                }
+            } else {
+
+            }
+        }
+
         const columns = [{
             title: '序号',
             dataIndex: 'serial',
         }, {
             title: '身份证号',
             dataIndex: 'idcard',
+            width:160,
         }, {
             title: '姓名',
             dataIndex: 'name',
-            // width: 180,
+            width:90,
         }, {
             title: '性别',
             dataIndex: 'sex',
@@ -415,6 +442,7 @@ export class WithDay extends Component {
         }, {
             title: '现居住地址',
             dataIndex: 'now_address',
+            width:350
         }, {
             title: '联系电话',
             dataIndex: 'phone',
@@ -427,9 +455,11 @@ export class WithDay extends Component {
         }, {
             title: '盘查时间',
             dataIndex: 'checktime',
+            width:138
         }, {
             title: '操作',
             key: 'action',
+            width:50,
             render: (text, record) => (
                 <span>
                     <span onClick={(e) => this.editShowModal(record)} style={{ cursor: 'pointer' }}>详情</span>
@@ -461,7 +491,7 @@ export class WithDay extends Component {
                 if (arrayImg && arrayImg.length > 0) {
                     for (let i = 0; i < arrayImg.length; i++) {
                         imgArray.push(
-                            <img src={arrayImg[i]} key={i} alt="" style={{ width: '100px', height: '120px', margin: '5px' }}
+                            <img src={arrayImg[i]} key={i} alt="" style={{ width: '100px', height: '120px', margin: '5px', flexShrink: 0 }}
                                 onClick={handleImgClick => this.handleImgClick(arrayImg, arrayImg[i], i)} />
                         );
                     }
@@ -572,9 +602,12 @@ export class WithDay extends Component {
                                 <Row>
                                     <Col span={24} style={{ fontSize: '16px', color: "#fff" }}>人员信息</Col>
                                     <Col span={12}>
-                                        <Row style={{ padding: '32px' }}>
+                                        <Row style={{ padding: '32px 32px 16px 32px' }}>
                                             <Col span={4} style={{ color: "#fff" }}>照片：</Col>
                                             <Col span={20}><img src={obj ? obj.zpurl ? obj.zpurl : "/images/zanwu.png" : "/images/zanwu.png"} style={{ width: '130px', height: '160px' }} /></Col>
+                                        </Row>
+                                        <Row style={{ padding: '0 32px 16px 32px',maxHeight:'100px',overflow:'auto' }}>
+                                            {redTag}{greenTag}
                                         </Row>
                                         <FormItem
                                             {...formItemLayout}
@@ -631,7 +664,8 @@ export class WithDay extends Component {
                                                 <Input disabled />
                                             )}
                                         </FormItem>
-
+                                    </Col>
+                                    <Col span={12}>
                                         <FormItem
                                             {...formItemLayout}
                                             label="户籍地址"
@@ -643,8 +677,6 @@ export class WithDay extends Component {
                                                 <Input disabled title={obj ? obj.address ? obj.address : '' : ''} />
                                             )}
                                         </FormItem>
-                                    </Col>
-                                    <Col span={12}>
                                         <FormItem
                                             {...formItemLayout}
                                             label="居住类型"
@@ -690,7 +722,7 @@ export class WithDay extends Component {
                                             {getFieldDecorator('phone', {
                                                 initialValue: obj ? obj.phone ? obj.phone : '' : '',
                                             })(
-                                                <Input disabled />
+                                                <Input disabled title={obj ? obj.phone ? obj.phone : '' : ''}/>
                                             )}
                                         </FormItem>
                                         <FormItem
@@ -777,8 +809,10 @@ export class WithDay extends Component {
                                 <Row>
                                     <Col span={24} style={{ fontSize: '16px', color: "#fff" }}>写实详情</Col>
                                     <Row style={{ padding: '32px 32px 0 32px' }}>
-                                        <Col span={24}>
-                                            {imgArray}
+                                        <Col span={24} style={{ maxWidth: '99%', width: '856px', position: 'relative', overflowX: 'auto', }} className='bannermodal'>
+                                            <div style={{ display: 'flex', flexWrap: 'nowrap', }}>
+                                                {imgArray}
+                                            </div>
                                             <Modal
                                                 key={this.state.ModalKey}
                                                 visible={this.state.visibles}
@@ -1036,7 +1070,7 @@ const SearchArea = React.createClass({
                         <label htmlFor="" className="font14">盘查警员：</label>
                         <Input style={{ width: '150px', marginRight: "10px" }} type="text" id='police_name' placeholder='请输入盘查警员姓名' value={police_name} onChange={this.handlePoliceNameClick} />
                     </div>
-                    <div style={{clear:'both'}}></div>
+                    <div style={{ clear: 'both' }}></div>
                 </div>
                 <div style={{ marginLeft: "2%", marginTop: "10px" }}>
                     <label htmlFor="" className="font14">起止时间：</label>

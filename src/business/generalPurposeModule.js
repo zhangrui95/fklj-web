@@ -66,7 +66,6 @@ export class ShallowBlueBtn extends Component {
 
     }
     onClick = () => {
-        console.log(this.props);
         this.props.onClick();
     }
     handleshallblueMouseOver = () => {
@@ -925,7 +924,6 @@ export const SliderMenuItem = React.createClass({
 const MenuBox = React.createClass({
 
     handleChange: function () {
-        console.log('this.props.menu',this.props.menu);
         this.props.handleMenuClick(this.props.menu, 'openAndClose');
     },
     handleClick: function () {
@@ -942,15 +940,13 @@ const MenuBox = React.createClass({
         let haveSon = this.props.menu.haveSon;
         let isSelect = this.props.menu.isSelect;
         let handleMenuClick = this.props.handleMenuClick;
-        console.log('this.props.menu.sonMenu',this.props.menu.sonMenu);
-        console.log('haveSon',haveSon);
         if (haveSon == true) {
             return (
                 <div style={sliderWrap}>
                     <div className="sliderItemDiv">
                         <ul style={sliderUl}>
                             <li style={isSelect === true ? OneLevelMenuActive : OneLevelMenu} onClick={this.handleClick} ref='refMenuName'>{this.props.menu.menuName}</li>
-                            {isOpen === true ? <a onClick={this.handleChange} style={{ position: "absolute", top: "27px", right: "20px", width: 20, height: 20, cursor: "pointer" }}><img src="../images/menu_down.png" /></a> : <a onClick={this.handleChange} style={{ position: "absolute", top: "27px", right: "20px", width: 20, height: 20, cursor: "pointer" }}><img src="../images/menu_up.png" /></a>}
+                            {isOpen === true ? <a onClick={this.handleChange} style={{ position: "absolute", top: "27px", right: "20px", width: 20, height: 20, cursor: "pointer" }}><img src="../images/menu_up.png" /></a> : <a onClick={this.handleChange} style={{ position: "absolute", top: "27px", right: "20px", width: 20, height: 20, cursor: "pointer" }}><img src="../images/menu_down.png" /></a>}
                             {isOpen === true ? <SonMenuBox sonMenu={this.props.menu.sonMenu} handleMenuClick={this.props.handleMenuClick} /> : ''}
                             <div className="clear"></div>
                         </ul>
@@ -977,7 +973,6 @@ const SonMenuBox = React.createClass({
     },
     render() {
         let sonMenu = this.props.sonMenu;
-        console.log('sonMenu',sonMenu);
         let sonMenus = [];
         for (var i = 0; i < sonMenu.length; i++) {
             let liCss;
@@ -991,7 +986,6 @@ const SonMenuBox = React.createClass({
                 sonMenus.push(<li style={liCss} key={i} onClick={this.handleClick.bind(this, sonMenuDb)}>{sonMenuDb.menuName}</li>)
             }
         }
-        console.log(';sonMenus',sonMenus);
         return (
             <ul>
                 {sonMenus}
@@ -1159,7 +1153,6 @@ export class ColorBgTag extends Component {
 export class InterrogationDetailsItem extends Component {
     render() {
         let tags = this.props.interrogationDetailsUser.tags;
-        // console.info(tags);
         let greenTag = [];
         let redTag = [];
         if (tags !== undefined) {

@@ -587,7 +587,7 @@ export class PointTask extends Component {
                                     )}
                                 </FormItem>
                             </Col>
-                            <Col span={24}>
+                            <Col span={24} className="selectHeight">
                                 <FormItem
                                     {...formItemLayouts}
                                     label="盘查对象"
@@ -614,7 +614,6 @@ export class PointTask extends Component {
                                             mode="multiple"
                                             size='default'
                                             placeholder="盘查对象"
-                                            defaultValue={['a10', 'c12']}
                                             onChange={this.handleChange}
                                             style={{ width: '100%' }}
                                             disabled
