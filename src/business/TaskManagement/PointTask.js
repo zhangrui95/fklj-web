@@ -614,7 +614,6 @@ export class PointTask extends Component {
                                             mode="multiple"
                                             size='default'
                                             placeholder="盘查对象"
-                                            defaultValue={['a10', 'c12']}
                                             onChange={this.handleChange}
                                             style={{ width: '100%' }}
                                             disabled

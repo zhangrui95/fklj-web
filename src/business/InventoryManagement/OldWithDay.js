@@ -305,7 +305,7 @@ export class OldWithDay extends Component {
                     phone: item.phone?item.phone:'',
                     police_unit: item.police_unit?item.police_unit:'',
                     police_name: item.police_name?item.police_name:'',
-                    checktime: item.checktime ? getMyDate(item.checktime) : '',
+                    checktime: item.checktime ? getMyDate(item.checktime/1000) : '',
                     person_id: item.person_id?item.person_id:'',
                     record_id: item.record_id?item.record_id:'',
 
@@ -318,6 +318,7 @@ export class OldWithDay extends Component {
         }, {
             title: '身份证号',
             dataIndex: 'idcard',
+            width:160,
         }, {
             title: '姓名',
             dataIndex: 'name',
@@ -348,9 +349,11 @@ export class OldWithDay extends Component {
         }, {
             title: '盘查时间',
             dataIndex: 'checktime',
+            width:138
         }, {
             title: '操作',
             key: 'action',
+            width:50,
             render: (text, record) => (
                 <span>
                     <span onClick={(e) => this.oldDetailsShowModal(record)} style={{ cursor: 'pointer' }}>详情</span>

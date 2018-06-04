@@ -419,10 +419,11 @@ export class WithWeek extends Component {
         }, {
             title: '身份证号',
             dataIndex: 'idcard',
+            width:160,
         }, {
             title: '姓名',
             dataIndex: 'name',
-            // width: 180,
+            width:90,
         }, {
             title: '性别',
             dataIndex: 'sex',
@@ -438,6 +439,7 @@ export class WithWeek extends Component {
         }, {
             title: '现居住地址',
             dataIndex: 'now_address',
+            width:350
         }, {
             title: '联系电话',
             dataIndex: 'phone',
@@ -450,9 +452,11 @@ export class WithWeek extends Component {
         }, {
             title: '盘查时间',
             dataIndex: 'checktime',
+            width:138
         }, {
             title: '操作',
             key: 'action',
+            width:50,
             render: (text, record) => (
                 <span>
                     <span onClick={(e) => this.editShowModal(record)} style={{ cursor: 'pointer' }}>详情</span>
@@ -716,7 +720,7 @@ export class WithWeek extends Component {
                                             {getFieldDecorator('phone', {
                                                 initialValue: obj ? obj.phone ? obj.phone : '' : '',
                                             })(
-                                                <Input disabled />
+                                                <Input disabled title={obj ? obj.phone ? obj.phone : '' : ''}/>
                                             )}
                                         </FormItem>
                                         <FormItem
