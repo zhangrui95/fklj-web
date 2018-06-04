@@ -1120,7 +1120,7 @@ class ActiveDataStatistics extends Component {
         return (
             <div style={{ position: "absolute", top: "15px", right: "15px", width: "25%", height: "50%" }}>
                 <DeepBlueBtnY width="25px" text="责任单位" borderLeft="2px solid #0C1CD8" borderRight="0" borderTop="0" float="right" display={isShowBtn} onClick={this.BtnClick} />
-                <div style={{ padding: "10px 15px", background: "rgba(25,41,85,0.5)", display: isShowDiv, height: '99.9%', position: 'relative' , overflow:'auto'}}>
+                <div style={{ padding: "10px 15px", background: "rgba(25,41,85,0.5)", display: isShowDiv, height: '99.9%', position: 'relative', overflow: 'auto' }}>
                     {/*标题*/}
                     <div>
                         <img src="/images/guanbi.png" alt="" style={{ float: "left", marginRight: "20px", cursor: "pointer" }} onClick={this.chartsClick} />
@@ -1231,7 +1231,7 @@ class Personnel extends Component {
         return (
             <div>
                 <DeepBlueBtnY width="25" text={this.props.text} borderLeft="2px solid #0C1CD8" borderRight="0" borderTop="0" float="right" display={isShowBtn} onClick={this.BtnClick} />
-                <div style={{ padding: "10px 10px", background: "rgba(25,41,85,0.5)", height: "100%", display: isShowDiv, position: 'relative',overflow:'auto' }}>
+                <div style={{ padding: "10px 10px", background: "rgba(25,41,85,0.5)", height: "100%", display: isShowDiv, position: 'relative', overflow: 'auto' }}>
                     {/*标题*/}
                     <div style={{ borderBottom: "1px solid #585c77" }}>
                         <img src="/images/guanbi.png" alt="" style={{ float: 'left', marginRight: "20px", cursor: "pointer" }} onClick={this.chartsClick} />
@@ -1257,7 +1257,9 @@ class Personnel extends Component {
                             <div style={{ textAlign: "center", position: "absolute", left: "45%", top: "50%" }}>
                                 <Spin size="large" />
                             </div> :
-                            <PersonnelLst personIndex={data} />
+                            data ?
+                                <PersonnelLst personIndex={data} /> :
+                                <div style={{ color: '#fff', fontSize: '1.2rem', fontFamily: 'Microsoft YaHei', marginTop: '29%', textAlign: 'center' }}>暂无数据</div>
                         }
 
                     </div>
@@ -1271,12 +1273,12 @@ class Personnel extends Component {
 class PersonnelLst extends Component {
     render() {
         let personIndex = this.props.personIndex;
-        let toElectronicArchivesUrl = '/ElectronicArchives/' + personIndex.idcard;
+        // let toElectronicArchivesUrl = '/ElectronicArchives/' + personIndex.idcard;
         return (
             <div style={{ marginTop: "10px", height: "200", padding: "0 16px" }}>
                 {/*<Link to={toElectronicArchivesUrl}>*/}
                 <div >
-                    {personIndex ? personIndex.zpurl !== '' ? <img src={personIndex.zpurl} alt="" style={{ width: "80px", height: "110px", float: "left", marginTop: 15 }} /> :
+                    {personIndex ? personIndex.xp !== '' ? <img src={personIndex.xp} alt="" style={{ width: "80px", height: "110px", float: "left", marginTop: 15 }} /> :
                         <img src='../images/zanwu.png' alt="" style={{ width: "80px", height: "110px", float: "left", marginTop: 15 }} /> :
                         <img src='../images/zanwu.png' alt="" style={{ width: "80px", height: "110px", float: "left", marginTop: 15 }} />
                     }
@@ -1285,19 +1287,19 @@ class PersonnelLst extends Component {
                             fontSize: 14, color: "#fff", width: '98%', overflow: 'hidden',
                             textOverflow: 'ellipsis', whiteSpace: 'nowrap',
                         }}
-                            title={personIndex ? personIndex.name === '' ? '暂无姓名' : personIndex.name : '暂无姓名'}
+                            title={personIndex ? personIndex.xm === '' ? '暂无姓名' : personIndex.xm : '暂无姓名'}
                         >
-                            {personIndex ? personIndex.name === '' ? '暂无姓名' : personIndex.name : '暂无姓名'}<Tag style={{ marginLeft: '16px', color: '#f6c094', background: 'none' }} color="volcano">
+                            {personIndex ? personIndex.xm === '' ? '暂无姓名' : personIndex.xm : '暂无姓名'}<Tag style={{ marginLeft: '16px', color: '#f6c094', background: 'none' }} color="volcano">
                                 {personIndex ? personIndex.address_type ? personIndex.address_type === 0 ? '常住' : personIndex.address_type === 1 ? "暂住" : '流动' : '暂无居住类型' : '暂无居住类型'}
                             </Tag>
                         </p>
                         <p style={{ fontSize: 14, color: "#fff" }}>{personIndex ? personIndex.idcard : ''}</p>
-                        <p style={{ fontSize: 14, color: "#fff" }}>{personIndex ? personIndex.now_address : ''}</p>
+                        <p style={{ fontSize: 14, color: "#fff" }}>{personIndex ? personIndex.zzxz : ''}</p>
                     </div>
                     <div style={clear}></div>
                 </div>
                 <div style={{ color: '#f89448', marginTop: '16px' }}>
-                    <div>由 {personIndex ? personIndex.police_unit : '派出所'}，{personIndex ? personIndex.police_name : '警员'}，于{personIndex ? getMyDate(personIndex.checktime) : ''} 盘查</div>
+                    <div>由 {personIndex ? personIndex.police_unit : '派出所'}{personIndex ? personIndex.police_name : '警员'}，于{personIndex ? getMyDate(personIndex.checktime) : ''} 盘查</div>
                 </div>
                 {/*</Link>*/}
             </div>

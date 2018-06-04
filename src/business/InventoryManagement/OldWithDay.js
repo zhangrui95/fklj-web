@@ -296,18 +296,18 @@ export class OldWithDay extends Component {
                 let serial = recordNumber + i + 1;
                 dataList.push({
                     serial: serial,
-                    name: item.name,
-                    idcard: item.idcard,
-                    sex: item.sex,
-                    age: item.age,
-                    nation: item.nation,
-                    address: item.address,
-                    phone: item.phone,
-                    police_unit: item.police_unit,
-                    police_name: item.police_name,
-                    checktime: item.checktime ? getMyDate(item.checktime / 1000) : '',
-                    person_id: item.person_id,
-                    record_id: item.record_id,
+                    name: item.name?item.name:'',
+                    idcard: item.idcard?item.idcard:'',
+                    sex: item.sex?item.sex:'',
+                    age: item.age?item.age:'',
+                    nation: item.nation?item.nation:'',
+                    address: item.address?item.address:'',
+                    phone: item.phone?item.phone:'',
+                    police_unit: item.police_unit?item.police_unit:'',
+                    police_name: item.police_name?item.police_name:'',
+                    checktime: item.checktime ? getMyDate(item.checktime) : '',
+                    person_id: item.person_id?item.person_id:'',
+                    record_id: item.record_id?item.record_id:'',
 
                 });
             }
@@ -382,7 +382,7 @@ export class OldWithDay extends Component {
                 if (arrayImg && arrayImg.length > 0) {
                     for (let i = 0; i < arrayImg.length; i++) {
                         imgArray.push(
-                            <img src={arrayImg[i]} key={i} alt="" style={{ width: '100px', height: '120px', margin: '5px' }}
+                            <img src={arrayImg[i]} key={i} alt="" style={{ width: '100px', height: '120px', margin: '5px', flexShrink: 0 }}
                                 onClick={handleImgClick => this.handleImgClick(arrayImg, arrayImg[i], i)} />
                         );
                     }
@@ -634,9 +634,11 @@ export class OldWithDay extends Component {
                                 <hr style={{ background: '#0c5f93', height: '1px', border: 'none', margin: '24px 0' }} />
                                 <Row>
                                     <p style={{ fontSize: '16px' }}>写实详情</p>
-                                    <Row >
-                                        <Col span={24}>
-                                            {imgArray}
+                                    <Row>
+                                        <Col span={24} style={{ maxWidth: '99%', width: '1480px', position: 'relative', overflowX: 'auto', }} className='bannermodal'>
+                                            <div style={{ display: 'flex', flexWrap: 'nowrap', }}>
+                                                {imgArray}
+                                            </div>
                                             <Modal
                                                 key={this.state.ModalKey}
                                                 visible={this.state.visibles}
@@ -847,19 +849,19 @@ const SearchArea = React.createClass({
         return (
             <div>
                 <div className="marLeft40 z_searchDiv">
-                    <div style={{ float: 'left' ,marginTop:'10px'}}>
+                    <div style={{ float: 'left', marginTop: '10px' }}>
                         <label htmlFor="" className="font14">人员姓名：</label>
                         <Input style={{ width: '180px', marginRight: "10px" }} type="text" id='name' placeholder='请输入人员姓名' value={name} onChange={this.handleNameClick} />
                     </div>
-                    <div style={{ float: 'left' ,marginTop:'10px'}}>
+                    <div style={{ float: 'left', marginTop: '10px' }}>
                         <label htmlFor="" className="font14">身份证号：</label>
                         <Input style={{ width: '230px', marginRight: "10px" }} type="text" id='sfzh' placeholder='请输入身份证号' value={idcard} onChange={this.handleSfzhClick} />
                     </div>
-                    <div style={{ float: 'left' ,marginTop:'10px'}}>
+                    <div style={{ float: 'left', marginTop: '10px' }}>
                         <label htmlFor="" className="font14">所属机构：</label>
                         <Input value={subtask_name} style={{ width: '230px', marginRight: "10px" }} type="text" id='subtask_name' placeholder='请输入所属机构名称' onChange={this.handleSubtaskNameClick} />
                     </div>
-                    <div style={{ float: 'left',marginTop:'10px' }}>
+                    <div style={{ float: 'left', marginTop: '10px' }}>
                         <label htmlFor="" className="font14">盘查警员：</label>
                         <Input style={{ width: '230px', marginRight: "10px" }} type="text" id='police_name' placeholder='请输入盘查警员姓名' value={police_name} onChange={this.handlePoliceNameClick} />
                     </div>
@@ -870,7 +872,7 @@ const SearchArea = React.createClass({
                         <Option value={1}>暂住</Option>
                         <Option value={2}>流动</Option>
                     </Select> */}
-                    <div style={{clear:'both'}}></div>
+                    <div style={{ clear: 'both' }}></div>
                 </div>
                 <div style={{ marginLeft: "2%", marginTop: "10px" }}>
                     <label htmlFor="" className="font14">起止时间：</label>
@@ -1019,7 +1021,7 @@ class MobileDataTable extends Component {
                 />
                 <Modal
                     visible={this.state.visible}
-                    title="手机型号信息"
+                    title="手机信息详情"
                     onCancel={this.handleCancel}
                     onOk={this.handleOk}
                     closable={true}
@@ -1175,7 +1177,7 @@ class CallLogTable extends Component {
                 />
                 <Modal
                     visible={this.state.visible}
-                    title="通话记录信息"
+                    title="通话记录信息详情"
                     onCancel={this.handleCancel}
                     onOk={this.handleOk}
                     closable={true}
@@ -1201,7 +1203,7 @@ class CallLogTable extends Component {
                     </div>
                     <div style={{ marginBottom: "10px" }}>
                         <label style={mStyle} htmlFor="">通话时长：</label>
-                        <Input style={{ width: '60%' }} value={this.state.record ? this.state.record.voicelen+' 秒' : ''} disabled />
+                        <Input style={{ width: '60%' }} value={this.state.record ? this.state.record.voicelen + ' 秒' : ''} disabled />
                     </div>
 
                 </Modal>
@@ -1328,7 +1330,7 @@ class MessageTable extends Component {
                 />
                 <Modal
                     visible={this.state.visible}
-                    title="短信记录信息"
+                    title="短信记录信息详情"
                     onCancel={this.handleCancel}
                     onOk={this.handleOk}
                     closable={true}
@@ -1458,7 +1460,7 @@ class InstallationSoftwareTable extends Component {
                 />
                 <Modal
                     visible={this.state.visible}
-                    title="安装软件记录信息"
+                    title="安装软件记录信息详情"
                     onCancel={this.handleCancel}
                     onOk={this.handleOk}
                     closable={true}
@@ -1553,22 +1555,11 @@ class OnlineTable extends Component {
     }
     render() {
         const columns = [{
-            title: '类别编码',
-            dataIndex: 'code',
+            title: '类别',
+            dataIndex: 'text',
         }, {
             title: '号码',
             dataIndex: 'number',
-        }, {
-            title: '照片',
-            dataIndex: 'photo',
-            render: (text, record) => (
-                <span>
-                    <img src={record.photo ? record.photo : '/images/zanwu.png'} />
-                </span>
-            ),
-        }, {
-            title: '类别',
-            dataIndex: 'text',
         }, {
             title: '操作',
             key: 'action',
@@ -1593,7 +1584,7 @@ class OnlineTable extends Component {
                 />
                 <Modal
                     visible={this.state.visible}
-                    title="联通信息"
+                    title="联通信息详情"
                     onCancel={this.handleCancel}
                     onOk={this.handleOk}
                     closable={true}
@@ -1602,23 +1593,22 @@ class OnlineTable extends Component {
                     maskClosable={false}
                 >
                     <div style={{ marginBottom: "10px" }}>
+                        <label style={mStyle} htmlFor="">类别：</label>
+                        <Input style={{ width: '60%' }} value={this.state.record ? this.state.record.text : ''} readOnly="readOnly" />
+                    </div>
+                    {/* <div style={{ marginBottom: "10px" }}>
                         <label style={mStyle} htmlFor="">类别编码：</label>
                         <Input style={{ width: '60%' }} value={this.state.record ? this.state.record.code : ''} readOnly="readOnly" />
-                    </div>
+                    </div> */}
                     <div style={{ marginBottom: "10px" }}>
                         <label style={mStyle} htmlFor="">号码：</label>
                         <Input style={{ width: '60%' }} value={this.state.record ? this.state.record.number : ''} readOnly="readOnly" />
                     </div>
-                    <div style={{ marginBottom: "10px" }}>
+                    {/* <div style={{ marginBottom: "10px" }}>
                         <label style={mStyle} htmlFor="">照片：</label>
                         <img src={this.state.record ? this.state.record.photo : '/images/zanwu.png'} style={{ width: '80px' }} />
-                    </div>
-                    <div style={{ marginBottom: "10px" }}>
-                        <label style={mStyle} htmlFor="">类别：</label>
-                        <Input style={{ width: '60%' }} value={this.state.record ? this.state.record.text : ''} readOnly="readOnly" />
-                    </div>
-
-
+                        <div style={{ clear: 'both' }}></div>
+                    </div> */}
                 </Modal>
             </div>
         );

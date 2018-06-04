@@ -66,7 +66,6 @@ export class ShallowBlueBtn extends Component {
 
     }
     onClick = () => {
-        console.log(this.props);
         this.props.onClick();
     }
     handleshallblueMouseOver = () => {
@@ -925,7 +924,6 @@ export const SliderMenuItem = React.createClass({
 const MenuBox = React.createClass({
 
     handleChange: function () {
-        console.log('this.props.menu',this.props.menu);
         this.props.handleMenuClick(this.props.menu, 'openAndClose');
     },
     handleClick: function () {
@@ -942,8 +940,6 @@ const MenuBox = React.createClass({
         let haveSon = this.props.menu.haveSon;
         let isSelect = this.props.menu.isSelect;
         let handleMenuClick = this.props.handleMenuClick;
-        console.log('this.props.menu.sonMenu',this.props.menu.sonMenu);
-        console.log('haveSon',haveSon);
         if (haveSon == true) {
             return (
                 <div style={sliderWrap}>
@@ -977,7 +973,6 @@ const SonMenuBox = React.createClass({
     },
     render() {
         let sonMenu = this.props.sonMenu;
-        console.log('sonMenu',sonMenu);
         let sonMenus = [];
         for (var i = 0; i < sonMenu.length; i++) {
             let liCss;
@@ -991,7 +986,6 @@ const SonMenuBox = React.createClass({
                 sonMenus.push(<li style={liCss} key={i} onClick={this.handleClick.bind(this, sonMenuDb)}>{sonMenuDb.menuName}</li>)
             }
         }
-        console.log(';sonMenus',sonMenus);
         return (
             <ul>
                 {sonMenus}
@@ -1159,7 +1153,6 @@ export class ColorBgTag extends Component {
 export class InterrogationDetailsItem extends Component {
     render() {
         let tags = this.props.interrogationDetailsUser.tags;
-        // console.info(tags);
         let greenTag = [];
         let redTag = [];
         if (tags !== undefined) {

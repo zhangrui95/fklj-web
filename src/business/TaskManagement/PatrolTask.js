@@ -1036,12 +1036,6 @@ export class PatrolTask extends Component {
                                         label="任务名称"
                                     >
                                         {getFieldDecorator('name', {
-                                            rules: [{
-                                                required: true, message: '请输入名称!',
-
-                                            }, {
-                                                max: 20, message: '最多输入二十个字符!',
-                                            }],
                                             initialValue: this.state.modalType === 'edit' ? ogjByid ? ogjByid.name : '' : '',
                                             validateFirst: true
                                         })(
@@ -1056,10 +1050,6 @@ export class PatrolTask extends Component {
                                         label="任务开始时间"
                                     >
                                         {getFieldDecorator('starttime', {
-                                            rules: [{
-                                                required: true,
-                                                message: '请选择任务开始时间!'
-                                            }],
                                             initialValue: this.state.modalType === 'edit' ? ogjByid ? moment(getMyDate(ogjByid.starttime / 1000), 'YYYY-MM-DD HH:mm:ss') : '' : '',
                                         })(
                                             this.state.disabled ?
@@ -1075,10 +1065,6 @@ export class PatrolTask extends Component {
                                         label="任务结束时间"
                                     >
                                         {getFieldDecorator('endtime', {
-                                            rules: [{
-                                                required: true,
-                                                message: '请选择任务结束时间!'
-                                            }],
                                             initialValue: this.state.modalType === 'edit' ? ogjByid ? moment(getMyDate(ogjByid.endtime / 1000), 'YYYY-MM-DD HH:mm:ss') : '' : '',
                                         })(
                                             this.state.disabled ?
@@ -1093,10 +1079,6 @@ export class PatrolTask extends Component {
                                         label="任务类别"
                                     >
                                         {getFieldDecorator('category', {
-                                            rules: [{
-                                                required: true,
-                                                message: '请选择任务类别!'
-                                            }],
                                             initialValue: this.state.modalType === 'edit' ? ogjByid ? ogjByid.category : '' : '',
                                             validateFirst: true
                                         })(
@@ -1120,10 +1102,6 @@ export class PatrolTask extends Component {
                                         label="任务周期"
                                     >
                                         {getFieldDecorator('cycle', {
-                                            rules: [{
-                                                required: true,
-                                                message: '请选择任务周期!'
-                                            }],
                                             initialValue: this.state.modalType === 'edit' ? ogjByid ? ogjByid.cycle : '' : '',
                                             validateFirst: true
                                         })(
@@ -1149,10 +1127,6 @@ export class PatrolTask extends Component {
                                         label="任务创建者"
                                     >
                                         {getFieldDecorator('createuser', {
-                                            rules: [{
-                                                required: true,
-                                                message: '请选择任务创建者!'
-                                            }],
                                             initialValue: this.state.modalType === 'edit' ? ogjByid ? ogjByid.createuser : '' : '',
                                             validateFirst: true
                                         })(
@@ -1168,10 +1142,6 @@ export class PatrolTask extends Component {
                                         label="任务状态"
                                     >
                                         {getFieldDecorator('taskswitch', {
-                                            rules: [{
-                                                required: true,
-                                                message: '请选择任务状态!'
-                                            }],
                                             initialValue: this.state.modalType === 'edit' ? ogjByid ? ogjByid.taskswitch : '' : '',
                                             validateFirst: true
                                         })(

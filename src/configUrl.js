@@ -9,7 +9,7 @@ const Interface = {//服务器
   fxdl: '/data-service',
   lsfxdl: '/data-service-wwhc',
   fkww: '/fkww-data-service',
-  MXD: 'http://172.19.12.102:8888',//慕兴达
+  MXD: 'http://172.19.12.102:8800',//慕兴达
   ZZH: 'http://172.19.12.213:7005',//张泽恒
   pingshiTest: 'http://172.19.12.249:8888'
 };
@@ -27,7 +27,7 @@ global.configUrl = {
   sysName: '反恐利剑信息化作战系统',
   securityCenterUrls: securityCenter.testUrl,
   securityCenterUrl: securityCenter.pingshiTest,
-  serverUrl: Interface.ZZH,
+  serverUrl: Interface.MXD,
   //测试打包
   // securityCenterUrls:securityCenter.testUrl,
   // securityCenterUrl: securityCenter.fxdl,
