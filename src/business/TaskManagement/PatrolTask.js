@@ -171,11 +171,11 @@ export class PatrolTask extends Component {
 
     }
     // 根据id查询任务信息
-    byidtaskquery = (id) => {
+    byidtaskquery = (id,goback) => {
         let creds = {
             id: id,
         }
-        store.dispatch(postTaskListHushiByIdData(creds));
+        store.dispatch(postTaskListHushiByIdData(creds,goback));
     }
     // 未管控人员作为盘查对象在添加的时候使用
     weiguankongQuery = () => {
@@ -199,11 +199,11 @@ export class PatrolTask extends Component {
     }
     // 查看
     seeShowModal = (record) => {
-        let creds = {
-            id: record.id,
-        }
-        store.dispatch(postPersonListForTaskData(creds, this.goback));
-        this.byidtaskquery(record.id);
+        // let creds = {
+        //     id: record.id,
+        // }
+        // store.dispatch(postPersonListForTaskData(creds, this.goback));
+        this.byidtaskquery(record.id,this.goback);
         // this.weiguankongQuery();
     }
     // 等盘查对象数据调取成功后，再调取弹出模态框等方法
@@ -1136,7 +1136,7 @@ export class PatrolTask extends Component {
                                         )}
                                     </FormItem>
                                 </Col>
-                                <Col span={12}>
+                                {/* <Col span={12}>
                                     <FormItem
                                         {...formItemLayout}
                                         label="任务状态"
@@ -1160,7 +1160,7 @@ export class PatrolTask extends Component {
                                                 </Select>
                                         )}
                                     </FormItem>
-                                </Col>
+                                </Col> */}
                                 <Col span={24} className="selectHeight">
                                     <FormItem
                                         {...formItemLayouts}
@@ -1288,7 +1288,7 @@ export class PatrolTask extends Component {
                                                     {getFieldDecorator('checkObject', {
                                                         initialValue: this.state.childrenDetailsRecord ? this.state.childrenDetailsRecord.count2 + '/ ' + this.state.childrenDetailsRecord.count1 : '',
                                                     })(
-                                                        <Input />
+                                                        <Input disabled/>
                                                     )}
                                                 </FormItem>
                                             </Col>
@@ -1301,7 +1301,7 @@ export class PatrolTask extends Component {
                                                         initialValue: this.state.childrenDetailsRecord ? this.state.childrenDetailsRecord.type === 0 ? '待办任务' :
                                                             this.state.childrenDetailsRecord.type === 1 ? '已完成任务' : '超期任务' : '',
                                                     })(
-                                                        <Input />
+                                                        <Input disabled/>
                                                     )}
                                                 </FormItem>
                                             </Col>

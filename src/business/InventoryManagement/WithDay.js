@@ -758,7 +758,7 @@ export class WithDay extends Component {
                                                 <Input disabled />
                                             )}
                                         </FormItem>
-                                        <FormItem
+                                        {/* <FormItem
                                             {...formItemLayout}
                                             label="人员来源"
                                             style={{ marginBottom: '5px' }}
@@ -768,7 +768,7 @@ export class WithDay extends Component {
                                             })(
                                                 <Input disabled />
                                             )}
-                                        </FormItem>
+                                        </FormItem> */}
                                         <FormItem
                                             {...formItemLayout}
                                             label="人员属性"

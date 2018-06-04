@@ -217,12 +217,13 @@ export function postTaskListHushiData(creds) {
     }
 }
 // 根据id查询任务模板信息
-export function postTaskListHushiByIdData(creds) {
+export function postTaskListHushiByIdData(creds,goback) {
     let path = '/data/getTaskModelById';
     return dispatch => {
         // dispatch({ type: "REQUEST_TASK_LIST_HUSHI_BYID_DATA" });
         post(api + path, creds).then((json) => {
             dispatch({ type: 'TaskListHushi-data-byid', data: json });
+            goback();
         }).catch((e) => {
             dispatch({ type: 'TaskListHushi-error-byid', message: e.toString() })
         });
