@@ -167,7 +167,7 @@ class PopulationStatistics extends Component {
                 <div className="sliderItemDiv">
                     {/*查询条件*/}
                     <div style={sliderdyHeader}>
-                        <p style={{fontSize: "18px", color: "#fff", float: "left", marginRight: "50px"}}>在呼管控人员数量：
+                        <p style={{fontSize: "18px", color: "#fff", float: "left", marginRight: "50px"}}>管控人员数量：
                             <span
                                 style={{
                                     width: "80px",
