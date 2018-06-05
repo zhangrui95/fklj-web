@@ -85,7 +85,7 @@ export  class AddSystem extends Component{
                     zdyValue:!(result.outofcontroltime === 24||result.outofcontroltime === 48||result.outofcontroltime === 72) ? result.outofcontroltime : ''
                 })
             }
-        },200)
+        },0)
     }
     timeChange = (e) => {
         if(e === '0'){
@@ -153,7 +153,7 @@ export  class AddSystem extends Component{
                             {...formItemLayout}
                             label="失控时间设置"
                         >
-                            <Select value={this.state.timeValue} placeholder="请选择失控时间" onChange={this.timeChange}>
+                            <Select defaultValue = {(result.outofcontroltime === 24||result.outofcontroltime === 48||result.outofcontroltime === 72) ? result.outofcontroltime.toString() : '0' } value={this.state.timeValue} placeholder="请选择失控时间" onChange={this.timeChange}>
                                 <Option key="24">离开责任区24小时</Option>
                                 <Option key="48">离开责任区48小时</Option>
                                 <Option key="72">离开责任区72小时</Option>
