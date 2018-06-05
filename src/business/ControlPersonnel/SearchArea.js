@@ -705,7 +705,7 @@ export  class SearchArea extends Component{
                        onCancel={this.hideModal}
                        maskClosable={false}
                 >
-                    <Table className={newWord.length < 1 ? 'noneDiv': 'activeDiv'} columns={list} dataSource={newWord} bordered  pagination={false} showHeader={false} />
+                    <Table loading={store.getState().ControlPersonnel.data.FiledList.Loading} className={newWord.length < 1 ? 'noneDiv': 'activeDiv'} columns={list} dataSource={newWord} bordered  pagination={false} showHeader={false} />
                     <p style={{marginTop:"20px",textAlign:"center"}}>
                         <Button style={{margin:'0 15px 0 0 ',width:'100%',fontSize:'30px',lineHeight:'0'}} onClick={() => this.addNewsWord('add')} className="btn_ok">
                             +

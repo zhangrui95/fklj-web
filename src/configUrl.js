@@ -18,6 +18,7 @@ const securityCenter = {//安全中心
   ZX: 'http://172.19.12.165:8080',//张旭接口
   pingshiTest: 'http://172.19.12.249:8100',
   testUrl: 'http://172.19.12.249:8200',//安全中心线上部署地址
+  // testUrl:'http://10.101.140.73:8200',
   fxdl: '/security-service',
 };
 
@@ -32,6 +33,7 @@ global.configUrl = {
   // securityCenterUrls:securityCenter.testUrl,
   // securityCenterUrl: securityCenter.fxdl,
   // serverUrl: Interface.fkww,
+  // messageQueue: 'ws://10.101.140.73:7005/myHandler',
   messageQueue: 'ws://172.19.12.249:7005/myHandler',
   //客户区域
   clientArea: '黑龙江',

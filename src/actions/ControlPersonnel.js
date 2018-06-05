@@ -62,6 +62,7 @@ export function getControlDownload(creds) {
 export function getCustomFiledList(creds) {
     let path  = serverUrls + '/data/getCustomFiledList';
     return dispatch => {
+        dispatch( {type: 'get_Custom_Filed_Loading'} );
         post(path,creds).then((json) => {
             dispatch( {type: 'get_Custom_Filed_List',data: json} );
         }).catch((e)=>{

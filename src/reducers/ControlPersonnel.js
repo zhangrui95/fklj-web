@@ -27,6 +27,7 @@ const initialState = {
             }
         },
         FiledList: {
+            Loading:false,
             reason: 1,
             result: {
                 list: [],
@@ -286,8 +287,12 @@ const ControlPersonnel =(state = initialState, action) =>{
         case 'Download_Succeed':
             newState.data.Download = action.data;
             return newState;
+        case 'get_Custom_Filed_Loading':
+            newState.data.FiledList.Loading = true;
+            return newState;
         case 'get_Custom_Filed_List':
             newState.data.FiledList = action.data;
+            newState.data.FiledList.Loading = false;
             return newState;
         case 'insertOrUpdateCustomFiled_succeed':
             newState.data.CustomFiled = action.data;
