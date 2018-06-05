@@ -12,9 +12,9 @@ import { postInterrogationDetailsUsersData } from "../../actions/InterrogationDe
 import { SwordData } from "../InterrogationDetails/SwordData";
 import { changeTab } from "../../actions/actions";
 import {
-    postInventoryListHushiData, postInventoryListHushiDetailsData
+    postInventoryListHushiData, postInventoryListHushiDetailsData, postOldInventoryLuokuData
 } from "../../actions/InventoryManagement";
-
+import { OldModal } from "./OldModal.js";
 import moment from 'moment';
 moment.locale('zh-cn');
 
@@ -98,6 +98,7 @@ export class WithDay extends Component {
             zoomvisible: false,
             imgtext: '',
             text: null,
+            visible: false,
             visibles: false,//呼市反恐详情展示
             arrayImg: [],
             currentImg: '',
@@ -106,6 +107,8 @@ export class WithDay extends Component {
             oldVisibles: false,
             oldpersonInfo: '',
             testData: { "police_code": "080003", "police_idcard": "230382198011010010", "address": "", "police_unitcode": "410000000000", "nation": "", "checktime": "2018-03-22 10:53:19", "police_area": "", "sex": "男", "birth": "1980-01-01", "tagscode": "", "tags": "", "recordId": "23038219801101001020180322105307964", "police_unit": "河南省公安厅", "zpurl": "", "idcard": "350125198001010075", "name": "", "check_exception": 0, "imei": "", "personId": "b829a02b16c84f0ebddbb6cb935516d2", "collectNumber": 0, "police_name": "测试用户一", "cid": "HYX315000136" },
+            personId: '',
+            recordId: '',
         };
         this.pageChange = this.pageChange.bind(this);
     }
@@ -127,18 +130,41 @@ export class WithDay extends Component {
         store.dispatch(postInventoryListHushiData(params));
     }
     editShowModal = (record) => {
-        this.setState({
-            visible: true,
-            personInfo: record,
-            modalType: 'edit'
-        });
-        let creds = {
-            idcard: record.idcard,
-            cycle: 0,
-            checktime: record.checktime,
-            record_id: record.id,
+        if (record.examine_version && record.examine_version == 1) {
+            this.setState({
+                visible: true,
+                oldVisibles: false,
+                personInfo: record,
+                modalType: 'edit'
+            });
+            let creds = {
+                idcard: record.idcard,
+                cycle: 0,
+                checktime: record.checktime,
+                record_id: record.id,
+            }
+            store.dispatch(postInventoryListHushiDetailsData(creds));
+        } else {
+            this.setState({
+                oldVisibles: true,
+                visible: false,
+                recordId: record.record_id,
+                personId: record.person_id,
+                personInfo: record,
+                modalType: 'edit'
+            });
+            let creds = {
+                currentPage: 1,
+                entityOrField: true,
+                pd: {
+                    record_id: record.record_id,
+                    person_id: record.person_id,
+                },
+                showCount: constants.pageSize
+            }
+            store.dispatch(postOldInventoryLuokuData(creds));
         }
-        store.dispatch(postInventoryListHushiDetailsData(creds));
+
     }
     addShowModal = (record) => {
         this.setState({
@@ -366,6 +392,7 @@ export class WithDay extends Component {
         let data = store.getState().InventoryManagement.data.invenListHushi.result.list;
         let obj = store.getState().InventoryManagement.data.invenListHushiDetails.result;
         let page = store.getState().InventoryManagement.data.invenListHushi.result.page;
+        let luokeData = store.getState().InventoryManagement.data.oldinvenLuoku.result;
         let dataList = [];
 
         let recordNumber = parseInt((nowPage - 1) * 10);
@@ -385,8 +412,10 @@ export class WithDay extends Component {
                     taskname: item.taskname ? item.taskname : '',
                     police_name: item.police_name ? item.police_name : '',
                     checktime: item.checktime ? getMyDate(item.checktime / 1000) : '',
-                    id: item.id ? item.id : ''
-
+                    examine_version: item.examine_version ? item.examine_version : '',
+                    person_id: item.person_id ? item.person_id : '',
+                    record_id: item.id ? item.id : '',
+                    id: item.id ? item.id : '',
                 });
             }
         }
@@ -422,11 +451,11 @@ export class WithDay extends Component {
         }, {
             title: '身份证号',
             dataIndex: 'idcard',
-            width:160,
+            width: 160,
         }, {
             title: '姓名',
             dataIndex: 'name',
-            width:90,
+            width: 90,
         }, {
             title: '性别',
             dataIndex: 'sex',
@@ -442,7 +471,7 @@ export class WithDay extends Component {
         }, {
             title: '现居住地址',
             dataIndex: 'now_address',
-            width:350
+            width: 350
         }, {
             title: '联系电话',
             dataIndex: 'phone',
@@ -455,11 +484,11 @@ export class WithDay extends Component {
         }, {
             title: '盘查时间',
             dataIndex: 'checktime',
-            width:138
+            width: 138
         }, {
             title: '操作',
             key: 'action',
-            width:50,
+            width: 50,
             render: (text, record) => (
                 <span>
                     <span onClick={(e) => this.editShowModal(record)} style={{ cursor: 'pointer' }}>详情</span>
@@ -500,6 +529,10 @@ export class WithDay extends Component {
                         <div style={{ fontSize: 16, color: '#fff', width: '100%', textAlign: "center" }}>暂无写实照片</div>
                     );
                 }
+            } else {
+                imgArray.push(
+                    <div style={{ fontSize: 16, color: '#fff', width: '100%', textAlign: "center" }}>暂无写实照片</div>
+                );
             }
         } else {
             imgArray.push(
@@ -606,7 +639,7 @@ export class WithDay extends Component {
                                             <Col span={4} style={{ color: "#fff" }}>照片：</Col>
                                             <Col span={20}><img src={obj ? obj.zpurl ? obj.zpurl : "/images/zanwu.png" : "/images/zanwu.png"} style={{ width: '130px', height: '160px' }} /></Col>
                                         </Row>
-                                        <Row style={{ padding: '0 32px 16px 32px',maxHeight:'100px',overflow:'auto' }}>
+                                        <Row style={{ padding: '0 32px 16px 32px', maxHeight: '100px', overflow: 'auto' }}>
                                             {redTag}{greenTag}
                                         </Row>
                                         <FormItem
@@ -722,7 +755,7 @@ export class WithDay extends Component {
                                             {getFieldDecorator('phone', {
                                                 initialValue: obj ? obj.phone ? obj.phone : '' : '',
                                             })(
-                                                <Input disabled title={obj ? obj.phone ? obj.phone : '' : ''}/>
+                                                <Input disabled title={obj ? obj.phone ? obj.phone : '' : ''} />
                                             )}
                                         </FormItem>
                                         <FormItem
@@ -843,27 +876,14 @@ export class WithDay extends Component {
                 }
                 {
                     this.state.oldVisibles ?
-                        <Modal
-                            width="60%"
-                            style={{ top: '20px' }}
-                            title="详情"
-                            visible={this.state.oldVisibles}
-                            onCancel={this.handleOldCancel}
-                            footer={null}
-                            key={this.state.modalKey}
-                            maskClosable={false}
-                        >
-                            <div>
-                                <InterrogationDetailsItem interrogationDetailsUser={this.state.testData} />
-                                <div>
-                                    <div style={{ marginTop: "20px" }}>
-                                        <Tabs tabs={tabs} handleTabClick={this.handleTabClick} />
-                                        <div style={{ clear: "both" }}></div>
-                                    </div>
-                                    {content}
-                                </div>
-                            </div>
-                        </Modal> : ''
+                        <OldModal
+                            oldVisibles={this.state.oldVisibles}
+                            luokeData={luokeData}
+                            handleOldCancel={this.handleOldCancel}
+                            modalKey={this.state.modalKey}
+                            recordId={this.state.recordId}
+                            personId={this.state.personId}
+                        /> : ''
                 }
 
             </div>
