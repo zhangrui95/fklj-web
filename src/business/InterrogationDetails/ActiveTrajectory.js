@@ -93,7 +93,13 @@ export class ActiveTrajectory extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            data: [],
+            // data: [],
+            data:[{
+                type:'',
+                address:'',
+                fromCity:'',
+                toCity:'',
+            }]
 
         }
     }
