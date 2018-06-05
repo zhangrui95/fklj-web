@@ -1195,7 +1195,10 @@ export class InterrogationDetailsItem extends Component {
                                 <button style={{ height: "44px", width: "142px", background: "rgba(14,33,86,0.8)", border: "1px solid rgb(12, 95, 147)", color: "#fff", margin: " 0 50px 25px 0" }}>
                                     {this.props.interrogationDetailsUser.check_exception === 0 ? <span style={{ color: "#fff" }}>盘查正常</span> : <span style={{ color: "#fff" }}>盘查异常</span>}
                                 </button>
-                                <button style={{ height: "44px", width: "142px", background: "rgba(14,33,86,0.8)", border: "1px solid rgb(12, 95, 147)", color: "#fff", margin: " 0 0 25px 0" }}>收藏数量：<span style={{ color: "red" }}>{this.props.interrogationDetailsUser.collectNumber}</span></button>
+                                {/* <button style={{ height: "44px", width: "142px", background: "rgba(14,33,86,0.8)", border: "1px solid rgb(12, 95, 147)", color: "#fff", margin: " 0 0 25px 0" }}>收藏数量：<span style={{ color: "red" }}>{this.props.interrogationDetailsUser.collectNumber}</span></button> */}
+                                <button style={{ height: "44px", width: "142px", background: "rgba(14,33,86,0.8)", border: "1px solid rgb(12, 95, 147)", color: "#fff", margin: " 0 0 25px 0" }}>
+                                关注度：<span style={{ color: "red" }}>{this.props.interrogationDetailsUser.collectNumber}</span> >
+                                </button>
                             </div>
                             <p style={font}><span>姓名：</span><span style={marginr}>{this.props.interrogationDetailsUser.name}</span>
                                 <span>身份证号：</span><span>{this.props.interrogationDetailsUser.idcard}</span>

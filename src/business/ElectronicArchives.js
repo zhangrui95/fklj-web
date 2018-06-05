@@ -19,6 +19,7 @@ import { BasicInformation } from "./InterrogationDetails/BasicInformation";
 import { BgInformation } from "./InterrogationDetails/BgInformation";
 import { SwordData } from "./InterrogationDetails/SwordData";
 import { ActiveTrajectory } from "./InterrogationDetails/ActiveTrajectory";
+import { AttentionDegree } from "./InterrogationDetails/AttentionDegree";
 import { Header } from "../components/Header";
 import {
     EmptyData
@@ -57,6 +58,9 @@ class ElectronicArchives extends Component {
             case constants.INTERROGATIONDETAILS_TAB_NEW_LJ_DATA:
                 //   this.props.dispatch(fetchInterrogationInformationData('/getInterrogationInformation'));
                 break;
+            case constants.INTERROGATIONDETAILS_TAB_NEW_GUZHU_DATA:
+
+                break
             default:
                 break
         }
@@ -79,9 +83,9 @@ class ElectronicArchives extends Component {
     render() {
         // let ElectronicArchivesList =store.getState().ElectronicArchivesUsers.data.ElectronicArchives.personnelInformation.result.list;
         let ElectronicArchivesList = [{
-            zpurl:'',
+            zpurl: '',
             check_exception: 1,
-            collectNumber: 0,
+            collectNumber: 19,
             name: '测试用户',
             idcard: '232326200002020608',
             birth: '1995-05-23',
@@ -155,6 +159,16 @@ class ElectronicArchives extends Component {
                         <SwordData recordId={recordId} personId={personId} />
                     </div>
                     break
+                case constants.INTERROGATIONDETAILS_TAB_NEW_GUZHU_DATA:
+                    content = <div>
+                        <div style={{ marginTop: "20px" }}>
+                            <Tabs tabs={tabs} handleTabClick={this.handleTabClick} />
+                            <div style={{ clear: "both" }}></div>
+                        </div>
+                        <AttentionDegree recordId={recordId} personId={personId} />
+                    </div>
+                    break
+
                 default:
                     break
             }

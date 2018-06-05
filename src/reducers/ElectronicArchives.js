@@ -121,6 +121,11 @@ const initialState = {
                     id: '104',
                     tabName: '最新盘查数据',
                     isSelect: false
+                },
+                {
+                    id: '105',
+                    tabName: '关注度积分',
+                    isSelect: false
                 }
             ]
         }
