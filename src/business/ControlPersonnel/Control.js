@@ -337,7 +337,7 @@ export  class Control extends Component{
             for(let i in newValue){
                 if(newValue[i].type == '0'){
                     newFormList.push(
-                        <Col span={12}>
+                        <Col span={12} key={i}>
                             <FormItem
                                 {...formItemLayout}
                                 label={newValue[i].name}
