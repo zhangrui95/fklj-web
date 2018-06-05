@@ -165,7 +165,7 @@ export  class AddSystem extends Component{
                                 style={{width:'100px', float:'left'}}
                                 {...formItem}
                             >
-                                <InputNumber min={0} value={this.state.zdyValue} onChange={this.zdyInput} onBlur={this.cs}/>
+                                <InputNumber defaultValue = {!(result.outofcontroltime === 24||result.outofcontroltime === 48||result.outofcontroltime === 72) ? result.outofcontroltime : ''} min={0} value={this.state.zdyValue} onChange={this.zdyInput} onBlur={this.cs}/>
                             </FormItem>
                             <span style={{color:'#fff', float:'left',lineHeight:'40px'}}>小时</span>
                         </div>
