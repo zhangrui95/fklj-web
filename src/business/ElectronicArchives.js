@@ -131,7 +131,7 @@ class ElectronicArchives extends Component{
         return (
             
             <div>
-                <Header />
+                <Header homeType="hs_fklj_sys"/>
                 <div>
                     <p style={{fontSize:"16px",color:"#fff",marginTop:"20px",paddingLeft:"18px"}}>电子档案</p>
                 </div>

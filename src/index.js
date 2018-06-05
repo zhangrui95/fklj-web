@@ -56,7 +56,8 @@ class Index extends Component{
                 || pathname.indexOf("InterrogationRecord") > 0
                 || pathname.indexOf("InterrogationDetails") > 0
                 || pathname.indexOf("PhoneDetails") > 0
-                || pathname.indexOf("ElectronicArchives") > 0){//路由包含动态管控内路径 pathname更改为根导航路径
+                // || pathname.indexOf("ElectronicArchives") > 0
+            ){//路由包含动态管控内路径 pathname更改为根导航路径
                 pathname = "/DynamicControl";
             }
             store.dispatch(changeNavigation(pathname));
@@ -83,7 +84,8 @@ class Index extends Component{
                             <Route exact path="/AuditReport/:idcard/:personId" component={AuditReport}  onEnter={this.requireAuth}/>
                             <Route exact path="/interrogationRecord/:idcard" component={InterrogationRecord} onEnter={this.requireAuth} />
                             <Route exact path="/InterrogationDetails/:recordId/:personId" component={InterrogationDetails}  onEnter={this.requireAuth} />
-                            <Route exact path="/ElectronicArchives/:idcard" component={ElectronicArchives}  onEnter={this.requireAuth} />
+                            {/* <Route exact path="/ElectronicArchives/:idcard" component={ElectronicArchives}  onEnter={this.requireAuth} /> */}
+                            <Route exact path="/ElectronicArchives" component={ElectronicArchives}  onEnter={this.requireAuth} />
                             <Route exact path="/Preview" component={Preview}  onEnter={this.requireAuth} />
                             <Route exact path="/ReportForms" component={ReportForms}  onEnter={this.requireAuth}  />
                             <Route exact path="/ReportForm" component={ReportForm}  onEnter={this.requireAuth}  />

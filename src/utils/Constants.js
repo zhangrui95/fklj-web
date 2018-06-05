@@ -89,7 +89,6 @@ export const INVENTORYMANAGEMENT_OLD_HUSHI_MODULE_Qt= '其他';
 //自定义库模块
 // export const DEFINE_WAREHOUSE_MODULE = 'define_warehouse_module';
 
-
 //设置盘查管理侧边导航_洛阳
 export const INVENTORYMANAGEMENT_MENU = "流动盘查"//盘查管理一级菜单
 export const INVENTORYMANAGEMENT_MENU_PERDONNEL = "人员盘查"
