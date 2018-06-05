@@ -199,10 +199,10 @@ export class PatrolTask extends Component {
     }
     // 查看
     seeShowModal = (record) => {
-        // let creds = {
-        //     id: record.id,
-        // }
-        // store.dispatch(postPersonListForTaskData(creds, this.goback));
+        let creds = {
+            id: record.id,
+        }
+        store.dispatch(postPersonListForTaskData(creds));
         this.byidtaskquery(record.id,this.goback);
         // this.weiguankongQuery();
     }

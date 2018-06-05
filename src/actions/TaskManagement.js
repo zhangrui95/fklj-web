@@ -355,12 +355,11 @@ export function postWeiguankongData(creds) {
 }
 
 // 编辑查看时盘查对象字典项
-export function postPersonListForTaskData(creds, goback) {
+export function postPersonListForTaskData(creds) {
     let path = '/data/getControlPersonListForTaskPersonal';
     return dispatch => {
         post(api + path, creds).then((json) => {
             dispatch({ type: 'Task_PersonListForTaskHushi-data', data: json });
-            goback()
         }).catch((e) => {
             dispatch({ type: 'Task_PersonListForTaskHushi-error', message: e.toString() })
         });
