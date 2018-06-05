@@ -202,7 +202,7 @@ export class PatrolTask extends Component {
         let creds = {
             id: record.id,
         }
-        store.dispatch(postPersonListForTaskData(creds, this.goback));
+        store.dispatch(postPersonListForTaskData(creds));
         this.byidtaskquery(record.id,this.goback);
         // this.weiguankongQuery();
     }

@@ -217,7 +217,7 @@ export function postTaskListHushiData(creds) {
     }
 }
 // 根据id查询任务模板信息
-export function postTaskListHushiByIdData(creds,goback) {
+export function postTaskListHushiByIdData(creds, goback) {
     let path = '/data/getTaskModelById';
     return dispatch => {
         // dispatch({ type: "REQUEST_TASK_LIST_HUSHI_BYID_DATA" });
@@ -299,7 +299,7 @@ export function postThreeTaskListHushiByIdData(creds, goback) {
             if (json.reason === null) {
                 goback();
             } else {
-                message.error(`提示：${json.reason.text}`,1);
+                message.error(`提示：${json.reason.text}`, 1);
             }
         }).catch((e) => {
             dispatch({ type: 'Three_TaskListHushi-error-byid', message: e.toString() })
@@ -355,12 +355,11 @@ export function postWeiguankongData(creds) {
 }
 
 // 编辑查看时盘查对象字典项
-export function postPersonListForTaskData(creds, goback) {
+export function postPersonListForTaskData(creds) {
     let path = '/data/getControlPersonListForTaskPersonal';
     return dispatch => {
         post(api + path, creds).then((json) => {
             dispatch({ type: 'Task_PersonListForTaskHushi-data', data: json });
-            goback()
         }).catch((e) => {
             dispatch({ type: 'Task_PersonListForTaskHushi-error', message: e.toString() })
         });

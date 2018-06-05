@@ -1293,8 +1293,8 @@ class PersonnelLst extends Component {
                                 {personIndex ? personIndex.address_type ? personIndex.address_type === 0 ? '常住' : personIndex.address_type === 1 ? "暂住" : '流动' : '暂无居住类型' : '暂无居住类型'}
                             </Tag>
                         </p>
-                        <p style={{ fontSize: 14, color: "#fff" }}>{personIndex ? personIndex.idcard : ''}</p>
-                        <p style={{ fontSize: 14, color: "#fff" }}>{personIndex ? personIndex.zzxz : ''}</p>
+                        <p style={{ fontSize: 14, color: "#fff", wordWrap: 'break-word' }}>{personIndex ? personIndex.idcard : ''}</p>
+                        <p style={{ fontSize: 14, color: "#fff", wordWrap: 'break-word' }}>{personIndex ? personIndex.zzxz : ''}</p>
                     </div>
                     <div style={clear}></div>
                 </div>
