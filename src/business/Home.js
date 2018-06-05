@@ -1290,7 +1290,7 @@ class PersonnelLst extends Component {
                             title={personIndex ? personIndex.xm === '' ? '暂无姓名' : personIndex.xm : '暂无姓名'}
                         >
                             {personIndex ? personIndex.xm === '' ? '暂无姓名' : personIndex.xm : '暂无姓名'}<Tag style={{ marginLeft: '16px', color: '#f6c094', background: 'none' }} color="volcano">
-                                {personIndex ? personIndex.address_type ? personIndex.address_type === 0 ? '常住' : personIndex.address_type === 1 ? "暂住" : '流动' : '暂无居住类型' : '暂无居住类型'}
+                                {personIndex ? personIndex.address_type!=undefined ? personIndex.address_type == 0 ? '常住' : personIndex.address_type == 1 ? "暂住" : '流动' : '暂无居住类型' : '暂无居住类型'}
                             </Tag>
                         </p>
                         <p style={{ fontSize: 14, color: "#fff", wordWrap: 'break-word' }}>{personIndex ? personIndex.idcard : ''}</p>

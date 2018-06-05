@@ -466,7 +466,7 @@ export class WithDay extends Component {
             title: '居住类型',
             dataIndex: 'address_type',
             render: (text, record) => (
-                <span>{record.address_type === 0 ? '常住' : record.address_type === 1 ? '暂住' : '流动'}</span>
+                <span>{record.address_type == 0 ? '常住' : record.address_type == 1 ? '暂住' : '流动'}</span>
             ),
         }, {
             title: '现居住地址',
@@ -716,7 +716,7 @@ export class WithDay extends Component {
                                             style={{ marginBottom: '5px' }}
                                         >
                                             {getFieldDecorator('address_type', {
-                                                initialValue: obj ? obj.address_type ? obj.address_type : '' : '',
+                                                initialValue: obj ? obj.address_type!=undefined ? obj.address_type : '' : '',
                                             })(
                                                 <Select disabled>
                                                     <Option value={0}>常住</Option>
