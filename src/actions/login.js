@@ -128,6 +128,7 @@ export function logoutUser() {
         sessionStorage.removeItem('user');
         dispatch(receiveLogout());
         browserHistory.push('/');
+        location.replace('/') 
     }
 }
 
