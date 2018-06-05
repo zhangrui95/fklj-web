@@ -34,17 +34,11 @@ const initialState = {
             }
         },
         CustomFiled:{
-            reason: {
-                code:'',
-                text:''
-            },
+            reason: null,
             result: {}
         },
         delCustomFiled:{
-            reason: {
-                code:'',
-                text:''
-            },
+            reason: null,
             result: {}
         },
         getControlPersonListById: {

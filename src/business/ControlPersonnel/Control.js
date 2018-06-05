@@ -335,46 +335,48 @@ export  class Control extends Component{
         let newValue = store.getState().ControlPersonnel.data.FiledList.result.list;
         if(newValue.length > 0){
             for(let i in newValue){
-                if(newValue[i].type == '0'){
-                    newFormList.push(
-                        <Col span={12} key={i}>
-                            <FormItem
-                                {...formItemLayout}
-                                label={newValue[i].name}
-                            >
-                                {getFieldDecorator('wordText' + i, {
-                                    initialValue:this.state.modalType === 'edit' ? detail.custom_filed_value[i].value : '',
-                                })(
-                                    <Input disabled/>
-                                )}
-                            </FormItem>
-                        </Col>
-                    )
-                }else if(newValue[i].type == '1'){
-                    let strs = []
-                    strs=newValue[i].value.split(/[,，]/);
-                    const children = [];
-                    for(let j in strs){
-                        if(j!='remove'){
-                            children.push(<Option key={j}>{strs[j]}</Option>);
+                if(detail.custom_filed_value.length > 0){
+                    if(newValue[i].type == '0'){
+                        newFormList.push(
+                            <Col span={12} key={i}>
+                                <FormItem
+                                    {...formItemLayout}
+                                    label={newValue[i].name}
+                                >
+                                    {getFieldDecorator('wordText' + i, {
+                                        initialValue:this.state.modalType === 'edit' ? detail.custom_filed_value[i].value : '',
+                                    })(
+                                        <Input disabled/>
+                                    )}
+                                </FormItem>
+                            </Col>
+                        )
+                    }else if(newValue[i].type == '1'){
+                        let strs = []
+                        strs=newValue[i].value.split(/[,，]/);
+                        const children = [];
+                        for(let j in strs){
+                            if(j!='remove'){
+                                children.push(<Option key={j}>{strs[j]}</Option>);
+                            }
                         }
+                        newFormList.push(
+                            <Col span={12}>
+                                <FormItem
+                                    {...formItemLayout}
+                                    label={newValue[i].name}
+                                >
+                                    {getFieldDecorator('wordName', {
+                                        initialValue:this.state.modalType === 'edit' ? detail.custom_filed_value[i].value : '',
+                                    })(
+                                        <Select disabled>
+                                            {children}
+                                        </Select>
+                                    )}
+                                </FormItem>
+                            </Col>
+                        )
                     }
-                    newFormList.push(
-                        <Col span={12}>
-                            <FormItem
-                                {...formItemLayout}
-                                label={newValue[i].name}
-                            >
-                                {getFieldDecorator('wordName', {
-                                    initialValue:this.state.modalType === 'edit' ? detail.custom_filed_value[i].value : '',
-                                })(
-                                    <Select disabled>
-                                        {children}
-                                    </Select>
-                                )}
-                            </FormItem>
-                        </Col>
-                    )
                 }
             }
         }
