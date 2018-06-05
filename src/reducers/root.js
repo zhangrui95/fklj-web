@@ -143,15 +143,15 @@ const initialState = {
                 code: 'xtsz_menu',
                 homeType: ''
             }
-            // ,{
-            //     id: '115',
-            //     navigationName: '电子档案',
-            //     isSelect: false,
-            //     path: "/ElectronicArchives",
-            //     isShow: true,
-            //     code: '',
-            //     homeType: ''
-            // }
+            ,{
+                id: '115',
+                navigationName: '电子档案',
+                isSelect: false,
+                path: "/ElectronicArchives",
+                isShow: true,
+                code: '',
+                homeType: ''
+            }
         ],
         ModalDialogueBg: 'none',//遮罩展示与隐藏
 

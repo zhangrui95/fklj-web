@@ -3,148 +3,182 @@
  * Created by zy on 2017/5/15.
  */
 //盘查详情页面
-import React, {Component} from 'react'
-import {mainReducer} from "../reducers/reducers";
-import {fetchUsersData,changeTab} from "../actions/actions";
-import {connect} from "react-redux";
-import {initElectroTab,
-postElectronicArchivesData} from "../actions/ElectronicArchives";
+import React, { Component } from 'react'
+import { mainReducer } from "../reducers/reducers";
+import { fetchUsersData, changeTab } from "../actions/actions";
+import { connect } from "react-redux";
+import {
+    initElectroTab,
+    postElectronicArchivesData
+} from "../actions/ElectronicArchives";
 import DynamicRightContent from "./DynamicRightContent";
-import {StylePage,ShallowBlueBtn,DeepRedBtn,Input,DeepBlueBtn,PhotoItem,Pag,InterrogationDetailsItem,Tabs} from "./generalPurposeModule";
-import {store} from '../index.js';
-import  * as constants from "../utils/Constants";
-import {BasicInformation} from "./InterrogationDetails/BasicInformation";
-import {BgInformation} from "./InterrogationDetails/BgInformation";
-import {SwordData} from "./InterrogationDetails/SwordData";
-import {ActiveTrajectory} from "./InterrogationDetails/ActiveTrajectory";
-import {Header} from "../components/Header";
+import { StylePage, ShallowBlueBtn, DeepRedBtn, Input, DeepBlueBtn, PhotoItem, Pag, InterrogationDetailsItem, Tabs } from "./generalPurposeModule";
+import { store } from '../index.js';
+import * as constants from "../utils/Constants";
+import { BasicInformation } from "./InterrogationDetails/BasicInformation";
+import { BgInformation } from "./InterrogationDetails/BgInformation";
+import { SwordData } from "./InterrogationDetails/SwordData";
+import { ActiveTrajectory } from "./InterrogationDetails/ActiveTrajectory";
+import { Header } from "../components/Header";
 import {
     EmptyData
 } from "../components/EmptyData";
 
-class ElectronicArchives extends Component{
+class ElectronicArchives extends Component {
 
-    componentWillUnmount() { //销毁
-        store.dispatch(initElectroTab());
-        store.getState().ElectronicArchivesUsers.data.ElectronicArchives.personnelInformation = {
-             reason: {
-                        "code": "",
-                        "text": ""
-                        },
-                        result: {
-                          
-                            list: [],
-                    }
-        }
-    }
+    // componentWillUnmount() { //销毁
+    //     store.dispatch(initElectroTab());
+    //     store.getState().ElectronicArchivesUsers.data.ElectronicArchives.personnelInformation = {
+    //          reason: {
+    //                     "code": "",
+    //                     "text": ""
+    //                     },
+    //                     result: {
+
+    //                         list: [],
+    //                 }
+    //     }
+    // }
     //设置管理菜单点击-获取数据-开关事件
-    handleTabClick = (tab,type) => {
+    handleTabClick = (tab, type) => {
 
-        store.dispatch(changeTab(tab,type,constants.ELETRO_MODULE));
+        store.dispatch(changeTab(tab, type, constants.ELETRO_MODULE));
 
-        switch(tab.tabName){
+        switch (tab.tabName) {
             case constants.INTERROGATIONDETAILS_TAB_BASIC:
-            //     this.props.dispatch(fetchHorrorSoftwareData('/getHorrorSoftware'));
-                 break;
+                //     this.props.dispatch(fetchHorrorSoftwareData('/getHorrorSoftware'));
+                break;
             case constants.INTERROGATIONDETAILS_TAB_CONTEXT:
-             //    this.props.dispatch(fetchInterrogationInformationData('/getInterrogationInformation'));
-                 break;
+                //    this.props.dispatch(fetchInterrogationInformationData('/getInterrogationInformation'));
+                break;
             case constants.INTERROGATIONDETAILS_TAB_ACTIVE_TRAJECTORY:
-              //   this.props.dispatch(fetchInterrogationInformationData('/getInterrogationInformation'));
-                 break;
+                //   this.props.dispatch(fetchInterrogationInformationData('/getInterrogationInformation'));
+                break;
             case constants.INTERROGATIONDETAILS_TAB_NEW_LJ_DATA:
-              //   this.props.dispatch(fetchInterrogationInformationData('/getInterrogationInformation'));
-                 break;
+                //   this.props.dispatch(fetchInterrogationInformationData('/getInterrogationInformation'));
+                break;
             default:
                 break
         }
     }
 
     componentDidMount() {
-      let search = "idNumber="+this.props.params.personId;
-      let creds = {
-            currentPage:1,
-            entityOrField:true,
-            pd:{
-            //    personId: this.props.params.personId,
-            //    recordId: this.props.params.recordId,
-               idcard: this.props.params.idcard,
+        let search = "idNumber=" + this.props.params.personId;
+        let creds = {
+            currentPage: 1,
+            entityOrField: true,
+            pd: {
+                //    personId: this.props.params.personId,
+                //    recordId: this.props.params.recordId,
+                idcard: this.props.params.idcard,
             },
             showCount: constants.pageSize
         }
-       this.props.dispatch(postElectronicArchivesData(creds));
-   }
-    render(){
-        let ElectronicArchivesList =store.getState().ElectronicArchivesUsers.data.ElectronicArchives.personnelInformation.result.list;
+        this.props.dispatch(postElectronicArchivesData(creds));
+    }
+    render() {
+        // let ElectronicArchivesList =store.getState().ElectronicArchivesUsers.data.ElectronicArchives.personnelInformation.result.list;
+        let ElectronicArchivesList = [{
+            zpurl:'',
+            check_exception: 1,
+            collectNumber: 0,
+            name: '测试用户',
+            idcard: '232326200002020608',
+            birth: '1995-05-23',
+            nation: '汉',
+            sex: '女',
+            address: '黑龙江省哈尔滨市松北区科技创新城',
+            tags: "违法犯罪-111001,在逃人员-111001,涉毒人员-111001"
+        }];
         let interrogation = []
         var ElectronicArchives = null;
-        for(var i = 0;i<ElectronicArchivesList.length;i++){
+        for (var i = 0; i < ElectronicArchivesList.length; i++) {
             ElectronicArchives = ElectronicArchivesList[i];
             interrogation.push(
-                <InterrogationDetailsItem  interrogationDetailsUser = {ElectronicArchives}/>
+                <InterrogationDetailsItem interrogationDetailsUser={ElectronicArchives} />
             );
         }
 
         //标签
-        let tabs =store.getState().ElectronicArchivesUsers.uiData.tabs;
-        let isSelectTab,content;
+        let tabs = store.getState().ElectronicArchivesUsers.uiData.tabs;
+        console.log('tabs**', tabs);
+        let isSelectTab, content;
         //查找被选中的标签
-        tabs.forEach(function(tab){
-            if(tab.isSelect===true){
+        tabs.forEach(function (tab) {
+            if (tab.isSelect === true) {
                 isSelectTab = tab;
             }
         });
 
-        let recordId = (ElectronicArchives===null?0:ElectronicArchives.recordId);
-        let personId = (ElectronicArchives===null?0:ElectronicArchives.personId);
+        let recordId = (ElectronicArchives === null ? 0 : ElectronicArchives.recordId);
+        let personId = (ElectronicArchives === null ? 0 : ElectronicArchives.personId);
         let user = JSON.parse(sessionStorage.getItem('user'));
         let jyxm = user.user.name;
-        let idcard =  this.props.params.idcard;
-        if(ElectronicArchives !== null){
-            switch(isSelectTab.tabName){
-                // case constants.INTERROGATIONDETAILS_TAB_BASIC:
-                //     content = <BasicInformation idcard={idcard} />
-                //     break
-                // case constants.INTERROGATIONDETAILS_TAB_CONTEXT:
-                //     content =<BgInformation idcard={idcard} recordId={recordId} personId={personId}/>
-                //     break
-                
-                // case constants.INTERROGATIONDETAILS_TAB_ACTIVE_TRAJECTORY:
-                //     content =<ActiveTrajectory idcard={idcard} jyxm={jyxm}/>
-                //     break
+        let idcard = this.props.params.idcard;
+        if (ElectronicArchives !== null) {
+            switch (isSelectTab.tabName) {
+                case constants.INTERROGATIONDETAILS_TAB_BASIC:
+                    content =
+                        <div>
+                            <div style={{ marginTop: "20px" }}>
+                                <Tabs tabs={tabs} handleTabClick={this.handleTabClick} />
+                                <div style={{ clear: "both" }}></div>
+                            </div>
+                            <BasicInformation idcard={idcard} />
+                        </div>
+                    break
+                case constants.INTERROGATIONDETAILS_TAB_CONTEXT:
+                    content = <div>
+                        <div style={{ marginTop: "20px" }}>
+                            <Tabs tabs={tabs} handleTabClick={this.handleTabClick} />
+                            <div style={{ clear: "both" }}></div>
+                        </div>
+                        <BgInformation idcard={idcard} recordId={recordId} personId={personId} />
+                    </div>
+                    break
+
+                case constants.INTERROGATIONDETAILS_TAB_ACTIVE_TRAJECTORY:
+                    content = <div>
+                        <div style={{ marginTop: "20px" }}>
+                            <Tabs tabs={tabs} handleTabClick={this.handleTabClick} />
+                            <div style={{ clear: "both" }}></div>
+                        </div>
+                        <ActiveTrajectory idcard={idcard} jyxm={jyxm} />
+                    </div>
+                    break
                 case constants.INTERROGATIONDETAILS_TAB_NEW_LJ_DATA:
-                    content =<div>
-                        <div style={{marginTop:"20px"}}>
-                            <Tabs  tabs={tabs} handleTabClick={this.handleTabClick}/>
-                            <div style={{clear:"both"}}></div>
+                    content = <div>
+                        <div style={{ marginTop: "20px" }}>
+                            <Tabs tabs={tabs} handleTabClick={this.handleTabClick} />
+                            <div style={{ clear: "both" }}></div>
                         </div>
                         <SwordData recordId={recordId} personId={personId} />
-                        </div>
+                    </div>
                     break
                 default:
                     break
             }
-        }else{
-            content=<EmptyData />
+        } else {
+            content = <EmptyData />
         }
 
         return (
-            
+
             <div>
-                <Header homeType="hs_fklj_sys"/>
+                <Header homeType="hs_fklj_sys" />
                 <div>
-                    <p style={{fontSize:"16px",color:"#fff",marginTop:"20px",paddingLeft:"18px"}}>电子档案</p>
+                    <p style={{ fontSize: "16px", color: "#fff", marginTop: "20px", paddingLeft: "18px" }}>电子档案</p>
                 </div>
-                <div style={{padding:"18px"}}>
+                <div style={{ padding: "18px" }}>
                     {/*{interrogationDetailsUserItems}*/}
-                      {interrogation}
+                    {interrogation}
                     {/*标签页*/}
                     <div>
-                        
-                         {content}
+
+                        {content}
                     </div>
                 </div>
-                
+
             </div>
         );
     }

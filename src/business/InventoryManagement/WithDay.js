@@ -367,7 +367,8 @@ export class WithDay extends Component {
         let obj = store.getState().InventoryManagement.data.invenListHushiDetails.result;
         let page = store.getState().InventoryManagement.data.invenListHushi.result.page;
         let dataList = [];
-
+        console.log('obj***&&&&', obj);
+        console.log('obj***', obj.address_type);
         let recordNumber = parseInt((nowPage - 1) * 10);
         if (data) {
             for (let i = 0; i < data.length; i++) {
@@ -422,11 +423,11 @@ export class WithDay extends Component {
         }, {
             title: '身份证号',
             dataIndex: 'idcard',
-            width:160,
+            width: 160,
         }, {
             title: '姓名',
             dataIndex: 'name',
-            width:90,
+            width: 90,
         }, {
             title: '性别',
             dataIndex: 'sex',
@@ -437,12 +438,12 @@ export class WithDay extends Component {
             title: '居住类型',
             dataIndex: 'address_type',
             render: (text, record) => (
-                <span>{record.address_type === 0 ? '常住' : record.address_type === 1 ? '暂住' : '流动'}</span>
+                <span>{record.address_type == 0 ? '常住' : record.address_type == 1 ? '暂住' : '流动'}</span>
             ),
         }, {
             title: '现居住地址',
             dataIndex: 'now_address',
-            width:350
+            width: 350
         }, {
             title: '联系电话',
             dataIndex: 'phone',
@@ -455,11 +456,11 @@ export class WithDay extends Component {
         }, {
             title: '盘查时间',
             dataIndex: 'checktime',
-            width:138
+            width: 138
         }, {
             title: '操作',
             key: 'action',
-            width:50,
+            width: 50,
             render: (text, record) => (
                 <span>
                     <span onClick={(e) => this.editShowModal(record)} style={{ cursor: 'pointer' }}>详情</span>
@@ -606,7 +607,7 @@ export class WithDay extends Component {
                                             <Col span={4} style={{ color: "#fff" }}>照片：</Col>
                                             <Col span={20}><img src={obj ? obj.zpurl ? obj.zpurl : "/images/zanwu.png" : "/images/zanwu.png"} style={{ width: '130px', height: '160px' }} /></Col>
                                         </Row>
-                                        <Row style={{ padding: '0 32px 16px 32px',maxHeight:'100px',overflow:'auto' }}>
+                                        <Row style={{ padding: '0 32px 16px 32px', maxHeight: '100px', overflow: 'auto' }}>
                                             {redTag}{greenTag}
                                         </Row>
                                         <FormItem
@@ -683,7 +684,7 @@ export class WithDay extends Component {
                                             style={{ marginBottom: '5px' }}
                                         >
                                             {getFieldDecorator('address_type', {
-                                                initialValue: obj ? obj.address_type ? obj.address_type : '' : '',
+                                                initialValue: obj ? obj.address_type !== undefined ? obj.address_type : '' : '',
                                             })(
                                                 <Select disabled>
                                                     <Option value={0}>常住</Option>
@@ -722,7 +723,7 @@ export class WithDay extends Component {
                                             {getFieldDecorator('phone', {
                                                 initialValue: obj ? obj.phone ? obj.phone : '' : '',
                                             })(
-                                                <Input disabled title={obj ? obj.phone ? obj.phone : '' : ''}/>
+                                                <Input disabled title={obj ? obj.phone ? obj.phone : '' : ''} />
                                             )}
                                         </FormItem>
                                         <FormItem
