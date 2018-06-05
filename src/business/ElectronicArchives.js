@@ -27,19 +27,53 @@ import {
 
 class ElectronicArchives extends Component {
 
-    // componentWillUnmount() { //销毁
-    //     store.dispatch(initElectroTab());
-    //     store.getState().ElectronicArchivesUsers.data.ElectronicArchives.personnelInformation = {
-    //          reason: {
-    //                     "code": "",
-    //                     "text": ""
-    //                     },
-    //                     result: {
+    componentWillUnmount() { //销毁
+        // store.dispatch(initElectroTab());
+        // store.getState().ElectronicArchivesUsers.data.ElectronicArchives.personnelInformation = {
+        //      reason: {
+        //                 "code": "",
+        //                 "text": ""
+        //                 },
+        //                 result: {
 
-    //                         list: [],
-    //                 }
-    //     }
-    // }
+        //                     list: [],
+        //             }
+        // }
+        store.getState().ElectronicArchivesUsers.uiData = {
+            tabs: [
+                {
+                    id: '101',
+                    tabName: '基础信息',
+                    isSelect: true
+                },
+                {
+                    id: '102',
+                    tabName: '背景信息',
+                    isSelect: false
+                },
+                {
+                    id: '103',
+                    tabName: '活动轨迹',
+                    isSelect: false
+                },
+                // {
+                //     id: '104',
+                //     tabName: '最新盘查数据',
+                //     isSelect: false
+                // },
+                {
+                    id: '104',
+                    tabName: '利剑数据',
+                    isSelect: false
+                },
+                {
+                    id: '105',
+                    tabName: '关注度积分',
+                    isSelect: false
+                }
+            ]
+        }
+    }
     //设置管理菜单点击-获取数据-开关事件
     handleTabClick = (tab, type) => {
 
@@ -83,14 +117,14 @@ class ElectronicArchives extends Component {
     render() {
         // let ElectronicArchivesList =store.getState().ElectronicArchivesUsers.data.ElectronicArchives.personnelInformation.result.list;
         let ElectronicArchivesList = [{
-            zpurl: '',
+            zpurl: '/images/IMG_00000001.jpg',
             check_exception: 1,
             collectNumber: 19,
             name: '测试用户',
             idcard: '232326200002020608',
-            birth: '1995-05-23',
+            birth: '1985-05-23',
             nation: '汉',
-            sex: '女',
+            sex: '男',
             address: '黑龙江省哈尔滨市松北区科技创新城',
             tags: "违法犯罪-111001,在逃人员-111001,涉毒人员-111001"
         }];
@@ -180,9 +214,9 @@ class ElectronicArchives extends Component {
 
             <div>
                 <Header homeType="hs_fklj_sys" />
-                <div>
+                {/* <div>
                     <p style={{ fontSize: "16px", color: "#fff", marginTop: "20px", paddingLeft: "18px" }}>电子档案</p>
-                </div>
+                </div> */}
                 <div style={{ padding: "18px" }}>
                     {/*{interrogationDetailsUserItems}*/}
                     {interrogation}

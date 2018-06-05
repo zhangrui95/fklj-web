@@ -117,9 +117,14 @@ const initialState = {
                     tabName: '活动轨迹',
                     isSelect: false
                 },
+                // {
+                //     id: '104',
+                //     tabName: '最新盘查数据',
+                //     isSelect: false
+                // },
                 {
                     id: '104',
-                    tabName: '最新盘查数据',
+                    tabName: '利剑数据',
                     isSelect: false
                 },
                 {

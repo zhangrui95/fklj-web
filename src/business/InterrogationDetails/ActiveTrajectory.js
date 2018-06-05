@@ -94,12 +94,56 @@ export class ActiveTrajectory extends Component {
         super(props);
         this.state = {
             // data: [],
-            data:[{
-                type:'',
-                address:'',
-                fromCity:'',
-                toCity:'',
-            }]
+            data: [{
+                type: 'railway',
+                address: '',
+                fromCity: '黑龙江',
+                toCity: '佳木斯',
+                name: 'K7203',
+                position: '023',
+                beginDate: '2017-04-03',
+
+            },
+            {
+                type: 'railway',
+                address: '',
+                fromCity: '沈阳',
+                toCity: '吉林',
+                name: 'K7203',
+                position: '059',
+                beginDate: '2017-04-30',
+
+            }, {
+                type: 'plane',
+                address: '',
+                fromCity: '北京',
+                toCity: '南京',
+                name: 'JD5796',
+                position: '32A',
+                beginDate: '2017-05-06',
+
+            }, {
+                type: 'netPlay',
+                address: '黑龙江省呼兰区学院路1022商服',
+                fromCity: '',
+                toCity: '',
+                name: '王者荣耀网吧',
+                position: '22',
+                beginDate: '2018-05-29 08:10',
+                endDate: '2017-05-29 12:10',
+            },
+            {
+                type: 'hostel',
+                address: '北京市海淀区',
+                fromCity: '',
+                toCity: '',
+                name: '汉庭商务酒店',
+                position: '301',
+                beginDate: '2017-06-06',
+
+            },
+
+            ]
 
         }
     }
@@ -118,7 +162,7 @@ export class ActiveTrajectory extends Component {
                 data: data.result.list,
             });
 
-        }).catch((e) => {});
+        }).catch((e) => { });
     }
     componentDidMount() {
 
@@ -130,8 +174,8 @@ export class ActiveTrajectory extends Component {
         //let activeTrajectoryList=this.props.activeTrajectoryList;
         return (
             <div>
-                
-               <TrajectoryModel activeTrajectoryList={data}/>
+
+                <TrajectoryModel activeTrajectoryList={data} />
             </div>
         );
     }
@@ -150,24 +194,24 @@ const TrajectoryModel = React.createClass({
             let YearAndMonth = dateSplit[0] + "年" + dateSplit[1] + "月";
             if (nowYearAndMonth != YearAndMonth) {
                 dates.push(
-                    <DateBox  key={gj}  date={YearAndMonth} />
+                    <DateBox key={gj} date={YearAndMonth} />
                 );
                 nowYearAndMonth = YearAndMonth;
             }
             dates.push(
-                <TrajectoryDiv key={i} dataList={dataList}/>
+                <TrajectoryDiv key={i} dataList={dataList} />
             );
-            console.log('dates',dates);
+            console.log('dates', dates);
         }
 
 
 
         return (
-            <div  style={{border:"1px solid rgb(12, 95, 147)",padding:"20px",background:"rgba(40,51,99,0.8)",zIndex:"3"}}>
-                <p style={{color:"#fff",fontSize:"16px",marginBottom:"10px"}}>活动轨迹</p>
-                {dates.length>0?
-                 <div>{dates}</div>:
-                 <div style={{color:"#fff",fontSize:30,textAlign:"center",margin:"30px 0"}}>暂无数据</div>
+            <div style={{ border: "1px solid rgb(12, 95, 147)", padding: "20px", background: "rgba(40,51,99,0.8)", zIndex: "3" }}>
+                <p style={{ color: "#fff", fontSize: "16px", marginBottom: "10px" }}>活动轨迹</p>
+                {dates.length > 0 ?
+                    <div>{dates}</div> :
+                    <div style={{ color: "#fff", fontSize: 30, textAlign: "center", margin: "30px 0" }}>暂无数据</div>
                 }
                 {/*{dates}*/}
             </div>
@@ -177,55 +221,55 @@ const TrajectoryModel = React.createClass({
 
 //轨迹详情
 const TrajectoryDiv = React.createClass({
-    render(){
+    render() {
         let dataList = this.props.dataList;
         return (
-            
+
             <div>
-               
-                <div style={{width:"1170px",margin:"0 auto",marginBottom:"20px"}}>
+
+                <div style={{ width: "1170px", margin: "0 auto", marginBottom: "20px" }}>
                     <div style={bgDiv}>
-                        <div style={{float:"left",marginRight:"30px"}}>
-                            {dataList.type==="plane"?<img src="/images/air.png" alt=""/>
-                            :dataList.type==="netPlay"?<img src="/images/internet.png" alt=""/>
-                            :dataList.type==="railway"?<img src="/images/tielu.png" alt=""/>
-                            :dataList.type==="highway"?<img src="/images/gonglu.png" alt=""/>
-                            :dataList.type==="hostel"?<img src="/images/hotel.png"/>:''}
-                            </div>
-                        <div style={{float:"left",marginRight:"10px",width:"300px"}}>
+                        <div style={{ float: "left", marginRight: "30px" }}>
+                            {dataList.type === "plane" ? <img src="/images/air.png" alt="" />
+                                : dataList.type === "netPlay" ? <img src="/images/internet.png" alt="" />
+                                    : dataList.type === "railway" ? <img src="/images/tielu.png" alt="" />
+                                        : dataList.type === "highway" ? <img src="/images/gonglu.png" alt="" />
+                                            : dataList.type === "hostel" ? <img src="/images/hotel.png" /> : ''}
+                        </div>
+                        <div style={{ float: "left", marginRight: "10px", width: "300px" }}>
                             <p style={font18}>
-                                {dataList.type==="plane"?"民航"
-                                :dataList.type==="netPlay"?"上网"
-                                :dataList.type==="railway"?"铁路"
-                                :dataList.type==="highway"?"公路"
-                                :dataList.type==="hostel"?"酒店":''}
+                                {dataList.type === "plane" ? "民航"
+                                    : dataList.type === "netPlay" ? "上网"
+                                        : dataList.type === "railway" ? "铁路"
+                                            : dataList.type === "highway" ? "公路"
+                                                : dataList.type === "hostel" ? "酒店" : ''}
                             </p>
-                            <p style={font16two} title={dataList.type==="netPlay" ?dataList.address : dataList.fromCity + "---" + dataList.toCity && dataList.type==="hostel" ?dataList.address : dataList.fromCity + "---" + dataList.toCity}>
-                                {dataList.type==="netPlay" ?dataList.address : dataList.fromCity + "---" + dataList.toCity && dataList.type==="hostel" ?dataList.address : dataList.fromCity + "---" + dataList.toCity}
+                            <p style={font16two} title={dataList.type === "netPlay" ? dataList.address : dataList.fromCity + "---" + dataList.toCity && dataList.type === "hostel" ? dataList.address : dataList.fromCity + "---" + dataList.toCity}>
+                                {dataList.type === "netPlay" ? dataList.address : dataList.fromCity + "---" + dataList.toCity && dataList.type === "hostel" ? dataList.address : dataList.fromCity + "---" + dataList.toCity}
                             </p>
                         </div>
-                        <div style={{float:"left",marginRight:"10px",width:"300px"}}>
+                        <div style={{ float: "left", marginRight: "10px", width: "300px" }}>
                             <p style={font18}>
-                            {dataList.type==="plane"?"班次："+dataList.name
-                            :dataList.type==="netPlay"?dataList.name
-                            :dataList.type==="railway"?"车次："+dataList.name
-                            :dataList.type==="highway"?"车次："+dataList.name:dataList.name}
+                                {dataList.type === "plane" ? "班次：" + dataList.name
+                                    : dataList.type === "netPlay" ? dataList.name
+                                        : dataList.type === "railway" ? "车次：" + dataList.name
+                                            : dataList.type === "highway" ? "车次：" + dataList.name : dataList.name}
                             </p>
                         </div>
-                        <div style={{float:"left",width:"400px"}}>
+                        <div style={{ float: "left", width: "400px" }}>
                             <p style={font18}>
-                                {dataList.type==="netPlay"?"主机号："+dataList.position:"座位："+dataList.position && dataList.type==="hostel"?"房间号："+dataList.position:"座位："+dataList.position}
+                                {dataList.type === "netPlay" ? "主机号：" + dataList.position : "座位：" + dataList.position && dataList.type === "hostel" ? "房间号：" + dataList.position : "座位：" + dataList.position}
                             </p>
-                            <p style={font16}>{dataList.type==="netPlay" ? dataList.beginDate + "-" + dataList.endDate:dataList.beginDate}</p>
+                            <p style={font16}>{dataList.type === "netPlay" ? dataList.beginDate + "-" + dataList.endDate : dataList.beginDate}</p>
                         </div>
-                        <div style={{clear:"both"}}></div>
+                        <div style={{ clear: "both" }}></div>
                     </div>
                 </div>
-                
+
             </div>
         );
     }
-    
+
 
 });
 //年月标题
@@ -233,7 +277,7 @@ const DateBox = React.createClass({
     render() {
 
         return (
-            <div style={{fontSize:"18px",color:"#00acee",textAlign:"center",margin:"20px 0 20px 0"}}>{this.props.date}</div>
+            <div style={{ fontSize: "18px", color: "#00acee", textAlign: "center", margin: "20px 0 20px 0" }}>{this.props.date}</div>
         );
     }
 });

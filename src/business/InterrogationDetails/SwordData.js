@@ -388,9 +388,15 @@ class InfluxPlaceTable extends Component {
     state = {
         visible: false,
         record: null,
-        data: [],
+        // data: [],
         pagination: pagination,
         loading: false,
+        data:[{
+            fromProvince:'江苏',
+            fromCity:'南京',
+            toProvince:'福建省',
+            toCity:'晋江市'
+        }]
     };
     handleTableChange = (pagination, filters, sorter) => {
         const pager = {...this.state.pagination
@@ -424,7 +430,7 @@ class InfluxPlaceTable extends Component {
             pagination.total = data.result.page.totalResult;
             this.setState({
                 loading: false,
-                data: data.result.list,
+                // data: data.result.list,
                 pagination,
             });
         }).catch((e) => {});
@@ -461,17 +467,19 @@ class InfluxPlaceTable extends Component {
         }, {
             title: '目的地市',
             dataIndex: 'toCity',
-        }, {
-            title: '操作',
-            key: 'action',
-            // width: 30,
-            render: (text, record) => (
-                <span>
-                        <span onClick={(e)=>this.showModal(record)} style={{cursor:'pointer'}}>详情</span>
-                </span>
-            ),
+        }
+        // , {
+        //     title: '操作',
+        //     key: 'action',
+        //     // width: 30,
+        //     render: (text, record) => (
+        //         <span>
+        //                 <span onClick={(e)=>this.showModal(record)} style={{cursor:'pointer'}}>详情</span>
+        //         </span>
+        //     ),
 
-        }];
+        // }
+    ];
         return (
             <div>
                 <Table columns={columns}
@@ -520,9 +528,15 @@ class MobileDataTable extends Component {
     state = {
         visible: false,
         record: null,
-        data: [],
+        // data: [],
         pagination: pagination,
         loading: false,
+        data: [{
+            phoneNumber:'13205051212',
+            imei:'56656565',
+            product:'OPPOR9s',
+            os:'【安卓系统】'
+        }],
     };
     handleTableChange = (pagination, filters, sorter) => {
             const pager = {...this.state.pagination
@@ -557,7 +571,7 @@ class MobileDataTable extends Component {
             pagination.total = data.result.page.totalResult;
             this.setState({
                 loading: false,
-                data: data.result.list,
+                // data: data.result.list,
                 pagination,
             });
         }).catch((e) => {});
@@ -605,19 +619,21 @@ class MobileDataTable extends Component {
                     }
                 </span>
             )
-        }, {
-            title: '操作',
-            key: 'action',
-            // width: 30,
-            render: (text, record) => (
-                <span>
-                        <Link to={'/PhoneDetails/'+record.phoneId}>
-                            <span style={{cursor:'pointer',color:'#fff'}}>详情</span>
-                        </Link>
-                </span>
-            ),
+        }
+        // , {
+        //     title: '操作',
+        //     key: 'action',
+        //     // width: 30,
+        //     render: (text, record) => (
+        //         <span>
+        //                 <Link to={'/PhoneDetails/'+record.phoneId}>
+        //                     <span style={{cursor:'pointer',color:'#fff'}}>详情</span>
+        //                 </Link>
+        //         </span>
+        //     ),
 
-        }];
+        // }
+    ];
         return (
             <div>
                 <Table columns={columns}

@@ -135,15 +135,6 @@ const initialState = {
                 code: '',
                 homeType: 'fklj'
             }, {
-                id: '114',
-                navigationName: '系统设置',
-                isSelect: false,
-                path: "/SystemManagement",
-                isShow: false,
-                code: 'xtsz_menu',
-                homeType: ''
-            }
-            ,{
                 id: '115',
                 navigationName: '电子档案',
                 isSelect: false,
@@ -152,6 +143,16 @@ const initialState = {
                 code: '',
                 homeType: ''
             }
+            , {
+                id: '114',
+                navigationName: '系统设置',
+                isSelect: false,
+                path: "/SystemManagement",
+                isShow: false,
+                code: 'xtsz_menu',
+                homeType: ''
+            }
+
         ],
         ModalDialogueBg: 'none',//遮罩展示与隐藏
 
@@ -209,7 +210,7 @@ const root = (state = initialState, action) => {
             newState.data.policeUnitsList = action.data.result.list;
             return newState;
         // 修改密码
-        case MODIFIY_PASSWORD: 
+        case MODIFIY_PASSWORD:
             newState.data.modifiyMessage = action.data;
             return newState;
         default:
