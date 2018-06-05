@@ -144,7 +144,7 @@ export  class SearchArea extends Component{
             }else{
                 message.error(`提示：${store.getState().ControlPersonnel.data.delCustomFiled.reason.text}`);
             }
-        },150)
+        },200)
         this.setState({
             visible: false,
             zdyModal:true
@@ -277,14 +277,14 @@ export  class SearchArea extends Component{
                 setTimeout(()=>{
                     let delCode = store.getState().ControlPersonnel.data.CustomFiled.reason;
                     if(delCode === null){
-                        message.success(`提示：自定义字段${this.state.zdyType === 'add' ? '新增':'修改'}成功`);
                         this.hideModals();
+                        message.success(`提示：自定义字段${this.state.zdyType === 'add' ? '新增':'修改'}成功`);
                         this.getNewWords();
                     }
                     // else{
                     //     message.error(`提示：${store.getState().ControlPersonnel.data.CustomFiled.reason.text}`);
                     // }
-                },150)
+                },200)
             }
         }else{
             message.error(`提示：字段名称不能为空`);
