@@ -1278,11 +1278,11 @@ class PersonnelLst extends Component {
             <div style={{ marginTop: "10px", height: "200", padding: "0 16px" }}>
                 {/*<Link to={toElectronicArchivesUrl}>*/}
                 <div >
-                    {personIndex ? personIndex.xp !== '' ? <img src={personIndex.xp} alt="" style={{ width: "80px", height: "110px", float: "left", marginTop: 15 }} /> :
-                        <img src='../images/zanwu.png' alt="" style={{ width: "80px", height: "110px", float: "left", marginTop: 15 }} /> :
-                        <img src='../images/zanwu.png' alt="" style={{ width: "80px", height: "110px", float: "left", marginTop: 15 }} />
+                    {personIndex ? personIndex.xp !== '' ? <img src={personIndex.xp} alt="" style={{width:"25%", float: "left", marginTop: 15 }} /> :
+                        <img src='../images/zanwu.png' alt="" style={{ width:"25%", float: "left", marginTop: 15 }} /> :
+                        <img src='../images/zanwu.png' alt="" style={{ width:"25%", float: "left", marginTop: 15 }} />
                     }
-                    <div style={{ float: "left", marginLeft: "5%", marginTop: 20, }}>
+                    <div style={{ width:"69%",float: "left", marginLeft: "5%", marginTop: 20, }}>
                         <p style={{
                             fontSize: 14, color: "#fff", width: '98%', overflow: 'hidden',
                             textOverflow: 'ellipsis', whiteSpace: 'nowrap',
