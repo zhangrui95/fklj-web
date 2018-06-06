@@ -2,6 +2,9 @@
 import {post} from "./request";
 import {fetchRankUnitTreeData} from './actions';
 import {serverUrls} from '../utils/index';
+// import { ADDRGETNETWORKPARAMS } from "dns";
+import { store } from '../index.js';
+import { message } from 'antd';
 //获取列表
 export function getControlPersonList(creds) {
     let path  = serverUrls + '/data/getControlPersonList';
@@ -87,17 +90,30 @@ export function delCustomFiled(creds) {
     return dispatch => {
         post(path,creds).then((json) => {
             dispatch( {type: 'delCustomFiled_succeed',data: json} );
+            if (json.reason === null) {
+                message.success(`提示：字段删除成功`);
+                store.dispatch(getCustomFiledList({}));
+            } else {
+                message.error(`提示：${json.reason.text}`);
+            }
         }).catch((e)=>{
             dispatch({type: 'delCustomFiled_error',message: e.toString()} )
         });
     }
 }
 //添加到任务
-export function updateTaskModelControlPerson(creds) {
+export function updateTaskModelControlPerson(creds,getNewsList,changeSelection,ModalTitle) {
     let path  = serverUrls + '/data/updateTaskModelControlPerson';
     return dispatch => {
         post(path,creds).then((json) => {
             dispatch( {type: 'updateTaskModelControlPerson_succeed',data: json} );
+            if(json.reason === null){
+                message.success(`提示：${ModalTitle}成功`);
+                getNewsList();
+                changeSelection();
+            }else{
+                message.error(`提示：${json.reason.text}`);
+            }
         }).catch((e)=>{
             dispatch({type: 'updateTaskModelControlPerson_error',message: e.toString()} )
         });
