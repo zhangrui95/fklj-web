@@ -27,7 +27,7 @@ import {
 } from "react-router";
 import moment from 'moment';
 moment.locale('zh-cn');
-
+import {NewModal} from "./NewModal";
 // 样式
 const sliderdyHeader = {
     borderBottom: "1px solid #0C5F93",
@@ -705,7 +705,16 @@ export class OldWithDay extends Component {
                             </div>
                         </Modal> : ''
                 }
-
+                {
+                    this.state.visible?
+                    <NewModal 
+                    visible={this.state.visible}
+                    newobj={newobj}
+                    handleCancel={this.handleCancel}
+                    modalKey={this.state.modalKey}
+                    />:''
+                }
+                
             </div>
         )
     }
