@@ -237,7 +237,7 @@ class TaskDoneCharts extends Component {
         let ToskChartsLists = [];
         for(let i in ToskChartsList){
             if(i!=='remove'){
-                ToskChartsLists.push({name:ToskChartsList[i].name == 0 ? '待办任务':(ToskChartsList[i].name === 1 ? '已完成任务' : '超期任务'),value:ToskChartsList[i].value})
+                ToskChartsLists.push({name:ToskChartsList[i].name == 0 ? '待办任务':(ToskChartsList[i].name === 1 ? '已办任务' : '超期任务'),value:ToskChartsList[i].value})
             }
         }
         let isFetching = store.getState().ReportForms.data.getSubtaskListGroup.isFetching;
