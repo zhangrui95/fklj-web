@@ -27,7 +27,7 @@ import {
 } from "react-router";
 import moment from 'moment';
 moment.locale('zh-cn');
-import {NewModal} from "./NewModal";
+import { NewModal } from "./NewModal";
 // 样式
 const sliderdyHeader = {
     borderBottom: "1px solid #0C5F93",
@@ -119,7 +119,7 @@ export class OldWithDay extends Component {
             oldpersonInfo: '',
             personId: '',
             recordId: '',
-            visible:false,
+            visible: false,
         };
         // this.pageChange = this.pageChange.bind(this);
     }
@@ -163,7 +163,9 @@ export class OldWithDay extends Component {
     }
     // 原反恐利剑 点击详情函数
     oldDetailsShowModal = (record) => {
-        if (record.examine_version && record.examine_version == 0) {
+        console.log('record.examine_version', record.examine_version);
+        if (record.examine_version != undefined && record.examine_version == 0) {
+            console.log('旧版本详情');
             let creds = {
                 currentPage: 1,
                 entityOrField: true,
@@ -182,6 +184,7 @@ export class OldWithDay extends Component {
                 personId: record.person_id,
             });
         } else {
+            console.log('新版本详情');
             let creds = {
                 idcard: record.idcard,
                 cycle: 0,
@@ -421,6 +424,10 @@ export class OldWithDay extends Component {
                         <div style={{ fontSize: 16, color: '#fff', width: '100%', textAlign: "center" }}>暂无写实照片</div>
                     );
                 }
+            } else {
+                imgArray.push(
+                    <div style={{ fontSize: 16, color: '#fff', width: '100%', textAlign: "center" }}>暂无写实照片</div>
+                );
             }
         } else {
             imgArray.push(
@@ -706,15 +713,15 @@ export class OldWithDay extends Component {
                         </Modal> : ''
                 }
                 {
-                    this.state.visible?
-                    <NewModal 
-                    visible={this.state.visible}
-                    newobj={newobj}
-                    handleCancel={this.handleCancel}
-                    modalKey={this.state.modalKey}
-                    />:''
+                    this.state.visible ?
+                        <NewModal
+                            visible={this.state.visible}
+                            newobj={newobj}
+                            handleCancel={this.handleCancel}
+                            modalKey={this.state.modalKey}
+                        /> : ''
                 }
-                
+
             </div>
         )
     }

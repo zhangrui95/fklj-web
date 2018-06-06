@@ -130,7 +130,7 @@ export class WithWeek extends Component {
         store.dispatch(postInventoryListHushiData(params));
     }
     editShowModal = (record) => {
-        if (record.examine_version && record.examine_version == 1) {
+        if (record.examine_version !=undefined && record.examine_version == 1) {
             this.setState({
                 visible: true,
                 oldVisibles: false,
