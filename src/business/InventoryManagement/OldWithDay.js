@@ -12,7 +12,7 @@ import { postInterrogationDetailsUsersData } from "../../actions/InterrogationDe
 import { SwordData } from "../InterrogationDetails/SwordData";
 import { changeTab } from "../../actions/actions";
 import {
-    postOldInventoryListHushiData, postOldInventoryListHushiDetailsData, postOldInventoryLuokuData
+    postOldInventoryListHushiData, postOldInventoryListHushiDetailsData, postOldInventoryLuokuData, postInventoryListHushiDetailsData
 } from "../../actions/InventoryManagement";
 import {
     api
@@ -110,7 +110,7 @@ export class OldWithDay extends Component {
             zoomvisible: false,
             imgtext: '',
             text: null,
-            visibles: false,//呼市反恐详情展示
+            visibles: false,//写实照片展示
             arrayImg: [],
             currentImg: '',
             index: 0,
@@ -119,6 +119,7 @@ export class OldWithDay extends Component {
             oldpersonInfo: '',
             personId: '',
             recordId: '',
+            visible:false,
         };
         // this.pageChange = this.pageChange.bind(this);
     }
@@ -162,23 +163,41 @@ export class OldWithDay extends Component {
     }
     // 原反恐利剑 点击详情函数
     oldDetailsShowModal = (record) => {
-        let creds = {
-            currentPage: 1,
-            entityOrField: true,
-            pd: {
+        if (record.examine_version && record.examine_version == 0) {
+            let creds = {
+                currentPage: 1,
+                entityOrField: true,
+                pd: {
+                    record_id: record.record_id,
+                    person_id: record.person_id,
+                },
+                showCount: constants.pageSize
+            }
+            store.dispatch(postOldInventoryLuokuData(creds));
+            this.setState({
+                oldVisibles: true,
+                oldpersonInfo: record,
+                modalType: 'edit',
+                recordId: record.record_id,
+                personId: record.person_id,
+            });
+        } else {
+            let creds = {
+                idcard: record.idcard,
+                cycle: 0,
+                checktime: record.checktime,
                 record_id: record.record_id,
-                person_id: record.person_id,
-            },
-            showCount: constants.pageSize
+            }
+            store.dispatch(postInventoryListHushiDetailsData(creds));
+            this.setState({
+                visible: true,
+                oldVisibles: false,
+                personInfo: record,
+                modalType: 'edit'
+            });
         }
-        store.dispatch(postOldInventoryLuokuData(creds));
-        this.setState({
-            oldVisibles: true,
-            oldpersonInfo: record,
-            modalType: 'edit',
-            recordId: record.record_id,
-            personId: record.person_id,
-        });
+
+
     }
     // 原反恐利剑 取消
     handleOldCancel = () => {
@@ -220,6 +239,12 @@ export class OldWithDay extends Component {
             ModalKey: this.state.ModalKey + 1
         });
     }
+    handleCancel = () => {
+        this.setState({
+            visible: false,
+            ModalKey: this.state.ModalKey + 1
+        });
+    }
     // 原反恐 
     //设置管理菜单点击-获取数据-开关事件
     handleTabClick = (tab, type) => {
@@ -248,6 +273,7 @@ export class OldWithDay extends Component {
         let paintRealInfo = luokeData.paintRealInfo ? luokeData.paintRealInfo : {};//写实信息
         let examinaTerrorismflow = luokeData.examinaTerrorismflow ? luokeData.examinaTerrorismflow : {};//流入地信息
         let scrutinyInfo = luokeData.scrutinyInfo ? luokeData.scrutinyInfo : [];//特征核查
+        let newobj = store.getState().InventoryManagement.data.invenListHushiDetails.result;
         // 特征盘查 数组
         let scrutinyInfoList = [];
         if (scrutinyInfo && scrutinyInfo.length > 0) {
@@ -296,18 +322,19 @@ export class OldWithDay extends Component {
                 let serial = recordNumber + i + 1;
                 dataList.push({
                     serial: serial,
-                    name: item.name?item.name:'',
-                    idcard: item.idcard?item.idcard:'',
-                    sex: item.sex?item.sex:'',
-                    age: item.age?item.age:'',
-                    nation: item.nation?item.nation:'',
-                    address: item.address?item.address:'',
-                    phone: item.phone?item.phone:'',
-                    police_unit: item.police_unit?item.police_unit:'',
-                    police_name: item.police_name?item.police_name:'',
-                    checktime: item.checktime ? getMyDate(item.checktime/1000) : '',
-                    person_id: item.person_id?item.person_id:'',
-                    record_id: item.record_id?item.record_id:'',
+                    name: item.name ? item.name : '',
+                    idcard: item.idcard ? item.idcard : '',
+                    sex: item.sex ? item.sex : '',
+                    age: item.age ? item.age : '',
+                    nation: item.nation ? item.nation : '',
+                    address: item.address ? item.address : '',
+                    phone: item.phone ? item.phone : '',
+                    police_unit: item.police_unit ? item.police_unit : '',
+                    police_name: item.police_name ? item.police_name : '',
+                    checktime: item.checktime ? getMyDate(item.checktime / 1000) : '',
+                    person_id: item.person_id ? item.person_id : '',
+                    record_id: item.record_id ? item.record_id : '',
+                    examine_version: item.examine_version ? item.examine_version : '',
 
                 });
             }
@@ -318,7 +345,7 @@ export class OldWithDay extends Component {
         }, {
             title: '身份证号',
             dataIndex: 'idcard',
-            width:160,
+            width: 160,
         }, {
             title: '姓名',
             dataIndex: 'name',
@@ -349,11 +376,11 @@ export class OldWithDay extends Component {
         }, {
             title: '盘查时间',
             dataIndex: 'checktime',
-            width:138
+            width: 138
         }, {
             title: '操作',
             key: 'action',
-            width:50,
+            width: 50,
             render: (text, record) => (
                 <span>
                     <span onClick={(e) => this.oldDetailsShowModal(record)} style={{ cursor: 'pointer' }}>详情</span>

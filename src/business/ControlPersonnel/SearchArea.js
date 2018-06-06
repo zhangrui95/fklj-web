@@ -135,16 +135,17 @@ export  class SearchArea extends Component{
     }
     hideModalOk = () => {
         let id = this.state.wordId;
+
         store.dispatch(delCustomFiled({id:id}));
-        setTimeout(()=>{
-            let delCode = store.getState().ControlPersonnel.data.delCustomFiled.reason;
-            if(delCode === null){
-                message.success(`提示：字段删除成功`);
-                this.getNewWords();
-            }else{
-                message.error(`提示：${store.getState().ControlPersonnel.data.delCustomFiled.reason.text}`);
-            }
-        },200)
+        // setTimeout(()=>{
+        //     let delCode = store.getState().ControlPersonnel.data.delCustomFiled.reason;
+        //     if(delCode === null){
+        //         message.success(`提示：字段删除成功`);
+        //         this.getNewWords();
+        //     }else{
+        //         message.error(`提示：${store.getState().ControlPersonnel.data.delCustomFiled.reason.text}`);
+        //     }
+        // },200)
         this.setState({
             visible: false,
             zdyModal:true
@@ -491,19 +492,19 @@ export  class SearchArea extends Component{
         if(this.state.ToskId === '请选择任务'){
             message.warning(`提示：${this.state.ToskId}`);
         }else{
-            store.dispatch(updateTaskModelControlPerson(creds))
-            setTimeout(()=>{
-                let delCode = store.getState().ControlPersonnel.data.TaskModelControlPerson.reason;
-                if(delCode === null){
-                    message.success(`提示：${this.state.ModalTitle}成功`);
-                }else{
-                    message.error(`提示：${store.getState().ControlPersonnel.data.TaskModelControlPerson.reason.text}`);
-                }
-            },200)
-            setTimeout(()=>{
-                this.getNewsList();
-                this.props.changeSelection([],1);
-            },200)
+            store.dispatch(updateTaskModelControlPerson(creds,this.getNewsList,()=>this.props.changeSelection([],1),this.state.ModalTitle))
+            // setTimeout(()=>{
+            //     let delCode = store.getState().ControlPersonnel.data.TaskModelControlPerson.reason;
+            //     if(delCode === null){
+            //         message.success(`提示：${this.state.ModalTitle}成功`);
+            //     }else{
+            //         message.error(`提示：${store.getState().ControlPersonnel.data.TaskModelControlPerson.reason.text}`);
+            //     }
+            // },200)
+            // setTimeout(()=>{
+            //     this.getNewsList();
+            //     this.props.changeSelection([],1);
+            // },200)
             this.setState({
                 addModal:false
             });
