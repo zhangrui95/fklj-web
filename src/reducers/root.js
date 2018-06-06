@@ -134,15 +134,16 @@ const initialState = {
                 isShow: true,
                 code: '',
                 homeType: 'fklj'
-            }, {
-                id: '115',
-                navigationName: '电子档案',
-                isSelect: false,
-                path: "/ElectronicArchives",
-                isShow: true,
-                code: '',
-                homeType: ''
             }
+            // , {
+            //     id: '115',
+            //     navigationName: '电子档案',
+            //     isSelect: false,
+            //     path: "/ElectronicArchives",
+            //     isShow: true,
+            //     code: '',
+            //     homeType: ''
+            // }
             , {
                 id: '114',
                 navigationName: '系统设置',
