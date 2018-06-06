@@ -71,6 +71,10 @@ class ElectronicArchives extends Component {
                     id: '105',
                     tabName: '关注度积分',
                     isSelect: false
+                }, {
+                    id: '106',
+                    tabName: '研判报告',
+                    isSelect: false
                 }
             ]
         }

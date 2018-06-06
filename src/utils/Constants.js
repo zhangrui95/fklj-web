@@ -141,7 +141,7 @@ export const INTERROGATIONDETAILS_TAB_NEW_YANPAN_DATA = "研判报告"//演示�
 //智能检索tab
 export const INTELLIGENTRETRIEVAL_ALL = "全部"
 export const INTELLIGENTRETRIEVAL_LJ_DATA = "利剑数据"
-export const INTELLIGENTRETRIEVAL_AUDIT_REPORT = "研判报告"
+// export const INTELLIGENTRETRIEVAL_AUDIT_REPORT = "研判报告"
 
 //研判报告
 export const AUDIT_REPORT_BASICIN_FORMATION = "基础信息"
