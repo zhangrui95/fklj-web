@@ -140,8 +140,8 @@ const initialState = {
                 navigationName: '电子档案',
                 isSelect: false,
                 path: "/ElectronicArchives",
-                isShow: true,
-                code: '',
+                isShow: false,
+                code: 'dzda_menu',
                 homeType: ''
             }
             , {
