@@ -982,7 +982,7 @@ const SonMenuBox = React.createClass({
             } else {
                 liCss = secondLevelMenu;
             }
-            if(sonMenuDb.isShow){
+            if (sonMenuDb.isShow) {
                 sonMenus.push(<li style={liCss} key={i} onClick={this.handleClick.bind(this, sonMenuDb)}>{sonMenuDb.menuName}</li>)
             }
         }
@@ -1197,8 +1197,9 @@ export class InterrogationDetailsItem extends Component {
                                 </button>
                                 {/* <button style={{ height: "44px", width: "142px", background: "rgba(14,33,86,0.8)", border: "1px solid rgb(12, 95, 147)", color: "#fff", margin: " 0 0 25px 0" }}>收藏数量：<span style={{ color: "red" }}>{this.props.interrogationDetailsUser.collectNumber}</span></button> */}
                                 <button style={{ height: "44px", width: "142px", background: "rgba(14,33,86,0.8)", border: "1px solid rgb(12, 95, 147)", color: "#fff", margin: " 0 0 25px 0" }}>
-                                关注度：<span style={{ color: "red" }}>{this.props.interrogationDetailsUser.collectNumber}</span> >
+                                    关注度：<span style={{ color: "red" }}>{this.props.interrogationDetailsUser.collectNumber}</span> >
                                 </button>
+                                <img src="/images/guanzhudu.png" style={{marginLeft:'30px',width:'100px'}}/>
                             </div>
                             <p style={font}><span>姓名：</span><span style={marginr}>{this.props.interrogationDetailsUser.name}</span>
                                 <span>身份证号：</span><span>{this.props.interrogationDetailsUser.idcard}</span>

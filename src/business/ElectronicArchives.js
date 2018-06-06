@@ -20,6 +20,7 @@ import { BgInformation } from "./InterrogationDetails/BgInformation";
 import { SwordData } from "./InterrogationDetails/SwordData";
 import { ActiveTrajectory } from "./InterrogationDetails/ActiveTrajectory";
 import { AttentionDegree } from "./InterrogationDetails/AttentionDegree";
+import { Yanpan } from "./InterrogationDetails/Yanpan";
 import { Header } from "../components/Header";
 import {
     EmptyData
@@ -93,7 +94,8 @@ class ElectronicArchives extends Component {
                 //   this.props.dispatch(fetchInterrogationInformationData('/getInterrogationInformation'));
                 break;
             case constants.INTERROGATIONDETAILS_TAB_NEW_GUZHU_DATA:
-
+                break
+            case constants.INTERROGATIONDETAILS_TAB_NEW_YANPAN_DATA:
                 break
             default:
                 break
@@ -120,12 +122,12 @@ class ElectronicArchives extends Component {
             zpurl: '/images/IMG_00000001.jpg',
             check_exception: 1,
             collectNumber: 19,
-            name: '测试用户',
-            idcard: '232326200002020608',
-            birth: '1985-05-23',
-            nation: '汉',
+            name: '艾则孜·博格达',
+            idcard: '653222197301012217',
+            birth: '1973-01-01 ',
+            nation: '维族',
             sex: '男',
-            address: '黑龙江省哈尔滨市松北区科技创新城',
+            address: '新疆墨玉县奎雅乡喀克勒克村5组1号',
             tags: "违法犯罪-111001,在逃人员-111001,涉毒人员-111001"
         }];
         let interrogation = []
@@ -202,7 +204,15 @@ class ElectronicArchives extends Component {
                         <AttentionDegree recordId={recordId} personId={personId} />
                     </div>
                     break
-
+                case constants.INTERROGATIONDETAILS_TAB_NEW_YANPAN_DATA:
+                    content = <div>
+                        <div style={{ marginTop: "20px" }}>
+                            <Tabs tabs={tabs} handleTabClick={this.handleTabClick} />
+                            <div style={{ clear: "both" }}></div>
+                        </div>
+                        <Yanpan />
+                    </div>
+                    break
                 default:
                     break
             }

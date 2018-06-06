@@ -128,7 +128,7 @@ const  pagination = {size:'small',pageSize:constants.recordPageSize,
 class PersonBasicTable extends Component{
     state = {
         data: [{
-            name:'测试用户',
+            name:'艾则孜·博格达',
             nameUsedBefore:'无',
             educationLevel:'初中',
             maritalStatus:'有配偶',

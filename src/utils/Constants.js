@@ -136,6 +136,7 @@ export const INTERROGATIONDETAILS_TAB_LJ_DATA = "盘查数据"
 // export const INTERROGATIONDETAILS_TAB_NEW_LJ_DATA = "最新盘查数据"
 export const INTERROGATIONDETAILS_TAB_NEW_LJ_DATA = "利剑数据"
 export const INTERROGATIONDETAILS_TAB_NEW_GUZHU_DATA = "关注度积分"
+export const INTERROGATIONDETAILS_TAB_NEW_YANPAN_DATA = "研判报告"//演示版的研判报告
 
 //智能检索tab
 export const INTELLIGENTRETRIEVAL_ALL = "全部"
