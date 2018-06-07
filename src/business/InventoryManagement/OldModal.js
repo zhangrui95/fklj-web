@@ -12,7 +12,7 @@ import { postInterrogationDetailsUsersData } from "../../actions/InterrogationDe
 import { SwordData } from "../InterrogationDetails/SwordData";
 import { changeTab } from "../../actions/actions";
 import {
-    postOldInventoryListHushiData, postOldInventoryListHushiDetailsData, postOldInventoryLuokuData, postInventoryListHushiDetailsData
+    postOldInventoryListHushiData, postOldInventoryListHushiDetailsData, postOldInventoryLuokuData
 } from "../../actions/InventoryManagement";
 import {
     api
@@ -27,7 +27,7 @@ import {
 } from "react-router";
 import moment from 'moment';
 moment.locale('zh-cn');
-import { NewModal } from "./NewModal";
+
 // 样式
 const sliderdyHeader = {
     borderBottom: "1px solid #0C5F93",
@@ -83,7 +83,7 @@ const mStyle = {
     textAlign: "right"
 }
 
-export class OldWithDay extends Component {
+export class OldModal extends Component {
     constructor(props) { //初始化nowPage为1
         super(props);
         this.state = {
@@ -110,7 +110,7 @@ export class OldWithDay extends Component {
             zoomvisible: false,
             imgtext: '',
             text: null,
-            visibles: false,//写实照片展示
+            visibles: false,//呼市反恐详情展示
             arrayImg: [],
             currentImg: '',
             index: 0,
@@ -119,164 +119,41 @@ export class OldWithDay extends Component {
             oldpersonInfo: '',
             personId: '',
             recordId: '',
-            visible: false,
         };
         // this.pageChange = this.pageChange.bind(this);
     }
     componentDidMount() {
-        let params = {
-            currentPage: 1,
-            pd: {
-                idcard: '',
-                police_unit: '',
-                name: "",
-                police_name: '',
-                endtime: '',
-                starttime: '',
-            },
-            showCount: 10
-        }
-        store.dispatch(postOldInventoryListHushiData(params));
-    }
-    editShowModal = (record) => {
-        this.setState({
-            visible: true,
-            personInfo: record,
-            modalType: 'edit'
-        });
-        let creds = {
-            idcard: record.idcard
-        }
-        store.dispatch(postOldInventoryListHushiDetailsData(creds));
-    }
-    addShowModal = (record) => {
-        this.setState({
-            visible: true,
-            modalType: 'add',
-        });
-    }
-    handleCancel = () => {
-        this.setState({
-            visible: false,
-            modalKey: this.state.modalKey + 1
-        });
-    }
-    // 原反恐利剑 点击详情函数
-    oldDetailsShowModal = (record) => {
-        console.log('record.examine_version', record.examine_version);
-        if (record.examine_version != undefined && record.examine_version == 0) {
-            console.log('旧版本详情');
-            let creds = {
-                currentPage: 1,
-                entityOrField: true,
-                pd: {
-                    record_id: record.record_id,
-                    person_id: record.person_id,
-                },
-                showCount: constants.pageSize
-            }
-            store.dispatch(postOldInventoryLuokuData(creds));
-            this.setState({
-                oldVisibles: true,
-                oldpersonInfo: record,
-                modalType: 'edit',
-                recordId: record.record_id,
-                personId: record.person_id,
-            });
-        } else {
-            console.log('新版本详情');
-            let creds = {
-                idcard: record.idcard,
-                cycle: 0,
-                checktime: record.checktime,
-                record_id: record.record_id,
-            }
-            store.dispatch(postInventoryListHushiDetailsData(creds));
-            this.setState({
-                visible: true,
-                oldVisibles: false,
-                personInfo: record,
-                modalType: 'edit'
-            });
-        }
-
 
     }
-    // 原反恐利剑 取消
-    handleOldCancel = () => {
-        this.setState({
-            oldVisibles: false,
-            modalKey: this.state.modalKey + 1
-        });
-    }
-    serchChange = (name, idcard, enddate, begindate, subtask_name, police_name, page) => {
-        this.setState({
-            name: name,
-            idcard: idcard,
-            enddate: enddate,
-            begindate: begindate,
-            subtask_name: subtask_name,
-            police_name: police_name,
-            nowPage: page
-        });
-    }
-    initEntity = () => {
-        this.setState({
-            nowPage: 1,
-        })
-    }
-    handleImgClick = (arrayImg, currentImg, index) => {
-        this.setState({
-            visibles: true,
-            arrayImg: arrayImg,
-            currentImg: currentImg,
-            index: index,
-        });
-    }
-    handleCancels = () => {
-        this.setState({
-            visibles: false,
-            arrayImg: [],
-            currentImg: '',
-            index: 0,
-            ModalKey: this.state.ModalKey + 1
-        });
-    }
-    handleCancel = () => {
-        this.setState({
-            visible: false,
-            ModalKey: this.state.ModalKey + 1
-        });
-    }
-    // 原反恐 
-    //设置管理菜单点击-获取数据-开关事件
-    handleTabClick = (tab, type) => {
-        store.dispatch(changeTab(tab, type, constants.INTERROGATIONDETAILS_MODULE));
+    // editShowModal = (record) => {
+    //     this.setState({
+    //         visible: true,
+    //         personInfo: record,
+    //         modalType: 'edit'
+    //     });
+    //     let creds = {
+    //         idcard: record.idcard
+    //     }
+    //     store.dispatch(postOldInventoryListHushiDetailsData(creds));
+    // }
+    // addShowModal = (record) => {
+    //     this.setState({
+    //         visible: true,
+    //         modalType: 'add',
+    //     });
+    // }
 
-        switch (tab.tabName) {
 
-            case constants.INTERROGATIONDETAILS_TAB_LJ_DATA:
-                //   this.props.dispatch(fetchInterrogationInformationData('/getInterrogationInformation'));
-                break;
-            default:
-                break
-        }
-    }
     render() {
         const { getFieldDecorator } = this.props.form;
-        let nowPage = this.state.nowPage;
-        let isFetching = store.getState().InventoryManagement.data.oldinvenListHushi.isFetching;
-        let data = store.getState().InventoryManagement.data.oldinvenListHushi.result.list;
-        let obj = store.getState().InventoryManagement.data.oldinvenListHushi.result;
-        let page = store.getState().InventoryManagement.data.oldinvenListHushi.result.page;
-        let luokeData = store.getState().InventoryManagement.data.oldinvenLuoku.result;
+        let luokeData = this.props.luokeData;
+        console.log('luokeData ***&&&', luokeData);
         let baseInfo = luokeData.baseInfo ? luokeData.baseInfo : {};//人员基本信息
         let recordPerson = luokeData.recordPerson ? luokeData.recordPerson : {};//人员信息及标签
         let domicileInfo = luokeData.domicileInfo ? luokeData.domicileInfo : {};//背景核查
         let paintRealInfo = luokeData.paintRealInfo ? luokeData.paintRealInfo : {};//写实信息
         let examinaTerrorismflow = luokeData.examinaTerrorismflow ? luokeData.examinaTerrorismflow : {};//流入地信息
         let scrutinyInfo = luokeData.scrutinyInfo ? luokeData.scrutinyInfo : [];//特征核查
-        let newobj = store.getState().InventoryManagement.data.invenListHushiDetails.result;
         // 特征盘查 数组
         let scrutinyInfoList = [];
         if (scrutinyInfo && scrutinyInfo.length > 0) {
@@ -317,95 +194,6 @@ export class OldWithDay extends Component {
         } else {
 
         }
-        let dataList = [];
-        let recordNumber = parseInt((nowPage - 1) * 10);
-        if (data) {
-            for (let i = 0; i < data.length; i++) {
-                let item = data[i];
-                let serial = recordNumber + i + 1;
-                dataList.push({
-                    serial: serial,
-                    name: item.name ? item.name : '',
-                    idcard: item.idcard ? item.idcard : '',
-                    sex: item.sex ? item.sex : '',
-                    age: item.age ? item.age : '',
-                    nation: item.nation ? item.nation : '',
-                    address: item.address ? item.address : '',
-                    phone: item.phone ? item.phone : '',
-                    police_unit: item.police_unit ? item.police_unit : '',
-                    police_name: item.police_name ? item.police_name : '',
-                    checktime: item.checktime ? getMyDate(item.checktime / 1000) : '',
-                    person_id: item.person_id ? item.person_id : '',
-                    record_id: item.record_id ? item.record_id : '',
-                    examine_version: item.examine_version ? item.examine_version : '',
-
-                });
-            }
-        }
-        const columns = [{
-            title: '序号',
-            dataIndex: 'serial',
-        }, {
-            title: '身份证号',
-            dataIndex: 'idcard',
-            width: 160,
-        }, {
-            title: '姓名',
-            dataIndex: 'name',
-            // width: 180,
-        }, {
-            title: '性别',
-            dataIndex: 'sex',
-        }, {
-            title: '年龄',
-            dataIndex: 'age',
-        }
-            , {
-            title: '民族',
-            dataIndex: 'nation',
-        }
-            , {
-            title: '户籍地址',
-            dataIndex: 'address',
-        }, {
-            title: '联系电话',
-            dataIndex: 'phone',
-        }, {
-            title: '所属机构',
-            dataIndex: 'police_unit',
-        }, {
-            title: '盘查警员',
-            dataIndex: 'police_name',
-        }, {
-            title: '盘查时间',
-            dataIndex: 'checktime',
-            width: 138
-        }, {
-            title: '操作',
-            key: 'action',
-            width: 50,
-            render: (text, record) => (
-                <span>
-                    <span onClick={(e) => this.oldDetailsShowModal(record)} style={{ cursor: 'pointer' }}>详情</span>
-                </span>
-            ),
-        }];
-        const rowSelection = {
-            onChange: (selectedRowKeys, selectedRows) => {
-                console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-                const ids = [];
-                for (var i = 0; i < selectedRows.length; i++) {
-                    var selectedRow = selectedRows[i];
-                    ids.push(selectedRow.id);
-                }
-                this.setState({
-                    selectedRowsId: ids
-                });
-            },
-            getCheckboxProps: record => ({
-                disabled: record.name === 'Disabled User',    // Column configuration not to be checked
-            }),
-        };
         let imgArray = [];
         if (paintRealInfo) {
             if (paintRealInfo.paint_photo_path) {
@@ -435,97 +223,21 @@ export class OldWithDay extends Component {
             );
         }
 
-        let tabs = store.getState().InterrogationDetailsUsers.uiData.tabs;
-        let isSelectTab, content;
-        //查找被选中的标签
-        tabs.forEach(function (tab) {
-            if (tab.isSelect === true) {
-                isSelectTab = tab;
-            }
-        });
-        let recordId = 'b829a02b16c84f0ebddbb6cb935516d2';
-        let personId = '23038219801101001020180322105307964';
 
-        switch (isSelectTab.tabName) {
-            case constants.INTERROGATIONDETAILS_TAB_LJ_DATA:
-                content = <SwordData recordId={recordId} personId={personId} />
-                break
-            default:
-                break
-        }
-        // 分页
-        const pagination = {
-            onChange: (page) => {
-                this.setState({
-                    nowPage: page,
-                });
-                let { name, idcard, enddate, begindate, subtask_name, address_type, police_name } = this.state;
-                let params = {
-                    currentPage: page,
-                    pd: {
-                        idcard: idcard,
-                        police_unit: subtask_name,
-                        name: name,
-                        police_name: police_name,
-                        endtime: enddate,
-                        starttime: begindate,
-                    },
-                    showCount: 10
-                }
-                store.dispatch(postOldInventoryListHushiData(params)); 
-            },
-            current: page.currentPage,
-            total: page.totalResult,
-            pageSize: page.showCount,
-            showQuickJumper: true,
-
-        }
         return (
-            <div className="sliderWrap">
-                <div className="sliderItemDiv">
-                    {/*查询条件*/}
-                    <div style={sliderdyHeader}>
-                        <SearchArea
-                            dispatch={this.props.dispatch}
-                            lineId={this.state.lineId}
-                            highRiskLine={this.state.highRiskLine}
-                            lineIdChange={this.handleLineIdChange}
-                            createClick={this.handChangeModalDialogueShow}
-                            addShowModal={this.addShowModal}
-                            handleDelete={this.handleDelete}
-                            serchChange={this.serchChange}
-                        />
 
-                        <div className="clear"></div>
-                    </div>
-                </div>
-                {/*表格*/}
-                <div className="z_slderRightBody sys_overflow">
-                    {isFetching === true ?
-                        <div style={{ textAlign: "center", position: "absolute", left: "45%", top: "50%" }}>
-                            <Spin size="large" />
-                        </div> :
-                        <div style={{ padding: "0 15px" }}>
-                            <Table locale={{ emptyText: '暂无数据' }} columns={columns} dataSource={dataList} bordered pagination={pagination} />
-                        </div>}
-                    <div className="clear"></div>
-                </div>
-                {/*分页*/}
-                {/* <Pag pageSize={10} nowPage={nowPage} totalRecord={10} pageChange={this.pageChange} /> */}
-                {
-                    this.state.oldVisibles ?
-                        <Modal
-                            width="80%"
-                            style={{ top: '20px' }}
-                            title="详情"
-                            visible={this.state.oldVisibles}
-                            onCancel={this.handleOldCancel}
-                            footer={null}
-                            key={this.state.modalKey}
-                            maskClosable={false}
-                        >
-                            <div>
-                                {/* <InterrogationDetailsItem interrogationDetailsUser={this.state.testData} />
+            <Modal
+                width="80%"
+                style={{ top: '20px' }}
+                title="详情"
+                visible={this.props.oldVisibles}
+                onCancel={this.props.handleOldCancel}
+                footer={null}
+                key={this.props.modalKey}
+                maskClosable={false}
+            >
+                <div>
+                    {/* <InterrogationDetailsItem interrogationDetailsUser={this.state.testData} />
                                 <div>
                                     <div style={{ marginTop: "20px" }}>
                                         <Tabs tabs={tabs} handleTabClick={this.handleTabClick} />
@@ -533,174 +245,174 @@ export class OldWithDay extends Component {
                                     </div>
                                     {content}
                                 </div> */}
-                                <Row>
-                                    <Col span={4}>
-                                        <img src={recordPerson ? recordPerson.zpurl ? recordPerson.zpurl : "/images/zanwu.png" : ''} style={{ width: '130px', height: '160px' }} />
-                                    </Col>
-                                    <Col span={19}>
-                                        <Row style={{ marginBottom: '10px' }}>
-                                            <Col span={10}>
-                                                姓名：{recordPerson ? recordPerson.name : ''}
-                                            </Col>
-                                            <Col span={10}>
-                                                身份证号：{recordPerson ? recordPerson.idcard : ''}
-                                            </Col>
-                                        </Row>
-                                        <Row style={{ marginBottom: '10px' }}>
-                                            <Col span={5}>
-                                                性别：{recordPerson ? recordPerson.sex : ''}
-                                            </Col>
-                                            <Col span={5}>
-                                                民族：{recordPerson ? recordPerson.nation : ''}
-                                            </Col>
-                                            <Col span={10}>
-                                                出生日期：{recordPerson ? recordPerson.birth : ''}
-                                            </Col>
-                                        </Row>
-                                        <Row style={{ marginBottom: '10px' }}>
-                                            <Col span={24}>
-                                                住址：{recordPerson ? recordPerson.address : ''}
-                                            </Col>
-                                        </Row>
-                                        <Row>
-                                            {redTag}{greenTag}
-                                        </Row>
+                    <Row>
+                        <Col span={4}>
+                            <img src={recordPerson ? recordPerson.zpurl ? recordPerson.zpurl : "/images/zanwu.png" : ''} style={{ width: '130px', height: '160px' }} />
+                        </Col>
+                        <Col span={19}>
+                            <Row style={{ marginBottom: '10px' }}>
+                                <Col span={10}>
+                                    姓名：{recordPerson ? recordPerson.name : ''}
+                                </Col>
+                                <Col span={10}>
+                                    身份证号：{recordPerson ? recordPerson.idcard : ''}
+                                </Col>
+                            </Row>
+                            <Row style={{ marginBottom: '10px' }}>
+                                <Col span={5}>
+                                    性别：{recordPerson ? recordPerson.sex : ''}
+                                </Col>
+                                <Col span={5}>
+                                    民族：{recordPerson ? recordPerson.nation : ''}
+                                </Col>
+                                <Col span={10}>
+                                    出生日期：{recordPerson ? recordPerson.birth : ''}
+                                </Col>
+                            </Row>
+                            <Row style={{ marginBottom: '10px' }}>
+                                <Col span={24}>
+                                    住址：{recordPerson ? recordPerson.address : ''}
+                                </Col>
+                            </Row>
+                            <Row>
+                                {redTag}{greenTag}
+                            </Row>
 
-                                    </Col>
-                                </Row>
-                                <hr style={{ background: '#0c5f93', height: '1px', border: 'none', margin: '24px 0' }} />
-                                <Row>
-                                    <p style={{ fontSize: '16px' }}>特征盘查信息</p>
-                                    <Col span={24}>
-                                        特征描述：{scrutinyInfoList}
-                                    </Col>
-                                </Row>
-                                <hr style={{ background: '#0c5f93', height: '1px', border: 'none', margin: '24px 0' }} />
-                                <Row>
-                                    <p style={{ fontSize: '16px' }}>基础信息</p>
-                                    <Row style={{ marginBottom: '10px' }}>
-                                        <Col span={8}>
-                                            人员属性：{baseInfo ? baseInfo.attribute : ''}
-                                        </Col>
-                                        <Col span={8}>
-                                            人员状态：{baseInfo ? baseInfo.state : ''}
-                                        </Col>
-                                        <Col span={8}>
-                                            到达方式：{baseInfo ? baseInfo.to_type : ''}
-                                        </Col>
-                                    </Row>
-                                    <Row style={{ marginBottom: '10px' }}>
-                                        <Col span={8}>
-                                            住所类型：{baseInfo ? baseInfo.residence_type : ''}
-                                        </Col>
-                                        <Col span={8}>
-                                            人员类型：{baseInfo ? baseInfo.type : ''}
-                                        </Col>
-                                    </Row>
-                                </Row>
-                                <hr style={{ background: '#0c5f93', height: '1px', border: 'none', margin: '24px 0' }} />
-                                <Row>
-                                    <p style={{ fontSize: '16px' }}>流入地信息</p>
-                                    <Row style={{ marginBottom: '10px' }}>
-                                        <Col span={8}>
-                                            从何处来：{examinaTerrorismflow ? examinaTerrorismflow.fromCity : ''}
-                                        </Col>
-                                        <Col span={8}>
-                                            到何处去：{examinaTerrorismflow ? examinaTerrorismflow.toCity : ''}
-                                        </Col>
-                                        <Col span={8}>
-                                            联络员：{examinaTerrorismflow ? examinaTerrorismflow.liaisonname : ''}
-                                        </Col>
-                                    </Row>
-                                    <Row style={{ marginBottom: '10px' }}>
-                                        <Col span={8}>
-                                            出行方式：{examinaTerrorismflow ? examinaTerrorismflow.tripmode : ''}
-                                        </Col>
-                                        <Col span={8}>
-                                            出行目的：{examinaTerrorismflow ? examinaTerrorismflow.trippurp : ''}
-                                        </Col>
-                                        <Col span={8}>
-                                            出行日期：{examinaTerrorismflow ? examinaTerrorismflow.traveldate ? getMyDate(examinaTerrorismflow.traveldate / 1000) : '' : ''}
-                                        </Col>
-                                    </Row>
-                                    <Row style={{ marginBottom: '10px' }}>
-                                        <Col span={8}>
-                                            投奔人：{examinaTerrorismflow ? examinaTerrorismflow.visitorname ? examinaTerrorismflow.visitorname : '暂无' : '暂无'}，
+                        </Col>
+                    </Row>
+                    <hr style={{ background: '#0c5f93', height: '1px', border: 'none', margin: '24px 0' }} />
+                    <Row>
+                        <p style={{ fontSize: '16px' }}>特征盘查信息</p>
+                        <Col span={24}>
+                            特征描述：{scrutinyInfoList}
+                        </Col>
+                    </Row>
+                    <hr style={{ background: '#0c5f93', height: '1px', border: 'none', margin: '24px 0' }} />
+                    <Row>
+                        <p style={{ fontSize: '16px' }}>基础信息</p>
+                        <Row style={{ marginBottom: '10px' }}>
+                            <Col span={8}>
+                                人员属性：{baseInfo ? baseInfo.attribute : ''}
+                            </Col>
+                            <Col span={8}>
+                                人员状态：{baseInfo ? baseInfo.state : ''}
+                            </Col>
+                            <Col span={8}>
+                                到达方式：{baseInfo ? baseInfo.to_type : ''}
+                            </Col>
+                        </Row>
+                        <Row style={{ marginBottom: '10px' }}>
+                            <Col span={8}>
+                                住所类型：{baseInfo ? baseInfo.residence_type : ''}
+                            </Col>
+                            <Col span={8}>
+                                人员类型：{baseInfo ? baseInfo.type : ''}
+                            </Col>
+                        </Row>
+                    </Row>
+                    <hr style={{ background: '#0c5f93', height: '1px', border: 'none', margin: '24px 0' }} />
+                    <Row>
+                        <p style={{ fontSize: '16px' }}>流入地信息</p>
+                        <Row style={{ marginBottom: '10px' }}>
+                            <Col span={8}>
+                                从何处来：{examinaTerrorismflow ? examinaTerrorismflow.fromCity : ''}
+                            </Col>
+                            <Col span={8}>
+                                到何处去：{examinaTerrorismflow ? examinaTerrorismflow.toCity : ''}
+                            </Col>
+                            <Col span={8}>
+                                联络员：{examinaTerrorismflow ? examinaTerrorismflow.liaisonname : ''}
+                            </Col>
+                        </Row>
+                        <Row style={{ marginBottom: '10px' }}>
+                            <Col span={8}>
+                                出行方式：{examinaTerrorismflow ? examinaTerrorismflow.tripmode : ''}
+                            </Col>
+                            <Col span={8}>
+                                出行目的：{examinaTerrorismflow ? examinaTerrorismflow.trippurp : ''}
+                            </Col>
+                            <Col span={8}>
+                                出行日期：{examinaTerrorismflow ? examinaTerrorismflow.traveldate ? getMyDate(examinaTerrorismflow.traveldate / 1000) : '' : ''}
+                            </Col>
+                        </Row>
+                        <Row style={{ marginBottom: '10px' }}>
+                            <Col span={8}>
+                                投奔人：{examinaTerrorismflow ? examinaTerrorismflow.visitorname ? examinaTerrorismflow.visitorname : '暂无' : '暂无'}，
                                             电话号码&nbsp;{examinaTerrorismflow ? examinaTerrorismflow.visitortel ? examinaTerrorismflow.visitortel : '暂无' : '暂无'}
-                                        </Col>
-                                        <Col span={16}>
-                                            其他信息：座位号&nbsp;{examinaTerrorismflow ? examinaTerrorismflow.seatnumber ? examinaTerrorismflow.seatnumber : '暂无' : '暂无'}，
+                            </Col>
+                            <Col span={16}>
+                                其他信息：座位号&nbsp;{examinaTerrorismflow ? examinaTerrorismflow.seatnumber ? examinaTerrorismflow.seatnumber : '暂无' : '暂无'}，
                                             车厢号&nbsp;{examinaTerrorismflow ? examinaTerrorismflow.carriagenumber ? examinaTerrorismflow.carriagenumber : '暂无' : '暂无'}
-                                            ，司机电话号&nbsp;{examinaTerrorismflow ? examinaTerrorismflow.drivertel ? examinaTerrorismflow.drivertel : '暂无' : '暂无'}，
+                                ，司机电话号&nbsp;{examinaTerrorismflow ? examinaTerrorismflow.drivertel ? examinaTerrorismflow.drivertel : '暂无' : '暂无'}，
                                             车牌号&nbsp;{examinaTerrorismflow ? examinaTerrorismflow.trainnumber ? examinaTerrorismflow.trainnumber : '暂无' : '暂无'}
-                                        </Col>
-                                    </Row>
+                            </Col>
+                        </Row>
+                    </Row>
+                    <hr style={{ background: '#0c5f93', height: '1px', border: 'none', margin: '24px 0' }} />
+                    <Row>
+                        <p style={{ fontSize: '16px' }}>手机信息</p>
+                        <MobileDataTable personId={this.state.personId} recordId={this.state.recordId} />
+                    </Row>
+                    <hr style={{ background: '#0c5f93', height: '1px', border: 'none', margin: '24px 0' }} />
+                    <Row>
+                        <p style={{ fontSize: '16px' }}>联通信息</p>
+                        <OnlineTable personId={this.state.personId} recordId={this.state.recordId} />
+                    </Row>
+                    <hr style={{ background: '#0c5f93', height: '1px', border: 'none', margin: '24px 0' }} />
+                    <Row>
+                        <p style={{ fontSize: '16px' }}>背景核查</p>
+                        <Row style={{ marginBottom: '10px' }}>
+                            <Col span={24}>
+                                核查方式：{domicileInfo ? domicileInfo.checked_type : ''}
+                            </Col>
+                        </Row>
+                        <Row style={{ marginBottom: '10px' }}>
+                            <Col span={24}>
+                                核查类型：{domicileInfo ? domicileInfo.checked_mark : ''}
+                            </Col>
+                        </Row>
+                        <Row style={{ marginBottom: '10px' }}>
+                            <Col span={12}>
+                                户籍警局：{domicileInfo ? domicileInfo.station : ''}
+                            </Col>
+                            <Col span={12}>
+                                户籍地联系人：{domicileInfo ? domicileInfo.station_person : ''}
+                            </Col>
+                        </Row>
+                    </Row>
+                    <hr style={{ background: '#0c5f93', height: '1px', border: 'none', margin: '24px 0' }} />
+                    <Row>
+                        <p style={{ fontSize: '16px' }}>写实详情</p>
+                        <Row>
+                            <Col span={24} style={{ maxWidth: '99%', width: '1480px', position: 'relative', overflowX: 'auto', }} className='bannermodal'>
+                                <div style={{ display: 'flex', flexWrap: 'nowrap', }}>
+                                    {imgArray}
+                                </div>
+                                <Modal
+                                    key={this.state.ModalKey}
+                                    visible={this.state.visibles}
+                                    onCancel={this.handleCancels}
+                                    footer={false}
+                                    wrapClassName='zoomImg'
+                                    style={{ height: '85%' }}
+                                    maskClosable={false}
+                                >
+                                    <BannerAnimImg arrayImg={this.state.arrayImg} currentImg={this.state.currentImg} index={this.state.index} />
+                                </Modal>
+                            </Col>
+                            <Col span={24}>
+                                <Row style={{ marginTop: '8px' }}>
+                                    <Col span={2} style={{ textAlign: 'right' }}>
+                                        <p style={{ marginBottom: '14px' }}>详情：</p>
+                                    </Col>
+                                    <Col span={22}>
+                                        <TextArea rows={2} disabled style={{ resize: 'none' }} value={imgObjText} />
+                                    </Col>
                                 </Row>
-                                <hr style={{ background: '#0c5f93', height: '1px', border: 'none', margin: '24px 0' }} />
-                                <Row>
-                                    <p style={{ fontSize: '16px' }}>手机信息</p>
-                                    <MobileDataTable personId={this.state.personId} recordId={this.state.recordId} />
-                                </Row>
-                                <hr style={{ background: '#0c5f93', height: '1px', border: 'none', margin: '24px 0' }} />
-                                <Row>
-                                    <p style={{ fontSize: '16px' }}>联通信息</p>
-                                    <OnlineTable personId={this.state.personId} recordId={this.state.recordId} />
-                                </Row>
-                                <hr style={{ background: '#0c5f93', height: '1px', border: 'none', margin: '24px 0' }} />
-                                <Row>
-                                    <p style={{ fontSize: '16px' }}>背景核查</p>
-                                    <Row style={{ marginBottom: '10px' }}>
-                                        <Col span={24}>
-                                            核查方式：{domicileInfo ? domicileInfo.checked_type : ''}
-                                        </Col>
-                                    </Row>
-                                    <Row style={{ marginBottom: '10px' }}>
-                                        <Col span={24}>
-                                            核查类型：{domicileInfo ? domicileInfo.checked_mark : ''}
-                                        </Col>
-                                    </Row>
-                                    <Row style={{ marginBottom: '10px' }}>
-                                        <Col span={12}>
-                                            户籍警局：{domicileInfo ? domicileInfo.station : ''}
-                                        </Col>
-                                        <Col span={12}>
-                                            户籍地联系人：{domicileInfo ? domicileInfo.station_person : ''}
-                                        </Col>
-                                    </Row>
-                                </Row>
-                                <hr style={{ background: '#0c5f93', height: '1px', border: 'none', margin: '24px 0' }} />
-                                <Row>
-                                    <p style={{ fontSize: '16px' }}>写实详情</p>
-                                    <Row>
-                                        <Col span={24} style={{ maxWidth: '99%', width: '1480px', position: 'relative', overflowX: 'auto', }} className='bannermodal'>
-                                            <div style={{ display: 'flex', flexWrap: 'nowrap', }}>
-                                                {imgArray}
-                                            </div>
-                                            <Modal
-                                                key={this.state.ModalKey}
-                                                visible={this.state.visibles}
-                                                onCancel={this.handleCancels}
-                                                footer={false}
-                                                wrapClassName='zoomImg'
-                                                style={{ height: '85%' }}
-                                                maskClosable={false}
-                                            >
-                                                <BannerAnimImg arrayImg={this.state.arrayImg} currentImg={this.state.currentImg} index={this.state.index} />
-                                            </Modal>
-                                        </Col>
-                                        <Col span={24}>
-                                            <Row style={{ marginTop: '8px' }}>
-                                                <Col span={2} style={{ textAlign: 'right' }}>
-                                                    <p style={{ marginBottom: '14px' }}>详情：</p>
-                                                </Col>
-                                                <Col span={22}>
-                                                    <TextArea rows={2} disabled style={{ resize: 'none' }} value={imgObjText} />
-                                                </Col>
-                                            </Row>
-                                        </Col>
-                                    </Row>
-                                </Row>
-                                {/* <hr style={{ background: '#0c5f93', height: '1px', border: 'none', margin: '24px 0' }} />
+                            </Col>
+                        </Row>
+                    </Row>
+                    {/* <hr style={{ background: '#0c5f93', height: '1px', border: 'none', margin: '24px 0' }} />
                                 <Row>
                                     <p style={{ fontSize: '16px' }}>租房信息</p>
                                     <Row>
@@ -709,230 +421,15 @@ export class OldWithDay extends Component {
                                         </Col>
                                     </Row>
                                 </Row> */}
-                            </div>
-                        </Modal> : ''
-                }
-                {
-                    this.state.visible ?
-                        <NewModal
-                            visible={this.state.visible}
-                            newobj={newobj}
-                            handleCancel={this.handleCancel}
-                            modalKey={this.state.modalKey}
-                        /> : ''
-                }
+                </div>
+            </Modal>
 
-            </div>
+
         )
     }
 }
 
-//搜索区域内容组件
-const SearchArea = React.createClass({
-    getInitialState: function () {
-        return {
-            name: '',
-            idcard: '',
-            enddate: '',
-            begindate: '',
-            subtask_name: '',
-            police_name: ''
-        };
-    },
-    handleClick: function () { //点击查询
-        let page = 1;
-        let { name, idcard, enddate, begindate, subtask_name, police_name } = this.state;
-        let params = {
-            currentPage: 1,
-            pd: {
-                idcard: idcard,
-                police_unit: subtask_name,
-                name: name,
-                police_name: police_name,
-                endtime: enddate,
-                starttime: begindate,
-            },
-            showCount: 10
-        }
-        store.dispatch(postOldInventoryListHushiData(params));
-        this.props.serchChange(name, idcard, enddate, begindate, subtask_name, police_name, page);
-    },
-    init: function () {
-        let page = 1;
-        this.setState({
-            name: '',
-            idcard: '',
-            enddate: '',
-            begindate: '',
-            subtask_name: '',
-            police_name: '',
-        });
-        let params = {
-            currentPage: 1,
-            pd: {
-                idcard: '',
-                police_unit: '',
-                name: '',
-                police_name: '',
-                endtime: '',
-                starttime: '',
-            },
-            showCount: 10
-        }
-        store.dispatch(postOldInventoryListHushiData(params));
-        this.props.serchChange('', '', '', '', '', '', page);
-    },
-    // componentWillReceiveProps: function (nextProps) {
-    //     if (this.props.type !== nextProps.type) {
-    //         this.init();
-    //     }
-    // },
-    handleSfzhClick: function (e) {
-        this.setState({
-            idcard: e.target.value,
-        });
-    },
-    handleNameClick: function (e) {
-        this.setState({
-            name: e.target.value,
-        });
-    },
-    handlePoliceNameClick: function (e) {
-        this.setState({
-            police_name: e.target.value,
-        });
-    },
-    handleaddressTypeClick: function (value) {
-        this.setState({
-            address_type: value
-        });
-    },
-    handleSubtaskNameClick: function (e) {
-        this.setState({
-            subtask_name: e.target.value
-        });
-    },
-    handleBeginDeteClick: function (date, dateString) {
-        this.setState({
-            begindate: dateString,
-        });
 
-    },
-    handleEndDeteClick: function (date, dateString) {
-        this.setState({
-            enddate: dateString,
-        });
-    },
-    handleSelectChange: function (value) {
-        this.setState({
-            unitSelected: value
-        });
-    },
-    ontagsChange: function (value) {
-        this.setState({
-            tagsSelect: value
-        });
-    },
-
-    onOkBegin: function (e) {
-        let beginDate = this.state.beginDate;
-        if (e === undefined) {
-            this.setState({
-                beginDate: moment()
-            });
-        }
-    },
-    onOkEnd: function (e) {
-        let endDate = this.state.endDate;
-        if (e === undefined) {
-            this.setState({
-                endDate: moment()
-            });
-        }
-    },
-    render() {
-        //警员单位列表
-        let policeUnitsList = store.getState().root.data.policeUnitsList;
-        let policeUnitsOptions = [];
-        for (var i = 0; i < policeUnitsList.length; i++) {
-            var policeUnit = policeUnitsList[i];
-            let key = "policeUnitsList" + policeUnit.code + "_" + i;
-            policeUnitsOptions.push(
-                <Option key={key} value={policeUnit.code}>{policeUnit.text}</Option>
-            )
-        }
-        //人员标签列表
-        let personTagsList = store.getState().root.data.personTagsList;
-        let personTagsOptions = [];
-        for (var i = 0; i < personTagsList.length; i++) {
-            var personTag = personTagsList[i];
-            personTagsOptions.push(
-                <Option key={personTag.code}>{personTag.text}</Option>
-            )
-        }
-
-        let idcard = this.state.idcard;
-        let name = this.state.name;
-        let police_name = this.state.police_name;
-        let begindate = this.state.begindate;
-        let enddate = this.state.enddate;
-        let subtask_name = this.state.subtask_name;
-        let address_type = this.state.address_type;
-
-        let beginDateValue = '';
-        if (begindate === '') { } else {
-            beginDateValue = moment(begindate, dateFormat);
-        }
-        let endDateValue = '';
-        if (enddate === '') { } else {
-            endDateValue = moment(enddate, dateFormat);
-        }
-
-        if (beginDateValue != "" && endDateValue != "" && beginDateValue > endDateValue) {
-            message.error('提示：开始时间不能大于结束时间！');
-            return;
-        }
-        return (
-            <div>
-                <div className="marLeft40 z_searchDiv">
-                    <div style={{ float: 'left', marginTop: '10px' }}>
-                        <label htmlFor="" className="font14">人员姓名：</label>
-                        <Input style={{ width: '180px', marginRight: "10px" }} type="text" id='name' placeholder='请输入人员姓名' value={name} onChange={this.handleNameClick} />
-                    </div>
-                    <div style={{ float: 'left', marginTop: '10px' }}>
-                        <label htmlFor="" className="font14">身份证号：</label>
-                        <Input style={{ width: '230px', marginRight: "10px" }} type="text" id='sfzh' placeholder='请输入身份证号' value={idcard} onChange={this.handleSfzhClick} />
-                    </div>
-                    <div style={{ float: 'left', marginTop: '10px' }}>
-                        <label htmlFor="" className="font14">所属机构：</label>
-                        <Input value={subtask_name} style={{ width: '230px', marginRight: "10px" }} type="text" id='subtask_name' placeholder='请输入所属机构名称' onChange={this.handleSubtaskNameClick} />
-                    </div>
-                    <div style={{ float: 'left', marginTop: '10px' }}>
-                        <label htmlFor="" className="font14">盘查警员：</label>
-                        <Input style={{ width: '230px', marginRight: "10px" }} type="text" id='police_name' placeholder='请输入盘查警员姓名' value={police_name} onChange={this.handlePoliceNameClick} />
-                    </div>
-                    {/* <label htmlFor="" className="font14">居住类型：</label>
-                    <Select style={{ width: "10%", margin: "0 10px 0 0" }} value={address_type} onChange={this.handleaddressTypeClick} notFoundContent='暂无'>
-                        <Option value=''>全部</Option>
-                        <Option value={0}>常住</Option>
-                        <Option value={1}>暂住</Option>
-                        <Option value={2}>流动</Option>
-                    </Select> */}
-                    <div style={{ clear: 'both' }}></div>
-                </div>
-                <div style={{ marginLeft: "2%", marginTop: "10px" }}>
-                    <label htmlFor="" className="font14">起止时间：</label>
-                    <DatePicker placeholder="请选择日期" format={dateFormat} allowClear={false} style={{ marginRight: "10px" }} value={beginDateValue} defaultValue="" onChange={this.handleBeginDeteClick} />
-                    <span className="font14" style={{ marginRight: "10px" }}>至</span>
-                    <DatePicker placeholder="请选择日期" format={dateFormat} allowClear={false} style={{ marginRight: "10px" }} value={endDateValue} defaultValue="" onChange={this.handleEndDeteClick} />
-                    <ShallowBlueBtn width="82" text="查询" margin="0 10px 0 0" onClick={this.handleClick} />
-                    <ShallowBlueBtn width="82" text="重置" margin="0 10px 0 0" onClick={this.init} />
-                </div>
-            </div>
-
-        );
-    }
-})
 const paginationSmall = {
     size: 'small',
     pageSize: constants.recordPageSize,
@@ -1661,5 +1158,5 @@ class OnlineTable extends Component {
     }
 };
 
-OldWithDay = Form.create()(OldWithDay);
-export default connect(mainReducer)(OldWithDay);
+OldModal = Form.create()(OldModal);
+export default connect(mainReducer)(OldModal);

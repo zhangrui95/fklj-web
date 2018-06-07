@@ -394,7 +394,8 @@ export class WithDay extends Component {
         let page = store.getState().InventoryManagement.data.invenListHushi.result.page;
         let luokeData = store.getState().InventoryManagement.data.oldinvenLuoku.result;
         let dataList = [];
-
+        console.log('obj***&&&&', obj);
+        console.log('obj***', obj.address_type);
         let recordNumber = parseInt((nowPage - 1) * 10);
         if (data) {
             for (let i = 0; i < data.length; i++) {

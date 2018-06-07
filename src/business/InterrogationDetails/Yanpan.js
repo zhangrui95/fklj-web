@@ -1,7 +1,7 @@
 /**
- * Created by ycj on 2017/4/6.
+ * Created by zy on 2018/6/5.
  */
-//盘查详情页面盘查数据下所有表格
+//演示版 研判报告
 import React, {
     Component
 } from 'react';
@@ -60,20 +60,20 @@ const mStyle = {
     textAlign: "right"
 }
 
-export class SwordData extends Component {
+export class Yanpan extends Component {
     componentDidMount() {
 
     }
     render() {
-        console.log(2222,this.props);
+        console.log(2222, this.props);
         let recordId = this.props.recordId;
         let personId = this.props.personId;
         return (
 
             <div>
-                
-               <div style={{border:"1px solid rgb(12, 95, 147)",padding:"20px",background:"rgba(40,51,99,0.8)",zIndex:"3"}}>
-{/*                    <div style={{marginBottom:"20px"}}>
+
+                <div style={{ border: "1px solid rgb(12, 95, 147)", padding: "20px", background: "rgba(40,51,99,0.8)", zIndex: "3" }}>
+                    {/*                    <div style={{marginBottom:"20px"}}>
                         <p style={p}>基本信息</p>
                         <BasicInformationTable  recordId={recordId} personId={personId}/>
                     </div>
@@ -81,15 +81,15 @@ export class SwordData extends Component {
                         <p style={p}>车辆基本信息</p>
                         <VbiTable recordId={recordId} personId={personId}/>
                     </div>*/}
-                    <div style={{marginBottom:"20px"}}>
-                        <p style={p}>流入地对接信息</p>
-                        <InfluxPlaceTable   recordId={recordId} personId={personId}/>
-                    </div>
-                    <div style={{marginBottom:"20px"}}>
+                    {/* <div style={{ marginBottom: "20px" }}>
+                        <p style={p}>关注度积分</p>
+                        <InfluxPlaceTable recordId={recordId} personId={personId} />
+                    </div> */}
+                    {/* <div style={{marginBottom:"20px"}}>
                         <p style={p}>手机信息</p>
                         <MobileDataTable   recordId={recordId} personId={personId}/>
-                    </div>
-                    
+                    </div> */}
+                    <div style={{ color: "#fff", fontSize: 30, textAlign: "center", margin: "30px 0" }}>功能开发中...</div>
                 </div>
             </div>
         )
@@ -125,7 +125,8 @@ class BasicInformationTable extends Component {
         loading: false,
     };
     handleTableChange = (pagination, filters, sorter) => {
-        const pager = {...this.state.pagination
+        const pager = {
+            ...this.state.pagination
         };
         pager.current = pagination.current;
         this.setState({
@@ -167,7 +168,8 @@ class BasicInformationTable extends Component {
         "showCount": constants.recordPageSize
     }) => {
         post(api + '/data/getArcPersonsPhone', params).then((data) => {
-            const pagination = {...this.state.pagination
+            const pagination = {
+                ...this.state.pagination
             };
             pagination.total = data.result.page.totalResult;
             this.setState({
@@ -175,7 +177,7 @@ class BasicInformationTable extends Component {
                 data: data.result.list,
                 pagination,
             });
-        }).catch((e) => {});
+        }).catch((e) => { });
     }
     componentDidMount() {
         this.fetch();
@@ -198,20 +200,20 @@ class BasicInformationTable extends Component {
             key: 'action',
             render: (text, record) => (
                 <span>
-                        <span onClick={(e)=>this.showModal(record)} style={{cursor:'pointer'}}>详情</span>
+                    <span onClick={(e) => this.showModal(record)} style={{ cursor: 'pointer' }}>详情</span>
                 </span>
             ),
         }];
         return (
             <div>
                 <Table columns={columns}
-                       rowKey={record => record.registered}
-                       dataSource={this.state.data}
-                       pagination={this.state.pagination}
-                       loading={this.state.loading}
-                       bordered
-                       onChange={this.handleTableChange}
-                       locale={{emptyText:'暂无数据'}}
+                    rowKey={record => record.registered}
+                    dataSource={this.state.data}
+                    pagination={this.state.pagination}
+                    loading={this.state.loading}
+                    bordered
+                    onChange={this.handleTableChange}
+                    locale={{ emptyText: '暂无数据' }}
                 />
                 <Modal
                     visible={this.state.visible}
@@ -219,24 +221,24 @@ class BasicInformationTable extends Component {
                     onCancel={this.handleCancel}
                     onOk={this.handleOk}
                     closable={true}
-                    style={{maxHeight:650,overflow:"auto"}}
+                    style={{ maxHeight: 650, overflow: "auto" }}
                     footer={null}
                 >
-                    <div style={{marginBottom:"10px"}}>
+                    <div style={{ marginBottom: "10px" }}>
                         <label style={mStyle} htmlFor="">姓名：</label>
-                        <Input style={{width:'60%'}}  value={this.state.record!==null?this.state.record.name:''} readOnly="readOnly"/>
+                        <Input style={{ width: '60%' }} value={this.state.record !== null ? this.state.record.name : ''} readOnly="readOnly" />
                     </div>
-                    <div style={{marginBottom:"10px"}}>
+                    <div style={{ marginBottom: "10px" }}>
                         <label style={mStyle} htmlFor="">身份证号：</label>
-                        <Input style={{width:'60%'}}  value={this.state.record!==null?this.state.record.idcard:''} readOnly="readOnly"/>
+                        <Input style={{ width: '60%' }} value={this.state.record !== null ? this.state.record.idcard : ''} readOnly="readOnly" />
                     </div>
-                    <div style={{marginBottom:"10px"}}>
+                    <div style={{ marginBottom: "10px" }}>
                         <label style={mStyle} htmlFor="">手机号：</label>
-                        <Input style={{width:'60%'}}  value={this.state.record!==null?this.state.record.phoneNumber:''} readOnly="readOnly"/>
+                        <Input style={{ width: '60%' }} value={this.state.record !== null ? this.state.record.phoneNumber : ''} readOnly="readOnly" />
                     </div>
-                    <div style={{marginBottom:"10px"}}>
+                    <div style={{ marginBottom: "10px" }}>
                         <label style={mStyle} htmlFor="">性别：</label>
-                        <Input style={{width:'60%'}}  value={this.state.record!==null?this.state.record.sex:''} readOnly="readOnly"/>
+                        <Input style={{ width: '60%' }} value={this.state.record !== null ? this.state.record.sex : ''} readOnly="readOnly" />
                     </div>
 
                 </Modal>
@@ -255,7 +257,8 @@ class VbiTable extends Component {
         loading: false,
     };
     handleTableChange = (pagination, filters, sorter) => {
-        const pager = {...this.state.pagination
+        const pager = {
+            ...this.state.pagination
         };
         pager.current = pagination.current;
         this.setState({
@@ -281,7 +284,8 @@ class VbiTable extends Component {
         "showCount": constants.recordPageSize
     }) => {
         post(api + '/data/getCarRecord', params).then((data) => {
-            const pagination = {...this.state.pagination
+            const pagination = {
+                ...this.state.pagination
             };
             pagination.total = data.result.page.totalResult;
             this.setState({
@@ -289,7 +293,7 @@ class VbiTable extends Component {
                 data: data.result.list,
                 pagination,
             });
-        }).catch((e) => {});
+        }).catch((e) => { });
     }
     componentDidMount() {
         this.fetch();
@@ -326,20 +330,20 @@ class VbiTable extends Component {
             // width: 30,
             render: (text, record) => (
                 <span>
-                        <span onClick={(e)=>this.showModal(record)} style={{cursor:'pointer'}}>详情</span>
-                    </span>
+                    <span onClick={(e) => this.showModal(record)} style={{ cursor: 'pointer' }}>详情</span>
+                </span>
             ),
         }];
         return (
             <div>
                 <Table columns={columns}
-                       rowKey={record => record.registered}
-                       dataSource={this.state.data}
-                       pagination={this.state.pagination}
-                       loading={this.state.loading}
-                       bordered
-                       onChange={this.handleTableChange}
-                       locale={{emptyText:'暂无数据'}}
+                    rowKey={record => record.registered}
+                    dataSource={this.state.data}
+                    pagination={this.state.pagination}
+                    loading={this.state.loading}
+                    bordered
+                    onChange={this.handleTableChange}
+                    locale={{ emptyText: '暂无数据' }}
                 />
                 <Modal
                     visible={this.state.visible}
@@ -347,36 +351,36 @@ class VbiTable extends Component {
                     onCancel={this.handleCancel}
                     onOk={this.handleOk}
                     closable={true}
-                    style={{maxHeight:650,overflow:"auto"}}
+                    style={{ maxHeight: 650, overflow: "auto" }}
                     footer={null}
                 >
-                <div style={{marginBottom:"10px"}}>
+                    <div style={{ marginBottom: "10px" }}>
                         <label style={mStyle} htmlFor="">车牌号：</label>
-                        <Input style={{width:'60%'}}  value={this.state.record!==null?this.state.record.license_plate_no:''} readOnly="readOnly"/>
+                        <Input style={{ width: '60%' }} value={this.state.record !== null ? this.state.record.license_plate_no : ''} readOnly="readOnly" />
                     </div>
-                    <div style={{marginBottom:"10px"}}>
+                    <div style={{ marginBottom: "10px" }}>
                         <label style={mStyle} htmlFor="">车身颜色：</label>
-                        <Input style={{width:'60%'}}  value={this.state.record!==null?this.state.record.car_color:''} readOnly="readOnly"/>
+                        <Input style={{ width: '60%' }} value={this.state.record !== null ? this.state.record.car_color : ''} readOnly="readOnly" />
                     </div>
-                    <div style={{marginBottom:"10px"}}>
+                    <div style={{ marginBottom: "10px" }}>
                         <label style={mStyle} htmlFor="">车辆所有人电话：</label>
-                        <Input style={{width:'60%'}}  value={this.state.record!==null?this.state.record.car_owner_tel:''} readOnly="readOnly"/>
+                        <Input style={{ width: '60%' }} value={this.state.record !== null ? this.state.record.car_owner_tel : ''} readOnly="readOnly" />
                     </div>
-                    <div style={{marginBottom:"10px"}}>
+                    <div style={{ marginBottom: "10px" }}>
                         <label style={mStyle} htmlFor="">车辆所有人：</label>
-                        <Input style={{width:'60%'}}  value={this.state.record!==null?this.state.record.car_owner:''} readOnly="readOnly"/>
+                        <Input style={{ width: '60%' }} value={this.state.record !== null ? this.state.record.car_owner : ''} readOnly="readOnly" />
                     </div>
-                    <div style={{marginBottom:"10px"}}>
+                    <div style={{ marginBottom: "10px" }}>
                         <label style={mStyle} htmlFor="">号牌类型：</label>
-                        <Input style={{width:'60%'}}  value={this.state.record!==null?this.state.record.license_plate_type:''} readOnly="readOnly"/>
+                        <Input style={{ width: '60%' }} value={this.state.record !== null ? this.state.record.license_plate_type : ''} readOnly="readOnly" />
                     </div>
-                    <div style={{marginBottom:"10px"}}>
+                    <div style={{ marginBottom: "10px" }}>
                         <label style={mStyle} htmlFor="">车辆品牌：</label>
-                        <Input style={{width:'60%'}}  value={this.state.record!==null?this.state.record.car_brand:''} readOnly="readOnly"/>
+                        <Input style={{ width: '60%' }} value={this.state.record !== null ? this.state.record.car_brand : ''} readOnly="readOnly" />
                     </div>
-                    <div style={{marginBottom:"10px"}}>
+                    <div style={{ marginBottom: "10px" }}>
                         <label style={mStyle} htmlFor="">车辆类型：</label>
-                        <Input style={{width:'60%'}}  value={this.state.record!==null?this.state.record.car_model:''} readOnly="readOnly"/>
+                        <Input style={{ width: '60%' }} value={this.state.record !== null ? this.state.record.car_model : ''} readOnly="readOnly" />
                     </div>
                 </Modal>
             </div>
@@ -388,18 +392,37 @@ class InfluxPlaceTable extends Component {
     state = {
         visible: false,
         record: null,
-        // data: [],
+        data: [{
+            xuhao: '1',
+            jifenxiang: '场所聚集',
+            jifenqingkuang: '在网吧和其他涉疆人员聚集',
+            jifenshijian: '2017-06-03 19:23',
+            jifen: '4分',
+        }, {
+            xuhao: '2',
+            jifenxiang: '失联',
+            jifenqingkuang: '长时间未与本人取得联系，盘查不到信息',
+            jifenshijian: '2017-05-09 08:50',
+            jifen: '5分',
+        }, {
+            xuhao: '3',
+            jifenxiang: '频繁购买火车票',
+            jifenqingkuang: '购买从新疆到哈尔滨的火车票',
+            jifenshijian: '2017-05-01 16:12',
+            jifen: '5分',
+        }, {
+            xuhao: '4',
+            jifenxiang: '携带危险物品',
+            jifenqingkuang: '在公共场所携带汽油',
+            jifenshijian: '2017-04-29 10:30',
+            jifen: '5分',
+        }],
         pagination: pagination,
         loading: false,
-        data:[{
-            fromProvince:'江苏',
-            fromCity:'南京',
-            toProvince:'福建省',
-            toCity:'晋江市'
-        }]
     };
     handleTableChange = (pagination, filters, sorter) => {
-        const pager = {...this.state.pagination
+        const pager = {
+            ...this.state.pagination
         };
         pager.current = pagination.current;
         this.setState({
@@ -425,7 +448,8 @@ class InfluxPlaceTable extends Component {
         "showCount": constants.recordPageSize
     }) => {
         post(api + '/data/getCity', params).then((data) => {
-            const pagination = {...this.state.pagination
+            const pagination = {
+                ...this.state.pagination
             };
             pagination.total = data.result.page.totalResult;
             this.setState({
@@ -433,7 +457,7 @@ class InfluxPlaceTable extends Component {
                 // data: data.result.list,
                 pagination,
             });
-        }).catch((e) => {});
+        }).catch((e) => { });
     }
     componentDidMount() {
         this.fetch();
@@ -456,67 +480,67 @@ class InfluxPlaceTable extends Component {
     }
     render() {
         const columns = [{
-            title: '来自的省',
-            dataIndex: 'fromProvince',
+            title: '积分项',
+            dataIndex: 'jifenxiang',
         }, {
-            title: '来自的市',
-            dataIndex: 'fromCity',
+            title: '积分情况',
+            dataIndex: 'jifenqingkuang',
         }, {
-            title: '目的地省',
-            dataIndex: 'toProvince',
+            title: '积分时间',
+            dataIndex: 'jifenshijian',
         }, {
-            title: '目的地市',
-            dataIndex: 'toCity',
+            title: '积分',
+            dataIndex: 'jifen',
         }
-        // , {
-        //     title: '操作',
-        //     key: 'action',
-        //     // width: 30,
-        //     render: (text, record) => (
-        //         <span>
-        //                 <span onClick={(e)=>this.showModal(record)} style={{cursor:'pointer'}}>详情</span>
-        //         </span>
-        //     ),
+            // , {
+            //     title: '操作',
+            //     key: 'action',
+            //     // width: 30,
+            //     render: (text, record) => (
+            //         <span>
+            //                 <span onClick={(e)=>this.showModal(record)} style={{cursor:'pointer'}}>详情</span>
+            //         </span>
+            //     ),
 
-        // }
-    ];
+            // }
+        ];
         return (
             <div>
                 <Table columns={columns}
-                       rowKey={record => record.registered}
-                       dataSource={this.state.data}
-                       pagination={false}
-                       loading={this.state.loading}
-                       bordered
-                       onChange={this.handleTableChange}
-                       locale={{emptyText:'暂无数据'}}
+                    rowKey={record => record.registered}
+                    dataSource={this.state.data}
+                    pagination={false}
+                    loading={this.state.loading}
+                    bordered
+                    onChange={this.handleTableChange}
+                    locale={{ emptyText: '暂无数据' }}
                 />
                 <Modal
                     visible={this.state.visible}
-                    title="流入流出地信息"
+                    title="关注积分"
                     onCancel={this.handleCancel}
                     onOk={this.handleOk}
                     closable={true}
-                    style={{maxHeight:650,overflow:"auto"}}
+                    style={{ maxHeight: 650, overflow: "auto" }}
                     footer={null}
                 >
-                    <div style={{marginBottom:"10px"}}>
+                    <div style={{ marginBottom: "10px" }}>
                         <label style={mStyle} htmlFor="">来自的省：</label>
-                        <Input style={{width:'60%'}}  value={this.state.record!==null?this.state.record.fromProvince:''} readOnly="readOnly"/>
+                        <Input style={{ width: '60%' }} value={this.state.record !== null ? this.state.record.fromProvince : ''} readOnly="readOnly" />
                     </div>
-                    <div style={{marginBottom:"10px"}}>
+                    <div style={{ marginBottom: "10px" }}>
                         <label style={mStyle} htmlFor="">来自的市：</label>
-                        <Input style={{width:'60%'}}  value={this.state.record!==null?this.state.record.fromCity:''} readOnly="readOnly"/>
+                        <Input style={{ width: '60%' }} value={this.state.record !== null ? this.state.record.fromCity : ''} readOnly="readOnly" />
                     </div>
-                    <div style={{marginBottom:"10px"}}>
+                    <div style={{ marginBottom: "10px" }}>
                         <label style={mStyle} htmlFor="">目的地省：</label>
-                        <Input style={{width:'60%'}}  value={this.state.record!==null?this.state.record.toProvince:''} readOnly="readOnly"/>
+                        <Input style={{ width: '60%' }} value={this.state.record !== null ? this.state.record.toProvince : ''} readOnly="readOnly" />
                     </div>
-                    <div style={{marginBottom:"10px"}}>
+                    <div style={{ marginBottom: "10px" }}>
                         <label style={mStyle} htmlFor="">目的地市：</label>
-                        <Input style={{width:'60%'}}  value={this.state.record!==null?this.state.record.toCity:''} readOnly="readOnly"/>
+                        <Input style={{ width: '60%' }} value={this.state.record !== null ? this.state.record.toCity : ''} readOnly="readOnly" />
                     </div>
-                    
+
                 </Modal>
             </div>
         );
@@ -528,34 +552,29 @@ class MobileDataTable extends Component {
     state = {
         visible: false,
         record: null,
-        // data: [],
+        data: [],
         pagination: pagination,
         loading: false,
-        data: [{
-            phoneNumber:'13205051212',
-            imei:'56656565',
-            product:'OPPOR9s',
-            os:'【安卓系统】'
-        }],
     };
     handleTableChange = (pagination, filters, sorter) => {
-            const pager = {...this.state.pagination
-            };
-            pager.current = pagination.current;
-            this.setState({
-                pagination: pager,
-            });
-            this.fetch({ //点击下一页的时候调取的参数
-                currentPage: pagination.current,
-                entityOrField: true,
-                pd: {
-                    recordId: this.props.recordId,
-                    personId: this.props.personId
-                },
-                showCount: pagination.pageSize
-            });
-        }
-        //params第一次掉的参数，是第一页，它也会判断是否在掉fetch的时候传参  没传就执行默认的这个第一页
+        const pager = {
+            ...this.state.pagination
+        };
+        pager.current = pagination.current;
+        this.setState({
+            pagination: pager,
+        });
+        this.fetch({ //点击下一页的时候调取的参数
+            currentPage: pagination.current,
+            entityOrField: true,
+            pd: {
+                recordId: this.props.recordId,
+                personId: this.props.personId
+            },
+            showCount: pagination.pageSize
+        });
+    }
+    //params第一次掉的参数，是第一页，它也会判断是否在掉fetch的时候传参  没传就执行默认的这个第一页
     fetch = (params = {
         "currentPage": 1,
         "entityOrField": true,
@@ -566,15 +585,16 @@ class MobileDataTable extends Component {
         "showCount": constants.recordPageSize
     }) => {
         post(api + '/data/getPhoneOs', params).then((data) => {
-            const pagination = {...this.state.pagination
+            const pagination = {
+                ...this.state.pagination
             };
             pagination.total = data.result.page.totalResult;
             this.setState({
                 loading: false,
-                // data: data.result.list,
+                data: data.result.list,
                 pagination,
             });
-        }).catch((e) => {});
+        }).catch((e) => { });
     }
     componentDidMount() {
         this.fetch();
@@ -611,39 +631,37 @@ class MobileDataTable extends Component {
             title: '系统',
             dataIndex: 'os',
             render: (text, record) => (
-                <span title={text} style={{cursor:"pointer"}}>
+                <span title={text} style={{ cursor: "pointer" }}>
                     {
-                        text.length <= 75?
-                        text.slice(0,74):text.slice(0,74)+"..."
+                        text.length <= 75 ?
+                            text.slice(0, 74) : text.slice(0, 74) + "..."
 
                     }
                 </span>
             )
-        }
-        // , {
-        //     title: '操作',
-        //     key: 'action',
-        //     // width: 30,
-        //     render: (text, record) => (
-        //         <span>
-        //                 <Link to={'/PhoneDetails/'+record.phoneId}>
-        //                     <span style={{cursor:'pointer',color:'#fff'}}>详情</span>
-        //                 </Link>
-        //         </span>
-        //     ),
+        }, {
+            title: '操作',
+            key: 'action',
+            // width: 30,
+            render: (text, record) => (
+                <span>
+                    <Link to={'/PhoneDetails/' + record.phoneId}>
+                        <span style={{ cursor: 'pointer', color: '#fff' }}>详情</span>
+                    </Link>
+                </span>
+            ),
 
-        // }
-    ];
+        }];
         return (
             <div>
                 <Table columns={columns}
-                       rowKey={record => record.registered}
-                       dataSource={this.state.data}
-                       pagination={this.state.pagination}
-                       loading={this.state.loading}
-                       bordered
-                       onChange={this.handleTableChange}
-                       locale={{emptyText:'暂无数据'}}
+                    rowKey={record => record.registered}
+                    dataSource={this.state.data}
+                    pagination={this.state.pagination}
+                    loading={this.state.loading}
+                    bordered
+                    onChange={this.handleTableChange}
+                    locale={{ emptyText: '暂无数据' }}
                 />
                 <Modal
                     visible={this.state.visible}
@@ -651,26 +669,26 @@ class MobileDataTable extends Component {
                     onCancel={this.handleCancel}
                     onOk={this.handleOk}
                     closable={true}
-                    style={{maxHeight:650,overflow:"auto"}}
+                    style={{ maxHeight: 650, overflow: "auto" }}
                     footer={null}
                 >
-                <div style={{marginBottom:"10px"}}>
+                    <div style={{ marginBottom: "10px" }}>
                         <label style={mStyle} htmlFor="">手机号：</label>
-                        <Input style={{width:'60%'}}  value={this.state.record!==null?this.state.record.phoneNumber:''} readOnly="readOnly"/>
+                        <Input style={{ width: '60%' }} value={this.state.record !== null ? this.state.record.phoneNumber : ''} readOnly="readOnly" />
                     </div>
-                    <div style={{marginBottom:"10px"}}>
+                    <div style={{ marginBottom: "10px" }}>
                         <label style={mStyle} htmlFor="">系统：</label>
-                        <TextArea width="60%"  height='120px' value={this.state.record!==null?this.state.record.os:''} readOnly="readOnly"/>
+                        <TextArea width="60%" height='120px' value={this.state.record !== null ? this.state.record.os : ''} readOnly="readOnly" />
                     </div>
-                    <div style={{marginBottom:"10px"}}>
+                    <div style={{ marginBottom: "10px" }}>
                         <label style={mStyle} htmlFor="">型号：</label>
-                        <Input style={{width:'60%'}}  value={this.state.record!==null?this.state.record.product:''} readOnly="readOnly"/>
+                        <Input style={{ width: '60%' }} value={this.state.record !== null ? this.state.record.product : ''} readOnly="readOnly" />
                     </div>
-                    <div style={{marginBottom:"10px"}}>
+                    <div style={{ marginBottom: "10px" }}>
                         <label style={mStyle} htmlFor="">IMEI：</label>
-                        <Input style={{width:'60%'}}  value={this.state.record!==null?this.state.record.imei:''} readOnly="readOnly"/>
+                        <Input style={{ width: '60%' }} value={this.state.record !== null ? this.state.record.imei : ''} readOnly="readOnly" />
                     </div>
-                    
+
                 </Modal>
             </div>
         );
@@ -689,7 +707,8 @@ class PhotorTable extends Component {
         loading: false,
     };
     handleTableChange = (pagination, filters, sorter) => {
-        const pager = {...this.state.pagination
+        const pager = {
+            ...this.state.pagination
         };
         pager.current = pagination.current;
         this.setState({
@@ -714,7 +733,8 @@ class PhotorTable extends Component {
             "showCount": constants.recordPageSize
         };
         post(api + '/data/getArcPersonlistPage', creds).then((data) => {
-            const pagination = {...this.state.pagination
+            const pagination = {
+                ...this.state.pagination
             };
             pagination.total = data.result.page.totalResult;
             this.setState({
@@ -722,7 +742,7 @@ class PhotorTable extends Component {
                 data: data.result.list,
                 pagination,
             });
-        }).catch((e) => {});
+        }).catch((e) => { });
     }
     componentDidMount() {
         this.fetch();
@@ -756,7 +776,7 @@ class PhotorTable extends Component {
             // width: 30,
             render: (text, record) => (
                 <span>
-                        <span onClick={(e)=>this.showModal(record)} style={{cursor:'pointer'}}>详情</span>
+                    <span onClick={(e) => this.showModal(record)} style={{ cursor: 'pointer' }}>详情</span>
                 </span>
             ),
 
@@ -764,13 +784,13 @@ class PhotorTable extends Component {
         return (
             <div>
                 <Table columns={columns}
-                       rowKey={record => record.registered}
-                       dataSource={this.state.data}
-                       pagination={this.state.pagination}
-                       loading={this.state.loading}
-                       bordered
-                       onChange={this.handleTableChange}
-                       locale={{emptyText:'暂无数据'}}
+                    rowKey={record => record.registered}
+                    dataSource={this.state.data}
+                    pagination={this.state.pagination}
+                    loading={this.state.loading}
+                    bordered
+                    onChange={this.handleTableChange}
+                    locale={{ emptyText: '暂无数据' }}
                 />
                 <Modal
                     visible={this.state.visible}
@@ -778,22 +798,22 @@ class PhotorTable extends Component {
                     onCancel={this.handleCancel}
                     onOk={this.handleOk}
                     closable={true}
-                    style={{maxHeight:650,overflow:"auto"}}
+                    style={{ maxHeight: 650, overflow: "auto" }}
                     footer={null}
                 >
-                <div style={{marginBottom:"10px"}}>
+                    <div style={{ marginBottom: "10px" }}>
                         <label style={mStyle} htmlFor="">照片地址：</label>
-                        <Input style={{width:'60%'}}  value={this.state.record!==null?this.state.record.name:''} readOnly="readOnly"/>
+                        <Input style={{ width: '60%' }} value={this.state.record !== null ? this.state.record.name : ''} readOnly="readOnly" />
                     </div>
-                    <div style={{marginBottom:"10px"}}>
+                    <div style={{ marginBottom: "10px" }}>
                         <label style={mStyle} htmlFor="">安装包名称：</label>
-                        <Input style={{width:'60%'}}  value={this.state.record!==null?this.state.record.pkg:''} readOnly="readOnly"/>
+                        <Input style={{ width: '60%' }} value={this.state.record !== null ? this.state.record.pkg : ''} readOnly="readOnly" />
                     </div>
-                    <div style={{marginBottom:"10px"}}>
+                    <div style={{ marginBottom: "10px" }}>
                         <label style={mStyle} htmlFor="">版本号：</label>
-                        <Input style={{width:'60%'}}  value={this.state.record!==null?this.state.record.version:''} readOnly="readOnly"/>
+                        <Input style={{ width: '60%' }} value={this.state.record !== null ? this.state.record.version : ''} readOnly="readOnly" />
                     </div>
-                    
+
                 </Modal>
             </div>
         );
@@ -808,7 +828,8 @@ class IrTable extends Component {
         loading: false,
     };
     handleTableChange = (pagination, filters, sorter) => {
-        const pager = {...this.state.pagination
+        const pager = {
+            ...this.state.pagination
         };
         pager.current = pagination.current;
         this.setState({
@@ -832,7 +853,8 @@ class IrTable extends Component {
             "showCount": 12
         };
         post(api + '/data/getArcPersonlistPage', creds).then((data) => {
-            const pagination = {...this.state.pagination
+            const pagination = {
+                ...this.state.pagination
             };
             pagination.total = 0;
             this.setState({
@@ -840,7 +862,7 @@ class IrTable extends Component {
                 data: data.results,
                 pagination,
             });
-        }).catch((e) => {});
+        }).catch((e) => { });
     }
     componentDidMount() {
         this.fetch();
@@ -861,7 +883,7 @@ class IrTable extends Component {
             // width: 30,
             render: (text, record) => (
                 <span>
-                        <span onClick={onClickEdit=>this.handleLineIdChange(record.id,record)} style={{cursor:'pointer'}}>详情</span>
+                    <span onClick={onClickEdit => this.handleLineIdChange(record.id, record)} style={{ cursor: 'pointer' }}>详情</span>
                 </span>
             ),
 
@@ -869,13 +891,13 @@ class IrTable extends Component {
         return (
             <div>
                 <Table columns={columns}
-                       rowKey={record => record.registered}
-                       dataSource={this.state.data}
-                       pagination={this.state.pagination}
-                       loading={this.state.loading}
-                       bordered
-                       onChange={this.handleTableChange}
-                       locale={{emptyText:'暂无数据'}}
+                    rowKey={record => record.registered}
+                    dataSource={this.state.data}
+                    pagination={this.state.pagination}
+                    loading={this.state.loading}
+                    bordered
+                    onChange={this.handleTableChange}
+                    locale={{ emptyText: '暂无数据' }}
                 />
             </div>
         );
@@ -890,7 +912,8 @@ class FrTable extends Component {
         loading: false,
     };
     handleTableChange = (pagination, filters, sorter) => {
-        const pager = {...this.state.pagination
+        const pager = {
+            ...this.state.pagination
         };
         pager.current = pagination.current;
         this.setState({
@@ -916,7 +939,8 @@ class FrTable extends Component {
             "showCount": 12
         };
         post(api + '/data/getArcPersonlistPage', creds).then((data) => {
-            const pagination = {...this.state.pagination
+            const pagination = {
+                ...this.state.pagination
             };
             pagination.total = 0;
             this.setState({
@@ -924,7 +948,7 @@ class FrTable extends Component {
                 data: data.results,
                 pagination,
             });
-        }).catch((e) => {});
+        }).catch((e) => { });
     }
     componentDidMount() {
         this.fetch();
@@ -945,7 +969,7 @@ class FrTable extends Component {
             // width: 30,
             render: (text, record) => (
                 <span>
-                        <span onClick={onClickEdit=>this.handleLineIdChange(record.id,record)} style={{cursor:'pointer'}}>详情</span>
+                    <span onClick={onClickEdit => this.handleLineIdChange(record.id, record)} style={{ cursor: 'pointer' }}>详情</span>
                 </span>
             ),
 
@@ -953,13 +977,13 @@ class FrTable extends Component {
         return (
             <div>
                 <Table columns={columns}
-                       rowKey={record => record.registered}
-                       dataSource={this.state.data}
-                       pagination={this.state.pagination}
-                       loading={this.state.loading}
-                       bordered
-                       onChange={this.handleTableChange}
-                       locale={{emptyText:'暂无数据'}}
+                    rowKey={record => record.registered}
+                    dataSource={this.state.data}
+                    pagination={this.state.pagination}
+                    loading={this.state.loading}
+                    bordered
+                    onChange={this.handleTableChange}
+                    locale={{ emptyText: '暂无数据' }}
                 />
             </div>
         );

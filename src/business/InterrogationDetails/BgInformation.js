@@ -75,7 +75,7 @@ export class BgInformation extends Component {
         return (
             <div>
                <div style={{border:"1px solid rgb(12, 95, 147)",padding:"20px",background:"rgba(40,51,99,0.8)",zIndex:"3"}}>
-                    <div style={{marginBottom:"20px"}}>
+                    {/* <div style={{marginBottom:"20px"}}>
                         <p style={p}>违法犯罪人员</p>
                         <IllegalCrimeTable  idcard={idcard} jyxm={jyxm}/>
                     </div>
@@ -86,7 +86,7 @@ export class BgInformation extends Component {
                    <div style={{marginBottom:"20px"}}>
                         <p style={p}>交通违章</p>
                         <TrafficViolationTable   idcard={idcard} jyxm={jyxm}/>
-                   </div>
+                   </div> */}
                    <div style={{marginBottom:"20px"}}>
                         <p style={p}>在逃人员</p>
                         <AtLargeTable   idcard={idcard} jyxm={jyxm} />
@@ -95,10 +95,10 @@ export class BgInformation extends Component {
                         <p style={p}>涉疆涉藏学生</p>
                         <XinjiangStudentsTable   idcard={idcard} jyxm={jyxm} />
                   </div>*/}
-                  <div style={{marginBottom:"20px"}}>
+                  {/* <div style={{marginBottom:"20px"}}>
                         <p style={p}>重点人员</p>
                         <KeyPersonnalTable   idcard={idcard} jyxm={jyxm} />
-                  </div>
+                  </div> */}
                   
                 </div>
             </div>
@@ -669,7 +669,12 @@ class XinjiangStudentsTable extends Component{
 //在逃人员
 class AtLargeTable extends Component{
     state = {
-        data: [],
+        // data: [],
+        data:[{
+            liandanwei:'灵原派出所',
+            lianshijian:'2017-10-20',
+            shiyou:'2017年8月25日，晋江市公安局在灵源街道查获两把气枪、一把弹簧枪，一名嫌疑人被抓获，目前已被提起起诉'
+        }],
         record:null,
         pagination: pagination,
         loading: false,
@@ -697,7 +702,7 @@ class AtLargeTable extends Component{
             pagination.total = 0;
             this.setState({
                 loading: false,
-                data: data.result,
+                // data: data.result,
                 pagination,
             });
         }).catch((e)=>{
@@ -717,29 +722,40 @@ class AtLargeTable extends Component{
         this.setState({ visible: false });
     }
     render(){
+        // const columns = [
+        //     {
+        //         title: '姓名',
+        //         dataIndex: 'name',
+        //     },{
+        //         title: '身份证号',
+        //         dataIndex: 'idcard',
+        //     },{
+        //         title: '民族',
+        //         dataIndex: 'nation',
+        //     },{
+        //         title: '性别',
+        //         dataIndex: 'sex',
+        //     },{
+        //         title: '操作',
+        //         key: 'action',
+        //         // width: 30,
+        //         render: (text, record) => (
+        //             <span>
+        //                 <span onClick={onClickEdit=>this.showModal(record)} style={{cursor:'pointer'}}>详情</span>
+        //         </span>
+        //         ),
+            
+        //     }];
         const columns = [
             {
-                title: '姓名',
-                dataIndex: 'name',
+                title: '立案单位',
+                dataIndex: 'liandanwei',
             },{
-                title: '身份证号',
-                dataIndex: 'idcard',
+                title: '立案时间',
+                dataIndex: 'lianshijian',
             },{
-                title: '民族',
-                dataIndex: 'nation',
-            },{
-                title: '性别',
-                dataIndex: 'sex',
-            },{
-                title: '操作',
-                key: 'action',
-                // width: 30,
-                render: (text, record) => (
-                    <span>
-                        <span onClick={onClickEdit=>this.showModal(record)} style={{cursor:'pointer'}}>详情</span>
-                </span>
-                ),
-            
+                title: '立案事由',
+                dataIndex: 'shiyou',
             }];
         return (
             <div>

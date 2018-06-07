@@ -103,10 +103,10 @@ export class BasicInformation extends Component {
                         <p style={p}>机动车信息</p>
                         <VehicleTable   idcard={idcard} jyxm={jyxm}/>
                     </div>
-                    <div style={{marginBottom:"20px"}}>
+                    {/* <div style={{marginBottom:"20px"}}>
                         <p style={p}>驾驶证信息</p>
                         <DriverTable   idcard={idcard} jyxm={jyxm}/>
-                    </div>
+                    </div> */}
                 </div>
             </div>
         )
@@ -127,7 +127,14 @@ const  pagination = {size:'small',pageSize:constants.recordPageSize,
 //人员信息
 class PersonBasicTable extends Component{
     state = {
-        data: [],
+        data: [{
+            name:'艾则孜·博格达',
+            nameUsedBefore:'无',
+            educationLevel:'初中',
+            maritalStatus:'有配偶',
+            religiousBeliefs:'无',
+            occupation:'自由职业'
+        }],
         record:null,
         pagination: pagination,
         loading: false,
@@ -195,17 +202,19 @@ class PersonBasicTable extends Component{
             },{
                 title: '职业',
                 dataIndex: 'occupation',
-            },{
-                title: '操作',
-                key: 'action',
-                // width: 30,
-                render: (text, record) => (
-                    <span>
-                        <span onClick={onClickEdit=>this.showModal(record)} style={{cursor:'pointer'}}>详情</span>
-                </span>
-                ),
+            }
+            // ,{
+            //     title: '操作',
+            //     key: 'action',
+            //     // width: 30,
+            //     render: (text, record) => (
+            //         <span>
+            //             <span onClick={onClickEdit=>this.showModal(record)} style={{cursor:'pointer'}}>详情</span>
+            //     </span>
+            //     ),
             
-            }];
+            // }
+        ];
         return (
             <div>
                 <Table columns={columns}
@@ -558,7 +567,13 @@ class RaletionTable extends Component{
 //机动车表格
 class VehicleTable extends Component{
      state = {
-        data: [],
+        data: [{
+            vehicleIdentificationNumber:'2255155454',
+            vehicleType:"小型",
+            plateNumber:'黑AH8888',
+            brands:'丰田',
+            carBodyColor:'白'
+        }],
         record:null,
         pagination: pagination,
         loading: false,
@@ -586,7 +601,7 @@ class VehicleTable extends Component{
             pagination.total = 0;
             this.setState({
                 loading: false,
-                data: data.result,
+                // data: data.result,
                 pagination,
             });
         }).catch((e)=>{
@@ -623,17 +638,18 @@ class VehicleTable extends Component{
                 title: '车身颜色',
                 dataIndex: 'carBodyColor',
             }
-            ,{
-                title: '操作',
-                key: 'action',
-                // width: 30,
-                render: (text, record) => (
-                    <span>
-                        <span onClick={onClickEdit=>this.showModal(record)} style={{cursor:'pointer'}}>详情</span>
-                </span>
-                ),
+            // ,{
+            //     title: '操作',
+            //     key: 'action',
+            //     // width: 30,
+            //     render: (text, record) => (
+            //         <span>
+            //             <span onClick={onClickEdit=>this.showModal(record)} style={{cursor:'pointer'}}>详情</span>
+            //     </span>
+            //     ),
             
-            }];
+            // }
+        ];
         return (
             <div>
                 <Table columns={columns}
