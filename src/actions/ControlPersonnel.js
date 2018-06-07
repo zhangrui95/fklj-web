@@ -74,11 +74,18 @@ export function getCustomFiledList(creds) {
     }
 }
 //自定义字段新增（修改）
-export function insertOrUpdateCustomFiled(creds) {
+export function insertOrUpdateCustomFiled(creds,zdyType,getNewWords,hideModals) {
     let path  = serverUrls + '/data/insertOrUpdateCustomFiled';
     return dispatch => {
         post(path,creds).then((json) => {
             dispatch( {type: 'insertOrUpdateCustomFiled_succeed',data: json} );
+            if(json.reason === null){
+                hideModals();
+                message.success(`提示：自定义字段${zdyType === 'add' ? '新增':'修改'}成功`);
+                getNewWords();
+            }else{
+                message.error(`提示：${json.reason.text}`);
+            }
         }).catch((e)=>{
             dispatch({type: 'insertOrUpdateCustomFiled_error',message: e.toString()} )
         });
