@@ -575,7 +575,7 @@ export  class SearchArea extends Component{
             name: 'file',
             action: serverUrls + '/data/importControlPersonExcel',
             headers: {
-                Authorization: sessionStorage.getItem('id_token') || '',
+                token: sessionStorage.getItem('id_token') || '',
             },
             data: {
                 userName: sessionStorage.getItem('userName') || '',

@@ -1,6 +1,6 @@
 import {hex_md5} from "../resources/md5";
 import { browserHistory } from 'react-router';
-import {post} from "./request";
+import {post,postAQZX} from "./request";
 import { routerMiddleware, push } from 'react-router-redux';
 import {store} from '../index.js';
 import {clientNameList,clientName,securityCenterUrl, loginUrl, filterMenu,isAllowMenu} from '../utils/index';
@@ -50,7 +50,7 @@ export function loginUser(creds) {
         let cred = {username: creds.username, password: hex_md5(creds.password),sid:'fklj_sys'}
         let fk = false;
         let hs = false;
-        post(loginUrl+'/api/login', cred).then((res) => {
+        postAQZX(loginUrl+'/api/login', cred).then((res) => {
             if(res.error !== null){
                 message.warning('提示：'+res.error.text+"!",3);
             } else {
