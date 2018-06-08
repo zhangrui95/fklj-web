@@ -16,9 +16,9 @@ import { ELECTRO_TAB_CHANGE_CURRENT } from "./ElectronicArchives";
 ELECTRO_TAB_CHANGE_CURRENT
 import * as constants from "../utils/Constants";
 import { history } from '../index.js';
-import { post, get, put } from "./request";
+import { post, get, put ,postAQZX} from "./request";
 import { message } from 'antd';
-import { developmentModeList, developmentMode, serverUrl, securityCenterUrls } from "../utils/index";
+import { developmentModeList, developmentMode, serverUrl, securityCenterUrls,securityCenterUrl } from "../utils/index";
 
 import { PostPersonCenterData, PostPersonCenterFollowData } from "./PersonalCenter";
 
@@ -713,15 +713,13 @@ export const MODIFIY_PASSWORD_ERROR = 'modifiy_password_error';
 export function postModifiypaddword(creds, statusFalse) {
     let path = '/login/updatePassword';
     return dispatch => {
-        post(securityCenterUrls + path, creds).then((json) => {
+        postAQZX(securityCenterUrl + path, creds).then((json) => {
             dispatch(receivedModifiyPassword(json));
             console.log(json);
             if (json.reason === null) {
-                console.log(2222);
                 statusFalse();
                 sessionStorage.clear()
             } else {
-                console.log(3333);
                 message.error("提示：" + json.reason.text);
 
             }
