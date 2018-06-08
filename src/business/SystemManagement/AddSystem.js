@@ -41,7 +41,6 @@ moment.locale('zh-cn');
 const FormItem = Form.Item;
 const Option = Select.Option;
 import { Regular } from '../../components/Regular'
-
 const formItemLayout = {
     labelCol: {
         xs: { span: 24 },
@@ -73,33 +72,16 @@ export class AddSystem extends Component {
         };
     }
     componentDidMount() {
-        store.dispatch(getControlTimeCycle({}))
-        // setTimeout(()=>{
-        //     let loading = store.getState().SystemManagement.data.getControlTimeCycle.loading
-        //     if(!loading){
-        //         let result = store.getState().SystemManagement.data.getControlTimeCycle.result;
-        //         this.setState({
-        //             timeValue: (result.outofcontroltime === 24||result.outofcontroltime === 48||result.outofcontroltime === 72) ? result.outofcontroltime.toString() : '0',
-        //             HourStyle:(result.outofcontroltime === 24||result.outofcontroltime === 48||result.outofcontroltime === 72) ? "noneDiv" : "activeDiv",
-        //             cycle:result.defaulttaskcycle,
-        //             zdyValue:!(result.outofcontroltime === 24||result.outofcontroltime === 48||result.outofcontroltime === 72) ? result.outofcontroltime : ''
-        //         })
-        //     }
-        // },200)
+        store.dispatch(getControlTimeCycle({},this.getNewsTime))
     }
-    componentWillReceiveProps(nextprops) {
+    getNewsTime = () => {
         let result = store.getState().SystemManagement.data.getControlTimeCycle.result;
-        let loading = store.getState().SystemManagement.data.getControlTimeCycle.loading
-        if (!loading) {
-            let result = store.getState().SystemManagement.data.getControlTimeCycle.result;
-            this.setState({
-                timeValue: (result.outofcontroltime === 24 || result.outofcontroltime === 48 || result.outofcontroltime === 72) ? result.outofcontroltime.toString() : '0',
-                HourStyle: (result.outofcontroltime === 24 || result.outofcontroltime === 48 || result.outofcontroltime === 72) ? "noneDiv" : "activeDiv",
-                cycle: result.defaulttaskcycle,
-                zdyValue: !(result.outofcontroltime === 24 || result.outofcontroltime === 48 || result.outofcontroltime === 72) ? result.outofcontroltime : ''
-            })
-        }
-
+        this.setState({
+            timeValue: (result.outofcontroltime === 24 || result.outofcontroltime === 48 || result.outofcontroltime === 72) ? result.outofcontroltime.toString() : '0',
+            HourStyle: (result.outofcontroltime === 24 || result.outofcontroltime === 48 || result.outofcontroltime === 72) ? "noneDiv" : "activeDiv",
+            cycle: result.defaulttaskcycle,
+            zdyValue: !(result.outofcontroltime === 24 || result.outofcontroltime === 48 || result.outofcontroltime === 72) ? result.outofcontroltime : ''
+        })
     }
     timeChange = (e) => {
         if (e === '0') {
@@ -149,11 +131,7 @@ export class AddSystem extends Component {
             }
         }
         store.dispatch(UpdateControlTimeCycle(core))
-        store.dispatch(getControlTimeCycle({}))
-    }
-    cs = () => {
-        console.log('执行');
-        return
+        store.dispatch(getControlTimeCycle({},this.getNewsTime))
     }
     render() {
         let result = store.getState().SystemManagement.data.getControlTimeCycle.result;
@@ -179,7 +157,7 @@ export class AddSystem extends Component {
                                 style={{ width: '100px', float: 'left' }}
                                 {...formItem}
                             >
-                                <InputNumber min={0} value={this.state.zdyValue} onChange={this.zdyInput} onBlur={this.cs} />
+                                <InputNumber min={0} value={this.state.zdyValue} onChange={this.zdyInput} />
                             </FormItem>
                             <span style={{ color: '#fff', float: 'left', lineHeight: '40px' }}>小时</span>
                         </div>

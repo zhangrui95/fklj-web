@@ -15,7 +15,6 @@ import {getControlPersonList, getControlDetail,getCustomFiledList} from "../../a
 import moment from 'moment';
 import 'moment/locale/zh-cn';
 moment.locale('zh-cn');
-
 // 样式
 const sliderdyHeader = {
     borderBottom: "1px solid #0C5F93",
@@ -24,7 +23,6 @@ const sliderdyHeader = {
 }
 const FormItem = Form.Item;
 const Option = Select.Option;
-
 const formItemLayout = {
     labelCol: {
         xs: { span: 24 },
@@ -37,7 +35,6 @@ const formItemLayout = {
 };
 const newWord = []
 let controlType = ''
-
 export  class Control extends Component{
     constructor(props) { //初始化nowPage为1
         super(props);
@@ -74,11 +71,9 @@ export  class Control extends Component{
         };
         let controlType = this.props.controlType;
     }
-
     componentDidMount() {
         this.getList(this.props.controlType,1)
     }
-
     componentWillReceiveProps(nextProps) {
         if(this.props.controlType!==nextProps.controlType){
             this.setState({
@@ -98,8 +93,6 @@ export  class Control extends Component{
             },0)
         }
     }
-
-
     editShowModal = (record) => {
         let cerds = {id:record.id}
         store.dispatch(getControlDetail(cerds))
@@ -128,9 +121,9 @@ export  class Control extends Component{
     handleExport = () => {
         let path = '';
         if(this.props.controlType === 'GK_WGK' || this.props.controlType === 'GK_LKZRQ' || this.props.controlType === 'GK_SK'){
-           path = serverUrls + store.getState().ControlPersonnel.data.getExport2.result.path;
+            path = serverUrls + store.getState().ControlPersonnel.data.getExport2.result.path;
         }else{
-           path = serverUrls + store.getState().ControlPersonnel.data.getExport.result.path;
+            path = serverUrls + store.getState().ControlPersonnel.data.getExport.result.path;
         }
         window.open(path);
     }
@@ -139,11 +132,9 @@ export  class Control extends Component{
             nowPage: 1,
         })
     }
-
     onRef = (ref) => {
         this.child = ref
     }
-
     getList(controlType,page){
         let {name,cardId,status,Tosk, enddate, begindate} = this.state;
         let creds = ''
@@ -341,6 +332,7 @@ export  class Control extends Component{
                             <Col span={12} key={i}>
                                 <FormItem
                                     {...formItemLayout}
+                                    className={newValue[i].name.length > 7 ? 'zdyClass' : ''}
                                     label={newValue[i].name}
                                 >
                                     {getFieldDecorator('wordText' + i, {
@@ -364,6 +356,7 @@ export  class Control extends Component{
                             <Col span={12}>
                                 <FormItem
                                     {...formItemLayout}
+                                    className={newValue[i].name.length > 7 ? 'zdyClass' : ''}
                                     label={newValue[i].name}
                                 >
                                     {getFieldDecorator('wordName', {
@@ -439,7 +432,7 @@ export  class Control extends Component{
                         <Form>
                             <Col span={12} style={{ padding: '0 65px' }}>
                                 <span style={{color:"#fff"}}>照片：</span>
-                                {(detail.zpurl!==''&&this.state.ImgFalse)? <img src={detail.zpurl} style={{ width: '130px', height: '160px' }} onError={() =>this.ImgError(this)}/> : <img src="../../images/zanwu.png" style={{ width: '130px', height: '160px' }} />}
+                                {( detail.zpurl!=='' && detail.zpurl !== undefined && this.state.ImgFalse)? <img src={detail.zpurl} style={{ width: '130px', height: '160px' }} onError={() =>this.ImgError(this)}/> : <img src="../../images/zanwu.png" style={{ width: '130px', height: '160px' }} />}
                             </Col>
                             <Col span={12}>
                                 <FormItem
@@ -639,7 +632,7 @@ export  class Control extends Component{
                                         initialValue:this.state.modalType === 'edit' ? moment(getMyDate(detail.updatetime / 1000), 'YYYY-MM-DD HH:mm:ss') : '',
                                     })(
                                         <DatePicker showTime placeholder="" format="YYYY-MM-DD HH:mm:ss" allowClear={false} style={{ width: '283px' }} disabled />
-                                        )}
+                                    )}
                                 </FormItem>
                             </Col>
                             {newFormList}

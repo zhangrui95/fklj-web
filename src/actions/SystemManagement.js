@@ -4,11 +4,9 @@ import {post, get, put} from "./request";
 import * as constants from "../utils/Constants";
 import {store} from '../index.js';
 import {message} from 'antd';
-
 //获取涉恐软件
 export const HORRORSOFTWARE_DATA = 'horrorsoftware-data';
 export const HORRORSOFTWARE_ERROR = 'horrorsoftware-error';
-
 export function fetchHorrorSoftwareData(path, search = '') {
     return dispatch => {
         dispatch({type: "REQUEST_HORRORSOFTWARE_SYSTEM"});
@@ -22,7 +20,6 @@ export function fetchHorrorSoftwareData(path, search = '') {
             });
     }
 }
-
 export function getHorrorSoftwareData(path, search = '') {
     return dispatch => {
         dispatch({type: "REQUEST_HORRORSOFTWARE_SYSTEM"});
@@ -34,7 +31,6 @@ export function getHorrorSoftwareData(path, search = '') {
         ;
     }
 }
-
 export function PostHorrorSoftwareData(creds) {
     let path  = '/data/SelectSysCode';
     return dispatch => {
@@ -47,15 +43,12 @@ export function PostHorrorSoftwareData(creds) {
         ;
     }
 }
-
 export function receivedHorrorSoftwareData(data) {
     return {type: HORRORSOFTWARE_DATA, data: data}
 }
-
 export function receivedHorrorSoftwareError(message) {
     return {type: HORRORSOFTWARE_ERROR, message: message}
 }
-
 //保存涉恐软件  增加
 export function addHorrorSoftwareData(creds,params) {
     let path = "/data/InsertSysCode"
@@ -65,7 +58,7 @@ export function addHorrorSoftwareData(creds,params) {
                 let creds = params
                 message.success('保存成功！');
                 store.dispatch(PostHorrorSoftwareData(creds));
-                
+
             }else{
                 message.error(json.reason.text);
             }
@@ -90,12 +83,11 @@ export function updateHorrorSoftwareData(creds,params) {
         ;
     }
 }
-
 //删除涉恐软件
 export function DeleteHorrorSoftwareData(creds,params) {
     return dispatch => {
         post(api + "/data/DeleteSysCode",creds).then((json) => {
-           let creds = params;
+            let creds = params;
             store.dispatch(PostHorrorSoftwareData(creds));
             message.success('删除成功！');
         }).catch((e) => {
@@ -106,7 +98,6 @@ export function DeleteHorrorSoftwareData(creds,params) {
 //获取人工盘查信息-特征盘查设置
 export const INTERROGATIONINFORMATION_DATA = 'interrogationinformation-data';
 export const INTERROGATIONINFORMATION_ERROR = 'interrogationinformation-error';
-
 export function fetchInterrogationInformationData(path) {
     return dispatch => {
         dispatch({type: "REQUEST_INTERROGATIONINFORMATION_SYSTEM"});
@@ -118,7 +109,6 @@ export function fetchInterrogationInformationData(path) {
         ;
     }
 }
-
 export function PostInterrogationInformationData(creds) {
     let path  = '/data/SelectSysCode';
     return dispatch => {
@@ -131,15 +121,12 @@ export function PostInterrogationInformationData(creds) {
         ;
     }
 }
-
 export function receivedInterrogationInformationData(data) {
     return {type: INTERROGATIONINFORMATION_DATA, data: data}
 }
-
 export function receivedInterrogationInformationError(message) {
     return {type: INTERROGATIONINFORMATION_ERROR, message: message}
 }
-
 //添加人工盘查
 export function addInterrogationInformationData(creds,params) {
     let path = "/data/InsertSysCode";
@@ -149,7 +136,7 @@ export function addInterrogationInformationData(creds,params) {
                 let creds = params
                 message.success('保存成功！');
                 store.dispatch(PostInterrogationInformationData(creds));
-               
+
             }else{
                 message.error(json.reason.text);
             }
@@ -158,7 +145,6 @@ export function addInterrogationInformationData(creds,params) {
         ;
     }
 }
-
 //修改人工盘查
 export function saveIntrrrogationList(creds,params) {
     let path = "/data/UpdateSysCode";
@@ -168,7 +154,7 @@ export function saveIntrrrogationList(creds,params) {
                 let creds = params
                 message.success('保存成功！');
                 store.dispatch(PostInterrogationInformationData(creds));
-                
+
             }else{
                 message.error(json.reason.text);
             }
@@ -177,24 +163,20 @@ export function saveIntrrrogationList(creds,params) {
         ;
     }
 }
-
 //删除
 export function DeleteInterrogationInformationData(creds,params) {
-
     return dispatch => {
         post(api + "/data/DeleteSysCode",creds).then((json) => {
-           let creds = params
+            let creds = params
             message.success('删除成功！');
-             store.dispatch(PostInterrogationInformationData(creds));
+            store.dispatch(PostInterrogationInformationData(creds));
         }).catch((e)=>{
         });
     }
 }
-
 //获取盘异常提醒参数-系统管理
 export const EXCEPTIONPARAMETERREMINDER_DATA = 'exceptionparameterreminder-data';
 export const EXCEPTIONPARAMETERREMINDER_ERROR = 'exceptionparameterreminder-error';
-
 export function fetchExceptionParameterReminderData(path, search = '') {
     return dispatch => {
         dispatch({type: "REQUEST_EXCEPTIONPARAMETERREMINDER_SYSTEM"});
@@ -205,9 +187,7 @@ export function fetchExceptionParameterReminderData(path, search = '') {
         });
         ;
     }
-
 }
-
 export function getExceptionParameterReminderData(path, search = '') {
     return dispatch => {
         get(api + path + '?' + search).then((json) => {
@@ -218,7 +198,6 @@ export function getExceptionParameterReminderData(path, search = '') {
         ;
     }
 }
-
 export function postExceptionParameterReminderData(creds) {
     let path = '/data/SelectSysCode'
     return dispatch => {
@@ -229,15 +208,12 @@ export function postExceptionParameterReminderData(creds) {
         });
     }
 }
-
 export function receivedExceptionParameterReminderData(data) {
     return {type: EXCEPTIONPARAMETERREMINDER_DATA, data: data}
 }
-
 export function receivedExceptionParameterReminderError(message) {
     return {type: EXCEPTIONPARAMETERREMINDER_ERROR, message: message}
 }
-
 //保存异常提醒参数
 export function saveExceptionParameterReminderData(creds) {
     let path = "/data/UpdateSysCode";
@@ -253,8 +229,8 @@ export function saveExceptionParameterReminderData(creds) {
                     showCount: 10,
                 }
                 message.success('保存成功');
-                 store.dispatch(postExceptionParameterReminderData(creds));
-                
+                store.dispatch(postExceptionParameterReminderData(creds));
+
                 // fun();
             }else{
                 message.error(json.reason.text);
@@ -264,13 +240,10 @@ export function saveExceptionParameterReminderData(creds) {
         ;
     }
 }
-
 //获取黑名单信息
 export const BLACKLIST_DATA = 'blacklist-data';
 export const BLACKLIST_ERROR = 'blacklist-error';
-
 export function fetchBlackListData(path, search = '') {
-
     return dispatch => {
         dispatch({type: "REQUEST_BLACKLIST_SYSTEM"});
         get(api + path + '?' + search).then((json) => {
@@ -281,7 +254,6 @@ export function fetchBlackListData(path, search = '') {
         ;
     }
 }
-
 export function PostBlackListData(creds) {
     let path = '';
     return dispatch => {
@@ -294,15 +266,12 @@ export function PostBlackListData(creds) {
         ;
     }
 }
-
 export function receivedBlackListData(data) {
     return {type: BLACKLIST_DATA, data: data}
 }
-
 export function receivedBlackListError(message) {
     return {type: BLACKLIST_ERROR, message: message}
 }
-
 //保存黑名单(增加)
 export function addBlackData(creds, fun) {
     let path = "/";
@@ -325,7 +294,6 @@ export function addBlackData(creds, fun) {
         ;
     }
 }
-
 //修改更新
 export function updateBlackData(creds, fun) {
     let path = "/";
@@ -348,10 +316,8 @@ export function updateBlackData(creds, fun) {
         ;
     }
 }
-
 //删除 黑名单
 export function DeleteBlackListData(creds, fun) {
-
     return dispatch => {
         post(api + "/", creds).then((json) => {
             let creds = {
@@ -366,11 +332,9 @@ export function DeleteBlackListData(creds, fun) {
         ;
     }
 }
-
 //获取白名单信息
 export const WHITELIST_DATA = 'whitelist-data';
 export const WHITELIST_ERROR = 'whitelist-error';
-
 export function fetchWhiteListData(path, search = '') {
     return dispatch => {
         dispatch({type: "REQUEST_WHITELIST_SYSTEM"});
@@ -382,7 +346,6 @@ export function fetchWhiteListData(path, search = '') {
         ;
     }
 }
-
 export function PostWhiteListData(creds) {
     let path = '';
     return dispatch => {
@@ -395,15 +358,12 @@ export function PostWhiteListData(creds) {
         ;
     }
 }
-
 export function receivedWhiteListData(data) {
     return {type: WHITELIST_DATA, data: data}
 }
-
 export function receivedWhiteListError(message) {
     return {type: WHITELIST_ERROR, message: message}
 }
-
 //保存白名单
 export function addWhiteData(creds, fun) {
     let path = "/";
@@ -426,7 +386,6 @@ export function addWhiteData(creds, fun) {
         ;
     }
 }
-
 export function updateWhiteData(creds, fun) {
     let path = "/";
     return dispatch => {
@@ -448,10 +407,8 @@ export function updateWhiteData(creds, fun) {
         ;
     }
 }
-
 //删除 白名单
 export function DeleteWhiteListData(creds, fun) {
-
     return dispatch => {
         post(api + "/", creds).then((json) => {
             let creds = {
@@ -466,12 +423,10 @@ export function DeleteWhiteListData(creds, fun) {
         ;
     }
 }
-
 //获取高危城市信息
 //高危城市
 export const HIGHRISKCITIES_DATA = 'highriskcities-data';
 export const HIGHRISKCITIES_ERROR = 'highriskcities-error';
-
 export function fetchHighRiskCitiesData(path, search = '') {
     return dispatch => {
         dispatch({type: "REQUEST_HIGHRISKCITIES_SYSTEM"});
@@ -483,7 +438,6 @@ export function fetchHighRiskCitiesData(path, search = '') {
         ;
     }
 }
-
 export function PostHighRiskCityData(creds) {
     let path = '';
     return dispatch => {
@@ -496,7 +450,6 @@ export function PostHighRiskCityData(creds) {
         ;
     }
 }
-
 //保存高危城市
 export function saveHighRiskCitiesData(creds, fun) {
     let path = '';
@@ -519,7 +472,6 @@ export function saveHighRiskCitiesData(creds, fun) {
         ;
     }
 }
-
 export function updateHighRiskCitiesData(creds, fun) {
     let path = '';
     return dispatch => {
@@ -541,19 +493,15 @@ export function updateHighRiskCitiesData(creds, fun) {
         ;
     }
 }
-
 export function receivedHighRiskCitiesData(data) {
     return {type: HIGHRISKCITIES_DATA, data: data}
 }
-
 export function receivedHighRiskCitiesError(message) {
     return {type: HIGHRISKCITIES_ERROR, message: message}
 }
-
 //高危线路
 export const HIGHRISKLINE_DATA = 'highriskline-data';
 export const HIGHRISKLINE_ERROR = 'highriskline-error';
-
 export function fetchHighRiskLineData(path, search = '') {
     return dispatch => {
         dispatch({type: "REQUEST_HIGHRISKLINE_SYSTEM"});
@@ -565,7 +513,6 @@ export function fetchHighRiskLineData(path, search = '') {
         ;
     }
 }
-
 export function PostHighRiskLineData(creds) {
     let path  = '/data/getHighRistlistPage';
     return dispatch => {
@@ -578,17 +525,13 @@ export function PostHighRiskLineData(creds) {
         ;
     }
 }
-
 export function receivedHighRiskLineData(data) {
     return {type: HIGHRISKLINE_DATA, data: data}
 }
-
 export function receivedHighRiskLineError(message) {
     return {type: HIGHRISKLINE_ERROR, message: message}
 }
-
 //保存高危线路
-
 export function saveHighRiskLineData(creds,fun) {
     let path = '/data/saveHighRist';
     return dispatch => {
@@ -610,7 +553,6 @@ export function saveHighRiskLineData(creds,fun) {
         ;
     }
 }
-
 export function updateHighRiskLineData(creds,fun) {
     let path = '/data/updateHighRist';
     return dispatch => {
@@ -632,12 +574,10 @@ export function updateHighRiskLineData(creds,fun) {
         ;
     }
 }
-
 export function DeleteHighRiskLineData(creds, fun) {
-
     return dispatch => {
         post(api + "/data/DelBatchHighRist",creds).then((json) => {
-           let creds = {
+            let creds = {
                 currentPage:1,
                 entityOrField:true,
                 pd:{
@@ -650,12 +590,9 @@ export function DeleteHighRiskLineData(creds, fun) {
         ;
     }
 }
-
-
 //获取原籍地联系人信息
 export const PLACEOFORIGINPERSON_DATA = 'placeoforiginperson-data';
 export const PLACEOFORIGINPERSON_ERROR = 'placeoforiginperson-error';
-
 export function fetchPlaceOfOriginPersonData(path, search = '') {
     return dispatch => {
         dispatch({type: "REQUEST_PLACEOFORIGINPERSON_SYSTEM"});
@@ -667,9 +604,7 @@ export function fetchPlaceOfOriginPersonData(path, search = '') {
         ;
     }
 }
-
 export function PostPlaceOfOriginPersonData(creds) {
-
     let path  = '/data/getDomicilePolicelistPage';
     return dispatch => {
         dispatch({type: "REQUEST_PLACEOFORIGINPERSON_SYSTEM"});
@@ -681,18 +616,15 @@ export function PostPlaceOfOriginPersonData(creds) {
         ;
     }
 }
-
 export function receivedPlaceOfOriginPersonData(data) {
     return {type: PLACEOFORIGINPERSON_DATA, data: data}
 }
-
 export function receivedPlaceOfOriginPersonError(message) {
     return {type: PLACEOFORIGINPERSON_ERROR, message: message}
 }
-
 //保存原籍地
 export function addPlaceOfOriginPersonData(creds,params) {
-     let path = '/data/InsertDomicilePolice';
+    let path = '/data/InsertDomicilePolice';
     return dispatch => {
         post(api + path, creds).then((json) => {
             if (json.reason === null) {
@@ -723,13 +655,11 @@ export function updatePlaceOfOriginPersonData(creds,params) {
         ;
     }
 }
-
 //删除
 export function DeletePlaceOfOriginPersonData(creds,params) {
-
     return dispatch => {
         post(api + "/data/DeleteDomicilePolice",creds).then((json) => {
-           let creds = params
+            let creds = params
             store.dispatch(PostPlaceOfOriginPersonData(creds));
             message.success('删除成功！');
         }).catch((e) => {
@@ -737,11 +667,9 @@ export function DeletePlaceOfOriginPersonData(creds,params) {
         ;
     }
 }
-
 //获取流入地联系人信息
 export const PLACEOFINFLUXPERSON_DATA = 'placeofinfluxperson-data';
 export const PLACEOFINFLUXPERSON_ERROR = 'placeofinfluxperson-error';
-
 export function fetchPlaceOfInfluxPersonData(path, search = '') {
     return dispatch => {
         dispatch({type: "REQUEST_PLACEOFINFLUXPERSON_SYSTEM"});
@@ -753,7 +681,6 @@ export function fetchPlaceOfInfluxPersonData(path, search = '') {
         ;
     }
 }
-
 export function PostPlaceOfInfluxPersonData(creds) {
     let path  = '/data/getDomicilePolicelistPage';
     return dispatch => {
@@ -766,15 +693,12 @@ export function PostPlaceOfInfluxPersonData(creds) {
         ;
     }
 }
-
 export function receivedPlaceOfInfluxPersonData(data) {
     return {type: PLACEOFINFLUXPERSON_DATA, data: data}
 }
-
 export function receivedPlaceOfInfluxPersonError(message) {
     return {type: PLACEOFINFLUXPERSON_ERROR, message: message}
 }
-
 //保存流入地
 export function addPlaceOfInfluxPersonData(creds,params) {
     let path = '/data/InsertDomicilePolice';
@@ -808,13 +732,11 @@ export function updatePlaceOfInfluxPersonData(creds,params) {
         ;
     }
 }
-
 //删除
 export function DeletePlaceOfInfluxPersonData(creds,params) {
-
     return dispatch => {
         post(api + "/data/DeleteDomicilePolice",creds).then((json) => {
-           let creds = params
+            let creds = params
             store.dispatch(PostPlaceOfInfluxPersonData(creds));
             message.success('删除成功！');
         }).catch((e) => {
@@ -822,17 +744,13 @@ export function DeletePlaceOfInfluxPersonData(creds,params) {
         ;
     }
 }
-
 //获取红名单
 export function receiveRedList(data) {
     return {type: 'GetRedLIst_DATA', data: data}
 }
-
-
 export function receiveRedListError(message) {
     return {type: 'GetRedLIst_DATA_ERROR', message: message}
 }
-
 export function GetRedList(creds) {
     const path = '/data/SelectSysCode'
     return dispatch => {
@@ -845,7 +763,6 @@ export function GetRedList(creds) {
         ;
     }
 }
-
 //添加红名单
 export function  addRedList(creds) {
     let path = '/data/saveRedList';
@@ -867,7 +784,6 @@ export function  addRedList(creds) {
         ;
     }
 }
-
 export function saveRedList(creds, nowPage) {
     let path = '/data/updateRedList';
     return dispatch => {
@@ -888,8 +804,6 @@ export function saveRedList(creds, nowPage) {
         ;
     }
 }
-
-
 //获取人省市级联信息
 export const DEFAULT_PROVICE_DATA = 'default_provice_data'
 export const PLACE_PROVINCE_DATA = 'place_province_data';
@@ -911,7 +825,7 @@ export function postPlaceProvinceData(id) {
             }else{
                 dispatch({type: 'province_temp_tree_data', data: json});
             }
-            
+
         }).catch((e) => {
             dispatch(receivedPlaceProvinceError(e.toString()))
         });
@@ -929,28 +843,24 @@ export function receivedPlaceProvinceError(message) {
         message: message
     }
 }
-
 export function delRedList(creds) {
     console.log(creds);
     let path = '/data/DelBatchRedList';
     return dispatch => {
         post(api + path, creds).then((json) => {
-
-                let creds = {
-                    currentPage: 1,
-                    pd: {},
-                    showCount: 10
-                }
-                store.dispatch(GetRedList( creds));
-
+            let creds = {
+                currentPage: 1,
+                pd: {},
+                showCount: 10
+            }
+            store.dispatch(GetRedList( creds));
         }).catch((e) => {
             dispatch(receiveRedListError(e.toString()))
         });
     }
 }
-
 // export function fetchUnitTreeData(id) {
-    
+
 //         let nr;
 //         let random = '1001'+Math.round(Math.random()*10)+'';
 //         if(id ==='0'){
@@ -982,12 +892,12 @@ export function delRedList(creds) {
 //                 key: random+id +'003',
 //             }]
 //         }
-    
+
 //         let path = '/data/getProvince';
 //         console.log('id',id);
 //         let creds={
 //            // nr:nr,
-    
+
 //             currentPage:1,
 //             entityOrField:true,
 //             pd:{
@@ -997,14 +907,14 @@ export function delRedList(creds) {
 //         }
 //         return dispatch => {
 //             post(api + path,creds).then((json) => {
-    
+
 //                 // store.getState().root.data.unitTreeList = json.result;
 //                 //http://www.easy-mock.com/mock/591d5f109aba4141cf2736c6/fklj2/getTreeDataTest
 //                 if(id === '0'){
-                   
+
 //                     dispatch(receivedUnitTreeData(json));
 //                 }else{
-                    
+
 //                     dispatch({type: 'province_temp_tree_data', data: json});
 //                 }
 //             }).catch((e)=>{
@@ -1026,7 +936,6 @@ export function delRedList(creds) {
 //             message: message
 //         }
 //     }
-
 //获取编码表树状信息
 export const DEFAULT_CODE_DATA = 'default_code_data'
 export const CODE_DATA = 'code_data';
@@ -1043,14 +952,14 @@ export function postCodeData(id) {
         showCount: 999
     }
     return dispatch => {
-        
+
         post(api + path , creds).then((json) => {
             if(id === '0'){
                 dispatch(receivedCodeData(json));
             }else{
                 dispatch({type: 'code_temp_tree_data', data: json});
             }
-            
+
         }).catch((e) => {
             dispatch(receivedCodeError(e.toString()))
         });
@@ -1068,7 +977,6 @@ export function receivedCodeError(message) {
         message: message
     }
 }
-
 //获取编码表返回的字段信息
 export const DEFAULT_CODE_TABLE_DATA = 'default_code_table_data'
 export const CODE_TABLE_DATA = 'code_table_data';
@@ -1076,13 +984,13 @@ export const CODE_TABLE_ERROR = 'code_table_error';
 //获取编码
 export function postCodeTableData(creds) {
     let path = '/data/SelectSysCode';
-    
+
     return dispatch => {
         dispatch({type: "REQUEST_CODELIST_SYSTEM"});
         post(api + path , creds).then((json) => {
-            
-                dispatch(receivedCodeTableData(json));
-                        
+
+            dispatch(receivedCodeTableData(json));
+
         }).catch((e) => {
             dispatch(receivedCodeTableError(e.toString()))
         });
@@ -1100,7 +1008,6 @@ export function receivedCodeTableError(message) {
         message: message
     }
 }
-
 //保存
 export function addpostCodeTableData(creds,params) {
     let path = '/data/InsertSysCode';
@@ -1135,13 +1042,11 @@ export function updatepostCodeTableData(creds,params) {
         ;
     }
 }
-
 //删除
 export function DeletepostCodeTableData(creds) {
-
     return dispatch => {
         post(api + "/data/DeleteSysCode",creds).then((json) => {
-           let creds = {
+            let creds = {
                 currentPage:1,
                 entityOrField:true,
                 pd:{
@@ -1150,18 +1055,21 @@ export function DeletepostCodeTableData(creds) {
             }
             store.dispatch(postCodeTableData(creds));
             store.dispatch(postCodeData('0'));
-            message.success('删除成功！'); 
+            message.success('删除成功！');
         }).catch((e) => {
         });
         ;
     }
 }
 //获取失控时间及周期
-export function getControlTimeCycle(creds) {
+export function getControlTimeCycle(creds, getNewsTime) {
     return dispatch => {
         dispatch({type: "TimeCycle_Loading"});
         post(api + "/data/getControlTimeCycle",creds).then((json) => {
             dispatch( {type: 'getControlTimeCycle_succeed',data: json} );
+            if(json.reason === null){
+                getNewsTime();
+            }
         }).catch((e)=>{
             dispatch({type: 'getControlTimeCycle_error',message: e.toString()} )
         });
