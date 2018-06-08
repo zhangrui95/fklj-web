@@ -50,7 +50,8 @@ export  class SearchArea extends Component{
             wordId:'',
             ToskId:'请选择任务',
             ModalTitle:'',
-            zdyType:''
+            zdyType:'',
+            saveBtn:true
         }
     }
     handleNameChange = (e) => {
@@ -171,6 +172,7 @@ export  class SearchArea extends Component{
         this.setState({
             zdyModals: false,
             zdyModal: true,
+            saveBtn: true,
         });
     }
     getNewWords = () => {
@@ -207,56 +209,77 @@ export  class SearchArea extends Component{
         });
     }
     saveNewWord = () => {
+        this.setState({
+            saveBtn: false,
+        })
         let creds = ''
         let TorF = true;
         let strs=this.state.OptionWords.split(/[,，]/);
         const user = JSON.parse(sessionStorage.getItem('user'));
-        if(this.state.wordId === ''){
-            if(this.state.wordType === '文本'){
-                creds = {createuser:user.user.name,name:this.state.wordName,type:"0",updateuser:'',value:''}
-                this.getZdy(creds);
-            }else{
-                if(this.state.OptionWords.trim()!==""){
-                    strs.map((str)=>{
-                        let reg = Regular('xlz').reg
-                        if(!reg.test(str)){
-                            message.error(Regular('xlz').msg);
-                            TorF = false;
-                            return;
-                        }
-                    })
-                    if(TorF){
-                        creds = {createuser:user.user.name,name:this.state.wordName,type:"1",updateuser:'',value:this.state.OptionWords}
-                        this.getZdy(creds);
-                    }
+        if(this.state.saveBtn){
+            if(this.state.wordId === ''){
+                if(this.state.wordType === '文本'){
+                    creds = {createuser:user.user.name,name:this.state.wordName,type:"0",updateuser:'',value:''}
+                    this.getZdy(creds);
                 }else{
-                    message.error(`提示：下拉值不能为空`);
-                    return;
+                    if(this.state.OptionWords.trim()!==""){
+                        strs.map((str)=>{
+                            let reg = Regular('xlz').reg
+                            if(!reg.test(str)){
+                                message.error(Regular('xlz').msg);
+                                TorF = false;
+                                return;
+                            }
+                        })
+                        if(TorF){
+                            creds = {createuser:user.user.name,name:this.state.wordName,type:"1",updateuser:'',value:this.state.OptionWords}
+                            this.getZdy(creds);
+                        }else {
+                            this.setState({
+                                saveBtn: true,
+                            });
+                        }
+                    }else{
+                        message.error(`提示：下拉值不能为空`);
+                        this.setState({
+                            saveBtn: true,
+                        });
+                        return;
+                    }
+                }
+            }else{
+                if(this.state.wordType === '文本'){
+                    creds = {createuser:user.user.name,name:this.state.wordName,type:"0",value:'',id:this.state.wordId}
+                    this.getZdy(creds);
+                }else{
+                    if(this.state.OptionWords.trim()!==""){
+                        strs.map((str)=>{
+                            let reg = Regular('xlz').reg
+                            if(!reg.test(str)){
+                                message.error(Regular('xlz').msg);
+                                TorF = false;
+                                return;
+                            }
+                        })
+                        if(TorF){
+                            creds = {createuser:user.user.name,name:this.state.wordName,type:"1",value:this.state.OptionWords,id:this.state.wordId}
+                            this.getZdy(creds);
+                        }else {
+                            this.setState({
+                                saveBtn: true,
+                            });
+                        }
+                    }else{
+                        message.error(`提示：下拉值不能为空`);
+                        this.setState({
+                            saveBtn: true,
+                        });
+                        return;
+                    }
                 }
             }
         }else{
-            if(this.state.wordType === '文本'){
-                creds = {createuser:user.user.name,name:this.state.wordName,type:"0",value:'',id:this.state.wordId}
-                this.getZdy(creds);
-            }else{
-                if(this.state.OptionWords.trim()!==""){
-                    strs.map((str)=>{
-                        let reg = Regular('xlz').reg
-                        if(!reg.test(str)){
-                            message.error(Regular('xlz').msg);
-                            TorF = false;
-                            return;
-                        }
-                    })
-                    if(TorF){
-                        creds = {createuser:user.user.name,name:this.state.wordName,type:"1",value:this.state.OptionWords,id:this.state.wordId}
-                        this.getZdy(creds);
-                    }
-                }else{
-                    message.error(`提示：下拉值不能为空`);
-                    return;
-                }
-            }
+            return;
         }
     }
     getZdy = (creds) => {
@@ -264,11 +287,17 @@ export  class SearchArea extends Component{
             let reg = Regular('zdyName').reg
             if(!reg.test(this.state.wordName.trim())){
                 message.error(Regular('zdyName').msg);
+                this.setState({
+                    saveBtn: true,
+                });
             }else{
                 store.dispatch(insertOrUpdateCustomFiled(creds,this.state.zdyType,this.getNewWords,this.hideModals));
             }
         }else{
             message.error(`提示：字段名称不能为空`);
+            this.setState({
+                saveBtn: true,
+            });
         }
     }
     getAddModal = (type) => {
@@ -674,14 +703,14 @@ export  class SearchArea extends Component{
                        onCancel={this.hideModal}
                        maskClosable={false}
                 >
-                    <Table loading={store.getState().ControlPersonnel.data.FiledList.Loading} className={newWord.length < 1 ? 'noneDiv': 'activeDiv'} columns={list} dataSource={newWord} bordered  pagination={false} showHeader={false} />
+                    <Table onRowClick = {(e)=>this.addNewsWord('update', e)} loading={store.getState().ControlPersonnel.data.FiledList.Loading} className={newWord.length < 1 ? 'noneDiv': 'activeDiv'} columns={list} dataSource={newWord} bordered  pagination={false} showHeader={false} />
                     <p style={{marginTop:"20px",textAlign:"center"}}>
                         <Button style={{margin:'0 15px 0 0 ',width:'100%',fontSize:'30px',lineHeight:'0'}} onClick={() => this.addNewsWord('add')} className="btn_ok">
                             +
                         </Button>
                     </p>
                 </Modal>
-                <Modal style={{top:"38%"}}
+                <Modal style={{top:"20%"}}
                        title="自定义字段"
                        visible={this.state.zdyModals}
                        footer={null}
