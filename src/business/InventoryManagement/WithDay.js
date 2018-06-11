@@ -1067,15 +1067,15 @@ const SearchArea = React.createClass({
         return (
             <div>
                 <div className="marLeft40 z_searchDiv">
-                    <div style={{ float: 'left', marginTop: '10px' }}>
+                    <div style={{ float: 'left', marginBottom: '10px' }}>
                         <label htmlFor="" className="font14">人员姓名：</label>
                         <Input style={{ width: '180px', marginRight: "10px" }} type="text" id='name' placeholder='请输入人员姓名' value={name} onChange={this.handleNameClick} />
                     </div>
-                    <div style={{ float: 'left', marginTop: '10px' }}>
+                    <div style={{ float: 'left', marginBottom: '10px' }}>
                         <label htmlFor="" className="font14">身份证号：</label>
                         <Input style={{ width: '230px', marginRight: "10px" }} type="text" id='sfzh' placeholder='请输入身份证号' value={idcard} onChange={this.handleSfzhClick} />
                     </div>
-                    <div style={{ float: 'left', marginTop: '10px' }}>
+                    <div style={{ float: 'left', marginBottom: '10px' }}>
                         <label htmlFor="" className="font14">居住类型：</label>
                         <Select style={{ width: "100px", margin: "0 10px 0 0" }} value={address_type} onChange={this.handleaddressTypeClick} notFoundContent='暂无'>
                             <Option value=''>全部</Option>
@@ -1084,17 +1084,17 @@ const SearchArea = React.createClass({
                             <Option value={2}>流动</Option>
                         </Select>
                     </div>
-                    <div style={{ float: 'left', marginTop: '10px' }}>
+                    <div style={{ float: 'left', marginBottom: '10px' }}>
                         <label htmlFor="" className="font14">隶属任务：</label>
                         <Input value={subtask_name} style={{ width: '180px', marginRight: "10px" }} type="text" id='subtask_name' placeholder='请输入隶属任务名称' onChange={this.handleSubtaskNameClick} />
                     </div>
-                    <div style={{ float: 'left', marginTop: '10px' }}>
+                    <div style={{ float: 'left', marginBottom: '10px' }}>
                         <label htmlFor="" className="font14">盘查警员：</label>
                         <Input style={{ width: '150px', marginRight: "10px" }} type="text" id='police_name' placeholder='请输入盘查警员姓名' value={police_name} onChange={this.handlePoliceNameClick} />
                     </div>
                     <div style={{ clear: 'both' }}></div>
                 </div>
-                <div style={{ marginLeft: "2%", marginTop: "10px" }}>
+                <div style={{ marginLeft: "2%"}}>
                     <label htmlFor="" className="font14">起止时间：</label>
                     <DatePicker placeholder="请选择日期" format={dateFormat} allowClear={false} style={{ marginRight: "10px" }} value={beginDateValue} defaultValue="" onChange={this.handleBeginDeteClick} />
                     <span className="font14" style={{ marginRight: "10px" }}>至</span>
