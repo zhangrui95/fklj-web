@@ -447,24 +447,38 @@ export  class SearchArea extends Component{
                 prompt:true,
             })
         }else if(type === 'export'){
-            if(this.props.selectedRowsId.length > 0){
-                this.setState({
-                    promptText:'是否确定导出数据？',
-                    prompType:'export'
-                })
-                let creds = {ids:this.props.selectedRowsId.toString()}
-                let controlType = this.props.controlType
-                if(controlType === 'GK_WGK' || controlType === 'GK_LKZRQ' || controlType === 'GK_SK'){
-                    store.dispatch(getControlExport2(creds))
-                }else{
-                    store.dispatch(getControlExport(creds))
-                }
-                this.setState({
-                    prompt:true,
-                })
-            }else{
-                message.warning('提示：请选择需导出的人员');
+            // if(this.props.selectedRowsId.length > 0){
+            this.setState({
+                promptText:'是否确定导出数据？',
+                prompType:'export'
+            })
+            let controlType = this.props.controlType
+            let creds = {}
+            if(controlType === 'GK_WGK'){
+                creds = {ids:this.props.selectedRowsId.toString(),control_type:'0'}
+            } else if(controlType === 'GK_YGK'){
+                creds = {ids:this.props.selectedRowsId.toString(),control_type:'1'}
+            } else if(controlType === 'GK_LKZRQ'){
+                creds = {ids:this.props.selectedRowsId.toString(),control_type:'2'}
+            } else if(controlType === 'GK_SK'){
+                creds = {ids:this.props.selectedRowsId.toString(),control_type:'3'}
+            } else if(controlType === 'LY_DR'){
+                creds = {ids:this.props.selectedRowsId.toString(),source:'901006'}
+            } else if(controlType === 'LY_XZ'){
+                creds = {ids:this.props.selectedRowsId.toString(),source:'901001'}
             }
+            if(controlType === 'GK_WGK' || controlType === 'GK_LKZRQ' || controlType === 'GK_SK'){
+                store.dispatch(getControlExport2(creds))
+            }else{
+                store.dispatch(getControlExport(creds))
+            }
+            this.setState({
+                prompt:true,
+            })
+            // }
+            // else{
+            //     message.warning('提示：请选择需导出的人员');
+            // }
         }
     }
     exportModal = () => {
