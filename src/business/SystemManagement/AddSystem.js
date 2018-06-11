@@ -41,14 +41,15 @@ moment.locale('zh-cn');
 const FormItem = Form.Item;
 const Option = Select.Option;
 import { Regular } from '../../components/Regular'
+
 const formItemLayout = {
     labelCol: {
         xs: { span: 24 },
-        sm: { span: 10 },
+        sm: { span: 9 },
     },
     wrapperCol: {
         xs: { span: 24 },
-        sm: { span: 13 },
+        sm: { span: 14 },
     },
 };
 const formItem = {
@@ -164,9 +165,9 @@ export class AddSystem extends Component {
                         <FormItem
                             style={{ width: '300px', float: 'left' }}
                             {...formItemLayout}
-                            label="新增管控到任务"
+                            label="默认周期设置"
                         >
-                            <Select placeholder="请选择新增管控到任务" value={this.state.cycle === 0 ? '按天' : (this.state.cycle === 1) ? '按周' : ''} onChange={this.cycleChange}>
+                            <Select placeholder="请选择默认周期" value={this.state.cycle === 0 ? '按天' : (this.state.cycle === 1) ? '按周' : ''} onChange={this.cycleChange}>
                                 <Option key="0">按天</Option>
                                 <Option key="1">按周</Option>
                             </Select>

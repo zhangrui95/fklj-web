@@ -223,18 +223,25 @@ export  class SearchArea extends Component{
                     this.getZdy(creds);
                 }else{
                     if(this.state.OptionWords.trim()!==""){
-                        strs.map((str)=>{
-                            let reg = Regular('xlz').reg
-                            if(!reg.test(str)){
-                                message.error(Regular('xlz').msg);
-                                TorF = false;
-                                return;
+                        if(this.state.OptionWords.trim().indexOf(",") > 0 ){
+                            strs.map((str)=>{
+                                let reg = Regular('xlz').reg
+                                if(!reg.test(str)){
+                                    message.error(Regular('xlz').msg);
+                                    TorF = false;
+                                    return;
+                                }
+                            })
+                            if(TorF){
+                                creds = {createuser:user.user.name,name:this.state.wordName,type:"1",updateuser:'',value:this.state.OptionWords}
+                                this.getZdy(creds);
+                            }else {
+                                this.setState({
+                                    saveBtn: true,
+                                });
                             }
-                        })
-                        if(TorF){
-                            creds = {createuser:user.user.name,name:this.state.wordName,type:"1",updateuser:'',value:this.state.OptionWords}
-                            this.getZdy(creds);
-                        }else {
+                        }else{
+                            message.error(`提示：下拉值至少两个，并用逗号分隔`);
                             this.setState({
                                 saveBtn: true,
                             });
