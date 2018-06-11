@@ -351,12 +351,12 @@ export class OldModal extends Component {
                     <hr style={{ background: '#0c5f93', height: '1px', border: 'none', margin: '24px 0' }} />
                     <Row>
                         <p style={{ fontSize: '16px' }}>手机信息</p>
-                        <MobileDataTable personId={this.state.personId} recordId={this.state.recordId} />
+                        <MobileDataTable personId={this.props.personId} recordId={this.props.recordId} />
                     </Row>
                     <hr style={{ background: '#0c5f93', height: '1px', border: 'none', margin: '24px 0' }} />
                     <Row>
                         <p style={{ fontSize: '16px' }}>联通信息</p>
-                        <OnlineTable personId={this.state.personId} recordId={this.state.recordId} />
+                        <OnlineTable personId={this.props.personId} recordId={this.props.recordId} />
                     </Row>
                     <hr style={{ background: '#0c5f93', height: '1px', border: 'none', margin: '24px 0' }} />
                     <Row>

@@ -130,6 +130,7 @@ export class WithDay extends Component {
         store.dispatch(postInventoryListHushiData(params));
     }
     editShowModal = (record) => {
+        console.log('record',record);
         if (record.examine_version !=undefined&& record.examine_version == 1) {
             this.setState({
                 visible: true,
