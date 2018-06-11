@@ -131,7 +131,7 @@ export class AddSystem extends Component {
             }
         }
         store.dispatch(UpdateControlTimeCycle(core))
-        store.dispatch(getControlTimeCycle({},this.getNewsTime))
+        // store.dispatch(getControlTimeCycle({},this.getNewsTime))
     }
     render() {
         let result = store.getState().SystemManagement.data.getControlTimeCycle.result;
