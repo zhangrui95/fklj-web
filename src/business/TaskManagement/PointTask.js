@@ -384,7 +384,7 @@ export class PointTask extends Component {
             key: 'action',
             render: (text, record) => (
                 <span>
-                    <span onClick={(e) => this.editShowModal(record)} style={{ cursor: 'pointer' }}>查看</span>
+                    <span onClick={(e) => this.editShowModal(record)} style={{ cursor: 'pointer' }}>详情</span>
                 </span>
             ),
         }];

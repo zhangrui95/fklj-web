@@ -758,7 +758,7 @@ export class PatrolTask extends Component {
                         <span style={{ cursor: 'pointer' }}>{record.taskswitch === 1 ? '关闭' : '启动'}</span>
                     </Popconfirm>
                     <Divider type="vertical" />
-                    <span onClick={(e) => this.seeShowModal(record)} style={{ cursor: 'pointer' }}>查看</span>
+                    <span onClick={(e) => this.seeShowModal(record)} style={{ cursor: 'pointer' }}>详情</span>
                     <Divider type="vertical" />
                     <span style={{ cursor: 'pointer' }} onClick={() => this.showChildren(record.id)}>子任务</span>
                 </span>
