@@ -51,7 +51,8 @@ export  class SearchArea extends Component{
             ToskId:'请选择任务',
             ModalTitle:'',
             zdyType:'',
-            saveBtn:true
+            saveBtn:true,
+            beforeUpload:true,
         }
     }
     handleNameChange = (e) => {
@@ -377,63 +378,74 @@ export  class SearchArea extends Component{
         message.destroy();
     }
     importOnChange = (info) => {
-        if(info.file.response.reason!==null){
-            if(info.file.response.reason.code === ""){
-                if(info.file.response.result.errorExcelPath === "" ||info.file.response.result.errorExcelPath === undefined){
-                    message.success(`提示：${info.file.response.reason.text}`);
+        if(this.state.beforeUpload){
+            if(info.file.response.reason!==null){
+                if(info.file.response.reason.code === ""){
+                    if(info.file.response.result.errorExcelPath === "" ||info.file.response.result.errorExcelPath === undefined){
+                        message.success(`提示：${info.file.response.reason.text}`);
+                    }else{
+                        message.warning(
+                            <content>
+                                <span>提示：{info.file.response.reason.text}</span>
+                                <a onClick={()=>this.errorText(info.file.response.result.errorExcelPath)}> 下载失败数据明细 </a>
+                                <a onClick={this.getOnClose}> 关闭 </a>
+                            </content>,0
+                        );
+                    }
                 }else{
-                    message.warning(
-                        <content>
-                            <span>提示：{info.file.response.reason.text}</span>
-                            <a onClick={()=>this.errorText(info.file.response.result.errorExcelPath)}> 下载失败数据明细 </a>
-                            <a onClick={this.getOnClose}> 关闭 </a>
-                        </content>,0
-                    );
+                    message.error(`提示：${info.file.response.reason.text}`,5)
                 }
-            }else{
-                message.error(`提示：${info.file.response.reason.text}`,5)
             }
-        }
-        if (info.file.status === 'uploading') {
-            this.importEnterLoading();
-        }
-        if (info.file.status !== 'uploading') {
+            if (info.file.status === 'uploading') {
+                this.importEnterLoading();
+            }
+            if (info.file.status !== 'uploading') {
 
-        }
-        if (info.file.status === 'done') {
-            let creds = '';
-            let controlType = this.props.controlType
-            if(controlType==='GK_WGK'){
-                creds = {pd:{control_type:0},showCount:10,currentPage:1}
-            }else if(controlType==='GK_YGK'){
-                creds = {pd:{control_type:1},showCount:10,currentPage:1}
-            }else if(controlType==='GK_LKZRQ') {
-                creds = {pd:{control_type:2},showCount:10,currentPage:1}
-            }else if(controlType==='GK_SK'){
-                creds = {pd:{control_type:3},showCount:10,currentPage:1}
-            }else if(controlType==='LY_DR'){
-                creds = {pd:{source:'901006'},showCount:10,currentPage:1}
-            }else if(controlType==='LY_XZ'){
-                creds = {pd:{source:'901001'},showCount:10,currentPage:1}
-            }else{
-                creds = {}
             }
-            store.dispatch(getControlPersonList(creds))
-            this.setState({
-                importLoading: false,
-            });
-            this.props.changeSelection([],1);
-        } else if (info.file.status === 'error') {
-            message.error(`提示：${info.file.name} 上传失败`);
-            this.setState({
-                importLoading: false,
-            });
+            if (info.file.status === 'done') {
+                let creds = '';
+                let controlType = this.props.controlType
+                if(controlType==='GK_WGK'){
+                    creds = {pd:{control_type:0},showCount:10,currentPage:1}
+                }else if(controlType==='GK_YGK'){
+                    creds = {pd:{control_type:1},showCount:10,currentPage:1}
+                }else if(controlType==='GK_LKZRQ') {
+                    creds = {pd:{control_type:2},showCount:10,currentPage:1}
+                }else if(controlType==='GK_SK'){
+                    creds = {pd:{control_type:3},showCount:10,currentPage:1}
+                }else if(controlType==='LY_DR'){
+                    creds = {pd:{source:'901006'},showCount:10,currentPage:1}
+                }else if(controlType==='LY_XZ'){
+                    creds = {pd:{source:'901001'},showCount:10,currentPage:1}
+                }else{
+                    creds = {}
+                }
+                store.dispatch(getControlPersonList(creds))
+                this.setState({
+                    importLoading: false,
+                });
+                this.props.changeSelection([],1);
+            } else if (info.file.status === 'error') {
+                message.error(`提示：${info.file.name} 上传失败`);
+                this.setState({
+                    importLoading: false,
+                });
+            }
+        }else{
+            return;
         }
     }
     beforeUpload = (file, fileList) => {
         var rag = /\.(xls|xlsx|XLS|XLSX)$/;
         if(!rag.test(file.name)){
             message.error('提示：请上传excel');
+            this.setState({
+                beforeUpload:false
+            })
+        }else{
+            this.setState({
+                beforeUpload:true
+            })
         }
         return;
     }
