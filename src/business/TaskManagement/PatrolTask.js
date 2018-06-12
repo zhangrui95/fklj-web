@@ -46,7 +46,7 @@ import {
     Pagination
 } from 'antd';
 import {
-    postTaskListHushiData, postChildrenTaskListHushiData, postTaskListHushiByIdData, postWeiguankongData, editTaskHushiData, postPersonListForTaskData,postChildrenTaskListHushiByIdData
+    postTaskListHushiData, postChildrenTaskListHushiData, postTaskListHushiByIdData, postWeiguankongData, editTaskHushiData, postPersonListForTaskData, postChildrenTaskListHushiByIdData
 } from "../../actions/TaskManagement";
 
 import moment from 'moment';
@@ -637,8 +637,8 @@ export class PatrolTask extends Component {
 
             }
         }
-        let childrentaskListHushiById= store.getState().TaskManagement.data.childrentaskListHushiById.result;
-        console.log('childrentaskListHushiById',childrentaskListHushiById);
+        let childrentaskListHushiById = store.getState().TaskManagement.data.childrentaskListHushiById.result;
+        console.log('childrentaskListHushiById', childrentaskListHushiById);
         const chidrentaglist = [];
         // if (this.state.childrenDetailsRecord.control_person) {
         //     let dataList = JSON.parse(this.state.childrenDetailsRecord.control_person.value);
@@ -667,7 +667,7 @@ export class PatrolTask extends Component {
                             childrenselectOption.push(
                                 <Tag color="#2db7f5" style={{ marginTop: '3px', marginRight: '10px', fontSize: '14px' }} title={item.name + " " + item.idcard}>{item.name + " " + item.idcard}</Tag>
                             );
-                        }else{
+                        } else {
                             childrenselectOptionNot.push(
                                 <Tag color="#2db7f5" style={{ marginTop: '3px', marginRight: '10px', fontSize: '14px' }} title={item.name + " " + item.idcard}>{item.name + " " + item.idcard}</Tag>
                             );
@@ -758,7 +758,7 @@ export class PatrolTask extends Component {
                         <span style={{ cursor: 'pointer' }}>{record.taskswitch === 1 ? '关闭' : '启动'}</span>
                     </Popconfirm>
                     <Divider type="vertical" />
-                    <span onClick={(e) => this.seeShowModal(record)} style={{ cursor: 'pointer' }}>查看</span>
+                    <span onClick={(e) => this.seeShowModal(record)} style={{ cursor: 'pointer' }}>详情</span>
                     <Divider type="vertical" />
                     <span style={{ cursor: 'pointer' }} onClick={() => this.showChildren(record.id)}>子任务</span>
                 </span>
@@ -1172,7 +1172,7 @@ export class PatrolTask extends Component {
                                         )}
                                     </FormItem>
                                 </Col>
-                                {/* <Col span={12}>
+                                <Col span={12}>
                                     <FormItem
                                         {...formItemLayout}
                                         label="任务状态"
@@ -1184,19 +1184,35 @@ export class PatrolTask extends Component {
                                             this.state.disabled ?
                                                 <Select disabled>
                                                     <Option value=''>全部</Option>
-                                                    <Option value={0}>待办任务</Option>
-                                                    <Option value={1}>已完成任务</Option>
-                                                    <Option value={2}>超期任务</Option>
+                                                    <Option value={0}>关闭</Option>
+                                                    <Option value={1}>启动</Option>
+
                                                 </Select> :
                                                 <Select >
                                                     <Option value=''>全部</Option>
-                                                    <Option value={0}>待办任务</Option>
-                                                    <Option value={1}>已完成任务</Option>
-                                                    <Option value={2}>超期任务</Option>
+                                                    <Option value={0}>关闭</Option>
+                                                    <Option value={1}>启动</Option>
+
                                                 </Select>
                                         )}
                                     </FormItem>
-                                </Col> */}
+                                </Col>
+                                <Col span={12}>
+                                    <FormItem
+                                        {...formItemLayout}
+                                        label="任务数量"
+                                    >
+                                        {getFieldDecorator('count', {
+                                            initialValue: this.state.modalType === 'edit' ? ogjByid ? ogjByid.count : '' : '',
+                                            validateFirst: true
+                                        })(
+                                            this.state.disabled ?
+                                                <Input disabled /> :
+                                                <Input />
+
+                                        )}
+                                    </FormItem>
+                                </Col>
                                 <Col span={24} className="selectHeight">
                                     <FormItem
                                         {...formItemLayouts}
@@ -1365,12 +1381,12 @@ export class PatrolTask extends Component {
                                                     )}
                                                 </FormItem>
                                             </Col>
-                                            <Col span={24} style={{marginBottom:'24px'}}>
+                                            <Col span={24} style={{ marginBottom: '24px' }}>
                                                 <div style={{ width: '16.66666667%', float: 'left', color: '#fff', textAlign: "right" }}>
                                                     已盘查对象：
                                                 </div>
-                                                <div style={{ width: '79.16666667%', float: 'left', padding: ' 4px 11px', fontSize: '14px', border: '1px solid #0C5F93', maxHeight: '300px', overflow: 'auto', cursor: "not-allowed",color:'rgba(255, 255, 255, 0.8)' }}>
-                                                    {childrenselectOption.length==0?'盘查对象':childrenselectOption}
+                                                <div style={{ width: '79.16666667%', float: 'left', padding: ' 4px 11px', fontSize: '14px', border: '1px solid #0C5F93', maxHeight: '300px', overflow: 'auto', cursor: "not-allowed", color: 'rgba(255, 255, 255, 0.8)' }}>
+                                                    {childrenselectOption.length == 0 ? '盘查对象' : childrenselectOption}
                                                 </div>
                                                 <div style={{ clear: 'both' }}></div>
                                             </Col>
@@ -1378,7 +1394,7 @@ export class PatrolTask extends Component {
                                                 <div style={{ width: '16.66666667%', float: 'left', color: '#fff', textAlign: "right" }}>
                                                     未盘查对象：
                                                 </div>
-                                                <div style={{ width: '79.16666667%', float: 'left', padding: ' 4px 11px', fontSize: '14px', border: '1px solid #0C5F93', maxHeight: '300px', overflow: 'auto', cursor: "not-allowed" ,color:'rgba(255, 255, 255, 0.8)' }}>
+                                                <div style={{ width: '79.16666667%', float: 'left', padding: ' 4px 11px', fontSize: '14px', border: '1px solid #0C5F93', maxHeight: '300px', overflow: 'auto', cursor: "not-allowed", color: 'rgba(255, 255, 255, 0.8)' }}>
                                                     {childrenselectOptionNot}
                                                 </div>
                                                 <div style={{ clear: 'both' }}></div>
