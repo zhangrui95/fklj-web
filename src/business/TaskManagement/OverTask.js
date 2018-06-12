@@ -162,7 +162,7 @@ export class OverTask extends Component {
         let creds = {
             id: record.id
         }
-        store.dispatch(postThreeTaskListHushiByIdData(creds,this.goback));
+        store.dispatch(postThreeTaskListHushiByIdData(creds, this.goback));
         // this.onCheckChange(record.checkedList);   
     }
     goback = () => {
@@ -311,6 +311,7 @@ export class OverTask extends Component {
         let weiguankongList = store.getState().TaskManagement.data.weiguankongList.result.list;
         const checkObjOption = [];
         let selectOption = [];
+        const selectOptionNot = [];
         if (byidObj) {
             if (byidObj.personList) {
                 if (byidObj.personList.length > 0) {
@@ -322,9 +323,16 @@ export class OverTask extends Component {
                     }
                     for (let i = 0; i < byidObj.personList.length; i++) {
                         let item = byidObj.personList[i];
-                        selectOption.push(
-                            item.id
-                        );
+                        if (item.Cflag) {
+                            selectOption.push(
+                                item.id
+                            );
+                        } else {
+                            selectOptionNot.push(
+                                item.id
+                            );
+                        }
+
                     }
                 }
 
@@ -589,26 +597,34 @@ export class OverTask extends Component {
                             <Col span={24} className="selectHeight">
                                 <FormItem
                                     {...formItemLayouts}
-                                    label="盘查对象"
+                                    label="已盘查对象"
                                 >
                                     {getFieldDecorator('TaskPerson', {
                                         initialValue: this.state.modalType === 'edit' ? byidObj ? selectOption : '' : '',
                                         validateFirst: true
                                     })(
-                                        // <TreeSelect
-                                        //     style={{ marginRight: '10px' }}
-                                        //     value={unit}
-                                        //     dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-                                        //     treeData={treeList}
-                                        //     placeholder="盘查对象"
-                                        //     onChange={this.unitChange}
-                                        //     showSearch={false}
-                                        //     treeCheckable={true}
-                                        //     dropdownMatchSelectWidth={false}
-                                        //     showCheckedStrategy="SHOW_PARENT"
-                                        //     notFoundContent='暂无'
-                                        //     disabled
-                                        // />
+                                        <Select
+                                            mode="multiple"
+                                            size='default'
+                                            placeholder="盘查对象"
+                                            onChange={this.handleChange}
+                                            style={{ width: '100%' }}
+                                            disabled
+                                        >
+                                            {checkObjOption}
+                                        </Select>
+                                    )}
+                                </FormItem>
+                            </Col>
+                            <Col span={24} className="selectHeight">
+                                <FormItem
+                                    {...formItemLayouts}
+                                    label="未盘查对象"
+                                >
+                                    {getFieldDecorator('TaskPerson', {
+                                        initialValue: this.state.modalType === 'edit' ? byidObj ? selectOptionNot : '' : '',
+                                        validateFirst: true
+                                    })(
                                         <Select
                                             mode="multiple"
                                             size='default'

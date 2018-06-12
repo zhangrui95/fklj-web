@@ -46,7 +46,7 @@ import {
     Pagination
 } from 'antd';
 import {
-    postTaskListHushiData, postChildrenTaskListHushiData, postTaskListHushiByIdData, postWeiguankongData, editTaskHushiData, postPersonListForTaskData
+    postTaskListHushiData, postChildrenTaskListHushiData, postTaskListHushiByIdData, postWeiguankongData, editTaskHushiData, postPersonListForTaskData,postChildrenTaskListHushiByIdData
 } from "../../actions/TaskManagement";
 
 import moment from 'moment';
@@ -171,11 +171,11 @@ export class PatrolTask extends Component {
 
     }
     // 根据id查询任务信息
-    byidtaskquery = (id,goback) => {
+    byidtaskquery = (id, goback) => {
         let creds = {
             id: id,
         }
-        store.dispatch(postTaskListHushiByIdData(creds,goback));
+        store.dispatch(postTaskListHushiByIdData(creds, goback));
     }
     // 未管控人员作为盘查对象在添加的时候使用
     weiguankongQuery = () => {
@@ -203,7 +203,7 @@ export class PatrolTask extends Component {
             id: record.id,
         }
         store.dispatch(postPersonListForTaskData(creds));
-        this.byidtaskquery(record.id,this.goback);
+        this.byidtaskquery(record.id, this.goback);
         // this.weiguankongQuery();
     }
     // 等盘查对象数据调取成功后，再调取弹出模态框等方法
@@ -548,6 +548,11 @@ export class PatrolTask extends Component {
             childrenDetailsVisible: true,
             childrenDetailsRecord: record
         });
+        let creds = {
+            id: record.id
+        }
+        store.dispatch(postChildrenTaskListHushiByIdData(creds));
+        // this.onCheckChange(record.checkedList);   
     }
     childrenDetailshandleCancel = () => {
         this.setState({
@@ -632,14 +637,45 @@ export class PatrolTask extends Component {
 
             }
         }
+        let childrentaskListHushiById= store.getState().TaskManagement.data.childrentaskListHushiById.result;
+        console.log('childrentaskListHushiById',childrentaskListHushiById);
         const chidrentaglist = [];
-        if (this.state.childrenDetailsRecord.control_person) {
-            let dataList = JSON.parse(this.state.childrenDetailsRecord.control_person.value);
-            for (let i = 0; i < dataList.length; i++) {
-                let item = dataList[i];
-                chidrentaglist.push(
-                    <Tag color="#2db7f5" style={{ marginTop: '3px',marginRight: '10px', fontSize: '14px' }} title={item.name + " " + item.idcard}>{item.name + " " + item.idcard}</Tag>
-                );
+        // if (this.state.childrenDetailsRecord.control_person) {
+        //     let dataList = JSON.parse(this.state.childrenDetailsRecord.control_person.value);
+        //     for (let i = 0; i < dataList.length; i++) {
+        //         let item = dataList[i];
+        //         chidrentaglist.push(
+        //             <Tag color="#2db7f5" style={{ marginTop: '3px', marginRight: '10px', fontSize: '14px' }} title={item.name + " " + item.idcard}>{item.name + " " + item.idcard}</Tag>
+        //         );
+        //     }
+        // }
+        // let totaloption = [];
+        const childrenselectOption = [];
+        const childrenselectOptionNot = [];
+        if (childrentaskListHushiById) {
+            if (childrentaskListHushiById.personList) {
+                if (childrentaskListHushiById.personList.length > 0) {
+                    // for (let i = 0; i < childrentaskListHushiById.personList.length; i++) {
+                    //     let item = childrentaskListHushiById.personList[i];
+                    //     totaloption.push(
+                    //         <Option key={item.id} value={item.id} title={item.name + " " + item.idcard}>{item.name + " " + item.idcard}</Option>
+                    //     );
+                    // }
+                    for (let i = 0; i < childrentaskListHushiById.personList.length; i++) {
+                        let item = childrentaskListHushiById.personList[i];
+                        if (item.Cflag) {
+                            childrenselectOption.push(
+                                <Tag color="#2db7f5" style={{ marginTop: '3px', marginRight: '10px', fontSize: '14px' }} title={item.name + " " + item.idcard}>{item.name + " " + item.idcard}</Tag>
+                            );
+                        }else{
+                            childrenselectOptionNot.push(
+                                <Tag color="#2db7f5" style={{ marginTop: '3px', marginRight: '10px', fontSize: '14px' }} title={item.name + " " + item.idcard}>{item.name + " " + item.idcard}</Tag>
+                            );
+                        }
+
+                    }
+                }
+
             }
         }
 
@@ -1288,7 +1324,7 @@ export class PatrolTask extends Component {
                                                     {getFieldDecorator('checkObject', {
                                                         initialValue: this.state.childrenDetailsRecord ? this.state.childrenDetailsRecord.count2 + '/ ' + this.state.childrenDetailsRecord.count1 : '',
                                                     })(
-                                                        <Input disabled/>
+                                                        <Input disabled />
                                                     )}
                                                 </FormItem>
                                             </Col>
@@ -1301,7 +1337,7 @@ export class PatrolTask extends Component {
                                                         initialValue: this.state.childrenDetailsRecord ? this.state.childrenDetailsRecord.type === 0 ? '待办任务' :
                                                             this.state.childrenDetailsRecord.type === 1 ? '已完成任务' : '超期任务' : '',
                                                     })(
-                                                        <Input disabled/>
+                                                        <Input disabled />
                                                     )}
                                                 </FormItem>
                                             </Col>
@@ -1313,7 +1349,7 @@ export class PatrolTask extends Component {
                                                     {getFieldDecorator('createtime', {
                                                         initialValue: this.state.childrenDetailsRecord ? moment(this.state.childrenDetailsRecord.createtime, 'YYYY-MM-DD HH:mm:ss') : '',
                                                     })(
-                                                        <DatePicker showTime placeholder="" format="YYYY-MM-DD HH:mm:ss" style={{ width: '220px' }} allowClear={false}  disabled />
+                                                        <DatePicker showTime placeholder="" format="YYYY-MM-DD HH:mm:ss" style={{ width: '220px' }} allowClear={false} disabled />
                                                     )}
                                                 </FormItem>
                                             </Col>
@@ -1325,20 +1361,28 @@ export class PatrolTask extends Component {
                                                     {getFieldDecorator('endtime', {
                                                         initialValue: this.state.childrenDetailsRecord ? moment(this.state.childrenDetailsRecord.endtime, 'YYYY-MM-DD HH:mm:ss') : '',
                                                     })(
-                                                        <DatePicker showTime placeholder="" format="YYYY-MM-DD HH:mm:ss" style={{ width: '220px' }} allowClear={false}  disabled />
+                                                        <DatePicker showTime placeholder="" format="YYYY-MM-DD HH:mm:ss" style={{ width: '220px' }} allowClear={false} disabled />
                                                     )}
                                                 </FormItem>
                                             </Col>
-                                            <Col span={24}>
+                                            <Col span={24} style={{marginBottom:'24px'}}>
                                                 <div style={{ width: '16.66666667%', float: 'left', color: '#fff', textAlign: "right" }}>
-                                                    盘查对象：
+                                                    已盘查对象：
                                                 </div>
-                                                <div style={{ width: '79.16666667%', float: 'left', padding: '0px 5px 5px 3px', fontSize: '14px', border: '1px solid #0C5F93', maxHeight: '300px', overflow: 'auto', cursor: "not-allowed" }}>
-                                                    {chidrentaglist}
+                                                <div style={{ width: '79.16666667%', float: 'left', padding: ' 4px 11px', fontSize: '14px', border: '1px solid #0C5F93', maxHeight: '300px', overflow: 'auto', cursor: "not-allowed",color:'rgba(255, 255, 255, 0.8)' }}>
+                                                    {childrenselectOption.length==0?'盘查对象':childrenselectOption}
                                                 </div>
                                                 <div style={{ clear: 'both' }}></div>
                                             </Col>
-
+                                            <Col span={24}>
+                                                <div style={{ width: '16.66666667%', float: 'left', color: '#fff', textAlign: "right" }}>
+                                                    未盘查对象：
+                                                </div>
+                                                <div style={{ width: '79.16666667%', float: 'left', padding: ' 4px 11px', fontSize: '14px', border: '1px solid #0C5F93', maxHeight: '300px', overflow: 'auto', cursor: "not-allowed" ,color:'rgba(255, 255, 255, 0.8)' }}>
+                                                    {childrenselectOptionNot}
+                                                </div>
+                                                <div style={{ clear: 'both' }}></div>
+                                            </Col>
 
                                         </Row>
 
