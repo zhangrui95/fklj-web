@@ -46,7 +46,7 @@ import {
     Pagination
 } from 'antd';
 import {
-    postTaskListHushiData, postChildrenTaskListHushiData, postTaskListHushiByIdData, postWeiguankongData, editTaskHushiData, postPersonListForTaskData
+    postTaskListHushiData, postChildrenTaskListHushiData, postTaskListHushiByIdData, postWeiguankongData, editTaskHushiData, postPersonListForTaskData,postThreeTaskListHushiByIdData
 } from "../../actions/TaskManagement";
 
 import moment from 'moment';
@@ -171,11 +171,11 @@ export class PatrolTask extends Component {
 
     }
     // 根据id查询任务信息
-    byidtaskquery = (id,goback) => {
+    byidtaskquery = (id, goback) => {
         let creds = {
             id: id,
         }
-        store.dispatch(postTaskListHushiByIdData(creds,goback));
+        store.dispatch(postTaskListHushiByIdData(creds, goback));
     }
     // 未管控人员作为盘查对象在添加的时候使用
     weiguankongQuery = () => {
@@ -203,7 +203,7 @@ export class PatrolTask extends Component {
             id: record.id,
         }
         store.dispatch(postPersonListForTaskData(creds));
-        this.byidtaskquery(record.id,this.goback);
+        this.byidtaskquery(record.id, this.goback);
         // this.weiguankongQuery();
     }
     // 等盘查对象数据调取成功后，再调取弹出模态框等方法
@@ -548,6 +548,11 @@ export class PatrolTask extends Component {
             childrenDetailsVisible: true,
             childrenDetailsRecord: record
         });
+        let creds = {
+            id: record.id
+        }
+        store.dispatch(postThreeTaskListHushiByIdData(creds));
+        // this.onCheckChange(record.checkedList);   
     }
     childrenDetailshandleCancel = () => {
         this.setState({
@@ -638,7 +643,7 @@ export class PatrolTask extends Component {
             for (let i = 0; i < dataList.length; i++) {
                 let item = dataList[i];
                 chidrentaglist.push(
-                    <Tag color="#2db7f5" style={{ marginTop: '3px',marginRight: '10px', fontSize: '14px' }} title={item.name + " " + item.idcard}>{item.name + " " + item.idcard}</Tag>
+                    <Tag color="#2db7f5" style={{ marginTop: '3px', marginRight: '10px', fontSize: '14px' }} title={item.name + " " + item.idcard}>{item.name + " " + item.idcard}</Tag>
                 );
             }
         }
@@ -1288,7 +1293,7 @@ export class PatrolTask extends Component {
                                                     {getFieldDecorator('checkObject', {
                                                         initialValue: this.state.childrenDetailsRecord ? this.state.childrenDetailsRecord.count2 + '/ ' + this.state.childrenDetailsRecord.count1 : '',
                                                     })(
-                                                        <Input disabled/>
+                                                        <Input disabled />
                                                     )}
                                                 </FormItem>
                                             </Col>
@@ -1301,7 +1306,7 @@ export class PatrolTask extends Component {
                                                         initialValue: this.state.childrenDetailsRecord ? this.state.childrenDetailsRecord.type === 0 ? '待办任务' :
                                                             this.state.childrenDetailsRecord.type === 1 ? '已完成任务' : '超期任务' : '',
                                                     })(
-                                                        <Input disabled/>
+                                                        <Input disabled />
                                                     )}
                                                 </FormItem>
                                             </Col>
@@ -1313,7 +1318,7 @@ export class PatrolTask extends Component {
                                                     {getFieldDecorator('createtime', {
                                                         initialValue: this.state.childrenDetailsRecord ? moment(this.state.childrenDetailsRecord.createtime, 'YYYY-MM-DD HH:mm:ss') : '',
                                                     })(
-                                                        <DatePicker showTime placeholder="" format="YYYY-MM-DD HH:mm:ss" style={{ width: '220px' }} allowClear={false}  disabled />
+                                                        <DatePicker showTime placeholder="" format="YYYY-MM-DD HH:mm:ss" style={{ width: '220px' }} allowClear={false} disabled />
                                                     )}
                                                 </FormItem>
                                             </Col>
@@ -1325,7 +1330,7 @@ export class PatrolTask extends Component {
                                                     {getFieldDecorator('endtime', {
                                                         initialValue: this.state.childrenDetailsRecord ? moment(this.state.childrenDetailsRecord.endtime, 'YYYY-MM-DD HH:mm:ss') : '',
                                                     })(
-                                                        <DatePicker showTime placeholder="" format="YYYY-MM-DD HH:mm:ss" style={{ width: '220px' }} allowClear={false}  disabled />
+                                                        <DatePicker showTime placeholder="" format="YYYY-MM-DD HH:mm:ss" style={{ width: '220px' }} allowClear={false} disabled />
                                                     )}
                                                 </FormItem>
                                             </Col>
