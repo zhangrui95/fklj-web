@@ -371,7 +371,7 @@ export class OldWithDay extends Component {
             title: '联系电话',
             dataIndex: 'phone',
         }, {
-            title: '所属机构',
+            title: '盘查单位',
             dataIndex: 'police_unit',
         }, {
             title: '盘查警员',
@@ -904,8 +904,8 @@ const SearchArea = React.createClass({
                         <Input style={{ width: '230px', marginRight: "10px" }} type="text" id='sfzh' placeholder='请输入身份证号' value={idcard} onChange={this.handleSfzhClick} />
                     </div>
                     <div style={{ float: 'left', marginBottom: '10px' }}>
-                        <label htmlFor="" className="font14">所属机构：</label>
-                        <Input value={subtask_name} style={{ width: '230px', marginRight: "10px" }} type="text" id='subtask_name' placeholder='请输入所属机构名称' onChange={this.handleSubtaskNameClick} />
+                        <label htmlFor="" className="font14">盘查单位：</label>
+                        <Input value={subtask_name} style={{ width: '230px', marginRight: "10px" }} type="text" id='subtask_name' placeholder='请输入盘查单位名称' onChange={this.handleSubtaskNameClick} />
                     </div>
                     <div style={{ float: 'left', marginBottom: '10px' }}>
                         <label htmlFor="" className="font14">盘查警员：</label>
