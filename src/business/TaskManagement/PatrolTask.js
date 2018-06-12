@@ -46,7 +46,7 @@ import {
     Pagination
 } from 'antd';
 import {
-    postTaskListHushiData, postChildrenTaskListHushiData, postTaskListHushiByIdData, postWeiguankongData, editTaskHushiData, postPersonListForTaskData,postThreeTaskListHushiByIdData
+    postTaskListHushiData, postChildrenTaskListHushiData, postTaskListHushiByIdData, postWeiguankongData, editTaskHushiData, postPersonListForTaskData,postChildrenTaskListHushiByIdData
 } from "../../actions/TaskManagement";
 
 import moment from 'moment';
@@ -551,7 +551,7 @@ export class PatrolTask extends Component {
         let creds = {
             id: record.id
         }
-        store.dispatch(postThreeTaskListHushiByIdData(creds));
+        store.dispatch(postChildrenTaskListHushiByIdData(creds));
         // this.onCheckChange(record.checkedList);   
     }
     childrenDetailshandleCancel = () => {
@@ -637,14 +637,45 @@ export class PatrolTask extends Component {
 
             }
         }
+        let childrentaskListHushiById= store.getState().TaskManagement.data.childrentaskListHushiById.result;
+        console.log('childrentaskListHushiById',childrentaskListHushiById);
         const chidrentaglist = [];
-        if (this.state.childrenDetailsRecord.control_person) {
-            let dataList = JSON.parse(this.state.childrenDetailsRecord.control_person.value);
-            for (let i = 0; i < dataList.length; i++) {
-                let item = dataList[i];
-                chidrentaglist.push(
-                    <Tag color="#2db7f5" style={{ marginTop: '3px', marginRight: '10px', fontSize: '14px' }} title={item.name + " " + item.idcard}>{item.name + " " + item.idcard}</Tag>
-                );
+        // if (this.state.childrenDetailsRecord.control_person) {
+        //     let dataList = JSON.parse(this.state.childrenDetailsRecord.control_person.value);
+        //     for (let i = 0; i < dataList.length; i++) {
+        //         let item = dataList[i];
+        //         chidrentaglist.push(
+        //             <Tag color="#2db7f5" style={{ marginTop: '3px', marginRight: '10px', fontSize: '14px' }} title={item.name + " " + item.idcard}>{item.name + " " + item.idcard}</Tag>
+        //         );
+        //     }
+        // }
+        // let totaloption = [];
+        const childrenselectOption = [];
+        const childrenselectOptionNot = [];
+        if (childrentaskListHushiById) {
+            if (childrentaskListHushiById.personList) {
+                if (childrentaskListHushiById.personList.length > 0) {
+                    // for (let i = 0; i < childrentaskListHushiById.personList.length; i++) {
+                    //     let item = childrentaskListHushiById.personList[i];
+                    //     totaloption.push(
+                    //         <Option key={item.id} value={item.id} title={item.name + " " + item.idcard}>{item.name + " " + item.idcard}</Option>
+                    //     );
+                    // }
+                    for (let i = 0; i < childrentaskListHushiById.personList.length; i++) {
+                        let item = childrentaskListHushiById.personList[i];
+                        if (item.Cflag) {
+                            childrenselectOption.push(
+                                <Tag color="#2db7f5" style={{ marginTop: '3px', marginRight: '10px', fontSize: '14px' }} title={item.name + " " + item.idcard}>{item.name + " " + item.idcard}</Tag>
+                            );
+                        }else{
+                            childrenselectOptionNot.push(
+                                <Tag color="#2db7f5" style={{ marginTop: '3px', marginRight: '10px', fontSize: '14px' }} title={item.name + " " + item.idcard}>{item.name + " " + item.idcard}</Tag>
+                            );
+                        }
+
+                    }
+                }
+
             }
         }
 
@@ -1334,16 +1365,24 @@ export class PatrolTask extends Component {
                                                     )}
                                                 </FormItem>
                                             </Col>
-                                            <Col span={24}>
+                                            <Col span={24} style={{marginBottom:'24px'}}>
                                                 <div style={{ width: '16.66666667%', float: 'left', color: '#fff', textAlign: "right" }}>
-                                                    盘查对象：
+                                                    已盘查对象：
                                                 </div>
-                                                <div style={{ width: '79.16666667%', float: 'left', padding: '0px 5px 5px 3px', fontSize: '14px', border: '1px solid #0C5F93', maxHeight: '300px', overflow: 'auto', cursor: "not-allowed" }}>
-                                                    {chidrentaglist}
+                                                <div style={{ width: '79.16666667%', float: 'left', padding: ' 4px 11px', fontSize: '14px', border: '1px solid #0C5F93', maxHeight: '300px', overflow: 'auto', cursor: "not-allowed",color:'rgba(255, 255, 255, 0.8)' }}>
+                                                    {childrenselectOption.length==0?'盘查对象':childrenselectOption}
                                                 </div>
                                                 <div style={{ clear: 'both' }}></div>
                                             </Col>
-
+                                            <Col span={24}>
+                                                <div style={{ width: '16.66666667%', float: 'left', color: '#fff', textAlign: "right" }}>
+                                                    未盘查对象：
+                                                </div>
+                                                <div style={{ width: '79.16666667%', float: 'left', padding: ' 4px 11px', fontSize: '14px', border: '1px solid #0C5F93', maxHeight: '300px', overflow: 'auto', cursor: "not-allowed" ,color:'rgba(255, 255, 255, 0.8)' }}>
+                                                    {childrenselectOptionNot}
+                                                </div>
+                                                <div style={{ clear: 'both' }}></div>
+                                            </Col>
 
                                         </Row>
 

@@ -41,6 +41,15 @@ const initialState = {
             },
             childrenIsFetching: true
         },
+        childrentaskListHushiById: {//子任务列表详情
+            reason: {
+                "code": "",
+                "text": ""
+            },
+            result: {
+
+            }
+        },
         threetaskListHushi: {//待办 超期 已完成 列表
             reason: {
                 "code": "",
@@ -186,6 +195,10 @@ const TaskManagement = (state = initialState, action) => {
             newState.data.childrentaskListHushi.result.list = action.data.result.pdList;
             newState.data.childrentaskListHushi.result.page = action.data.result.page;//page?reason
             newState.data.childrentaskListHushi.childrenIsFetching = false;
+            return newState;
+            case 'Children_TaskListHushi-data-byid'://子任务列表详情
+            newState.data.childrentaskListHushiById.result = action.data.result.data;
+            // newState.isFetching = false;
             return newState;
         case 'REQUEST_THREE_TASK_LIST_HUSHI_DATA'://待办 超期 已完成
             return {

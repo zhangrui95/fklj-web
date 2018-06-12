@@ -277,6 +277,23 @@ export function postChildrenTaskListHushiData(creds) {
         });
     }
 }
+// 子任务列表详情
+export function postChildrenTaskListHushiByIdData(creds) {
+    let path = '/data/getSubtaskById';
+    return dispatch => {
+        dispatch({ type: "REQUEST_CHILDREN_TASK_LIST_HUSHIBYID_DATA" });
+        post(api + path, creds).then((json) => {
+            dispatch({ type: 'Children_TaskListHushi-data-byid', data: json });
+            if (json.reason === null) {
+                // goback();
+            } else {
+                message.error(`提示：${json.reason.text}`, 1);
+            }
+        }).catch((e) => {
+            dispatch({ type: 'Children_TaskListHushi-error-byid', message: e.toString() })
+        });
+    }
+}
 //待办 超期 已完成的列表
 export function postThreeTaskListHushiData(creds) {
     let path = '/data/getSubtaskList';
