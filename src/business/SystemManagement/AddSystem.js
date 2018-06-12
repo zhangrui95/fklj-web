@@ -172,7 +172,7 @@ export class AddSystem extends Component {
                             </Select>
                         </FormItem>
                     </Form>
-                    <ShallowBlueBtn width="80px" text="确定" margin="5px 10px" onClick={this.getSave} />
+                    <ShallowBlueBtn width="80px" text="保存" margin="5px 10px" onClick={this.getSave} />
                 </div>
                 <div className="spin-loading-box">
                     <Spin size="large" spinning={store.getState().SystemManagement.data.getControlTimeCycle.loading} />

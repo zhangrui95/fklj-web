@@ -313,9 +313,15 @@ export  class Control extends Component{
                 //     var selectedRow = selectedRows[i];
                 //     ids.push(selectedRow.id);
                 // }
-                this.setState({
-                    selectedRowsId:`${selectedRowKey}`.split(',')
-                });
+                if(selectedRows.length > 0){
+                    this.setState({
+                        selectedRowsId:`${selectedRowKey}`.split(',')
+                    });
+                }else{
+                    this.setState({
+                        selectedRowsId:[]
+                    });
+                }
             },
             getCheckboxProps: record => ({
                 disabled: record.name === 'Disabled User',    // Column configuration not to be checked

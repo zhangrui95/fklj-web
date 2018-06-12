@@ -319,6 +319,7 @@ export  class SearchArea extends Component{
                 ToskId:'请选择任务'
             })
         }
+        console.log('this.props.selectedRowsId=========>',this.props.selectedRowsId)
         if(this.props.selectedRowsId.length > 0){
             let creds = { taskswitch:'1',showCount:9999999}
             store.dispatch(getTaskModelList(creds));
@@ -629,6 +630,7 @@ export  class SearchArea extends Component{
         }else if(controlType === 'GK_LKZRQ' || controlType === 'GK_SK'){
             btns = (
                 <div style={{marginTop:"15px"}}>
+                    <Button style={{width:"110px", marginRight:"10px",float:'left'}} onClick={() => this.getAddModal('add')} className="btn_ok">添加到任务</Button>
                     <Button style={{width:"110px", marginRight:"10px"}} className="btn_ok" onClick={() => this.getPrompt('export')}>导出</Button>
                 </div>
             )
