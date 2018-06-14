@@ -42,5 +42,5 @@ global.configUrl = {
   // 首页 拟来某地区展示图的配置文字
   configureRegionText: '流入人员',
   //版本号
-  versionNumber: '1.0.0.1 演示版',
+  versionNumber: '1.0.0.2 演示版',
 }
