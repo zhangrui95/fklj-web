@@ -26,13 +26,13 @@ const securityCenter = {//安全中心
 global.configUrl = {
   //系统名称
   sysName: '反恐利剑信息化作战系统',
-  // securityCenterUrls: securityCenter.testUrl,
-  // securityCenterUrl: securityCenter.pingshiTest,
-  // serverUrl: Interface.MXD,
-  //测试打包
   securityCenterUrls: securityCenter.testUrl,
-  securityCenterUrl: securityCenter.fxdl,
-  serverUrl: Interface.fkww,
+  securityCenterUrl: securityCenter.pingshiTest,
+  serverUrl: Interface.MXD,
+  //测试打包
+  // securityCenterUrls: securityCenter.testUrl,
+  // securityCenterUrl: securityCenter.fxdl,
+  // serverUrl: Interface.fkww,
   // messageQueue: 'ws://10.101.140.73:7005/myHandler',
   messageQueue: 'ws://172.19.12.249:7005/myHandler',
   //客户区域
@@ -42,5 +42,5 @@ global.configUrl = {
   // 首页 拟来某地区展示图的配置文字
   configureRegionText: '流入人员',
   //版本号
-  versionNumber: '1.0.0.2 演示版',
+  versionNumber: '1.0.0.3 演示版',
 }

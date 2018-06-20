@@ -1385,7 +1385,7 @@ export class PatrolTask extends Component {
                                                 <div style={{ width: '16.66666667%', float: 'left', color: '#fff', textAlign: "right" }}>
                                                     已盘查对象：
                                                 </div>
-                                                <div style={{ width: '79.16666667%', float: 'left', padding: ' 4px 11px', fontSize: '14px', border: '1px solid #0C5F93', maxHeight: '300px', overflow: 'auto', cursor: "not-allowed", color: 'rgba(255, 255, 255, 0.8)' }}>
+                                                <div style={{ width: '79.16666667%', float: 'left', minHeight: '30px', padding: ' 4px 11px', fontSize: '14px', border: '1px solid #0C5F93', maxHeight: '300px', overflow: 'auto', cursor: "not-allowed", color: 'rgba(255, 255, 255, 0.8)' }}>
                                                     {childrenselectOption.length == 0 ? '盘查对象' : childrenselectOption}
                                                 </div>
                                                 <div style={{ clear: 'both' }}></div>
@@ -1394,8 +1394,8 @@ export class PatrolTask extends Component {
                                                 <div style={{ width: '16.66666667%', float: 'left', color: '#fff', textAlign: "right" }}>
                                                     未盘查对象：
                                                 </div>
-                                                <div style={{ width: '79.16666667%', float: 'left', padding: ' 4px 11px', fontSize: '14px', border: '1px solid #0C5F93', maxHeight: '300px', overflow: 'auto', cursor: "not-allowed", color: 'rgba(255, 255, 255, 0.8)' }}>
-                                                    {childrenselectOptionNot}
+                                                <div style={{ width: '79.16666667%', float: 'left', minHeight: '30px', padding: ' 4px 11px', fontSize: '14px', border: '1px solid #0C5F93', maxHeight: '300px', overflow: 'auto', cursor: "not-allowed", color: 'rgba(255, 255, 255, 0.8)' }}>
+                                                    {childrenselectOptionNot.length == 0 ? '盘查对象' : childrenselectOptionNot}
                                                 </div>
                                                 <div style={{ clear: 'both' }}></div>
                                             </Col>
