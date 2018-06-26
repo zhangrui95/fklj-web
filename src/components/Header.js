@@ -297,8 +297,8 @@ class LoginTable extends Component {
                 }
                 const creds = {
                     idcard: JSON.parse(sessionStorage.getItem('user')).user.idCard || JSON.parse(sessionStorage.getItem('user')).user.pcard,
-                    newPassword: MD5.hash(this.state.newPassword),
-                    oldPassword: MD5.hash(this.state.oldPassword)
+                    newPassword: MD5.hash(values.newPassword),
+                    oldPassword: MD5.hash(values.oldPassword)
                 }
                 store.dispatch(postModifiypaddword(creds, this.statusFalse));
                 // const { dispatch } = this.props;

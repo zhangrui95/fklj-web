@@ -1,10 +1,11 @@
-import {hex_md5} from "../resources/md5";
+import { hex_md5 } from "../resources/md5";
 import { browserHistory } from 'react-router';
-import {post,postAQZX} from "./request";
+import { post, postAQZX, get } from "./request";
 import { routerMiddleware, push } from 'react-router-redux';
-import {store} from '../index.js';
-import {clientNameList,clientName,securityCenterUrl, loginUrl, filterMenu,isAllowMenu} from '../utils/index';
-import { message} from 'antd';
+import { store } from '../index.js';
+import { clientNameList, clientName, securityCenterUrl, loginUrl, filterMenu, isAllowMenu } from '../utils/index';
+import { message } from 'antd';
+import { PostOrganizationData } from "./actions";
 export const LOGIN_REQUEST = 'LOGIN_REQUEST'
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS'
 export const LOGIN_FAILURE = 'LOGIN_FAILURE'
@@ -47,12 +48,12 @@ export function loginUser(creds) {
     return dispatch => {
         dispatch(requestLogin(creds))
 
-        let cred = {username: creds.username, password: hex_md5(creds.password),sid:'fklj_sys'}
+        let cred = { username: creds.username, password: hex_md5(creds.password), sid: 'fklj_sys' }
         let fk = false;
         let hs = false;
-        postAQZX(loginUrl+'/api/login', cred).then((res) => {
-            if(res.error !== null){
-                message.warning('提示：'+res.error.text+"!",3);
+        postAQZX(loginUrl + '/api/login', cred).then((res) => {
+            if (res.error !== null) {
+                message.warning('提示：' + res.error.text + "!", 3);
             } else {
                 let userJson = JSON.stringify(res.data);
                 let user = JSON.parse(userJson);
@@ -61,37 +62,41 @@ export function loginUser(creds) {
                 sessionStorage.setItem('id_token', res.data.token);
                 // sessionStorage.setItem('id_token', 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJjNTFmZDQwMS1hYTQ1LTQ3NzctOTkyZC1mODA5ODg5MGE2NGMiLCJpYXQiOjE1MjMyNTE0NDMsInN1YiI6IjEiLCJpc3MiOiJTZWN1cmUgQ2VudGVyIiwiZ3JvdXBjb2RlIjoiNDEwMzAwMDAwMDAwIiwidXR5cGUiOiIxIiwiaWRjYXJkIjoiYWRtaW4iLCJleHAiOjE1MjMzMzc4NDN9.WzBKSsbIkSOZy60FTmfGfliJxDYohkadUaArP1po2Wo');
                 dispatch(receiveLogin(res.data));
-                console.info('user.menu',user.menu);
-                if(user.menu.length > 0){
+                console.info('user.menu', user.menu);
+                if (user.menu.length > 0) {
                     isAllowMenu(store.getState().root.uiData.navigations)
                     isAllowMenu(store.getState().ControlPersonnel.uiData.menus)
                     isAllowMenu(store.getState().DynamicControl.uiData.menus)
                     isAllowMenu(store.getState().SystemManagement.uiData.menus)
-                    user.menu.map((menu) =>  {
-                        if(menu.resourceCode === 'yfklj_sys'){
+                    user.menu.map((menu) => {
+                        if (menu.resourceCode === 'yfklj_sys') {
                             fk = true;
-                        }else if(menu.resourceCode === 'hsfklj_sys'){
+                        } else if (menu.resourceCode === 'hsfklj_sys') {
                             hs = true;
                         }
                     })
-                    if(fk&&hs) {
+                    if (fk && hs) {
                         // browserHistory.push('/Transfer');//反恐和呼市反恐过度页面
                         browserHistory.push('/Home');
                         message.success('提示：登录成功!');
-                    } else if(fk&&!hs) {
+
+                    } else if (fk && !hs) {
                         browserHistory.push('/Homes');
                         message.success('提示：登录成功!');
-                    } else if(hs&&!fk) {
+                    } else if (hs && !fk) {
                         browserHistory.push('/Home');
                         message.success('提示：登录成功!');
-                    } else{
+                    } else {
                         message.warning('用户无权限登陆!');
                     }
-                }else{
+                    // 调取组织机构代码
+                    let creds = {};
+                    dispatch(PostOrganizationData(creds));
+                } else {
                     message.warning('用户无权限登陆!');
                 }
             }
-        }).catch(err => {message.warning('提示：登录失败，与服务器交互发生异常!');});
+        }).catch(err => { message.warning('提示：登录失败，与服务器交互发生异常!'); });
 
     }
 
@@ -128,7 +133,7 @@ export function logoutUser() {
         sessionStorage.removeItem('user');
         dispatch(receiveLogout());
         browserHistory.push('/');
-        location.replace('/') 
+        location.replace('/')
     }
 }
 

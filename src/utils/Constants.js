@@ -91,9 +91,9 @@ export const INVENTORYMANAGEMENT_OLD_HUSHI_MODULE_Qt= '其他';
 
 //设置盘查管理侧边导航_洛阳
 export const INVENTORYMANAGEMENT_MENU = "流动盘查"//盘查管理一级菜单
-export const INVENTORYMANAGEMENT_MENU_PERDONNEL = "人员盘查"
-export const INVENTORYMANAGEMENT_MENU_CAR = "车辆盘查"
-export const INVENTORYMANAGEMENT_MENU_BAYONET = "卡点盘查"
+export const INVENTORYMANAGEMENT_MENU_PERDONNEL_POINT = "人员盘查"
+export const INVENTORYMANAGEMENT_MENU_CAR_POIN = "车辆盘查"//卡点盘查的 车辆盘查
+export const INVENTORYMANAGEMENT_MENU_BAYONET = "卡点盘查"//卡点盘查的 人员盘查
 //设置洛阳——卡口盘查 菜单的名称，用来判断
 export const CUSTOMERMANAGEMENT_MENU_POINT = "卡点管理"
 // export const CUSTOMERMANAGEMENT_MENU_PERDONNEL = "人员盘查"
@@ -107,10 +107,14 @@ export const DEFINEWAREHOUSE_MENU_CAR = "临控车辆"
 // 任务管理 菜单名称
 export const TASKMANAGEMENT_MENU = "任务管理"
 // 任务管理 菜单名称
+export const TASKMANAGEMENT_MENU_PUTONG = "普通任务"
 export const TASKMANAGEMENT_MENU_PATROL = "任务设置"
 export const TASKMANAGEMENT_MENU_POINT = "待办任务"
 export const TASKMANAGEMENT_MENU_DONE = "已办任务"
 export const TASKMANAGEMENT_MENU_OUT = "超期任务"
+export const TASKMANAGEMENT_MENU_KADIAN = "卡点任务"
+export const TASKMANAGEMENT_MENU_DAIBAN = "待办任务"
+export const TASKMANAGEMENT_MENU_YIBAN = "已办任务"
 ////////////////////////////////////////////////////////////////////
 export const SYSTEMMANAGEMENT_MENU_HORRORSOFTWARE = "涉恐软件"
 export const SYSTEMMANAGEMENT_MENU_INTERROGATIONINFORMATION = "特征设置"

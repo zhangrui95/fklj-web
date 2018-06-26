@@ -1,246 +1,253 @@
-//卡点管理右侧组件
-import React, {
-    Component
-} from 'react';
-import {
-    connect
-} from 'react-redux';
+/**
+ *卡点管理
+ */
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import {
     mainReducer
 } from "../../reducers/reducers";
 import {
-    StylePage,
-    ShallowBlueBtn,
-    Pag,
-} from "../generalPurposeModule";
+    postCardPointManageListHushiData, saveaddPointManagekData, saveeditPointManageData, DeletePointManageData
+} from "../../actions/SystemManagement";
+import {
+    FileInput
+} from "../../components/fileInput";
+import {
+    changeShade, fetchUnitTree, fetchUnitTreeData, fetchCheckpointLevelData
+} from "../../actions/actions";
+import { StylePage, ShallowBlueBtn, DeepRedBtn, DeepBlueBtn, PhotoItem, Pag, SelectModel, Shade } from "../generalPurposeModule";
 import {
     store
 } from '../../index.js';
 import * as constants from "../../utils/Constants";
-import {
-    monthFormat,
-    dateFormat,
-    serverUrl
-} from '../../utils/';
-import {
-    Spin,
-    Table,
-    message,
-    Input,
-    Modal,
-    Button,
-    Form,
-    Icon,
-    Row,
-    Col,
-    TreeSelect,
-    DatePicker
-} from 'antd';
+import { DatePicker, message, Button, Icon, Spin, Input, Modal, TreeSelect, Table, Form, Row, Col } from 'antd';
+import { monthFormat, dateFormat, serverUrl, getNowFormatDate, getYmd } from '../../utils/';
 
 import moment from 'moment';
 moment.locale('zh-cn');
-import {findDeptTree} from "../../actions/AreaManagement";
+
+const { TextArea } = Input;
+const SHOW_PARENT = TreeSelect.SHOW_PARENT;
+const FormItem = Form.Item;
+const mStyle = {
+    fontSize: "14px", color: "#fff", marginRight: "20px", width: "104px", float: "left", textAlign: "right"
+}
+//表格样式
+const tableStyle = {
+    width: "98%",
+    margin: "0 auto",
+    border: "1px solid rgb(12, 95, 147)",
+    // background:"rgba(12, 95, 147,0.4)"
+    textAlign: "center",
+    borderCollapse: "collapse",
+    fontSize: "14px",
+    color: "#fff"
+}
+const tdStyle = {
+    border: "1px solid rgb(12, 95, 147)",
+    height: "40px",
+    // borderRight:"1px solid rgb(12, 95, 147)",
+    // borderBottom:"1px solid rgb(12, 95, 147)"
+    // background:"rgba(37, 51, 100, 0.8)"
+}
 
 // 样式
 const sliderdyHeader = {
     borderBottom: "1px solid #0C5F93",
-    padding: "18px 0",
-    overflow: "hidden"
+    padding: "18px 0"
 }
-const FormItem = Form.Item;
-
-//分页配置文件
-const pagination = {
-    size: 'small',
-    pageSize: constants.recordPageSize,
-    showTotal(total) {
-        return `合计 ${total} 条记录`;
-    },
-    itemRender(current, type, originalElement) {
-        if (type === 'prev') {
-            return <a>上一页</a>;
-        } else if (type === 'next') {
-            return <a>下一页</a>;
-        }
-        return originalElement;
-    }
-};
-const formItemLayout = {
+const font14 = {
+    fontSize: "14px",
+    color: "#fff"
+}
+const formItemLayouts = {
     labelCol: {
         xs: { span: 24 },
-        sm: { span: 6 },
+        sm: { span: 4 },
     },
     wrapperCol: {
         xs: { span: 24 },
-        sm: { span: 14 },
+        sm: { span: 19 },
     },
 };
-
-export  class AreaManage extends Component{
-    constructor(props) { //初始化nowPage为1
+let user = JSON.parse(sessionStorage.getItem('user'));
+export class AreaManage extends Component {
+    constructor(props) {  //初始化nowPage为1
         super(props);
-        this.treeData = []
         this.state = {
             nowPage: 1,
-            ModalDialogueShow: 'none',
+            ModalDialogueShow: 'none', lineId: '', customspassLine: null,
             ModalDialogueType: 'add',
-            lineId: '',
-            highRiskLine: null,
+            checkpoint_name: '',
+            updateuser: '',
+            // beginDate:moment().format('YYYY-MM-DD 00:00:00'),
+            // endDate:moment().format('YYYY-MM-DD 23:59:59'),
+            beginDate: '',
+            endDate: '',
             selectedRowsId: [],
-            name: '',
-            begindate: '',
-            enddate: '',
-            key: '',
-            data: [
-                {key: 1, serial: 1, value: '呼和浩特市公安局', name: '海邻科卡点', updatetime: '2018-04-10',operatingPerson:'张三'},
-                {key: 2, serial: 2, value: '呼和浩特市公安局', name: 'hylink卡点', updatetime: '2018-04-09',operatingPerson:'李四'},
-                {key: 3, serial: 3, value: '呼和浩特市公安局', name: '海邻科卡点', updatetime: '2018-04-08',operatingPerson:'王二'},
-            ],
-            record: null,
-            pagination: pagination,
             loading: false,
-            personInfo:'',
-            modalKey: 0,
-            modalType: '',
-            remark:"",
-            zoomvisible:false,
-            imgtext:'',
-            text:null,
+            handleVisible: false,
+            personInfo: {}
+
         };
         this.pageChange = this.pageChange.bind(this);
-        let creds = {name: "", policetpyes: []}
-        store.dispatch(findDeptTree(creds))
     }
-    editShowModal = (record) => {
-        this.setState({
-            visible: true,
-            personInfo: record,
-            modalType: 'edit'
-        });
-        this.treeData = [];
-        const list = store.getState().AreaManagement.data.FindTreeList.result.list
-        this.getListTree(list, false , this.treeData)
-    }
-    addShowModal = (record) => {
-        this.setState({
-            visible: true,
-            modalType: 'add',
-        });
-        this.treeData = [];
-        const list = store.getState().AreaManagement.data.FindTreeList.result.list
-        this.getListTree(list, false , this.treeData)
-    }
-    handleCancel = () => {
-        this.setState({
-            visible: false,
-            modalKey: this.state.modalKey + 1
-        });
-    }
-    handleDelete = () => {
-        if (this.state.selectedRowsId.length === 0) {
-            message.error('请选择要删除的项！');
-            return;
-        }
-
-        let crads = {
-            // id: this.state.selectedRowsId,
-            // userName: sessionStorage.getItem('userName') || ''
-
+    componentDidMount() {
+        let creds = {
+            currentPage: 1,
+            entityOrField: true,
             pd: {
-                id: this.state.selectedRowsId,
-            },
-
-        };
-        let params = {
-            currentPage: this.state.nowPage,
-            pd: {
-                beginTime: this.state.begindate,
-                endTime: this.state.enddate,
-                name: this.state.name,
-                pid:"199"
             },
             showCount: 10
         }
-        // store.dispatch(DeleteHorrorSoftwareData(crads,params));
-
+        store.dispatch(postCardPointManageListHushiData(creds)); //暂时注释掉
         this.setState({
-            selectedRowsId: [],
-            // nowPage: 1
+            loading: false
         });
-
+        // store.dispatch(fetchCheckpointLevelData());//获取卡点等级
     }
-    saveModel=(e)=>{
-        // this.handleCancel();
+    componentWillUnmount() {
+        store.getState().SystemManagement.data.cardPointList = {
+            reason: {
+                "code": "",
+                "text": ""
+            },
+            result: {
+                total: 0,
+                list: [],
+            },
+            isFetching: false
+        }
+    }
+    initEntity = () => {
+        this.setState({
+            nowPage: 1,
+        })
+    }
+    // 打开模态框 添加
+    handleChangeModol = () => {
+        this.setState({
+            handleVisible: true,
+            modalType: 'add'
+        });
+    }
+    // 关闭模块框
+    handleChangeCancel = () => {
+        this.setState({
+            handleVisible: false,
+        });
+    }
+    // 点击编辑
+    editChange = (id, record) => {
+        this.setState({
+            personInfo: record,
+            modalType: 'edit',
+            handleVisible: true
+        });
+    }
+    //查询变更
+    serchChange = (checkpoint_name, beginDate, endDate, updateuser) => {
+        this.setState({
+            nowPage: 1,
+            checkpoint_name: checkpoint_name,
+            beginDate: beginDate,
+            endDate: endDate,
+            updateuser: updateuser,
+        });
+    }
+    pageChange(nowPage) {
+        this.state = Object.assign({}, this.state, { nowPage: nowPage });
+        let creds = {
+            currentPage: nowPage,
+            entityOrField: true,
+            pd: {
+                starttime: this.state.beginDate,
+                endTime: this.state.endDate,
+                checkpoint_name: this.state.checkpoint_name,
+                updateuser: this.state.updateuser,
+            },
+            showCount: 10
+        }
+        store.dispatch(postCardPointManageListHushiData(creds)); //getPersonList
+    }
+    //删除按钮点击
+    handleDelete = () => {
+        if (this.state.selectedRowsId.length === 0) {
+            message.error('提示：请选择要删除的项！');
+            return;
+        }
+        let crads = {
+            id: this.state.selectedRowsId,
+            updateuser: JSON.parse(sessionStorage.getItem('user')).user.name,
+        };
+        let params = {
+            currentPage: 1,
+            entityOrField: true,
+            pd: {
+                starttime: this.state.beginDate,
+                endTime: this.state.endDate,
+                checkpoint_name: this.state.checkpoint_name,
+                updateuser: this.state.updateuser,
+            },
+            showCount: 10
+        }
+        store.dispatch(DeletePointManageData(crads, params));
+        this.setState({
+            selectedRowsId: []
+        });
+    }
+    loadchange = () => {
+        this.setState({
+            Loading: false
+        });
+    }
+    // 保存
+    saveModel = (e) => {
+        this.setState({
+            Loading: true
+        });
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             let userItem = JSON.parse(sessionStorage.getItem('user'));
-            if(!err){
-                if(this.state.modalType === "edit"){
-                    // values.id = this.state.personInfo.key;//让表单数据带上id  后台好进行操作
-                    // console.log('this.state.personInfo',this.state.personInfo);
-                    // console.log('values.id',values.id);
-                    // let creds = {
-                    //     pd:{
-                    //         name:values.label,
-                    //         iconUrl:values.iconUrl?values.iconUrl:this.state.avatarSrc,
-                    //         id:values.id.toString(),
-                    //         optuser:userItem.user.idcard,
-                    //         createuser:userItem.user.idcard,
-                    //         remark:values.remark?values.remark:'',
-                    //         status:values.status?values.status:'1',
-                    //         code:values.value?values.value:'',
-                    //         level:'2',
-                    //         pid:'199'
-                    //     },//传参 把后台需要的参数传过去
-                    // }
-                    // let params = {
-                    //     currentPage: 1,
-                    //     pd: {
-                    //         beginTime: this.state.begindate,
-                    //         endTime: this.state.enddate,
-                    //         name: this.state.name,
-                    //         pid:"199"
-                    //     },
-                    //     showCount: 10
-                    // }
-                    // store.dispatch(updateHorrorSoftwareData(creds,params));
-                }else if(this.state.modalType === "add"){
-                    let data = this.state.data;
-                    let len = this.state.data.length - 1;
-                    let key = data[len].key + 1
-                    let value = {key: key, serial: key, name: values.name, value: values.label, updatetime: "2018-04-10"}
-                    data.push(value)
-                    this.setState({
-                        data: data,
-                    });
-                    // let creds = {//表单域不一定写了所有的字段 所以要把空值通过赋值显示
-                    //     pd:{
-                    //         name:values.label?values.label:'',
-                    //         iconUrl:values.iconUrl?values.iconUrl:'',
-                    //         menuname:"304",
-                    //         optuser:userItem.user.idcard,
-                    //         createuser:userItem.user.idcard,
-                    //         remark:values.remark?values.remark:'',
-                    //         status:values.status?values.status:'1',
-                    //         code:values.value?values.value:'',
-                    //         level:'2',
-                    //         pid:'199'
-                    //     },
-                    // }
-                    // let params = {
-                    //     currentPage: 1,
-                    //     pd: {
-                    //         beginTime: this.state.begindate,
-                    //         endTime: this.state.enddate,
-                    //         name: this.state.name,
-                    //         pid:"199"
-                    //     },
-                    //     showCount: 10
-                    // }
-                    // store.dispatch(addHorrorSoftwareData(creds,params))
+            if (!err) {
+                if (this.state.modalType === "edit") {
+                    let creds = {
+                        checkpoint_name: values.checkpoint_name,
+                        id: values.id.toString(),
+                        updateuser: values.updateuser
+
+                    }
+                    let params = {
+                        currentPage: 1,
+                        pd: {
+                            checkpoint_name: this.state.checkpoint_name,
+                            starttime: this.state.beginDate,
+                            endtime: this.state.endDate,
+                            updateuser: this.state.updateuser
+                        },
+                        showCount: 10
+                    }
+                    store.dispatch(saveeditPointManageData(creds, params, () => this.loadchange()));
+                } else if (this.state.modalType === "add") {
+                    let creds = {//表单域不一定写了所有的字段 所以要把空值通过赋值显示
+                        checkpoint_name: values.checkpoint_name,
+                        id: values.id.toString(),
+                        updateuser: values.updateuser
+                    }
+                    let params = {
+                        currentPage: 1,
+                        pd: {
+                            checkpoint_name: this.state.checkpoint_name,
+                            starttime: this.state.beginDate,
+                            endtime: this.state.endDate,
+                            updateuser: this.state.updateuser
+                        },
+                        showCount: 10
+                    }
+                    store.dispatch(saveaddPointManagekData(creds, params, () => this.loadchange()))
 
                 }
-                this.handleCancel();
+                this.handleChangeCancel();
                 this.setState({
                     nowPage: 1
                 });
@@ -249,332 +256,435 @@ export  class AreaManage extends Component{
 
         })
     }
-    pageChange(nowPage) {
-        this.state = Object.assign({}, this.state, {nowPage:nowPage});
-        // let creds = {
-        //     currentPage:nowPage,
-        //     entityOrField:true,
-        //     pd:{
-        //         beginTime:this.state.beginDate ,
-        //         endTime:this.state.endDate,
-        //         name:this.state.name,
-        //         unit:this.state.unit,
-        //         task_stauts:this.state.status,
-        //         task_type:'113003',
-        //     },
-        //     showCount: constants.pageSize
-        // }
-        // store.dispatch(fetchPatrolTaskData(creds));
-        this.setState({
-            selectedRowsId:[],
-            selectedRowKeys:[],
-        });
-    }
-    initEntity = () =>{
-        this.setState({
-            nowPage: 1,
-        })
-    }
-    getListTree = (list, child ,tree) => {
-        for(let i in list){
-            if(!child){
-                if(i !== 'remove'){
-                    tree.push({label:list[i].name,value:list[i].name,key:list[i].name,children:[]})
-                    if(list[i].childrenList.length > 0){
-                        this.getListTree(list[i].childrenList,true , tree[i])
-                    }
-                }
-            } else{
-                if(i !== 'remove') {
-                    tree.children.push({label: list[i].name, value: list[i].name, key: list[i].name, children:[]})
-                    if (list[i].childrenList.length > 0) {
-                        this.getListTree(list[i].childrenList, true, tree.children[i])
-                    }
-                }
-            }
-        }
-    }
+
     render() {
         const { getFieldDecorator } = this.props.form;
         let nowPage = this.state.nowPage;
-        let isFetching = store.getState().AreaManagement.isFetching;
-        const columns = [{
-            title: '序号',
-            dataIndex: 'serial',
-        }, {
-            title: '卡点名称',
-            dataIndex: 'name',
-        }, {
-            title: '所属单位',
-            dataIndex: 'value',
-        }, {
-            title: '操作人',
-            dataIndex: 'operatingPerson',
-            width:180,
-        },{
-            title: '更新时间',
-            dataIndex: 'updatetime',
-            width:180,
-        }, {
-            title: '操作',
-            key: 'action',
-            render: (text, record) => (
-                <span>
-                        <span onClick={(e)=>this.editShowModal(record)} style={{cursor:'pointer'}}>编辑</span>
-                </span>
-            ),
-        }];
+        let customsPassList = store.getState().SystemManagement.data.cardPointList.result.list;
+        // let customsPassList = [];
+        let page = store.getState().SystemManagement.data.cardPointList.result.page;
+        let isFetching = store.getState().SystemManagement.isFetching;
+        let personInfo = this.state.personInfo;
+        let user = JSON.parse(sessionStorage.getItem('user'));
+        console.log('user', user);
+        const columns = [
+            {
+                title: '序号',
+                dataIndex: 'serial',
+            }, {
+                title: '卡点名称',
+                dataIndex: 'checkpoint_name',
+            }
+            , {
+                title: '操作人',
+                dataIndex: 'updateuser',
+            }, {
+                title: '更新时间',
+                dataIndex: 'updatetime',
+            }, {
+                title: '操作',
+                key: 'action',
+                // width: 30,
+                render: (text, record) => (
+                    <span>
+                        <span onClick={(e) => this.editChange(record.id, record)} style={{ cursor: 'pointer' }}>编辑</span>
+                    </span>
+                ),
+            }];
+
+        const data = [];
+        let recordNumber = parseInt((nowPage - 1) * 10);
+        for (var i = 0; i < customsPassList.length; i++) {
+            var customspass = customsPassList[i];
+            let serial = recordNumber + i + 1;
+            data.push({
+                key: i,
+                serial: serial,
+                checkpoint_name: customspass.checkpoint_name,
+                updateuser: customspass.updateuser,
+                updatetime: customspass.updatetime,
+                id: customspass.id
+            });
+
+        }
         const rowSelection = {
             onChange: (selectedRowKeys, selectedRows) => {
                 console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
                 const ids = [];
-                for(var i=0;i<selectedRows.length;i++){
+                for (var i = 0; i < selectedRows.length; i++) {
                     var selectedRow = selectedRows[i];
                     ids.push(selectedRow.id);
                 }
                 this.setState({
-                    selectedRowsId:ids
+                    selectedRowsId: ids
                 });
             },
             getCheckboxProps: record => ({
                 disabled: record.name === 'Disabled User',    // Column configuration not to be checked
             }),
         };
-        return(
+        const pagination = {
+            onChange: (page) => {
+                this.setState({
+                    nowPage: page,
+                });
+                let { checkpoint_name, endDate, beginDate, updateuser } = this.state;
+                let creds = {
+                    currentPage: page,
+                    entityOrField: true,
+                    pd: {
+                        checkpoint_name: checkpoint_name,
+                        starttime: beginDate,
+                        endtime: endDate,
+                        updateuser: updateuser,
+                    },
+                    showCount: 10
+                }
+                store.dispatch(postCardPointManageListHushiData(creds));
+            },
+            current: page.currentPage,
+            total: page.totalResult,
+            pageSize: page.showCount,
+            showQuickJumper: true,
+
+        }
+        return (
             <div className="sliderWrap">
                 <div className="sliderItemDiv">
                     {/*查询条件*/}
                     <div style={sliderdyHeader}>
                         <SearchArea
                             dispatch={this.props.dispatch}
-                            lineId={this.state.lineId}
-                            highRiskLine={this.state.highRiskLine}
-                            lineIdChange={this.handleLineIdChange}
-                            createClick={this.handChangeModalDialogueShow}
-                            addShowModal={this.addShowModal}
-                            handleDelete={this.handleDelete}
+                            type={this.props.type}
                             serchChange={this.serchChange}
-                        />
+                            handleAdd={this.handleChangeModol}
+                            handleDelete={this.handleDelete} />
 
-                        <div className="clear"></div>
                     </div>
                 </div>
                 {/*表格*/}
-                <div className="z_slderRightBody sys_overflow">
-                    {isFetching ===  true?
-                        <div style={{textAlign:"center",position:"absolute",left:"45%",top:"50%"}}>
-                            <Spin size="large" />
-                        </div>:
-                        <div style={{padding:"0 15px"}}>
-                            <Table locale={{emptyText:'暂无数据'}} rowSelection={rowSelection} columns={columns} dataSource={this.state.data} bordered  pagination={false}/>
-                        </div>}
-                    <div className="clear"></div>
-                </div>
-                {/*分页*/}
-                <Pag pageSize={10} nowPage={nowPage} totalRecord={10} pageChange={this.pageChange} />
-                <Modal
-                    title="卡点管理"
-                    visible={this.state.visible}
-                    onCancel={this.handleCancel}
-                    footer={null}
-                    key={this.state.modalKey}
-                >
-                    <Form onSubmit={this.saveModel}>
-                        <div className="formItemLeft">
-                            <FormItem
-                                {...formItemLayout}
-                                label="卡点名称"
-                            >
-                                {getFieldDecorator('name', {
-                                    rules: [{
-                                        required: true, message: '请输入名称!',
+                {isFetching === true ?
+                    <div style={{ textAlign: "center", position: "absolute", left: "45%", top: "50%" }}>
+                        <Spin size="large" />
+                    </div> :
 
-                                    },{
-                                        max:20,message:'最多输入二十个字符!',
-                                    }],
-                                    initialValue:this.state.modalType === 'edit' ? this.state.personInfo.name : '',
-                                    validateFirst:true
-                                })(
-                                    <Input />
-                                )}
-                            </FormItem>
+                    <div>
+                        <div className="z_slderRightBody">
+                            <div style={{ padding: "0 15px", maxHeight: 580 }}>
+                                <Table locale={{ emptyText: '暂无数据' }}
+                                    rowSelection={rowSelection}
+                                    columns={columns}
+                                    dataSource={data}
+                                    bordered
+                                    pagination={pagination} />
+                            </div>
+                            <div className="clear"></div>
                         </div>
-                        <div className="formItemLeft">
-                            <FormItem
-                                {...formItemLayout}
-                                label="所属单位"
-                            >
-                                {getFieldDecorator('label', {
-                                    rules: [{
-                                        required: true, message: '请选择所属单位!',
 
-                                    }],
-                                    initialValue:this.state.modalType === 'edit' ? this.state.personInfo.value : '',
-                                    validateFirst:true
-                                })(
-                                    <TreeSelect treeData={this.treeData} placeholder="请选择所属单位"/>
-                                )}
-                            </FormItem>
-                        </div>
-                        <Row>
-                            <Col span={16} style={{textAlign: 'right'}}>
-                                <Button htmlType="submit"  className="btn_ok">保存</Button>
-                                <Button style={{marginLeft: 30}} onClick={this.handleCancel} className="btn_delete">取消</Button>
-                            </Col>
-                        </Row>
-                    </Form>
-                </Modal>
+                        {/*模态框*/}
+                        <Modal width={800}
+                            title={this.state.modalType === 'edit' ? "编辑任务" : "新增任务"}
+                            visible={this.state.handleVisible}
+                            onCancel={this.handleChangeCancel}
+                            footer={null}
+                            key={this.state.modalKey}
+                            maskClosable={false}
+                            wrapClassName="taskaddeditModalClass"
+                        >
+                            <Form onSubmit={this.saveModel}>
+                                <Row className="formItemLeft" style={{ display: 'none' }}>
+                                    <Col span={24}>
+                                        <FormItem
+                                            {...formItemLayouts}
+                                            label="id"
+                                        >
+                                            {getFieldDecorator('id', {
+                                                initialValue: this.state.modalType === 'edit' ? personInfo.id : '',
+                                                validateFirst: true
+                                            })(
+                                                <Input type="hidden" />
+                                            )}
+                                        </FormItem>
+                                    </Col>
+                                </Row>
+                                <Row className="formItemLeft">
+                                    <Col span={24}>
+                                        <FormItem
+                                            {...formItemLayouts}
+                                            label="卡点名称"
+                                        >
+                                            {getFieldDecorator('checkpoint_name', {
+                                                initialValue: this.state.modalType === 'edit' ? personInfo.checkpoint_name : '',
+                                                validateFirst: true
+                                            })(
+                                                <Input placeholder="请输入卡点名称" />
+                                            )}
+                                        </FormItem>
+                                    </Col>
+                                </Row>
+                                <Row className="formItemLeft" style={{ display: 'none' }}>
+                                    <Col span={24}>
+                                        <FormItem
+                                            {...formItemLayouts}
+                                            label="updateuser"
+                                        >
+                                            {getFieldDecorator('updateuser', {
+                                                initialValue: this.state.modalType === 'edit' ? personInfo.updateuser : user.user.name,
+                                                validateFirst: true
+                                            })(
+                                                <Input type="hidden" />
+                                            )}
+                                        </FormItem>
+                                    </Col>
+                                </Row>
+                                <Row>
+                                    <Col span={15} style={{ textAlign: 'right' }}>
+                                        <Button htmlType="submit" className="btn_ok" loading={this.state.Loading}>保存</Button>
+                                        <Button style={{ marginLeft: 30 }} onClick={this.handleChangeCancel} className="btn_delete">取消</Button>
+                                    </Col>
+                                </Row>
+                            </Form>
+                        </Modal>
+
+
+                    </div>
+
+
+                }
+
             </div>
-        )
+
+
+        );
+
     }
-}
+};
+
 
 //搜索区域内容组件
 const SearchArea = React.createClass({
-    getInitialState: function() {
+    getInitialState: function () {
         return {
-            name: '',
-            begindate: '',
-            enddate: '',
-            nameClear:'',
-            begindateClear:'',
-            enddateClear:'',
-            treeData:[],
-            Pname: ''
+            checkpoint_name: '',
+            // beginDate:moment().format('YYYY-MM-DD 00:00:00'),
+            // endDate:moment().format('YYYY-MM-DD 23:59:59'),
+            beginDate: '',
+            endDate: '',
+            updateuser: '',
         };
     },
-    handleNameChange: function(e) {
+    init: function () {
         this.setState({
-            name: e.target.value
+            checkpoint_name: '',
+            // beginDate:moment().format('YYYY-MM-DD 00:00:00'),
+            // endDate:moment().format('YYYY-MM-DD 23:59:59'),
+            beginDate: '',
+            endDate: '',
+            updateuser: ''
+        });
+        let creds = {
+            currentPage: 1,
+            entityOrField: true,
+            pd: {
+            },
+            showCount: 10
+        }
+        store.dispatch(postCardPointManageListHushiData(creds));
+        this.props.serchChange(
+            '', '', '', '');
+    },
+
+    componentWillReceiveProps: function (nextProps) {
+        if (this.props.type !== nextProps.type) {
+            this.init();
+        }
+    },
+    handleCardPointNameChange: function (e) {
+        this.setState({
+            checkpoint_name: e.target.value,
         });
     },
-    handlePnameChange: function(e) {
+    handleBeginDeteClick: function (date, dateString) {
         this.setState({
-            Pname: e.target.value
+            beginDate: dateString,
+        });
+
+    },
+    handleEndDeteClick: function (date, dateString) {
+        this.setState({
+            endDate: dateString,
         });
     },
-    handleClick: function() { //点击查询
-        let {name} = this.state;
-        console.log('查询', name);
-    },
-    init:function () {
+    updateuserChange: function (e) {
         this.setState({
-            name:'',
-            begindate: '',
-            enddate: '',
-            Pname: ''
+            updateuser: e.target.value,
         });
     },
-    showModal: function() {
+    handleClick: function () { //点击查询
+        let { beginDate, endDate, checkpoint_name, updateuser } = this.state;
+        let nowPage = 1;
+        let creds = {
+            currentPage: nowPage,
+            entityOrField: true,
+            pd: {
+                starttime: beginDate,
+                endTime: endDate,
+                checkpoint_name: checkpoint_name,
+                updateuser: updateuser,
+            },
+            showCount: 10
+        }
+        store.dispatch(postCardPointManageListHushiData(creds));
+        this.props.serchChange(
+            checkpoint_name, beginDate, endDate, updateuser);
+    },
+    showModal: function () {
         this.setState({
             visible: true,
         });
+
     },
-    hideModalOk: function() {
+    hideModalOk: function () {
         this.setState({
             visible: false,
         });
         this.props.handleDelete();
+
     },
-    hideModal: function() {
+    hideModal: function () {
         this.setState({
             visible: false,
         });
     },
-    handleBeginDeteClick: function(date, dateString) {
+    cardPoint_leveChange: function (value) {
         this.setState({
-            begindate: dateString,
+            cardPoint_leve: value
         });
     },
-    handleEndDeteClick: function(date, dateString) {
-        this.setState({
-            enddate: dateString,
-        });
-    },
-    getTreeList:function(){
-        this.treeData = [];
-        const list = store.getState().AreaManagement.data.FindTreeList.result.list
-        this.getListTree(list, false , this.treeData)
-    },
-    getListTree:function(list, child ,tree){
-        for(let i in list){
-            if(!child){
-                if(i !== 'remove'){
-                    tree.push({label:list[i].name,value:list[i].name,key:list[i].name,children:[]})
-                    if(list[i].childrenList.length > 0){
-                        this.getListTree(list[i].childrenList,true , tree[i])
-                    }
-                }
-            } else{
-                if(i !== 'remove') {
-                    tree.children.push({label: list[i].name, value: list[i].name, key: list[i].name, children:[]})
-                    if (list[i].childrenList.length > 0) {
-                        this.getListTree(list[i].childrenList, true, tree.children[i])
-                    }
-                }
-            }
+    onOkBegin: function (e) {
+        let beginDate = this.state.beginDate;
+        if (e === undefined) {
+            this.setState({
+                beginDate: moment().format('YYYY-MM-DD')
+            });
         }
-        this.setState({
-            treeData: this.treeData
-        });
+    },
+    onOkEnd: function (e) {
+        let endDate = this.state.endDate;
+        if (e === undefined) {
+            this.setState({
+                endDate: moment().format('YYYY-MM-DD')
+            });
+        }
     },
     render() {
-        let {name, enddate, begindate,Pname} = this.state;
+
+
+
+
+        let { checkpoint_name, endDate, beginDate, updateuser } = this.state;
         let beginDateValue = '';
-        if (begindate === '') {} else {
-            beginDateValue = moment(begindate, dateFormat);
+        if (beginDate === '') {
+        } else {
+            beginDateValue = moment(beginDate, dateFormat);
         }
         let endDateValue = '';
-        if (enddate === '') {} else {
-            endDateValue = moment(enddate, dateFormat);
+        if (endDate === '') {
+        } else {
+            endDateValue = moment(endDate, dateFormat);
         }
+        if (beginDateValue != "" && endDateValue != "" && beginDateValue > endDateValue) {
+            message.error('提示：开始时间不能大于结束时间！');
+            return;
+        }
+
         return (
-            <div className="marLeft40 fl z_searchDiv">
-                <label htmlFor="" className="font14">卡点名称：</label>
-                <Input style={{width:'150px',marginRight:"10px"}} type="text"  id='name' placeholder='请输入卡点名称'  value={name}  onChange={this.handleNameChange}/>
-                <label htmlFor="" className="font14">所属单位：</label>
-                <TreeSelect style={{width:'150px',marginRight:"10px"}} dropdownClassName="treeStyle" treeData={this.state.treeData} placeholder="全部" onClick={this.getTreeList}/>
-                <label htmlFor="" className="font14">起止时间：</label>
-                <DatePicker placeholder="请选择日期"  format={dateFormat} allowClear={false} style={{marginRight:"10px"}} value={beginDateValue} defaultValue="" onChange={this.handleBeginDeteClick}/>
-                <span className="font14" style={{margin:"0 10px 0 0"}}>至</span>
-                <DatePicker placeholder="请选择日期"  format={dateFormat} allowClear={false} style={{marginRight:"10px"}} value={endDateValue} defaultValue="" onChange={this.handleEndDeteClick}/>
-                <label htmlFor="" className="font14">操作人：</label>
-                <Input style={{width:'150px',marginRight:"10px"}} type="text"  id='name' placeholder='请输入操作人'  value={Pname}  onChange={this.handlePnameChange}/>
-                <ShallowBlueBtn width="80px" text="查询" margin="0 10px 0 0" onClick={this.handleClick} />
-                <ShallowBlueBtn width="80px" text="重置" margin="0 10px 0 0" onClick={this.init} />
-                <div style={{marginTop:"15px"}}>
-                    <Button style={{width:"80px"}}
-                            onClick={this.props.addShowModal}
-                            className="btn_ok"
+            <div>
+                <div className="marLeft40 z_searchDiv">
+
+                    <label htmlFor="" className="font14">卡点名称：</label>
+                    <Input
+                        style={{ width: "221px", marginRight: "10px" }}
+                        type="text"
+                        id='checkpoint_name'
+                        placeholder='请输入卡点名称'
+                        value={checkpoint_name}
+                        onChange={this.handleCardPointNameChange}
+                    />
+                    <label htmlFor="" className="font14">更新时间：</label>
+
+                    <DatePicker
+                        format={dateFormat}
+                        showTime={{ defaultValue: moment('00:00:00', 'HH:mm:ss') }}
+                        allowClear={false}
+                        style={{ marginRight: "10px" }}
+                        value={beginDateValue}
+                        defaultValue=""
+                        onChange={this.handleBeginDeteClick}
+                        onOk={this.onOkBegin}
+                    />
+                    <span className="font14" style={{ marginRight: "10px" }}>至</span>
+                    <DatePicker
+                        format={dateFormat}
+                        showTime={{ defaultValue: moment('00:00:00', 'HH:mm:ss') }}
+                        allowClear={false}
+                        style={{ marginRight: "10px" }}
+                        value={endDateValue}
+                        defaultValue=""
+                        onChange={this.handleEndDeteClick}
+                        onOk={this.onOkEnd}
+                    />
+                    <label htmlFor="" className="font14">操作人：</label>
+                    <Input
+                        style={{ width: "121px", marginRight: "10px" }}
+                        type="text"
+                        id='createuser'
+                        placeholder='请输入操作人'
+                        value={updateuser}
+                        onChange={this.updateuserChange}
+                    />
+                    <ShallowBlueBtn width="82" text="查询" margin="0 10px 0 0" onClick={this.handleClick} />
+                    <ShallowBlueBtn width="82" text="重置" margin="0 10px 0 0" onClick={this.init} />
+                </div>
+                <div style={{ marginTop: "15px" }}>
+                    <Button style={{ margin: '0 0 0 20px', width: "80px" }}
+                        onClick={this.props.handleAdd}
+                        className="btn_ok"
                     >
                         <Icon type="file-add" /> 增加
                     </Button>
-                    <Button style={{margin:'0 0 0 10px',width:"80px"}} onClick={this.showModal} className="btn_delete">
+                    <Button style={{ margin: '0 0 0 20px', width: "80px" }} onClick={this.showModal} className="btn_delete">
                         <Icon type="delete" />  删除
                     </Button>
-                    <Modal style={{top:"38%"}}
-                           title="提示"
-                           visible={this.state.visible}
-                           footer={null}
-                           maskClosable={false}
-                           closable={false}
+                    <Modal style={{ top: "38%" }}
+                        title="提示"
+                        visible={this.state.visible}
+                        footer={null}
+                        maskClosable={false}
+                        closable={false}
                     >
-                        <p style={{fontSize:"16px",}}>是否删除选中项？</p>
-                        <p style={{marginTop:"20px",textAlign:"center"}}>
-                            <Button style={{margin:'0 20px 0 0 ',width:"80px"}} onClick={this.hideModalOk} className="btn_ok">
+                        <p style={{ fontSize: "16px", }}>是否删除选中项？</p>
+                        <p style={{ marginTop: "20px", textAlign: "center" }}>
+                            <Button style={{ margin: '0 20px 0 0 ', width: "80px" }} onClick={this.hideModalOk} className="btn_ok">
                                 确定
-                            </Button>
-                            <Button style={{margin:'',width:"80px"}} onClick={this.hideModal} className="btn_delete">
+                        </Button>
+                            <Button style={{ margin: '', width: "80px" }} onClick={this.hideModal} className="btn_delete">
                                 取消
-                            </Button>
+                        </Button>
                         </p>
 
                     </Modal>
                     <div className="clear"></div>
                 </div>
+
             </div>
+
         );
     }
 })
+
+
+
+
 AreaManage = Form.create()(AreaManage);
 export default connect(mainReducer)(AreaManage);

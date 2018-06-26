@@ -9,8 +9,8 @@ import { store } from '../index.js';
 import { WithDay } from "./InventoryManagement/WithDay";
 import { WithWeek } from "./InventoryManagement/WithWeek";
 import { OldWithDay } from "./InventoryManagement/OldWithDay";
-import { CarInventory } from "./InventoryManagement/WithWeek";
-import { fetchPersonnelInventoryData, fetchCarInventoryData, fetchBayonetInventoryData } from "../actions/InventoryManagement";
+import { PersonnelPonitInventory } from "./InventoryManagement/PersonnelPonitInventory";
+import { CarPointInventory } from "./InventoryManagement/CarPointInventory";
 import * as constants from "../utils/Constants";
 
 
@@ -48,6 +48,12 @@ class InventoryManagementRight extends Component {
                 break
             case constants.INVENTORYMANAGEMENT_OLD_HUSHI_MODULE_Qt://旧版其他任务
                 content = <OldWithDay />
+                break
+            case constants.INVENTORYMANAGEMENT_MENU_PERDONNEL_POINT:
+                content = <PersonnelPonitInventory />
+                break
+            case constants.INVENTORYMANAGEMENT_MENU_CAR_POIN:
+                content = <CarPointInventory />
                 break
             default:
                 break

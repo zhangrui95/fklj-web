@@ -16,9 +16,9 @@ import { ELECTRO_TAB_CHANGE_CURRENT } from "./ElectronicArchives";
 ELECTRO_TAB_CHANGE_CURRENT
 import * as constants from "../utils/Constants";
 import { history } from '../index.js';
-import { post, get, put ,postAQZX} from "./request";
+import { post, get, put, postAQZX } from "./request";
 import { message } from 'antd';
-import { developmentModeList, developmentMode, serverUrl, securityCenterUrls,securityCenterUrl } from "../utils/index";
+import { developmentModeList, developmentMode, serverUrl, securityCenterUrls, securityCenterUrl } from "../utils/index";
 
 import { PostPersonCenterData, PostPersonCenterFollowData } from "./PersonalCenter";
 
@@ -29,6 +29,7 @@ import { PostPersonCenterData, PostPersonCenterFollowData } from "./PersonalCent
 const mockApi = "http://www.easy-mock.com/mock/591d5f109aba4141cf2736c6/fklj2";
 //const standardApi = serverUrl+"/hylink-fklj";
 const standardApi = serverUrl;
+const securityCenterUrlApi = securityCenterUrl;
 // let store = createDevToolsStore(mainReducer);
 
 export let api;
@@ -213,6 +214,8 @@ export const CUSTOMERMANAGEMENT_MENU__CHANGE_CURRENT = 'customermanagement_menu_
 export const REPORT_MENU__CHANGE_CURRENT = 'Report_menu_change_current';//统计报表管理-更换选-洛阳
 export const DEFINWARE_MENU__CHANGE_CURRENT = 'DefinWare_menu_change_current';//临控管理-更换选-洛阳
 export const TASK_MENU__CHANGE_CURRENT = 'Task_menu_change_current';//任务管理-更换选-洛阳
+export const TASK_MENU__CHANGE_PUTONG = 'Task_menu_change_current_putong';//任务管理-更换选-普通任务
+export const TASK_MENU__CHANGE_KADIAN = 'Task_menu_change_current_kadian';//任务管理-更换选-卡点任务
 export const CONTROL_PERSONNEL_CURRENT = 'Control_personnel_current';//管控人员-更选项-呼市
 export const SYSTEM_SETUP_CURRENT = 'System_Setup_current';//系统设置-更选项-呼市
 export const CONTROLPERSONNEL_TYPE = 'Control_personnel_type';//管控人员-更选项-呼市-关注人员
@@ -220,6 +223,7 @@ export const CONTROLPERSONNEL_Person = 'Control_personnel_person';//管控人员
 export const CONTROLPERSONNEL_AddOrOut = 'Control_personnel_addorout';//管控人员-更选项-呼市-管控人员
 export const INVENTORYMANAGEMENT_HUSHI_ZQRW = 'Inventorymanagement_hushi_zqrw';//盘查管理-呼市-周期任务
 export const INVENTORYMANAGEMENT_HUSHI_OLDZQRW = 'Inventorymanagement_hushi_old_zqrw';//盘查管理-呼市-旧版周期任务
+export const INVENTORYMANAGEMENT_HUSHI_KDRW = 'Inventorymanagement_hushi_old_zqrw';//盘查管理-呼市-卡点任务
 export const INVENTORYMANAGEMENT_HUSHI_CURRENT = 'Inventorymanagement_hushi_current';//盘查管理-更选项-呼市
 
 export const SYSTEMSETUP_ADD = 'System_Setup_add';//更选项-呼市-系统设置-添加到任务
@@ -335,7 +339,11 @@ export function changeMenu(menu, type, moduleName) {//改变目录状态
         }
     } else if (moduleName === TaskMANAGEMENT_MODULE) {//任务管理-洛阳
         if (type === 'openAndClose') {//菜单打开关闭
-
+            if (menu.id === '10') {
+                return { type: TASK_MENU__CHANGE_PUTONG }
+            } else if (menu.id === '11') {
+                return { type: TASK_MENU__CHANGE_KADIAN }
+            }
         } else if (type === 'getData') {//点击目录
             // store.dispatch(fetchUsersData('/getUsers',menu.search));
             return { type: TASK_MENU__CHANGE_CURRENT, menu: menu };
@@ -345,9 +353,9 @@ export function changeMenu(menu, type, moduleName) {//改变目录状态
             if (menu.id === '101') {
                 return { type: INVENTORYMANAGEMENT_HUSHI_ZQRW }
             }
-            // else if (menu.id === '102') {
-            //     return { type: INVENTORYMANAGEMENT_HUSHI_OLDZQRW }
-            // } 
+            else if (menu.id === '103') {
+                return { type: INVENTORYMANAGEMENT_HUSHI_KDRW }
+            }
         } else if (type === 'getData') {//点击目录
             return { type: INVENTORYMANAGEMENT_HUSHI_CURRENT, menu: menu };
         }
@@ -647,7 +655,8 @@ export function fetchPersonTagsData() {
         pd: {
             prefix: "101",
             level: "2",
-            status: "1"
+            status: "1",
+            flag:''
         },
         showCount: 9999
     }   ////http://172.19.12.147:8888/sys/getSysCodeList
@@ -677,7 +686,8 @@ export function fetchCarTagsData() {
         pd: {
             prefix: "106",
             level: "2",
-            status: "1"
+            status: "1",
+            flag:''
         },
         showCount: 9999
     }
@@ -735,6 +745,29 @@ export function receivedModifiyPasswordError(message) {
     return { type: MODIFIY_PASSWORD_ERROR, message: message }
 }
 
+
+// 责任单位 组织机构
+export function PostOrganizationData(creds) {
+    let path = '/lowcase/getUseDept';
+    return dispatch => {
+        postAQZX(securityCenterUrlApi + path, creds).then((json) => {
+            dispatch({ type: 'recv-Organization-data', data: json })
+        }).catch((e) => {
+            dispatch({ type: 'recv-Organization-Error', message: e.toString() })
+        });
+    }
+}
+// 盘查卡点
+export function postCardPointManage_taskData(creds) {
+    let path = '/data/getCheckpointList';
+    return dispatch => {
+        post(api + path, creds).then((json) => {
+            dispatch({ type: 'CardPoint_Manage_taskListHushi-data', data: json });
+        }).catch((e) => {
+            dispatch({ type: 'CardPoint_Manage_taskListHushi-error', message: e.toString() })
+        });
+    }
+}
 // export function fetchUnitTreeData(id) {
 
 //     let nr;

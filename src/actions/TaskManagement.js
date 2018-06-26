@@ -383,3 +383,90 @@ export function postPersonListForTaskData(creds) {
     }
 }
 
+// 卡点任务
+// 查询
+export function postCardPointTaskListHushiData(creds) {
+    let path = '/data/getTaskModelListForChecktype2';
+    return dispatch => {
+        dispatch({ type: "REQUEST_CARDPOINT_TASK_LIST_HUSHI_DATA" });
+        post(api + path, creds).then((json) => {
+            dispatch({ type: 'CardPoint_TaskListHushi-data', data: json });
+        }).catch((e) => {
+            dispatch({ type: 'CardPoint_TaskListHushi-error', message: e.toString() })
+        });
+    }
+}
+// 根据id回显
+export function postCardPointTaskListHushiByidData(creds, goback) {
+    let path = '/data/getTaskModelById';
+    return dispatch => {
+        dispatch({ type: "REQUEST_CARDPOINT_TASK_LIST_HUSHI_BYID_DATA" });
+        post(api + path, creds).then((json) => {
+            dispatch({ type: 'CardPoint_TaskListHushi_Byid-data', data: json });
+            if (json.reason === null) {
+                goback();
+            } else {
+                message.error(`提示：${json.reason.text}`, 1);
+            }
+        }).catch((e) => {
+            dispatch({ type: 'CardPoint_TaskListHushi_Byid-error', message: e.toString() })
+        });
+    }
+}
+// 卡点的开启和关闭
+export function cardPointIsOpenTaskData(creds, params) {
+    return dispatch => {
+        post(api + "/data/updateTaskModelForChecktype2", creds).then((json) => {
+            if (json.reason === null) {
+                let tempCreds = params;
+                store.dispatch(postCardPointTaskListHushiData(tempCreds));
+                message.success("提示：操作成功！");
+            } else {
+                message.error("提示：" + json.reason.text + "!");
+            }
+        }).catch((e) => {
+        });;
+    }
+}
+// 添加的保存
+export function saveaddPointTaskData(creds, params, loadchange) {
+    return dispatch => {
+        post(api + "/data/insertTaskModel", creds).then((json) => {
+            if (json.reason === null) {
+                let tempCreds = params;
+                store.dispatch(postCardPointTaskListHushiData(tempCreds));
+                loadchange()
+            } else {
+                message.error("提示：" + json.reason.text + "!");
+                loadchange()
+            }
+        }).catch((e) => {
+        });;
+    }
+}
+//保存修改
+export function saveeditPointTaskData(creds, params, loadchange) {
+    return dispatch => {
+        post(api + "/data/updateCheckPoint", creds).then((json) => {
+            if (json.reason === null) {
+                let tempCreds = params;
+                store.dispatch(postCardPointTaskListHushiData(tempCreds));
+            } else {
+                message.error("提示：" + json.reason.text + "!");
+                loadchange()
+            }
+        }).catch((e) => {
+        });;
+    }
+}
+//删除
+export function DeletePointTaskData(creds, params) {
+    return dispatch => {
+        post(api + "/data/deleteCheckPoint", creds).then((json) => {
+            let creds = params
+            store.dispatch(postCardPointTaskListHushiData(creds));
+        }).catch((e) => {
+        });;
+    }
+}
+

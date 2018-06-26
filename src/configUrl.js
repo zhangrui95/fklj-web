@@ -28,7 +28,7 @@ global.configUrl = {
   sysName: '反恐利剑信息化作战系统',
   securityCenterUrls: securityCenter.testUrl,
   securityCenterUrl: securityCenter.pingshiTest,
-  serverUrl: Interface.MXD,
+  serverUrl: Interface.ZZH,
   //测试打包
   // securityCenterUrls: securityCenter.testUrl,
   // securityCenterUrl: securityCenter.fxdl,

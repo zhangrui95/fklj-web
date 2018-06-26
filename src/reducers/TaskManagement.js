@@ -2,7 +2,7 @@
  * 任务管理-洛阳
  */
 import { lyInitialStateReturn } from "./initialState"
-import { TASK_MENU__CHANGE_CURRENT, TASKMANAGEMENT_MENU_INIT, } from "../actions/actions";
+import { TASK_MENU__CHANGE_CURRENT, TASKMANAGEMENT_MENU_INIT, TASK_MENU__CHANGE_PUTONG, TASK_MENU__CHANGE_KADIAN } from "../actions/actions";
 import { store } from '../index.js';
 import { filterMenu } from '../utils/index';
 
@@ -95,46 +95,108 @@ const initialState = {
             result: {
                 list: [],
             }
-        }
+        },
+        CardPointtaskWithListHushiList: {//卡点任务 待办任务 已办任务
+            reason: {
+                "code": "",
+                "text": ""
+            },
+            result: {
+                page: {},
+                list: []
+            }
+        },
+        CardPointtaskWithListHushiById: {//卡点任务 待办任务 已办任务 根据id回显
+            reason: {
+                "code": "",
+                "text": ""
+            },
+            result: {
+            }
+        },
+
     },
     uiData: {
         menus: [
             {
-                id: '102',
-                menuName: '任务设置',
-                isOpen: false,
+                id: '10',
+                menuName: '普通任务',
+                isOpen: true,
                 search: 'type=rwgl',
-                haveSon: false,
-                isSelect: true,
-                code: "jyydpt_rwgl_xlrw",
+                haveSon: true,
+                isSelect: false,
+                isShow: true,
+                code: "jyydpt_rwgl_ptrw",
+                sonMenu: [
+                    {
+                        id: '102',
+                        menuName: '任务设置',
+                        search: 'type=rwgl',
+                        haveSon: false,
+                        isSelect: true,
+                        isShow: true,
+                        code: "jyydpt_rwgl_xlrw",
+                    },
+                    {
+                        id: '101',
+                        menuName: '待办任务',
+                        search: 'type=rwgl',
+                        haveSon: false,
+                        isSelect: false,
+                        isShow: true,
+                        code: "jyydpt_rwgl_kdrw",
+                    },
+                    {
+                        id: '103',
+                        menuName: '已办任务',
+                        search: 'type=rwgl',
+                        haveSon: false,
+                        isSelect: false,
+                        isShow: true,
+                        code: "",
+                    },
+                    {
+                        id: '104',
+                        menuName: '超期任务',
+                        search: 'type=rwgl',
+                        haveSon: false,
+                        isSelect: false,
+                        isShow: true,
+                        code: "",
+                    }
+                ]
             },
             {
-                id: '101',
-                menuName: '待办任务',
+                id: '11',
+                menuName: '卡点任务',
                 isOpen: false,
                 search: 'type=rwgl',
-                haveSon: false,
+                haveSon: true,
                 isSelect: false,
+                isShow: true,
                 code: "jyydpt_rwgl_kdrw",
+                sonMenu: [
+                    {
+                        id: '111',
+                        menuName: '待办任务',
+                        search: 'type=rwgl',
+                        haveSon: false,
+                        isSelect: false,
+                        isShow: true,
+                        code: "jyydpt_rwgl_kd_kdrw",
+                    },
+                    {
+                        id: '112',
+                        menuName: '已办任务',
+                        search: 'type=rwgl',
+                        haveSon: false,
+                        isSelect: false,
+                        isShow: true,
+                        code: "jyydpt_rwgl_kd_ybrw",
+                    },
+
+                ]
             },
-            {
-                id: '103',
-                menuName: '已办任务',
-                isOpen: false,
-                search: 'type=rwgl',
-                haveSon: false,
-                isSelect: false,
-                code: "",
-            },
-            {
-                id: '104',
-                menuName: '超期任务',
-                isOpen: false,
-                search: 'type=rwgl',
-                haveSon: false,
-                isSelect: false,
-                code: "",
-            }
         ]
     }
 
@@ -162,8 +224,27 @@ const TaskManagement = (state = initialState, action) => {
         case TASKMANAGEMENT_MENU_INIT://初始化菜单
             for (let x in newState.uiData.menus) {
                 newState.uiData.menus[x].isSelect = false;
+                for (let i in newState.uiData.menus[x].sonMenu) {
+                    newState.uiData.menus[x].sonMenu[i].isSelect = false;
+                }
             }
-            newState.uiData.menus[0].isSelect = true;
+            newState.uiData.menus[0].isOpen = true;
+            newState.uiData.menus[1].isOpen = false;
+            newState.uiData.menus[0].sonMenu[0].isSelect = true;
+            return newState;
+        case TASK_MENU__CHANGE_PUTONG:
+            if (newState.uiData.menus[0].isOpen === true) {
+                newState.uiData.menus[0].isOpen = false;
+            } else {
+                newState.uiData.menus[0].isOpen = true;
+            }
+            return newState;
+        case TASK_MENU__CHANGE_KADIAN:
+            if (newState.uiData.menus[1].isOpen === true) {
+                newState.uiData.menus[1].isOpen = false;
+            } else {
+                newState.uiData.menus[1].isOpen = true;
+            }
             return newState;
         case TASK_MENU__CHANGE_CURRENT:
             //遍历一级目录
@@ -173,8 +254,18 @@ const TaskManagement = (state = initialState, action) => {
                 } else {
                     newState.uiData.menus[x].isSelect = false;
                 }
+                //遍历子目录
+                for (let i in newState.uiData.menus[x].sonMenu) {
+                    if (action.menu.id == newState.uiData.menus[x].sonMenu[i].id) {
+                        newState.uiData.menus[x].sonMenu[i].isSelect = true;
+                    } else {
+                        newState.uiData.menus[x].sonMenu[i].isSelect = false;
+                    }
+
+                }
             }
             return newState;
+
 
         // 呼市反恐利剑
         case 'REQUEST_TASK_LIST_HUSHI_DATA':
@@ -196,7 +287,7 @@ const TaskManagement = (state = initialState, action) => {
             newState.data.childrentaskListHushi.result.page = action.data.result.page;//page?reason
             newState.data.childrentaskListHushi.childrenIsFetching = false;
             return newState;
-            case 'Children_TaskListHushi-data-byid'://子任务列表详情
+        case 'Children_TaskListHushi-data-byid'://子任务列表详情
             newState.data.childrentaskListHushiById.result = action.data.result.data;
             // newState.isFetching = false;
             return newState;
@@ -237,6 +328,21 @@ const TaskManagement = (state = initialState, action) => {
         case 'Task_PersonListForTaskHushi-data'://编辑查看时 盘查对象项
             newState.data.personListForTask.result.list = action.data.result.list;
             return newState;
+        case 'REQUEST_CARDPOINT_TASK_LIST_HUSHI_DATA'://卡点任务 查询列表
+            return {
+                ...state,//原状态
+                isFetching: true,
+                didInvalidate: false
+            }
+        case 'CardPoint_TaskListHushi-data'://卡点任务 查询列表
+            newState.data.CardPointtaskWithListHushiList.result.list = action.data.result.list;
+            newState.data.CardPointtaskWithListHushiList.result.page = action.data.result.page;//page?reason
+            newState.isFetching = false;
+            return newState;
+        case 'CardPoint_TaskListHushi_Byid-data'://卡点任务 根据id回显
+            newState.data.CardPointtaskWithListHushiById.result = action.data.result.data;
+            return newState;
+
         default:
             if (store !== undefined) {
                 return store.getState().TaskManagement;

@@ -27,6 +27,24 @@ const initialState = {
                 "text": ""
             },
             result: ''
+        },
+        organizationData: {//组织机构数据
+            reason: {
+                "code": "",
+                "text": ""
+            },
+            result: {
+                list: []
+            }
+        },
+        invetoryCardPointData: {//盘查卡点数据
+            reason: {
+                "code": "",
+                "text": ""
+            },
+            result: {
+                list: []
+            }
         }
     },
     uiData: {
@@ -209,6 +227,12 @@ const root = (state = initialState, action) => {
             return newState;
         case POLICE_UNITS_DATA: //警员单位
             newState.data.policeUnitsList = action.data.result.list;
+            return newState;
+        case 'recv-Organization-data': //组织机构代码
+            newState.data.organizationData.result.list = action.data.data;
+            return newState;
+        case 'CardPoint_Manage_taskListHushi-data'://盘查卡点数据
+            newState.data.invetoryCardPointData.result.list = action.data.result.list;
             return newState;
         // 修改密码
         case MODIFIY_PASSWORD:

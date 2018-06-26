@@ -1086,3 +1086,75 @@ export function UpdateControlTimeCycle(creds) {
         });
     }
 }
+
+// 卡点管理
+
+// 查询
+export function postCardPointManageListHushiData(creds) {
+    let path = '/data/getCheckpointList';
+    return dispatch => {
+        dispatch({ type: "REQUEST_CARDPOINT_MANAGE_LIST_HUSHI_DATA" });
+        post(api + path, creds).then((json) => {
+            dispatch({ type: 'CardPoint_ManageListHushi-data', data: json });
+        }).catch((e) => {
+            dispatch({ type: 'CardPoint_ManageListHushi-error', message: e.toString() })
+        });
+    }
+}
+// 根据id回显
+// export function postCardPointManageListHushiByidData(creds) {
+//     let path = '/data/getSubtaskList';
+//     return dispatch => {
+//         dispatch({ type: "REQUEST_CARDPOINT_MANAGE_LIST_HUSHI_BYID_DATA" });
+//         post(api + path, creds).then((json) => {
+//             dispatch({ type: 'CardPoint_manageListHushi_Byid-data', data: json });
+//         }).catch((e) => {
+//             dispatch({ type: 'CardPoint_manageListHushi_Byid-error', message: e.toString() })
+//         });
+//     }
+// }
+// 添加的保存
+export function saveaddPointManagekData(creds,params,loadchange) {
+    return dispatch => {
+        post(api + "/data/updateCheckpointById", creds).then((json) => {
+            if (json.reason === null) {
+                let tempCreds = params;
+                store.dispatch(postCardPointManageListHushiData(tempCreds));
+                message.success("提示：添加成功！");
+                loadchange();
+            } else {
+                message.error("提示：" + json.reason.text + "!");
+                loadchange()
+            }
+        }).catch((e) => {
+        });;
+    }
+}
+//保存修改
+export function saveeditPointManageData(creds,params,loadchange) {
+    return dispatch => {
+        post(api + "/data/updateCheckpointById",creds).then((json) => {
+            if(json.reason === null){
+                let tempCreds = params;
+                store.dispatch(postCardPointManageListHushiData(tempCreds));
+                message.success("提示：编辑成功！");
+                loadchange()
+            }else{
+                message.error("提示："+json.reason.text+"!");
+                loadchange()
+            }
+        }).catch((e)=>{
+        });;
+    }
+}
+//删除
+export function DeletePointManageData(creds,params) {
+    return dispatch => {
+        post(api + "/data/delCheckpointById",creds).then((json) => {
+            let creds = params
+            store.dispatch(postCardPointManageListHushiData(creds));
+            message.success("提示：删除成功！");
+        }).catch((e)=>{
+        });;
+    }
+}

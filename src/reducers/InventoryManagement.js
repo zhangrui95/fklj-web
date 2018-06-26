@@ -8,7 +8,8 @@ import {
     INVENTORYMANAGEMENT_HUSHI_ZQRW,
     INVENTORYMANAGEMENT_HUSHI_OLDZQRW,
     INVENTORYMANAGEMENT_HUSHI_CURRENT,
-    INVENTORYMANAGEMENT_MENU_INIT
+    INVENTORYMANAGEMENT_MENU_INIT,
+    INVENTORYMANAGEMENT_HUSHI_KDRW
 } from "../actions/actions";
 import { store } from '../index.js';
 import { filterMenu } from '../utils/index';
@@ -70,10 +71,19 @@ const initialState = { //盘查管理
                 "text": ""
             },
             result: {
-                total: 0,
+                page: {},
                 list: [],
             },
             isFetching: false
+
+        },
+        personnelInventoryPointById: {//卡点-人员盘查 byid回显
+            reason: {
+                "code": "",
+                "text": ""
+            },
+            result: {
+            },
 
         },
         carInventoryPointList: {//卡点-车辆盘查
@@ -82,10 +92,28 @@ const initialState = { //盘查管理
                 "text": ""
             },
             result: {
-                total: 0,
+                page: {},
                 list: [],
             },
             isFetching: false
+        },
+        carInventoryPointById: {//卡点-车辆盘查 byid回显
+            reason: {
+                "code": "",
+                "text": ""
+            },
+            result: {
+            },
+
+        },
+        persontagsData: {//人员标签
+            reason: {
+                "code": "",
+                "text": ""
+            },
+            result: {
+                list: [],
+            },
         },
         relevancePersonList: {//关联人员
             reason: {
@@ -187,6 +215,34 @@ const initialState = { //盘查管理
                 ]
             },
             {
+                id: '103',
+                menuName: '卡点任务',
+                isOpen: false,
+                search: 'type=pcgl',
+                haveSon: true,
+                isSelect: false,
+                isShow: false,
+                code: "",
+                sonMenu: [
+                    {
+                        id: '1031',
+                        menuName: '人员盘查',
+                        search: 'type=zqrw&state=1',
+                        isSelect: false,
+                        isShow: true,
+                        code: ""
+                    },
+                    // {
+                    //     id: '1032',
+                    //     menuName: '车辆盘查',
+                    //     search: 'type=zqrw&state=2',
+                    //     isSelect: false,
+                    //     isShow: true,
+                    //     code: ""
+                    // }
+                ]
+            },
+            {
                 id: '102',
                 menuName: '其他',
                 isOpen: false,
@@ -241,30 +297,40 @@ const InventoryManagement = (state = initialState, action) => {
         //             newState.data.BayonetInventoryList.result.list = action.data.result.list;
         //             newState.data.BayonetInventoryList.result.total = action.data.result.total;
         //             return newState;
-        // //卡口管理
-        //         //人盘查 REQUEST_PERSON_INVENTORY_POINT
-        //         case 'REQUEST_PERSON_INVENTORY_POINT':
-        //             return {
-        //                 ...state,//原状态
-        //                 isFetching: true,
-        //                 didInvalidate: false
-        //             }
-        //         case InventoryManagementAction.PERSONNELINVENTORYPOIT_DATA: //人员盘查
-        //             newState.data.personnelInventoryPointList.result.list = action.data.result.list;
-        //             newState.data.personnelInventoryPointList.result.total = action.data.result.page.totalResult;
-        //             newState.isFetching = false;
-        //             return newState;
-        //         case 'REQUEST_CAR_INVENTORY_POINT':
-        //             return {
-        //                 ...state,//原状态
-        //                 isFetching: true,
-        //                 didInvalidate: false
-        //             }
-        //         case InventoryManagementAction.CARINVENTORYPOINT_DATA: //车辆盘查
-        //             newState.data.carInventoryPointList.result.list = action.data.result.list;//等号右侧的是接口的格式
-        //             newState.data.carInventoryPointList.result.total = action.data.result.page.totalResult;
-        //             newState.isFetching = false;
-        //             return newState;
+        //卡口管理
+        //人盘查 REQUEST_PERSON_INVENTORY_POINT
+        case 'REQUEST_PERSON_INVENTORY_POINT':
+            // return {
+            //     ...state,//原状态
+            //     isFetching: true,
+            //     didInvalidate: false
+            // }
+            newState.data.personnelInventoryPointList.isFetching = true;
+            return newState;
+        case InventoryManagementAction.CUMTOMERPERSONNEL_DATA: //人员盘查
+            newState.data.personnelInventoryPointList.result.list = action.data.result.data;
+            newState.data.personnelInventoryPointList.result.page = action.data.result.page;
+            newState.data.personnelInventoryPointList.isFetching = false;
+            return newState;
+        case 'personpointInventoryHushiDetails-data': //人员盘查 回显
+            newState.data.personnelInventoryPointById.result = action.data.result;
+            return newState;
+        case 'REQUEST_CAR_INVENTORY_POINT':
+            // return {
+            //     ...state,//原状态
+            //     isFetching: true,
+            //     didInvalidate: false
+            // }
+            newState.data.carInventoryPointList.isFetching = true;
+            return newState;
+        case InventoryManagementAction.CUMTOMERCAR_DATA: //车辆盘查
+            newState.data.carInventoryPointList.result.list = action.data.result.data;//等号右侧的是接口的格式
+            newState.data.carInventoryPointList.result.page = action.data.result.page;
+            newState.data.carInventoryPointList.isFetching = false;
+            return newState;
+        case 'carpointInventoryHushiDetails-data': //车辆盘查 回显
+            newState.data.carInventoryPointById.result = action.data.result;
+            return newState;
         //
 
         case INVENTORYMANAGEMENT_MENU_INIT://初始化菜单
@@ -285,11 +351,18 @@ const InventoryManagement = (state = initialState, action) => {
                 newState.uiData.menus[0].isOpen = true;
             }
             return newState;
-        case INVENTORYMANAGEMENT_HUSHI_OLDZQRW: //呼市-旧版周期任务
+        case INVENTORYMANAGEMENT_HUSHI_KDRW: //呼市-卡点任务
             if (newState.uiData.menus[1].isOpen === true) {
                 newState.uiData.menus[1].isOpen = false;
             } else {
                 newState.uiData.menus[1].isOpen = true;
+            }
+            return newState;
+        case INVENTORYMANAGEMENT_HUSHI_OLDZQRW: //呼市-旧版周期任务  其他任务
+            if (newState.uiData.menus[2].isOpen === true) {
+                newState.uiData.menus[2].isOpen = false;
+            } else {
+                newState.uiData.menus[2].isOpen = true;
             }
             return newState;
         case INVENTORYMANAGEMENT_HUSHI_CURRENT:
@@ -346,7 +419,7 @@ const InventoryManagement = (state = initialState, action) => {
             newState.data.oldinvenListHushiDetails.result = action.data.result.data;
             return newState;
         case 'old_InventoryLuoku-data': //原版反恐利剑 数据落库 点击详情时展示
-            newState.data.oldinvenLuoku.result = action.data.result.data; 
+            newState.data.oldinvenLuoku.result = action.data.result.data;
             return newState;
         default:
             if (store !== undefined) {

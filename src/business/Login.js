@@ -146,7 +146,7 @@ export class Login extends Component {
                                 {/*账号登录的表单*/}
                                 <div style={formDiv}>
                                     <div style={InpDiv}>
-                                        <input style={Inp} placeholder="用户名"   type='text' ref='username'/>
+                                        <input style={Inp} placeholder="用户名"  type='text' ref='username'/>
                                         <img src="../images/user.png" alt="" style={{position:"absolute",right:"20px",top:"10px"}}/>
                                     </div>
                                     <div style={InpDiv}>

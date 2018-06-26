@@ -687,7 +687,7 @@ export class PatrolTask extends Component {
             title: '任务名称',
             dataIndex: 'name',
         }, {
-            title: '盘查对象',
+            title: '已盘查人数/总人数',
             dataIndex: 'checkObject',
             render: (text, record) => (
                 <span>{record.count2 + '/' + record.count1}</span>

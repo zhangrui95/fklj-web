@@ -22,7 +22,7 @@ import  {HighRiskLine}  from "./SystemManagement/HighRiskLine";
 import  {RedList} from "./SystemManagement/RedList";
 import  {CodingTable} from "./SystemManagement/CodingTable";
 import {AddSystem}  from "./SystemManagement/AddSystem";
-
+import {AreaManage}  from "./AreaManagement/AreaManage";
 
 import {store} from '../index.js';
 import  * as constants from "../utils/Constants";
@@ -134,6 +134,9 @@ class SystemManagementRight extends Component{
               break
             case constants.SYSREMSETUP_MODULE_TIME:
                 content = <AddSystem />
+                break
+            case constants.CUSTOMERMANAGEMENT_MENU_POINT:
+                content = <AreaManage />
                 break
             default:
                 break
