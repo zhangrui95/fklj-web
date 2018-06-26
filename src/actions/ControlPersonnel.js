@@ -73,6 +73,18 @@ export function getCustomFiledList(creds) {
         });
     }
 }
+//自定义字段列表调用
+export function getCustom(creds) {
+    let path  = serverUrls + '/data/getCustomFiledList';
+    return dispatch => {
+        dispatch( {type: 'get_Custom_Loading'} );
+        post(path,creds).then((json) => {
+            dispatch( {type: 'get_Custom_List',data: json} );
+        }).catch((e)=>{
+            dispatch({type: 'get_Custom_List_error',message: e.toString()} )
+        });
+    }
+}
 //自定义字段新增（修改）
 export function insertOrUpdateCustomFiled(creds,zdyType,getNewWords,hideModals) {
     let path  = serverUrls + '/data/insertOrUpdateCustomFiled';
@@ -82,6 +94,7 @@ export function insertOrUpdateCustomFiled(creds,zdyType,getNewWords,hideModals) 
             if(json.reason === null){
                 hideModals();
                 message.success(`提示：自定义字段${zdyType === 'add' ? '新增':'修改'}成功`);
+                store.dispatch(getCustom({showtype:1}));
                 getNewWords();
             }else{
                 message.error(`提示：${json.reason.text}`);
@@ -99,6 +112,7 @@ export function delCustomFiled(creds) {
             dispatch( {type: 'delCustomFiled_succeed',data: json} );
             if (json.reason === null) {
                 message.success(`提示：字段删除成功`);
+                store.dispatch(getCustom({showtype:1}));
                 store.dispatch(getCustomFiledList({}));
             } else {
                 message.error(`提示：${json.reason.text}`);
