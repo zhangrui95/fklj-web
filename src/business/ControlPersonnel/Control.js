@@ -11,7 +11,7 @@ import {serverUrls, getLocalTime} from '../../utils/index';
 import {monthFormat, dateFormat, serverUrl,getMyDate} from '../../utils/';
 import {Spin, Table, Input, Modal, Form, Row, Col, Select, DatePicker} from 'antd';
 import {SearchArea} from './SearchArea'
-import {getControlPersonList, getControlDetail,getCustomFiledList} from "../../actions/ControlPersonnel";
+import {getControlPersonList, getControlDetail,getCustomFiledList,getCustom} from "../../actions/ControlPersonnel";
 import moment from 'moment';
 import 'moment/locale/zh-cn';
 moment.locale('zh-cn');
@@ -72,7 +72,8 @@ export  class Control extends Component{
         let controlType = this.props.controlType;
     }
     componentDidMount() {
-        this.getList(this.props.controlType,1)
+        this.getList(this.props.controlType,1);
+        store.dispatch(getCustom({showtype:1}));
     }
     componentWillReceiveProps(nextProps) {
         if(this.props.controlType!==nextProps.controlType){
@@ -88,7 +89,8 @@ export  class Control extends Component{
                 enddate: '',
             })
             setTimeout(()=>{
-                this.getList(nextProps.controlType,1)
+                this.getList(nextProps.controlType,1);
+                store.dispatch(getCustom({showtype:1}));
                 this.refs.SearchArea.init();
             },0)
         }
@@ -191,53 +193,77 @@ export  class Control extends Component{
                 dataList.push({id:list[i].id,key:list[i].id, serial: c, cardId: list[i].idcard, label: list[i].name, sex: list[i].sex == '1' ? '男': '女' ,age:list[i].age, state:(list[i].address_type == '0' ? '常住' : (list[i].address_type == '1' ? '暂住' : '流动')), phone:list[i].phone,zrdw:list[i].taskname, updatetime: getLocalTime(list[i].updatetime),cycle:list[i].cycle == '0' ? '按天' : (list[i].cycle == '1'?'按周':''),address:list[i].now_address,personFrom:list[i].source === '901006' ? '后台导入':'前端新增'})
             }
         }
-        const columns = [{
-            title: '序号',
-            dataIndex: 'serial',
-            width:50,
-        },{
-            title: '身份证号',
-            dataIndex: 'cardId',
-            width:160,
-        },{
-            title: '姓名',
-            dataIndex: 'label',
-            width:90,
-        },{
-            title: '性别',
-            dataIndex: 'sex',
-            width:50,
-        },{
-            title: '年龄',
-            dataIndex: 'age',
-            width:50,
-        },{
-            title: '居住类型',
-            dataIndex: 'state',
-        },{
-            title: '现居住地址',
-            dataIndex: 'address',
-            width:180,
-        },{
-            title: '联系电话',
-            dataIndex: 'phone',
-        },{
-            title: '隶属任务',
-            dataIndex: 'zrdw',
-            width:180,
-        },{
-            title: '任务周期',
-            dataIndex: 'cycle',
-        },{
+        let zdyList = [];
+        const column = [
+            {
+                title: '序号',
+                dataIndex: 'serial',
+                width:50,
+                fixed: 'left',
+            },{
+                title: '身份证号',
+                dataIndex: 'cardId',
+                width:160,
+            },{
+                title: '姓名',
+                dataIndex: 'label',
+                width:90,
+            },{
+                title: '性别',
+                dataIndex: 'sex',
+                width:50,
+            },{
+                title: '年龄',
+                dataIndex: 'age',
+                width:50,
+            },{
+                title: '居住类型',
+                dataIndex: 'state',
+            },{
+                title: '现居住地址',
+                dataIndex: 'address',
+                width: (controlType === 'GK_WGK' || controlType === 'GK_LKZRQ' || controlType === 'GK_SK') ? 350 : 180,
+            },{
+                title: '联系电话',
+                dataIndex: 'phone',
+            }
+        ];
+        if((controlType === 'GK_YGK' || controlType === 'LY_DR' || controlType === 'LY_XZ')){
+            column.push({
+                title: '隶属任务',
+                dataIndex: 'zrdw',
+                width:180,
+            },{
+                title: '任务周期',
+                dataIndex: 'cycle',
+            });
+        }
+        column.push({
             title: '人员来源',
             dataIndex: 'personFrom',
         }, {
             title: '更新时间',
             dataIndex: 'updatetime',
-        }, {
+        })
+        if(store.getState().ControlPersonnel.data.CustomList.result.list.length > 0){
+            store.getState().ControlPersonnel.data.CustomList.result.list.map((item, index)=>{
+                let ids = item.id
+                list.map((items,i)=>{
+                    if(i !== 'remove'){
+                        dataList[i][ids] = items[ids]
+                    }
+                })
+                column.push({
+                    title: item.name,
+                    dataIndex: item.id
+                })
+            })
+        }
+        column.push({
             title: '操作',
             key: 'action',
             width:50,
+            fixed: 'right',
             render: (text, record) => (
                 <span>
                     <span onClick={(e)=>this.editShowModal(record)} style={{cursor:'pointer'}}>详情</span>
@@ -249,57 +275,8 @@ export  class Control extends Component{
                     {/*</Popconfirm>*/}
                 </span>
             ),
-        }];
-        const column = [{
-            title: '序号',
-            dataIndex: 'serial',
-            width:50,
-        },{
-            title: '身份证号',
-            dataIndex: 'cardId',
-            width:160,
-        },{
-            title: '姓名',
-            dataIndex: 'label',
-            width:90,
-        },{
-            title: '性别',
-            dataIndex: 'sex',
-        },{
-            title: '年龄',
-            dataIndex: 'age',
-        },{
-            title: '居住类型',
-            dataIndex: 'state',
-        },{
-            title: '现居住地址',
-            dataIndex: 'address',
-            width:350
-        },{
-            title: '联系电话',
-            dataIndex: 'phone',
-        },{
-            title: '人员来源',
-            dataIndex: 'personFrom',
-        }, {
-            title: '更新时间',
-            dataIndex: 'updatetime',
-        }, {
-            title: '操作',
-            key: 'action',
-            width:50,
-            render: (text, record) => (
-                <span>
-                    <span onClick={(e)=>this.editShowModal(record)} style={{cursor:'pointer'}}>详情</span>
-                    {/*<Divider className={controlType === 'GZ_NLHRY' || controlType === 'GZ_ZALY' || controlType === 'LY_DR' || controlType === 'LY_XZ' || controlType === 'LY_XZ' ? '' : 'noneDiv'} type="vertical" />*/}
-                    {/*<span className={controlType === 'GK_WGK' || controlType === 'GK_YGK' || controlType === 'GK_LKZRQ' || controlType === 'GK_SK' ? '' : 'noneDiv'} onClick={(e)=>this.editShowModal(record)} style={{cursor:'pointer'}}>详情</span>*/}
-                    {/*<Divider className={controlType === 'GK_WGK' || controlType === 'GK_YGK' || controlType === 'GK_LKZRQ' || controlType === 'GK_SK' ? '' : 'noneDiv'} type="vertical" />*/}
-                    {/*<Popconfirm title="是否确定该人员离开责任区？" okText="确定" cancelText="取消">*/}
-                    {/*<span className={controlType === 'GK_WGK' || controlType === 'GK_YGK' || controlType === 'GK_LKZRQ' || controlType === 'GK_SK' ? '' : 'noneDiv'} style={{cursor:'pointer'}}>离开责任区</span>*/}
-                    {/*</Popconfirm>*/}
-                </span>
-            ),
-        }];
+        })
+        // column.splice(-2,0,{title: '',dataIndex: 'personFrom'})
         const {selectedRowKeys} = this.state
         const rowSelection = {
             selectedRowKeys,
@@ -390,6 +367,7 @@ export  class Control extends Component{
             total: store.getState().ControlPersonnel.data.ControlPersonList.result.page.totalResult,
             current: this.state.current,
         }
+        let widthX = store.getState().ControlPersonnel.data.CustomList.result.list.length * 10 + 100;
         return(
             <div className="sliderWrap">
                 <div className="sliderItemDiv">
@@ -421,7 +399,7 @@ export  class Control extends Component{
                             <Spin size="large" />
                         </div>:
                         <div style={{padding:"0 15px"}}>
-                            <Table locale={{emptyText:'暂无数据'}} rowSelection={rowSelection} columns={(controlType === 'GK_WGK' || controlType === 'GK_LKZRQ' || controlType === 'GK_SK') ? column : columns} dataSource={dataList} bordered pagination={pagination}/>
+                            <Table scroll={{ x: store.getState().ControlPersonnel.data.CustomList.result.list.length > 0 ? widthX +'%' : false}} locale={{emptyText:'暂无数据'}} rowSelection={rowSelection} columns={ column } dataSource={dataList} bordered pagination={pagination}/>
                         </div>}
                     <div className="clear"></div>
                 </div>

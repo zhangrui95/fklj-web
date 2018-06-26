@@ -5,7 +5,6 @@ import {lyInitialStateReturn} from "./initialState"
 import {CONTROL_PERSONNEL_CURRENT, CONTROLPERSONNEL_MENU_INIT, CONTROLPERSONNEL_TYPE,CONTROLPERSONNEL_Person,CONTROLPERSONNEL_AddOrOut} from "../actions/actions";
 import {store} from '../index.js';
 import {isAllowMenu} from '../utils/index';
-
 const initialState = {
     success: true,
     data: {
@@ -27,6 +26,13 @@ const initialState = {
             }
         },
         FiledList: {
+            Loading:false,
+            reason: 1,
+            result: {
+                list: [],
+            }
+        },
+        CustomList:{
             Loading:false,
             reason: 1,
             result: {
@@ -74,7 +80,6 @@ const initialState = {
                 "text": ""
             },
             result: {
-
             }
         },
         getTaskModelList:{
@@ -190,8 +195,6 @@ const initialState = {
     },
     isFetching:false
 }
-
-
 const ControlPersonnel =(state = initialState, action) =>{
     let newState = Object.assign({}, state);
     switch (action.type) {
@@ -209,7 +212,6 @@ const ControlPersonnel =(state = initialState, action) =>{
         case 'Task-Tree-data': //根据任务ID获取树
             newState.data.task = action.data.result;//page?
             return newState;
-
         case CONTROLPERSONNEL_MENU_INIT://初始化菜单
             for (let x in newState.uiData.menus) {
                 newState.uiData.menus[x].isSelect = false;
@@ -258,7 +260,6 @@ const ControlPersonnel =(state = initialState, action) =>{
                     }else{
                         newState.uiData.menus[x].sonMenu[i].isSelect=false;
                     }
-
                 }
             }
             return newState;
@@ -288,6 +289,13 @@ const ControlPersonnel =(state = initialState, action) =>{
             newState.data.FiledList = action.data;
             newState.data.FiledList.Loading = false;
             return newState;
+        case 'get_Custom_Loading':
+            newState.data.CustomList.Loading = true;
+            return newState;
+        case 'get_Custom_List':
+            newState.data.CustomList = action.data;
+            newState.data.CustomList.Loading = false;
+            return newState;
         case 'insertOrUpdateCustomFiled_succeed':
             newState.data.CustomFiled = action.data;
             return newState;
@@ -300,7 +308,6 @@ const ControlPersonnel =(state = initialState, action) =>{
         case 'getTaskModelList_succeed':
             newState.data.getTaskModelList = action.data;
             return newState;
-
         default:
             if(store !== undefined ){
                 return store.getState().ControlPersonnel;

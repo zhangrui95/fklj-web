@@ -39,6 +39,7 @@ export  class SearchArea extends Component{
             wordType: '',
             showInput:{display:'none'},
             wordName:'',
+            detailPlace: '0',
             OptionWords:'',
             addModal: false,
             showDel:{display:'none'},
@@ -137,8 +138,8 @@ export  class SearchArea extends Component{
     }
     hideModalOk = () => {
         let id = this.state.wordId;
-
         store.dispatch(delCustomFiled({id:id}));
+        this.getNewsList();
         this.setState({
             visible: false,
             zdyModal:true
@@ -183,7 +184,8 @@ export  class SearchArea extends Component{
             zdyModal: true,
             wordType: '',
             showInput:{display:'none'},
-            wordName:''
+            wordName:'',
+            detailPlace: '0'
         });
     }
     getSelects = (value) => {
@@ -209,6 +211,11 @@ export  class SearchArea extends Component{
             wordName:e.target.value
         });
     }
+    changedetailPlace = (e) => {
+        this.setState({
+            detailPlace:e
+        });
+    }
     saveNewWord = () => {
         this.setState({
             saveBtn: false,
@@ -220,7 +227,7 @@ export  class SearchArea extends Component{
         if(this.state.saveBtn){
             if(this.state.wordId === ''){
                 if(this.state.wordType === '文本'){
-                    creds = {createuser:user.user.name,name:this.state.wordName,type:"0",updateuser:'',value:''}
+                    creds = {createuser:user.user.name,name:this.state.wordName,type:"0",updateuser:'',value:'',showtype:parseInt(this.state.detailPlace)}
                     this.getZdy(creds);
                 }else{
                     if(this.state.OptionWords.trim()!==""){
@@ -234,7 +241,7 @@ export  class SearchArea extends Component{
                                 }
                             })
                             if(TorF){
-                                creds = {createuser:user.user.name,name:this.state.wordName,type:"1",updateuser:'',value:this.state.OptionWords}
+                                creds = {createuser:user.user.name,name:this.state.wordName,type:"1",updateuser:'',value:this.state.OptionWords,showtype:parseInt(this.state.detailPlace)}
                                 this.getZdy(creds);
                             }else {
                                 this.setState({
@@ -257,7 +264,7 @@ export  class SearchArea extends Component{
                 }
             }else{
                 if(this.state.wordType === '文本'){
-                    creds = {createuser:user.user.name,name:this.state.wordName,type:"0",value:'',id:this.state.wordId}
+                    creds = {createuser:user.user.name,name:this.state.wordName,type:"0",value:'',id:this.state.wordId,showtype:parseInt(this.state.detailPlace)}
                     this.getZdy(creds);
                 }else{
                     if(this.state.OptionWords.trim()!==""){
@@ -270,7 +277,7 @@ export  class SearchArea extends Component{
                             }
                         })
                         if(TorF){
-                            creds = {createuser:user.user.name,name:this.state.wordName,type:"1",value:this.state.OptionWords,id:this.state.wordId}
+                            creds = {createuser:user.user.name,name:this.state.wordName,type:"1",value:this.state.OptionWords,id:this.state.wordId,showtype:parseInt(this.state.detailPlace)}
                             this.getZdy(creds);
                         }else {
                             this.setState({
@@ -292,14 +299,22 @@ export  class SearchArea extends Component{
     }
     getZdy = (creds) => {
         if(this.state.wordName.trim()!==''){
-            let reg = Regular('zdyName').reg
-            if(!reg.test(this.state.wordName.trim())){
-                message.error(Regular('zdyName').msg);
+            if(this.state.detailPlace.trim()!==''){
+                let reg = Regular('zdyName').reg
+                if(!reg.test(this.state.wordName.trim())){
+                    message.error(Regular('zdyName').msg);
+                    this.setState({
+                        saveBtn: true,
+                    });
+                }else{
+                    store.dispatch(insertOrUpdateCustomFiled(creds,this.state.zdyType,this.getNewWords,this.hideModals));
+                    this.getNewsList();
+                }
+            } else {
+                message.error(`提示：请选择展示位置`);
                 this.setState({
                     saveBtn: true,
                 });
-            }else{
-                store.dispatch(insertOrUpdateCustomFiled(creds,this.state.zdyType,this.getNewWords,this.hideModals));
             }
         }else{
             message.error(`提示：字段名称不能为空`);
@@ -320,7 +335,6 @@ export  class SearchArea extends Component{
                 ToskId:'请选择任务'
             })
         }
-        console.log('this.props.selectedRowsId=========>',this.props.selectedRowsId)
         if(this.props.selectedRowsId.length > 0){
             let creds = { taskswitch:'1',showCount:9999999}
             store.dispatch(getTaskModelList(creds));
@@ -334,6 +348,7 @@ export  class SearchArea extends Component{
     addNewsWord = (type, record) => {
         // record.id
         if(type === 'update'){
+            let showtype = record.showtype === 0 ? '0' : '1'
             this.setState({
                 showDel:{},
                 inputDisabled:true,
@@ -342,6 +357,7 @@ export  class SearchArea extends Component{
                 wordType:record.type,
                 OptionWords:record.value,
                 wordId:record.id,
+                detailPlace:showtype,
                 zdyType:'update'
             })
             this.getSelects(record.type)
@@ -353,6 +369,7 @@ export  class SearchArea extends Component{
                 wordName:'',
                 wordType:'',
                 wordId:'',
+                detailPlace:'0',
                 OptionWords:'',
                 zdyType:'add'
             })
@@ -400,7 +417,6 @@ export  class SearchArea extends Component{
                 this.importEnterLoading();
             }
             if (info.file.status !== 'uploading') {
-
             }
             if (info.file.status === 'done') {
                 let creds = '';
@@ -552,7 +568,7 @@ export  class SearchArea extends Component{
     }
     render() {
         const {getFieldDecorator} = this.props.form
-        let {name,cardId,status,Tosk, enddate, begindate,cycle,wordType,showInput,wordName,OptionWords,showDel,showSave,inputDisabled} = this.state;
+        let {name,cardId,status,Tosk, enddate, begindate,cycle,wordType,showInput,wordName,OptionWords,showDel,showSave,inputDisabled,detailPlace} = this.state;
         let beginDateValue = '';
         if (begindate === '') {} else {
             beginDateValue = moment(begindate, dateFormat);
@@ -595,7 +611,7 @@ export  class SearchArea extends Component{
         for(let i in store.getState().ControlPersonnel.data.FiledList.result.list){
             if(i !== 'remove'){
                 let list= store.getState().ControlPersonnel.data.FiledList.result.list
-                newWord.push({name:list[i].name,key:i,id:list[i].id,type:list[i].type,value:list[i].value})
+                newWord.push({name:list[i].name,key:i,id:list[i].id,type:list[i].type,value:list[i].value,showtype:list[i].showtype})
             }
         }
         const list = [{
@@ -728,7 +744,6 @@ export  class SearchArea extends Component{
                             取消
                         </Button>
                     </p>
-
                 </Modal>
                 <Modal style={{top:"20%"}}
                        title="自定义字段"
@@ -774,6 +789,15 @@ export  class SearchArea extends Component{
                             style={showInput}
                         >
                             <Input value={OptionWords} onChange={this.getOptions} disabled={inputDisabled}/>
+                        </FormItem>
+                        <FormItem
+                            {...formItemLayout}
+                            label="展示位置"
+                        >
+                            <Select value={detailPlace} onChange={this.changedetailPlace} disabled={inputDisabled}>
+                                <Option value="0">只详情展示</Option>
+                                <Option value="1">列表详情都展示</Option>
+                            </Select>
                         </FormItem>
                     </Form>
                     <p style={{marginTop:"20px",textAlign:"center"}}>
